@@ -101,44 +101,19 @@ else ( MSVC )
 endif ( MSVC )
 # End configure secp256k1-zkp
 
-IF( WIN32 )
-  MESSAGE(STATUS "Configuring fc to build on Win32")
 
-  set( RPCRT4 rpcrt4 )
+MESSAGE(STATUS "Configuring fc to build on Unix/Apple")
 
-  #boost
-  SET(BOOST_ROOT $ENV{BOOST_ROOT})
-#  set(Boost_USE_DEBUG_PYTHON ON)
-  set(Boost_USE_MULTITHREADED ON)
-  set(BOOST_ALL_DYN_LINK OFF) # force dynamic linking for all libraries
+LIST(APPEND BOOST_COMPONENTS coroutine)
+FIND_PACKAGE(Boost 1.67 REQUIRED COMPONENTS ${BOOST_COMPONENTS})
 
-  FIND_PACKAGE(Boost 1.53 REQUIRED COMPONENTS ${BOOST_COMPONENTS})
-  # For Boost 1.53 on windows, coroutine was not in BOOST_LIBRARYDIR and do not need it to build,  but if boost versin >= 1.54, find coroutine otherwise will cause link errors
-  IF(NOT "${Boost_VERSION}" MATCHES "1.53(.*)")
-    SET(BOOST_LIBRARIES_TEMP ${Boost_LIBRARIES})
-    FIND_PACKAGE(Boost 1.54 REQUIRED COMPONENTS coroutine)
-    LIST(APPEND BOOST_COMPONENTS coroutine)
-    SET(Boost_LIBRARIES ${BOOST_LIBRARIES_TEMP} ${Boost_LIBRARIES})
-  ENDIF()
+SET(CMAKE_FIND_LIBRARY_SUFFIXES ".a;.so")
 
-  set( PLATFORM_SPECIFIC_LIBS wsock32.lib ws2_32.lib userenv.lib)
-  # iphlpapi.lib
-
-ELSE(WIN32)
-  MESSAGE(STATUS "Configuring fc to build on Unix/Apple")
-
-  LIST(APPEND BOOST_COMPONENTS coroutine)
-
-  FIND_PACKAGE(Boost 1.53 REQUIRED COMPONENTS ${BOOST_COMPONENTS})
-
-  SET(CMAKE_FIND_LIBRARY_SUFFIXES ".a;.so")
-
-  IF(NOT APPLE)
-    # Linux or other unix
-    SET(rt_library rt )
-    SET(pthread_library pthread)
-  ENDIF(NOT APPLE)
-ENDIF(WIN32)
+IF(NOT APPLE)
+# Linux or other unix
+SET(rt_library rt )
+SET(pthread_library pthread)
+ENDIF(NOT APPLE)
 
 
 
@@ -193,7 +168,6 @@ set( fc_sources
      src/rpc/json_connection.cpp
      src/rpc/state.cpp
      src/rpc/bstate.cpp
-     src/rpc/websocket_api.cpp
      src/log/log_message.cpp
      src/log/logger.cpp
      src/log/appender.cpp
@@ -228,7 +202,7 @@ set( fc_sources
      src/network/udp_socket.cpp
      src/network/http/http_connection.cpp
      src/network/http/http_server.cpp
-     src/network/http/websocket.cpp
+     src/network/http/http_client.cpp
      src/network/ntp.cpp
      src/network/ip.cpp
      src/network/rate_limiting.cpp
@@ -270,44 +244,25 @@ if (READLINE_FOUND)
   endif()
   set(readline_includes ${Readline_INCLUDE_DIR})
 endif()
-if(WIN32)
-  target_compile_definitions( fc PRIVATE _CRT_NONSTDC_NO_DEPRECATE )
-endif(WIN32)
+
 # end readline stuff
 
 if( NOT CPP_STANDARD )
   set( CPP_STANDARD, "-std=c++11" )
 endif()
 
-IF(WIN32)
-  target_compile_definitions(fc PUBLIC WIN32 NOMINMAX _WIN32_WINNT=0x0501 _CRT_SECURE_NO_WARNINGS
-    _SCL_SERCURE_NO_WARNINGS
-    # Needed to disable MSVC autolinking feature (#pragma comment)
-    BOOST_ALL_NO_LIB
-    # The current version of websockets doesn't correctly guess what 'chrono' implementation boost::asio uses
-    # on the recommended build platform of VC++12/boost_1.58.  Force it here until websocket gets their
-    # autodetecting code to do the right thing.
-    _WEBSOCKETPP_CPP11_CHRONO_
-  )
-  if( MSVC )
-    # Activate C++ exception handling, assume extern C calls don't throw
-    # Add /U options to be sure settings specific to dynamic boost link are ineffective
-    target_compile_options(fc PUBLIC /EHsc /UBOOST_ALL_DYN_LINK /UBOOST_LINKING_PYTHON /UBOOST_DEBUG_PYTHON)
-  elseif( MINGW )
-     # Put MinGW specific compiler settings here
-  endif()
-ELSE()
-  SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c99 -Wall")
 
-  IF(APPLE)
-    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CPP_STANDARD} -stdlib=libc++ -Wall")
-  ELSE()
-    if( NOT "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang" )
-      target_compile_options(fc PUBLIC ${CPP_STANDARD} -Wall -fnon-call-exceptions)
-    endif()
-    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CPP_STANDARD} -Wall -fnon-call-exceptions")
-  ENDIF()
+SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c99 -Wall")
+
+IF(APPLE)
+SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CPP_STANDARD} -Wall")
+ELSE()
+if( NOT "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang" )
+  target_compile_options(fc PUBLIC ${CPP_STANDARD} -Wall -fnon-call-exceptions)
+endif()
+SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CPP_STANDARD} -Wall -fnon-call-exceptions")
 ENDIF()
+
 
 IF(APPLE)
   # As of 10.10 yosemite, the OpenSSL static libraries shipped with os x have a dependency
@@ -336,12 +291,9 @@ else()
    set( BZIP2_LIBRARIES "" )
 endif( BZIP2_FOUND )
 
-# This will become unnecessary once we update to websocketpp which fixes upstream issue #395
-SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DWEBSOCKETPP_STRICT_MASKING")
-
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DBOOST_ASIO_HAS_STD_CHRONO")
 
-OPTION( LOG_LONG_API "Log long API calls over websocket (ON OR OFF)" ON )
+OPTION( LOG_LONG_API "Log long API calls (ON OR OFF)" ON )
 MESSAGE( STATUS "LOG_LONG_API: ${LOG_LONG_API}" )
 if( LOG_LONG_API )
   SET( LOG_LONG_API_MAX_MS 1000 CACHE STRING "Max API execution time in ms" )
@@ -360,7 +312,6 @@ target_include_directories(fc
     ${Boost_INCLUDE_DIR}
     ${OPENSSL_INCLUDE_DIR}
     "vendor/diff-match-patch-cpp-stl"
-    ${CONAN_INCLUDE_DIRS_WEBSOCKETPP}
     "${readline_includes}"
 
   PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}
@@ -371,15 +322,8 @@ target_include_directories(fc
   )
 
 #target_link_libraries( fc PUBLIC ${Boost_LIBRARIES} ${OPENSSL_LIBRARIES} ${ZLIB_LIBRARIES} ${BZIP2_LIBRARIES} ${PLATFORM_SPECIFIC_LIBS} ${RPCRT4} ${CMAKE_DL_LIBS} ${rt_library} ${ECC_LIB} )
-IF(NOT WIN32)
-  set(LINK_USR_LOCAL_LIB -L/usr/local/lib)
-ENDIF()
-target_link_libraries( fc PUBLIC ${LINK_USR_LOCAL_LIB} equihash ${OPENSSL_LIBRARIES} ${ZLIB_LIBRARIES} ${BZIP2_LIBRARIES} ${Boost_LIBRARIES} ${PLATFORM_SPECIFIC_LIBS} ${RPCRT4} ${CMAKE_DL_LIBS} ${rt_library} ${readline_libraries} ${ECC_LIB} )
-
-if(MSVC)
-  set_source_files_properties( src/network/http/websocket.cpp PROPERTIES COMPILE_FLAGS "/bigobj" )
-endif(MSVC)
-
+set(LINK_USR_LOCAL_LIB -L/usr/local/lib)
+target_link_libraries( fc PUBLIC ${LINK_USR_LOCAL_LIB} equihash ${Boost_LIBRARIES} ${OPENSSL_LIBRARIES} ${ZLIB_LIBRARIES} ${BZIP2_LIBRARIES} ${PLATFORM_SPECIFIC_LIBS} ${RPCRT4} ${CMAKE_DL_LIBS} ${rt_library} ${readline_libraries} ${ECC_LIB} )
 
 IF(NOT Boost_UNIT_TEST_FRAMEWORK_LIBRARY MATCHES "\\.(a|lib)$")
 IF(MSVC)
@@ -393,106 +337,12 @@ include_directories( vendor/equihash )
 
 add_subdirectory(tests)
 
-if(WIN32)
-   # add addtional import library on windows platform
-   target_link_libraries( fc PUBLIC crypt32.lib)
-
-   # now generate a list of the DLLs we're using to use during the install process
-   include (ParseLibraryList)
-   PARSE_LIBRARY_LIST(${Boost_LIBRARIES}
-                        FOUND parseOk
-                        DEBUG Boost_LIBRARIES_DEBUG
-                        OPT   Boost_LIBRARIES_RELEASE
-                        GENERAL Boost_LIBRARIES_GENERAL)
-
-   #Variable will hold list of .pdb files generated for libraries the 'fc' module is linked to
-   set(INTERFACE_LINK_PDB_RELEASE)
-
-   set(SHARED_LIBRARIES_RELEASE)
-   foreach(boost_import_lib ${Boost_LIBRARIES_RELEASE})
-      get_filename_component(import_lib_name_root ${boost_import_lib} NAME_WE)
-      get_filename_component(import_lib_path ${boost_import_lib} PATH)
-      set(boost_dll "${import_lib_path}/${import_lib_name_root}${CMAKE_SHARED_LIBRARY_SUFFIX}")
-      set(boost_lib_pdb "${import_lib_name_root}.pdb")
-
-      FILE(GLOB_RECURSE boost_pdb_paths "${import_lib_path}/../../bin.v2/*/${boost_lib_pdb}")
-
-      foreach(p ${boost_pdb_paths})
-        if(p MATCHES ".*/address-model-${platformBitness}/")
-          GP_APPEND_UNIQUE(INTERFACE_LINK_PDB_RELEASE ${p})
-        endif()
-      endforeach()
-
-      if(EXISTS "${boost_dll}")
-        set(SHARED_LIBRARIES_RELEASE ${SHARED_LIBRARIES_RELEASE} "${boost_dll}")
-      endif()
-
-   endforeach()
-
-   set(INTERFACE_LINK_PDB_DEBUG)
-   set(SHARED_LIBRARIES_DEBUG)
-   foreach(boost_import_lib ${Boost_LIBRARIES_DEBUG})
-      get_filename_component(import_lib_name_root ${boost_import_lib} NAME_WE)
-      get_filename_component(import_lib_path ${boost_import_lib} PATH)
-      set(boost_dll "${import_lib_path}/${import_lib_name_root}${CMAKE_SHARED_LIBRARY_SUFFIX}")
-      set(boost_lib_pdb "${import_lib_name_root}.pdb")
-
-      FILE(GLOB_RECURSE boost_pdb_paths "${import_lib_path}/../../bin.v2/*/${boost_lib_pdb}")
-
-      foreach(p ${boost_pdb_paths})
-        if(p MATCHES ".*/address-model-${platformBitness}/")
-          GP_APPEND_UNIQUE(INTERFACE_LINK_PDB_DEBUG ${p})
-        endif()
-      endforeach()
-      if(EXISTS "${boost_dll}")
-        set(SHARED_LIBRARIES_DEBUG ${SHARED_LIBRARIES_DEBUG} "${boost_dll}")
-      endif()
-   endforeach()
-
-   # message(STATUS "openssl_libraries=${OPENSSL_LIBRARIES}")
-   foreach(lib ${OPENSSL_LIBRARIES})
-      get_filename_component(lib_name ${lib} NAME_WE)
-      if (${lib_name} STREQUAL "libeay32")
-         get_filename_component(lib_dir ${lib} DIRECTORY)
-         get_filename_component(openssl_dir "${lib_dir}/.." REALPATH)
-         set( eaydll "${openssl_dir}/bin/${lib_name}${CMAKE_SHARED_LIBRARY_SUFFIX}")
-         set(eay_pdb "${openssl_dir}/bin/${lib_name}.pdb")
-         message(STATUS "eay=${eaydll}")
-         if(EXISTS ${eay_pdb})
-           GP_APPEND_UNIQUE(INTERFACE_LINK_PDB_RELEASE ${eay_pdb})
-           GP_APPEND_UNIQUE(INTERFACE_LINK_PDB_DEBUG ${eay_pdb})
-         endif()
-
-         set(SHARED_LIBRARIES_DEBUG   ${SHARED_LIBRARIES_DEBUG}   "${eaydll}")
-         set(SHARED_LIBRARIES_RELEASE ${SHARED_LIBRARIES_RELEASE} "${eaydll}")
-      endif()
-   endforeach()
-
-   set_property(TARGET fc PROPERTY INTERFACE_LINK_PDB_RELEASE ${INTERFACE_LINK_PDB_RELEASE})
-   set_property(TARGET fc PROPERTY INTERFACE_LINK_PDB_DEBUG ${INTERFACE_LINK_PDB_DEBUG})
-   set_property(TARGET fc PROPERTY SHARED_LIBRARIES_DEBUG ${SHARED_LIBRARIES_DEBUG})
-   set_property(TARGET fc PROPERTY SHARED_LIBRARIES_RELEASE ${SHARED_LIBRARIES_RELEASE})
-
-endif(WIN32)
-
 SET(OPENSSL_CONF_TARGET )
 IF(DEFINED CMAKE_RUNTIME_OUTPUT_DIRECTORY)
   SET (OPENSSL_CONF_TARGET ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
 ELSE()
   SET (OPENSSL_CONF_TARGET ${CMAKE_CURRENT_BINARY_DIR})
 ENDIF()
-
-    IF(WIN32)
-       IF("${OPENSSL_ROOT_DIR}" STREQUAL "")
-          get_filename_component(OPENSSL_ROOT_DIR "${OPENSSL_INCLUDE_DIR}/.." REALPATH)
-       ENDIF()
-       SET(OPENSSL_CONF_SOURCE "${OPENSSL_ROOT_DIR}/ssl/openssl.cnf")
-       IF(MINGW)
-          SET(OPENSSL_CONF_SOURCE "${OPENSSL_ROOT_DIR}/openssl.cnf")
-       ENDIF(MINGW)
-       SET(POST_BUILD_STEP_COMMANDS ${POST_BUILD_STEP_COMMANDS}
-           COMMAND ${CMAKE_COMMAND} -E copy_if_different "${OPENSSL_CONF_SOURCE}" "${OPENSSL_CONF_TARGET}/openssl.cnf")
-    ENDIF(WIN32)
 
 ADD_CUSTOM_COMMAND(TARGET fc POST_BUILD ${POST_BUILD_STEP_COMMANDS}
   COMMENT "Copying OpenSSL/ssl/openssl.cnf into target directory."

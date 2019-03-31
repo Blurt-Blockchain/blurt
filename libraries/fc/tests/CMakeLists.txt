@@ -47,9 +47,6 @@ target_link_libraries( ecdsa_canon_test fc )
 #add_executable( test_rate_limiting rate_limiting.cpp )
 #target_link_libraries( test_rate_limiting fc )
 
-add_executable( sha_test sha_test.cpp )
-target_link_libraries( sha_test fc )
-
 add_executable( all_tests all_tests.cpp
                           compress/compress.cpp
                           crypto/aes_test.cpp
@@ -60,7 +57,7 @@ add_executable( all_tests all_tests.cpp
                           crypto/rand_test.cpp
                           crypto/sha_tests.cpp
                           network/ntp_test.cpp
-                          network/http/websocket_test.cpp
+                          network/http/http_client_test.cpp
                           thread/task_cancel.cpp
                           thread/thread_tests.cpp
                           bloom_test.cpp
