@@ -40,8 +40,29 @@ Blurt is a public social blockchain with a diverse and vibrant community that st
     * 10% of inflation to Blurt DAO Fund. 
     
 
-# Software Status
+## Software Status
 
 This repository currently contains a fork of the Steem blockchain code.  Blurt will launch as a fork of the state of Steem on July 4, 2020.  If you compiled this software today, you would just be compiling Steem code, so we've removed the compile and deploy instructions for now, but they'll return soon.  
+
+## Build
+
+Do this exactly, and it'll work.  Do otherwise and you may have a bad time.  
+
+Spin up an Ubuntu 16.04 Virtual Machine with 16GB of RAM.  Then, run:
+
+```
+apt-get update 
+apt install git autoconf automake cmake g++ git libbz2-dev libsnappy-dev libssl-dev libtool make pkg-config python3 python3-jinja2 doxygen libboost-chrono-dev libboost-context-dev libboost-coroutine-dev libboost-date-time-dev libboost-filesystem-dev libboost-iostreams-dev libboost-locale-dev libboost-program-options-dev libboost-serialization-dev libboost-signals-dev libboost-system-dev libboost-test-dev libboost-thread-dev libncurses5-dev libreadline-dev perl
+git clone https://gitlab.com/blurt/blurt
+cd blurt
+git submodule update --init --recursive
+mkdir build
+cd build
+cmake -DCMAKE_BUILD_TYPE=Release ..
+make -j$(nproc) steemd
+make -j$(nproc) cli_wallet
+  ```
+
+
 
 
