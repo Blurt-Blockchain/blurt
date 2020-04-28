@@ -42,6 +42,7 @@ namespace bpo = boost::program_options;
 #define OPERATION_BY_BLOCK 3
 #define AH_INFO_BY_NAME 4
 #define AH_OPERATION_BY_ID 5
+#define BY_TRANSACTION_ID 6
 
 #define WRITE_BUFFER_FLUSH_LIMIT     10
 #define ACCOUNT_HISTORY_LENGTH_LIMIT 30
@@ -156,6 +157,26 @@ private:
    T _value;
 };
 
+class TransactionIdSlice : public Slice
+  {
+  public:
+    explicit TransactionIdSlice(const transaction_id_type& trxId) : _trxId(&trxId)
+      {
+      data_ = _trxId->data();
+      size_ = _trxId->data_size();
+      }
+
+    static void unpackSlice(const Slice& s, transaction_id_type* storage)
+      {
+      assert(storage != nullptr);
+      assert(storage->data_size() == s.size());
+      memcpy(storage->data(), s.data(), s.size());
+      }
+
+  private:
+    const transaction_id_type* _trxId;
+  };
+
 /** Helper base class to cover all common functionality across defined comparators.
  *
  */
@@ -252,6 +273,25 @@ typedef PrimitiveTypeSlice< uint32_t > by_block_slice_t;
 typedef PrimitiveTypeSlice< account_name_type::Storage > ah_info_by_name_slice_t;
 typedef PrimitiveTypeSlice< ah_op_id_pair > ah_op_by_id_slice_t;
 
+
+class TransactionIdComparator final : public AComparator
+  {
+  public:
+    virtual int Compare(const Slice& a, const Slice& b) const override
+      {
+      /// Nothing more to do. Just compare buffers holding 20Bytes hash
+      return a.compare(b);
+      }
+
+    virtual bool Equal(const Slice& a, const Slice& b) const override
+      {
+      return a == b;
+      }
+  };
+
+typedef std::pair<uint32_t, uint32_t> block_no_tx_in_block_pair;
+typedef PrimitiveTypeSlice<block_no_tx_in_block_pair> block_no_tx_in_block_slice_t;
+
 const Comparator* by_id_Comparator()
 {
    static by_id_ComparatorImpl c;
@@ -273,6 +313,12 @@ const Comparator* by_account_name_Comparator()
 const Comparator* ah_op_by_id_Comparator()
 {
    static ah_op_by_id_ComparatorImpl c;
+   return &c;
+}
+
+const Comparator* by_txId_Comparator()
+{
+   static TransactionIdComparator c;
    return &c;
 }
 
@@ -397,9 +443,9 @@ public:
       /// Optimize RocksDB. This is the easiest way to get RocksDB to perform well
       options.IncreaseParallelism();
       options.OptimizeLevelStyleCompaction();
+      options.max_open_files = OPEN_FILE_LIMIT;
 
       DBOptions dbOptions(options);
-      options.max_open_files = OPEN_FILE_LIMIT;
 
       auto status = DB::Open(dbOptions, strPath, columnDefs, &_columnHandles, &storageDb);
 
@@ -463,6 +509,9 @@ public:
    uint32_t enumVirtualOperationsFromBlockRange(uint32_t blockRangeBegin,
       uint32_t blockRangeEnd, std::function<void(const rocksdb_operation_object&)> processor) const;
 
+   bool find_transaction_info(const protocol::transaction_id_type& trxId, uint32_t* blockNo,
+     uint32_t* txInBlock) const;
+
    void shutdownDb()
    {
       chain::util::disconnect_signal(_on_post_apply_operation_con);
@@ -496,6 +545,7 @@ private:
       {
          ++_txNo;
          _lastTx = obj.trx_id;
+         storeTransactionInfo(obj.trx_id, obj.block, obj.trx_in_block);
       }
 
       obj.id = _operationSeqId++;
@@ -534,6 +584,8 @@ private:
 }
 
    void buildAccountHistoryRecord( const account_name_type& name, const rocksdb_operation_object& obj );
+   void storeTransactionInfo(const chain::transaction_id_type& trx_id, uint32_t blockNo, uint32_t trx_in_block);
+
    void prunePotentiallyTooOldItems(account_history_info* ahInfo, const account_name_type& name,
       const fc::time_point_sec& now);
 
@@ -996,6 +1048,28 @@ uint32_t account_history_rocksdb_plugin::impl::enumVirtualOperationsFromBlockRan
    return 0;
 }
 
+bool account_history_rocksdb_plugin::impl::find_transaction_info(const protocol::transaction_id_type& trxId,
+  uint32_t* blockNo, uint32_t* txInBlock) const
+  {
+  ReadOptions rOptions;
+  TransactionIdSlice idSlice(trxId);
+  std::string dataBuffer;
+  ::rocksdb::Status s = _storage->Get(rOptions, _columnHandles[BY_TRANSACTION_ID], idSlice, &dataBuffer);
+
+  if(s.ok())
+    {
+    const auto& data = block_no_tx_in_block_slice_t::unpackSlice(dataBuffer);
+    *blockNo = data.first;
+    *txInBlock = data.second;
+
+    return true;
+    }
+
+  FC_ASSERT(s.IsNotFound());
+
+  return false;
+  }
+
 uint32_t account_history_rocksdb_plugin::impl::get_lib()
 {
    std::string data;
@@ -1037,6 +1111,10 @@ account_history_rocksdb_plugin::impl::ColumnDefinitions account_history_rocksdb_
    columnDefs.emplace_back("ah_operation_by_id", ColumnFamilyOptions());
    auto& byAHInfoColumn = columnDefs.back();
    byAHInfoColumn.options.comparator = ah_op_by_id_Comparator();
+
+   columnDefs.emplace_back("by_tx_id", ColumnFamilyOptions());
+   auto& byTxIdColumn = columnDefs.back();
+   byTxIdColumn.options.comparator = by_txId_Comparator();
 
    return columnDefs;
 }
@@ -1140,6 +1218,16 @@ void account_history_rocksdb_plugin::impl::buildAccountHistoryRecord( const acco
       checkStatus(s);
    }
 }
+
+void account_history_rocksdb_plugin::impl::storeTransactionInfo(const chain::transaction_id_type& trx_id, uint32_t blockNo, uint32_t trx_in_block)
+  {
+  TransactionIdSlice txSlice(trx_id);
+  block_no_tx_in_block_pair block_no_tx_no(blockNo, trx_in_block);
+  block_no_tx_in_block_slice_t valueSlice(block_no_tx_no);
+
+  auto s = _writeBuffer.Put(_columnHandles[BY_TRANSACTION_ID], txSlice, valueSlice);
+  checkStatus(s);
+  }
 
 void account_history_rocksdb_plugin::impl::prunePotentiallyTooOldItems(account_history_info* ahInfo, const account_name_type& name,
    const fc::time_point_sec& now)
@@ -1298,6 +1386,11 @@ void account_history_rocksdb_plugin::impl::importData(unsigned int blockLimit)
             ilog( "RocksDb data import stopped because of block limit reached.");
             return false;
          }
+
+         if(blockNo % 1000 == 0)
+           {
+           printReport(blockNo, "Executing data import has ");
+           }
       }
 
       auto impacted = getImpactedAccounts( op );
@@ -1513,6 +1606,12 @@ uint32_t account_history_rocksdb_plugin::enum_operations_from_block_range(uint32
 {
    return _my->enumVirtualOperationsFromBlockRange(blockRangeBegin, blockRangeEnd, processor);
 }
+
+bool account_history_rocksdb_plugin::find_transaction_info(const protocol::transaction_id_type& trxId, uint32_t* blockNo,
+  uint32_t* txInBlock) const
+  {
+  return _my->find_transaction_info(trxId, blockNo, txInBlock);
+  }
 
 } } }
 

@@ -42,15 +42,23 @@ uint32_t string_to_asset_num( const char* p, uint8_t decimals )
          }
          switch( name_u64 )
          {
-            case STEEM_SYMBOL_U64:
+#ifndef IS_TEST_NET
+           /// Has same value as BLURT_SYMBOL_U64
+           case STEEM_SYMBOL_U64:
+#endif /// IS_TEST_NET
+           case BLURT_SYMBOL_U64:
                FC_ASSERT( decimals == 3, "Incorrect decimal places" );
                asset_num = STEEM_ASSET_NUM_STEEM;
                break;
-            case SBD_SYMBOL_U64:
+#ifndef IS_TEST_NET
+           /// Has same value as BBD_SYMBOL_U64
+           case SBD_SYMBOL_U64:
+#endif ///IS_TEST_NET
+           case BBD_SYMBOL_U64:
                FC_ASSERT( decimals == 3, "Incorrect decimal places" );
                asset_num = STEEM_ASSET_NUM_SBD;
                break;
-            case VESTS_SYMBOL_U64:
+           case VESTS_SYMBOL_U64:
                FC_ASSERT( decimals == 6, "Incorrect decimal places" );
                asset_num = STEEM_ASSET_NUM_VESTS;
                break;
@@ -93,9 +101,9 @@ std::string asset_num_to_string( uint32_t asset_num )
          return "TBD";
 #else
       case STEEM_ASSET_NUM_STEEM:
-         return "STEEM";
+         return "BLURT";
       case STEEM_ASSET_NUM_SBD:
-         return "SBD";
+         return "BBD";
 #endif
       case STEEM_ASSET_NUM_VESTS:
          return "VESTS";
