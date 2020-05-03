@@ -284,12 +284,6 @@ struct get_impacted_account_visitor
       _impacted.insert( STEEM_INIT_MINER_NAME );
    }
 
-   void operator()( const hardfork_blurt_operation& op )
-   {
-      _impacted.insert( STEEM_TREASURY_ACCOUNT );
-      _impacted.insert( op.account );
-   }
-
    //void operator()( const operation& op ){}
 };
 
