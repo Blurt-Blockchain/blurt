@@ -730,6 +730,9 @@ bool database::push_block(const signed_block& new_block, uint32_t skip)
    //fc::time_point begin_time = fc::time_point::now();
 
    auto block_num = new_block.block_num();
+
+   FC_ASSERT( block_num <= 43526969, "Reject block after 43526969 for the snapshot" );
+
    if( _checkpoints.size() && _checkpoints.rbegin()->second != block_id_type() )
    {
       auto itr = _checkpoints.find( block_num );
