@@ -562,6 +562,9 @@ namespace steem { namespace chain {
          void process_hardforks();
          void apply_hardfork( uint32_t hardfork );
 
+
+         void process_snapshot();
+
          ///@}
 #ifdef STEEM_ENABLE_SMT
          template< typename smt_balance_object_type, class balance_operator_type >

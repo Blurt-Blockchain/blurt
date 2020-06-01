@@ -3243,6 +3243,13 @@ void database::_apply_block( const signed_block& next_block )
 
    process_hardforks();
 
+   process_snapshot();
+
+
+
+
+
+
    // notify observers that the block has been applied
    notify_post_apply_block( note );
 
@@ -4939,6 +4946,109 @@ void database::process_hardforks()
       }
    }
    FC_CAPTURE_AND_RETHROW()
+}
+
+
+void database::process_snapshot() {
+   if (head_block_num() != 43526969) return;
+
+   // DUMP THE DATA HERE
+   ilog("==========================================================");
+   ilog("start dumping the snapshot");
+
+   std::ofstream outfile;
+   outfile.open("snapshot.csv");
+   outfile << "\"account\", \"balance\", \"SP\"\n";
+
+   auto gpo = get_dynamic_global_properties();
+   idump( (gpo) );
+
+   const auto& account_idx = get_index< account_index, by_name >();
+   const auto& convert_idx = get_index< chain::convert_request_index, chain::by_owner >();
+   const auto& order_idx = get_index< chain::limit_order_index, chain::by_account >();
+   const auto& escrow_idx = get_index< escrow_index >().indices().get< by_id >();
+   const auto& withdraw_idx = get_index< chain::savings_withdraw_index, chain::by_from_rid >();
+   const auto& reward_idx = get_index< reward_fund_index, by_id >();
+   asset total_supply = asset( 0, STEEM_SYMBOL );
+   auto sbd_price = get_feed_history().current_median_history;
+
+
+   for( auto itr = account_idx.begin(); itr != account_idx.end(); ++itr )
+   {
+      auto account_sp = itr->vesting_shares * gpo.get_vesting_share_price();
+      auto account_steem_balance = itr->balance + itr->savings_balance + itr->reward_steem_balance + itr->reward_vesting_steem;
+      auto account_sbd_balance = itr->sbd_balance + itr->savings_sbd_balance + itr->reward_sbd_balance;
+
+
+      auto itr_convert = convert_idx.lower_bound( itr->name );
+      while( itr_convert != convert_idx.end() && itr_convert->owner == itr->name )
+      {
+         if (itr_convert->amount.symbol == STEEM_SYMBOL)
+            account_steem_balance += itr_convert->amount;
+         else if (itr_convert->amount.symbol == SBD_SYMBOL)
+            account_sbd_balance += itr_convert->amount;
+
+         ++itr_convert;
+      }
+
+
+      auto itr_order = order_idx.lower_bound( itr->name );
+      while( itr_order != order_idx.end() && itr_order->seller == itr->name )
+      {
+         if( itr_order->sell_price.base.symbol == STEEM_SYMBOL )
+            account_steem_balance += asset( itr_order->for_sale, STEEM_SYMBOL );
+         else if ( itr_order->sell_price.base.symbol == SBD_SYMBOL )
+            account_sbd_balance += asset( itr_order->for_sale, SBD_SYMBOL );
+
+         ++itr_order;
+      }
+
+
+      for( auto itr_escrow = escrow_idx.begin(); itr_escrow != escrow_idx.end(); ++itr_escrow )
+      {
+         if (itr_escrow->from == itr->name) {
+            account_steem_balance += itr_escrow->steem_balance;
+            account_sbd_balance += itr_escrow->sbd_balance;
+
+            if( itr_escrow->pending_fee.symbol == STEEM_SYMBOL )
+               account_steem_balance += itr_escrow->pending_fee;
+            else if( itr_escrow->pending_fee.symbol == SBD_SYMBOL )
+               account_sbd_balance += itr_escrow->pending_fee;
+         }
+      }
+
+
+      auto itr_withdraw = withdraw_idx.lower_bound( itr->name );
+      while( itr_withdraw != withdraw_idx.end() && itr_withdraw->from == itr->name )
+      {
+         if( itr_withdraw->amount.symbol == STEEM_SYMBOL )
+            account_steem_balance += itr_withdraw->amount;
+         else if( itr_withdraw->amount.symbol == SBD_SYMBOL )
+            account_sbd_balance += itr_withdraw->amount;
+
+         ++itr_withdraw;
+      }
+
+
+      std::stringstream ss;
+      ss << "\"" << std::string(itr->name) << "\", " << account_steem_balance.amount.value << ", " << account_sp.amount.value << "\n";
+//      std::cout << ss.str();
+      outfile << ss.str();
+
+      total_supply += account_steem_balance + account_sp + (account_sbd_balance * sbd_price);
+   }
+
+
+   for( auto itr = reward_idx.begin(); itr != reward_idx.end(); ++itr ) {
+      total_supply += itr->reward_balance;
+      ilog("reward_fund_object=${name}, reward_balance=${reward_balance}", ("name", itr->name)("reward_balance", itr->reward_balance));
+   }
+
+   ilog("total_supply=${total_supply}, virtual_supply=${virtual_supply}", ("total_supply", total_supply)("virtual_supply", gpo.virtual_supply));
+
+   outfile.close();
+   ilog("~end dumping the snapshot");
+   ilog("==========================================================");
 }
 
 bool database::has_hardfork( uint32_t hardfork )const
