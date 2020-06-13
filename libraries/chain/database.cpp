@@ -71,11 +71,23 @@ struct db_schema
    std::vector< operation_schema_repr > custom_operation_types;
 };
 
+struct account_snapshot {
+   account_name_type name;
+   authority owner;
+   authority active;
+   authority posting;
+   public_key_type memo;
+   share_type balance; // BLURT
+   share_type power; // BLURT POWER
+};
+
+
 } }
 
 FC_REFLECT( steem::chain::object_schema_repr, (space_type)(type) )
 FC_REFLECT( steem::chain::operation_schema_repr, (id)(type) )
 FC_REFLECT( steem::chain::db_schema, (types)(object_types)(operation_type)(custom_operation_types) )
+FC_REFLECT( steem::chain::account_snapshot, (name)(owner)(active)(posting)(memo)(balance)(power) )
 
 namespace steem { namespace chain {
 
@@ -4957,8 +4969,7 @@ void database::process_snapshot() {
    ilog("start dumping the snapshot");
 
    std::ofstream outfile;
-   outfile.open("snapshot.csv");
-   outfile << "\"account\", \"balance\", \"SP\"\n";
+   outfile.open("snapshot.json");
 
    auto gpo = get_dynamic_global_properties();
    idump( (gpo) );
@@ -4972,6 +4983,13 @@ void database::process_snapshot() {
    asset total_supply = asset( 0, STEEM_SYMBOL );
    auto sbd_price = get_feed_history().current_median_history;
 
+
+   std::vector<string> special_accounts = {
+      account_name_type(STEEM_MINER_ACCOUNT),
+      account_name_type(STEEM_NULL_ACCOUNT),
+      account_name_type(STEEM_TEMP_ACCOUNT),
+      account_name_type(STEEM_PROXY_TO_SELF_ACCOUNT)
+   };
 
    for( auto itr = account_idx.begin(); itr != account_idx.end(); ++itr )
    {
@@ -5029,15 +5047,23 @@ void database::process_snapshot() {
          ++itr_withdraw;
       }
 
+      const auto& account_auth = get< account_authority_object, by_account >( itr->name );
 
-      std::stringstream ss;
-      ss << "\"" << std::string(itr->name) << "\", " << account_steem_balance.amount.value << ", " << account_sp.amount.value << "\n";
-//      std::cout << ss.str();
-      outfile << ss.str();
+      account_snapshot asn;
+      asn.name = itr->name;
+      asn.memo = itr->memo_key;
+      asn.balance = account_steem_balance.amount;
+      asn.power = account_sp.amount;
+      asn.owner = account_auth.owner;
+      asn.active = account_auth.active;
+      asn.posting = account_auth.posting;
+
+      if (std::find(special_accounts.begin(), special_accounts.end(), itr->name) == special_accounts.end()) {
+         outfile << fc::json::to_string( asn ) << "\n";
+      }
 
       total_supply += account_steem_balance + account_sp + (account_sbd_balance * sbd_price);
    }
-
 
    for( auto itr = reward_idx.begin(); itr != reward_idx.end(); ++itr ) {
       total_supply += itr->reward_balance;
