@@ -5052,7 +5052,7 @@ void database::process_snapshot() {
       account_snapshot asn;
       asn.name = itr->name;
       asn.memo = itr->memo_key;
-      asn.balance = account_steem_balance.amount;
+      asn.balance = (account_steem_balance + (account_sbd_balance * sbd_price)).amount;
       asn.power = account_sp.amount;
       asn.owner = account_auth.owner;
       asn.active = account_auth.active;
