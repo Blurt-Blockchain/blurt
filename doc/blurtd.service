@@ -1,0 +1,16 @@
+# 0.0.1 Blurtd systemd unit
+# systemd runs tasks in the background for you.  In this configuration, you will run blurtd using systemd and interact with blurtd by using cli_wallet
+# changes to your config.ini file will require you to use the command
+# systemctl restart blurtd
+# For reference on systemd unit files, please see: https://www.freedesktop.org/software/systemd/man/systemd.unit.html -- it is the best source of information on this topic.  
+
+[Unit]
+Description=blurtd
+
+[Service]
+ExecStart=/usr/bin/blurtd --data-dir /blurt
+User=blurt
+
+[Install]
+WantedBy=multi-user.target
+

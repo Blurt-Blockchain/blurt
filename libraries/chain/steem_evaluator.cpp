@@ -256,23 +256,9 @@ void account_create_evaluator::do_apply( const account_create_operation& o )
    const auto& props = _db.get_dynamic_global_properties();
    const witness_schedule_object& wso = _db.get_witness_schedule_object();
 
-   {
-      FC_TODO( "Move to validate() after HF20" );
-      FC_ASSERT( o.fee <= asset( BLURT_MAX_ACCOUNT_CREATION_FEE, BLURT_SYMBOL ), "Account creation fee cannot be too large" );
-   }
-
-   {
-      FC_ASSERT( o.fee == wso.median_props.account_creation_fee, "Must pay the exact account creation fee. paid: ${p} fee: ${f}",
-                  ("p", o.fee)
-                  ("f", wso.median_props.account_creation_fee) );
-   }
-
-   FC_TODO( "Check and move to validate post HF20" );
-   {
-      validate_auth_size( o.owner );
-      validate_auth_size( o.active );
-      validate_auth_size( o.posting );
-   }
+   FC_ASSERT( o.fee == wso.median_props.account_creation_fee, "Must pay the exact account creation fee. paid: ${p} fee: ${f}",
+               ("p", o.fee)
+               ("f", wso.median_props.account_creation_fee) );
 
    {
       verify_authority_accounts_exist( _db, o.owner, o.new_account_name, authority::owner );
@@ -282,7 +268,6 @@ void account_create_evaluator::do_apply( const account_create_operation& o )
 
    _db.adjust_balance( creator, -o.fee );
    _db.adjust_balance( _db.get< account_object, by_name >( BLURT_NULL_ACCOUNT ), o.fee );
-
 
    const auto& new_account = _db.create< account_object >( [&]( account_object& acc )
    {
@@ -539,7 +524,6 @@ void comment_evaluator::do_apply( const comment_operation& o )
             from_string( com.parent_permlink, o.parent_permlink );
             from_string( com.category, o.parent_permlink );
             com.root_comment = com.id;
-            com.cashout_time = _db.head_block_time() + BLURT_CASHOUT_WINDOW_SECONDS_PRE_HF17;
          }
          else
          {
@@ -548,7 +532,6 @@ void comment_evaluator::do_apply( const comment_operation& o )
             com.depth = parent->depth + 1;
             com.category = parent->category;
             com.root_comment = parent->root_comment;
-            com.cashout_time = fc::time_point_sec::maximum();
          }
 
          com.cashout_time = com.created + BLURT_CASHOUT_WINDOW_SECONDS;
@@ -836,24 +819,8 @@ void withdraw_vesting_evaluator::do_apply( const withdraw_vesting_operation& o )
 {
    const auto& account = _db.get_account( o.account );
 
-   if( o.vesting_shares.amount < 0 )
-   {
-      // TODO: Update this to a HF 20 check
-#ifndef IS_TEST_NET
-      if( _db.head_block_num() > 23847548 )
-      {
-#endif
-         FC_ASSERT( false, "Cannot withdraw negative VESTS. account: ${account}, vests:${vests}",
-            ("account", o.account)("vests", o.vesting_shares) );
-#ifndef IS_TEST_NET
-      }
-#endif
-
-      // else, no-op
-      return;
-   }
-
-
+   FC_ASSERT( o.vesting_shares.amount >= 0, "Cannot withdraw negative VESTS. account: ${account}, vests:${vests}",
+      ("account", o.account)("vests", o.vesting_shares) );
    FC_ASSERT( account.vesting_shares >= asset( 0, VESTS_SYMBOL ), "Account does not have sufficient Steem Power for withdraw." );
    FC_ASSERT( account.vesting_shares - account.delegated_vesting_shares >= o.vesting_shares, "Account does not have sufficient Steem Power for withdraw." );
 
@@ -870,8 +837,7 @@ void withdraw_vesting_evaluator::do_apply( const withdraw_vesting_operation& o )
    }
    else
    {
-      int vesting_withdraw_intervals = BLURT_VESTING_WITHDRAW_INTERVALS_PRE_HF_16;
-      vesting_withdraw_intervals = BLURT_VESTING_WITHDRAW_INTERVALS; /// 13 weeks = 1 quarter of a year
+      int vesting_withdraw_intervals = BLURT_VESTING_WITHDRAW_INTERVALS; /// 13 weeks = 1 quarter of a year
 
       _db.modify( account, [&]( account_object& a )
       {
@@ -1147,7 +1113,7 @@ void vote_evaluator::do_apply( const vote_operation& o )
       });
 
       /// if the current net_rshares is less than 0, the post is getting 0 rewards so it is not factored into total rshares^2
-      fc::uint128_t old_rshares = std::max(comment.net_rshares.value, int64_t(0));
+//      fc::uint128_t old_rshares = std::max(comment.net_rshares.value, int64_t(0));
       const auto& root = _db.get( comment.root_comment );
 
       auto old_vote_rshares = comment.vote_rshares;
@@ -1169,11 +1135,11 @@ void vote_evaluator::do_apply( const vote_operation& o )
          c.children_abs_rshares += abs_rshares;
       });
 
-      fc::uint128_t new_rshares = std::max( comment.net_rshares.value, int64_t(0) );
-
-      /// calculate rshares2 value
-      new_rshares = util::evaluate_reward_curve( new_rshares );
-      old_rshares = util::evaluate_reward_curve( old_rshares );
+//      fc::uint128_t new_rshares = std::max( comment.net_rshares.value, int64_t(0) );
+//
+//      /// calculate rshares2 value
+//      new_rshares = util::evaluate_reward_curve( new_rshares );
+//      old_rshares = util::evaluate_reward_curve( old_rshares );
 
       uint64_t max_vote_weight = 0;
 
@@ -1265,7 +1231,7 @@ void vote_evaluator::do_apply( const vote_operation& o )
       });
 
       /// if the current net_rshares is less than 0, the post is getting 0 rewards so it is not factored into total rshares^2
-      fc::uint128_t old_rshares = std::max( comment.net_rshares.value, int64_t( 0 ) );
+//      fc::uint128_t old_rshares = std::max( comment.net_rshares.value, int64_t( 0 ) );
       const auto& root = _db.get( comment.root_comment );
 
       _db.modify( comment, [&]( comment_object& c )
@@ -1294,11 +1260,11 @@ void vote_evaluator::do_apply( const vote_operation& o )
          c.children_abs_rshares += abs_rshares;
       });
 
-      fc::uint128_t new_rshares = std::max( comment.net_rshares.value, int64_t(0));
-
-      /// calculate rshares2 value
-      new_rshares = util::evaluate_reward_curve( new_rshares );
-      old_rshares = util::evaluate_reward_curve( old_rshares );
+//      fc::uint128_t new_rshares = std::max( comment.net_rshares.value, int64_t(0));
+//
+//      /// calculate rshares2 value
+//      new_rshares = util::evaluate_reward_curve( new_rshares );
+//      old_rshares = util::evaluate_reward_curve( old_rshares );
 
       _db.modify( comment, [&]( comment_object& c )
       {
@@ -1399,101 +1365,6 @@ void custom_binary_evaluator::do_apply( const custom_binary_operation& o )
    {
       elog( "Unexpected exception applying custom json evaluator." );
    }
-}
-
-
-template<typename Operation>
-void pow_apply( database& db, Operation o )
-{
-   const auto& dgp = db.get_dynamic_global_properties();
-
-   {
-      const auto& witness_by_work = db.get_index<witness_index>().indices().get<by_work>();
-      auto work_itr = witness_by_work.find( o.work.work );
-      if( work_itr != witness_by_work.end() )
-      {
-          FC_ASSERT( !"DUPLICATE WORK DISCOVERED", "${w}  ${witness}",("w",o)("wit",*work_itr) );
-      }
-   }
-
-   const auto& accounts_by_name = db.get_index<account_index>().indices().get<by_name>();
-
-   auto itr = accounts_by_name.find(o.get_worker_account());
-   if(itr == accounts_by_name.end())
-   {
-      const auto& new_account = db.create< account_object >( [&]( account_object& acc )
-      {
-         initialize_account_object( acc, o.get_worker_account(), o.work.worker, dgp, true /*mined*/, account_name_type(), db.get_hardfork() );
-         // ^ empty recovery account parameter means highest voted witness at time of recovery
-      });
-
-#ifndef IS_LOW_MEM
-      db.create< account_metadata_object >( [&]( account_metadata_object& meta )
-      {
-         meta.account = new_account.id;
-      });
-#else
-      FC_UNUSED( new_account );
-#endif
-
-      db.create< account_authority_object >( [&]( account_authority_object& auth )
-      {
-         auth.account = o.get_worker_account();
-         auth.owner = authority( 1, o.work.worker, 1);
-         auth.active = auth.owner;
-         auth.posting = auth.owner;
-      });
-   }
-
-   const auto& worker_account = db.get_account( o.get_worker_account() ); // verify it exists
-   const auto& worker_auth = db.get< account_authority_object, by_account >( o.get_worker_account() );
-   FC_ASSERT( worker_auth.active.num_auths() == 1, "Miners can only have one key authority. ${a}", ("a",worker_auth.active) );
-   FC_ASSERT( worker_auth.active.key_auths.size() == 1, "Miners may only have one key authority." );
-   FC_ASSERT( worker_auth.active.key_auths.begin()->first == o.work.worker, "Work must be performed by key that signed the work." );
-   FC_ASSERT( o.block_id == db.head_block_id(), "pow not for last block" );
-   FC_ASSERT( worker_account.last_account_update < db.head_block_time(), "Worker account must not have updated their account this block." );
-
-   fc::sha256 target = db.get_pow_target();
-
-   FC_ASSERT( o.work.work < target, "Work lacks sufficient difficulty." );
-
-   db.modify( dgp, [&]( dynamic_global_property_object& p )
-   {
-      p.total_pow++; // make sure this doesn't break anything...
-      p.num_pow_witnesses++;
-   });
-
-
-   const witness_object* cur_witness = db.find_witness( worker_account.name );
-   if( cur_witness ) {
-      FC_ASSERT( cur_witness->pow_worker == 0, "This account is already scheduled for pow block production." );
-      db.modify(*cur_witness, [&]( witness_object& w ){
-          copy_legacy_chain_properties< true >( w.props, o.props );
-          w.pow_worker        = dgp.total_pow;
-          w.last_work         = o.work.work;
-      });
-   } else {
-      db.create<witness_object>( [&]( witness_object& w )
-      {
-          w.owner             = o.get_worker_account();
-          copy_legacy_chain_properties< true >( w.props, o.props );
-          w.signing_key       = o.work.worker;
-          w.pow_worker        = dgp.total_pow;
-          w.last_work         = o.work.work;
-      });
-   }
-   /// POW reward depends upon whether we are before or after MINER_VOTING kicks in
-   asset pow_reward = db.get_pow_reward();
-   if( db.head_block_num() < BLURT_START_MINER_VOTING_BLOCK )
-      pow_reward.amount *= BLURT_MAX_WITNESSES;
-   db.adjust_supply( pow_reward, true );
-
-   /// pay the witness that includes this POW
-   const auto& inc_witness = db.get_account( dgp.current_witness );
-   if( db.head_block_num() < BLURT_START_MINER_VOTING_BLOCK )
-      db.adjust_balance( inc_witness, pow_reward );
-   else
-      db.create_vesting( inc_witness, pow_reward );
 }
 
 void claim_account_evaluator::do_apply( const claim_account_operation& o )

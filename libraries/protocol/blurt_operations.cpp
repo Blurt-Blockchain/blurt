@@ -22,12 +22,17 @@ namespace blurt { namespace protocol {
       owner.validate();
       active.validate();
 
+      validate_auth_size( owner );
+      validate_auth_size( active );
+      validate_auth_size( posting );
+
       if ( json_metadata.size() > 0 )
       {
          FC_ASSERT( fc::is_utf8(json_metadata), "JSON Metadata not formatted in UTF8" );
          FC_ASSERT( fc::json::is_valid(json_metadata), "JSON Metadata not valid JSON" );
       }
       FC_ASSERT( fee >= asset( 0, BLURT_SYMBOL ), "Account creation fee cannot be negative" );
+      FC_ASSERT( fee <= asset( BLURT_MAX_ACCOUNT_CREATION_FEE, BLURT_SYMBOL ), "Account creation fee cannot be too large" );
    }
 
    void account_update_operation::validate() const

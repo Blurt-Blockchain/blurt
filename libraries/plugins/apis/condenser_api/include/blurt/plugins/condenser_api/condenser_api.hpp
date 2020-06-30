@@ -304,10 +304,7 @@ struct extended_dynamic_global_properties
       head_block_id( o.head_block_id ),
       time( o.time ),
       current_witness( o.current_witness ),
-      total_pow( o.total_pow ),
-      num_pow_witnesses( o.num_pow_witnesses ),
       current_supply( legacy_asset::from_asset( o.current_supply ) ),
-      confidential_supply( legacy_asset::from_asset( o.confidential_supply ) ),
       total_vesting_fund_blurt( legacy_asset::from_asset( o.total_vesting_fund_blurt ) ),
       total_vesting_shares( legacy_asset::from_asset( o.total_vesting_shares ) ),
       total_reward_fund_blurt( legacy_asset::from_asset( o.total_reward_fund_blurt ) ),
@@ -336,12 +333,7 @@ struct extended_dynamic_global_properties
    time_point_sec    time;
    account_name_type current_witness;
 
-   uint64_t          total_pow = -1;
-
-   uint32_t          num_pow_witnesses = 0;
-
    legacy_asset      current_supply;
-   legacy_asset      confidential_supply;
    legacy_asset      total_vesting_fund_blurt;
    legacy_asset      total_vesting_shares;
    legacy_asset      total_reward_fund_blurt;
@@ -356,8 +348,8 @@ struct extended_dynamic_global_properties
 
    uint32_t          last_irreversible_block_num = 0;
 
-   uint32_t          vote_power_reserve_rate = BLURT_INITIAL_VOTE_POWER_RATE;
-   uint32_t          delegation_return_period = BLURT_DELEGATION_RETURN_PERIOD_HF0;
+   uint32_t          vote_power_reserve_rate = BLURT_REDUCED_VOTE_POWER_RATE;
+   uint32_t          delegation_return_period = BLURT_DELEGATION_RETURN_PERIOD_HF20;
 
    uint64_t          reverse_auction_seconds = 0;
 
@@ -366,9 +358,9 @@ struct extended_dynamic_global_properties
    time_point_sec    next_maintenance_time;
    time_point_sec    last_budget_time;
 
-   uint16_t          content_reward_percent = BLURT_CONTENT_REWARD_PERCENT_HF16;
+   uint16_t          content_reward_percent = BLURT_CONTENT_REWARD_PERCENT_HF21;
    uint16_t          vesting_reward_percent = BLURT_VESTING_FUND_PERCENT_HF16;
-   uint16_t          sps_fund_percent = BLURT_PROPOSAL_FUND_PERCENT_HF0;
+   uint16_t          sps_fund_percent = BLURT_PROPOSAL_FUND_PERCENT_HF21;
 
    legacy_asset      sps_interval_ledger;
 };
@@ -384,14 +376,12 @@ struct api_witness_object
       total_missed( w.total_missed ),
       last_aslot( w.last_aslot ),
       last_confirmed_block_num( w.last_confirmed_block_num ),
-      pow_worker( w.pow_worker ),
       signing_key( w.signing_key ),
       props( w.props ),
       votes( w.votes ),
       virtual_last_update( w.virtual_last_update ),
       virtual_position( w.virtual_position ),
       virtual_scheduled_time( w.virtual_scheduled_time ),
-      last_work( w.last_work ),
       running_version( w.running_version ),
       hardfork_version_vote( w.hardfork_version_vote ),
       hardfork_time_vote( w.hardfork_time_vote ),
@@ -405,14 +395,12 @@ struct api_witness_object
    uint32_t                total_missed = 0;
    uint64_t                last_aslot = 0;
    uint64_t                last_confirmed_block_num = 0;
-   uint64_t                pow_worker;
    public_key_type         signing_key;
    api_chain_properties    props;
    share_type              votes;
    fc::uint128_t           virtual_last_update;
    fc::uint128_t           virtual_position;
    fc::uint128_t           virtual_scheduled_time = fc::uint128_t::max_value();
-   digest_type             last_work;
    version                 running_version;
    hardfork_version        hardfork_version_vote;
    time_point_sec          hardfork_time_vote = BLURT_GENESIS_TIME;
@@ -429,12 +417,10 @@ struct api_witness_schedule_object
       num_scheduled_witnesses( w.num_scheduled_witnesses ),
       elected_weight( w.elected_weight ),
       timeshare_weight( w.timeshare_weight ),
-      miner_weight( w.miner_weight ),
       witness_pay_normalization_factor( w.witness_pay_normalization_factor ),
       median_props( w.median_props ),
       majority_version( w.majority_version ),
       max_voted_witnesses( w.max_voted_witnesses ),
-      max_miner_witnesses( w.max_miner_witnesses ),
       max_runner_witnesses( w.max_runner_witnesses ),
       hardfork_required_witnesses( w.hardfork_required_witnesses ),
       account_subsidy_rd( w.account_subsidy_rd ),
@@ -451,35 +437,16 @@ struct api_witness_schedule_object
    uint8_t                       num_scheduled_witnesses = 1;
    uint8_t                       elected_weight = 1;
    uint8_t                       timeshare_weight = 5;
-   uint8_t                       miner_weight = 1;
    uint32_t                      witness_pay_normalization_factor = 25;
    api_chain_properties          median_props;
    version                       majority_version;
-   uint8_t                       max_voted_witnesses           = BLURT_MAX_VOTED_WITNESSES_HF0;
-   uint8_t                       max_miner_witnesses           = BLURT_MAX_MINER_WITNESSES_HF0;
-   uint8_t                       max_runner_witnesses          = BLURT_MAX_RUNNER_WITNESSES_HF0;
+   uint8_t                       max_voted_witnesses           = BLURT_MAX_VOTED_WITNESSES_HF17;
+   uint8_t                       max_runner_witnesses          = BLURT_MAX_RUNNER_WITNESSES_HF17;
    uint8_t                       hardfork_required_witnesses   = BLURT_HARDFORK_REQUIRED_WITNESSES;
 
    rd_dynamics_params            account_subsidy_rd;
    rd_dynamics_params            account_subsidy_witness_rd;
    int64_t                       min_witness_account_subsidy_decay = 0;
-};
-
-struct api_feed_history_object
-{
-   api_feed_history_object() {}
-   api_feed_history_object( const database_api::api_feed_history_object& f ) :
-      current_median_history( f.current_median_history )
-   {
-      for( auto& p : f.price_history )
-      {
-         price_history.push_back( legacy_price( p ) );
-      }
-   }
-
-   feed_history_id_type   id;
-   legacy_price           current_median_history;
-   deque< legacy_price >  price_history;
 };
 
 struct api_reward_fund_object
@@ -1029,8 +996,8 @@ FC_REFLECT( blurt::plugins::condenser_api::api_comment_object,
 
 FC_REFLECT( blurt::plugins::condenser_api::extended_dynamic_global_properties,
             (head_block_number)(head_block_id)(time)
-            (current_witness)(total_pow)(num_pow_witnesses)
-            (current_supply)(confidential_supply)
+            (current_witness)
+            (current_supply)
             (total_vesting_fund_blurt)(total_vesting_shares)
             (total_reward_fund_blurt)(total_reward_shares2)(pending_rewarded_vesting_shares)(pending_rewarded_vesting_blurt)
             (maximum_block_size)(current_aslot)(recent_slots_filled)(participation_count)(last_irreversible_block_num)
@@ -1043,9 +1010,8 @@ FC_REFLECT( blurt::plugins::condenser_api::api_witness_object,
              (owner)
              (created)
              (url)(votes)(virtual_last_update)(virtual_position)(virtual_scheduled_time)(total_missed)
-             (last_aslot)(last_confirmed_block_num)(pow_worker)(signing_key)
+             (last_aslot)(last_confirmed_block_num)(signing_key)
              (props)
-             (last_work)
              (running_version)
              (hardfork_version_vote)(hardfork_time_vote)
              (available_witness_account_subsidies)
@@ -1059,23 +1025,15 @@ FC_REFLECT( blurt::plugins::condenser_api::api_witness_schedule_object,
              (num_scheduled_witnesses)
              (elected_weight)
              (timeshare_weight)
-             (miner_weight)
              (witness_pay_normalization_factor)
              (median_props)
              (majority_version)
              (max_voted_witnesses)
-             (max_miner_witnesses)
              (max_runner_witnesses)
              (hardfork_required_witnesses)
              (account_subsidy_rd)
              (account_subsidy_witness_rd)
              (min_witness_account_subsidy_decay)
-          )
-
-FC_REFLECT( blurt::plugins::condenser_api::api_feed_history_object,
-             (id)
-             (current_median_history)
-             (price_history)
           )
 
 FC_REFLECT( blurt::plugins::condenser_api::api_reward_fund_object,

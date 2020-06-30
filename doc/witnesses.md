@@ -1,30 +1,29 @@
+---
+title:  Blurt Witnesses
+geometry: margin=2cm
+---
+
 # Witnesses
 
 The role of a witness in the Blurt Blockchain is to verify incoming transactions, produce blocks when scheduled, participate in governance.  In addition to this, there is a formal expectation that Witnesses advocate for the Blurt blockchain, review software, and build the Blurt community.  
 
-Witnesses are able to use the `witness_set_properties_operation` to change witness specific properties and vote on paramters.
-
-Unless otherwise noted, the median of the top 20 elected witnesses is used for all calculations needing the parameter.
-
-This operation was added in Steem v0.20.0 to replace the `witness_update_operation` which was not easily extendable. While it is recommended to use `witness_set_properties_operation`, `witness_update_operation` will continue to work.
-
 ## Witness Hardware
 
-As many of you are aware, the hardware spec needed for running a Steem witness has grown significantly over the years!  
+As many of you are aware, the hardware spec needed for running a Steem/Hive witness has grown significantly over the years!  
 
 [privex.io](https://privex.io) currently offers a highly optomized Hive witness setup that they call Node In A Box(TM).
 
-We have had some discussions about a Blurt-Flavored "Node In A Box(TM), so in the long-term as the chain grows, their services may limit your costs.  
+We have had some discussions about a Blurt-Flavored "Node In A Box(TM)", so in the long-term as the chain grows, their services may limit your costs.  
 
-Additionally, a non-docker bash script AND a docker-based bash script will be developed and included in this repository.  
+Additionally, a non-docker bash script AND a docker-based script will be developed and included in this repository.  
 
-Collectively, our goal should be to ensure that we do not run on any single infrastructure provider.  While many of us have a bit of a [bare-metal server fetish](https://gitlab.com/virgohardware/core), the fact is that for Blurt's launch and likely for at least the first six months of Blurt's operation, you're not going to need a huge machine to operate a Witness.  We are considering further optomizations to Blurtd which would permanently lower the RAM consumption on both Witness and Seed nodes, but that's as of yet incomplete.  Here is a [reasonable machine spec](https://whaleshares.io/@faddat/witness-post#@faddat/re-daking-re-faddat-witness-post-20200612t195020198z) that should give you a ton of growing room.  
+Our goal should be to ensure that we do not run on any single infrastructure provider.  While many of us have a bit of a [bare-metal server fetish](https://gitlab.com/virgohardware/core), the fact is that for Blurt's launch and likely for at least the first six months of Blurt's operation, you're not going to need a huge machine to operate a Witness.  We are considering further optomizations to Blurtd which would permanently lower the RAM consumption on both Witness and Seed nodes, but that's as of yet incomplete.  Here is a [reasonable machine spec](https://whaleshares.io/@faddat/witness-post#@faddat/re-daking-re-faddat-witness-post-20200612t195020198z) that should give you a ton of growing room.  
 
 **Infrastructure Providers**:
 What's important here is that everyone is not using only a single provider.  
 
 | **Provider**   |      **Machine Types**      |  **Price** | **Special Feature** |
-|----------|-------------|------|
+|----------|-------------|------|------------|
 | hetzner.de |  Bare Metal and Cloud |  Competitive | Cheap Bare Metal |
 | privex.io |    Bare Metal and Cloud   |  Mid-range | Privacy, Peering, Cryptocurrency Payments, Witness Optomization, Team has steemed since 2016 |
 | vultr.com | cloud and bare metal |  Mid-Range | Easy and straightforward |
@@ -39,7 +38,6 @@ What's important here is that everyone is not using only a single provider.
 **Machine Spec**:
 Your Witness machine spec is entirely **your** choice.  This recommended spec should be relatively low cost ($5-20 per month) and should also run your Blurt Witness very effectively.  
 
-
 Accurate as of **June 15, 2020**:
 
 | Blurt Witness Spec | |
@@ -48,9 +46,9 @@ Accurate as of **June 15, 2020**:
 | RAM |    4GB   |
 | Storage | 80+GB |
 
-## Failover Script
+You'll also want to `suggest_brain_key`.  
 
-On Steem / Hive, and also in other blockchain ecosystems, some Witnesses / Validators choose to create automated failover systems that ensure that their nodes do not miss blocks in the event that their Witness / Validator / Block Producer goes down.  If your failover system breaks, you could end up double-signing blocks, which is **very** bad.  
+Copy down its entire output and keep it safely.  You'll be using this brain key to control your Witness.  
 
 > I (Jacob) am of the opinion that double-signing (a single hot key running on more than one node at the same time) is far more harmful to a blockchain system than a node simply going down.  
 
@@ -183,7 +181,127 @@ Next, we need to use that "wif_private_key" value to allow the witness to sign b
 
 First exit the cli_wallet:
 
-That said, your Witness is ultimately your responsiibility,  and running a failover scirpt or not is ultimately your decision to make.  
+```
+Ctrl+D
+```
+
+In the code below, replace BRAIN_KEY_WIF_PRIV_KEY with the previously generated Brain wif_priv_key and replace "jacobgadikian" with your own Blurt account name: 
+
+```
+echo "private-key = BRAIN_KEY_WIF_PRIV_KEY" >> /blurt/config.ini
+echo 'witness = "jacobgadikian"' >> /blurt/config.ini
+systemctl restart blurtd
+systemctl status blurtd
+```
+
+**Declare that you're a Witness** 
+
+Use the command `cli_wallet` to go back into the wallet and then unlock it with:
+
+```
+unlock yourpasswordhere
+```
+
+Use the below code, but first replace the Blurt account name with your own; replace the blog URL with your own blog (Blurt, Hive, Medium, Steem etc) and the Brain public key with yours which you generated previously: 
+
+```
+update_witness "jacobgadikian" "https://whaleshares.io/@faddat" "BRAIN_KEY_PUBLIC_KEY_GOES_HERE" {"account_creation_fee":"3.000 BLURT","maximum_block_size":65536} true
+```
+
+Success looks like this:
+```json
+{
+  "ref_block_num": 12141,
+  "ref_block_prefix": 747640993,
+  "expiration": "2020-06-15T16:54:30",
+  "operations": [[
+      "witness_update",{
+        "owner": "jacobgadikian",
+        "url": "https://whaleshares.io/@faddat",
+        "block_signing_key": "BLT8mBSoVWNcXqsk2PHTfJCxRz9ebJgz8e1WgAnuqQBpTjs9UXqGh",
+        "props": {
+          "account_creation_fee": "3.000 BLURT",
+          "maximum_block_size": 65536,
+          "account_subsidy_budget": 797,
+          "account_subsidy_decay": 347321
+        },
+        "fee": "0.000 BLURT"
+      }
+    ]
+  ],
+  "extensions": [],
+  "signatures": [
+    "1f132ce16452adf8667be7a0bb9bf909396dcea8e21093729a8c1b072fd3ad4f9909aa675a131871b0feb582077ea2b7a78c675155e0125f33c5376c087f2438f7"
+  ],
+  "transaction_id": "d28314a76b29cfb30e8c8de40c819ae38b538181",
+  "block_num": 12142,
+  "transaction_num": 0
+}
+```
+
+It's also a very good idea for you to vote for yourself from the CLI wallet, so that you will begin to make blocks:
+
+Note: gopher23 is an account name.  You'll want to replace `gopher23` with your own account name in the voting step.  The first name is the account that you're voting from, and the second is the account that you're voting for.  
+
+**vote for yoursself**
+```
+vote_for_witness gopher23 gopher23 true true
+```
+
+**vote for someone else**
+```
+vote_for_witness gopher23 megadrive true true
+```
+
+
+Success looks like:
+
+```json
+{
+  "ref_block_num": 35495,
+  "ref_block_prefix": 2258033885,
+  "expiration": "2020-06-16T12:23:03",
+  "operations": [[
+      "account_witness_vote",{
+        "account": "gopher23",
+        "witness": "gopher23",
+        "approve": true
+      }
+    ]
+  ],
+  "extensions": [],
+  "signatures": [
+    "1f7f104f99d77fdb397ef2ec01f178185efe7baa01077afd094dd34a9ecee68ea7511659ef3bfb829c333ae967746c8dd14282fe847bce693a96046f29308ead03"
+  ],
+  "transaction_id": "1472efb61fb35a65afe69f4c0f9344009b951462",
+  "block_num": 35496,
+  "transaction_num": 0
+}
+```
+
+## Common Cli Wallet Commands
+
+Open Cli Wallet:
+```
+cli_wallet
+```
+
+Unlock Wallet:
+```
+unlock yourpassword
+```
+
+Exit Cli Wallet:
+```
+Ctrl+D 
+```
+
+## Common Blurtd Commands
+
+Check block production status:
+```
+journalctl -u blurtd --no-pager --since "1 minute ago"
+```
 
 
 ## Social Expectations

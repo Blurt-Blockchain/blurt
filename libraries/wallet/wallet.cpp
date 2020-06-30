@@ -1552,31 +1552,6 @@ condenser_api::legacy_signed_transaction wallet_api::create_account(
    return create_account_with_keys( creator, new_account_name, json_meta, owner.pub_key, active.pub_key, posting.pub_key, memo.pub_key, broadcast );
 } FC_CAPTURE_AND_RETHROW( (creator)(new_account_name)(json_meta) ) }
 
-/**
- *  This method will genrate new owner, active, and memo keys for the new account which
- *  will be controlable by this wallet.
- */
-condenser_api::legacy_signed_transaction wallet_api::create_account_delegated(
-   string creator,
-   condenser_api::legacy_asset blurt_fee,
-   condenser_api::legacy_asset delegated_vests,
-   string new_account_name,
-   string json_meta,
-   bool broadcast )
-{ try {
-   FC_ASSERT( !is_locked() );
-   auto owner = suggest_brain_key();
-   auto active = suggest_brain_key();
-   auto posting = suggest_brain_key();
-   auto memo = suggest_brain_key();
-   import_key( owner.wif_priv_key );
-   import_key( active.wif_priv_key );
-   import_key( posting.wif_priv_key );
-   import_key( memo.wif_priv_key );
-   return create_account_with_keys_delegated( creator, blurt_fee, delegated_vests, new_account_name, json_meta,  owner.pub_key, active.pub_key, posting.pub_key, memo.pub_key, broadcast );
-} FC_CAPTURE_AND_RETHROW( (creator)(new_account_name)(json_meta) ) }
-
-
 condenser_api::legacy_signed_transaction wallet_api::update_witness(
    string witness_account_name,
    string url,

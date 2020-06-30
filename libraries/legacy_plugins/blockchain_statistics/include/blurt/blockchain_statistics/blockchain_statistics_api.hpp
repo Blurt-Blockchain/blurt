@@ -56,9 +56,6 @@ struct statistics
    uint32_t             finished_vesting_withdrawals = 0;            ///< Processed vesting withdrawals that are now finished
    share_type           vests_withdrawn = 0;                         ///< Ammount of VESTS withdrawn to BLURT
    share_type           vests_transferred = 0;                       ///< Ammount of VESTS transferred to another account
-   share_type           blurt_converted = 0;                         ///< Amount of BLURT that was converted
-   uint32_t             total_pow = 0;                               ///< POW submitted
-   uint128_t            estimated_hashpower = 0;                     ///< Estimated average hashpower over interval
 
    statistics& operator += ( const bucket_object& b );
 };
@@ -136,10 +133,7 @@ FC_REFLECT( blurt::blockchain_statistics::statistics,
    (vesting_withdrawals_processed)
    (finished_vesting_withdrawals)
    (vests_withdrawn)
-   (vests_transferred)
-   (blurt_converted)
-   (total_pow)
-   (estimated_hashpower) )
+   (vests_transferred))
 
 
 FC_API( blurt::blockchain_statistics::blockchain_statistics_api,

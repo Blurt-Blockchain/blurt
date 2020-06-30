@@ -170,8 +170,6 @@ namespace blurt { namespace chain {
           */
          bool                       is_known_block( const block_id_type& id )const;
          bool                       is_known_transaction( const transaction_id_type& id )const;
-         fc::sha256                 get_pow_target()const;
-         uint32_t                   get_pow_summary_target()const;
          block_id_type              find_block_id_for_num( uint32_t block_num )const;
          block_id_type              get_block_id_for_num( uint32_t block_num )const;
          optional<signed_block>     fetch_block_by_id( const block_id_type& id )const;
@@ -379,11 +377,6 @@ namespace blurt { namespace chain {
          void expire_escrow_ratification();
          void process_decline_voting_rights();
 
-         asset get_content_reward()const;
-         asset get_producer_reward();
-         asset get_curation_reward()const;
-         asset get_pow_reward()const;
-
          uint16_t get_curation_rewards_percent( const comment_object& c ) const;
 
          share_type pay_reward_funds( share_type reward );
@@ -404,7 +397,7 @@ namespace blurt { namespace chain {
          /// Reset the object graph in-memory
          void initialize_indexes();
          void init_schema();
-         void init_genesis(uint64_t initial_supply = BLURT_INIT_SUPPLY );
+         void init_genesis(const open_args& args );
 
          /**
           *  This method validates transactions without adding it to the pending state.
@@ -417,11 +410,9 @@ namespace blurt { namespace chain {
          std::deque< signed_transaction >       _popped_tx;
          vector< signed_transaction >           _pending_tx;
 
-         void perform_vesting_share_split( uint32_t magnitude );
          void retally_comment_children();
          void retally_witness_votes();
          void retally_witness_vote_counts( bool force = false );
-         void retally_liquidity_weight();
 
          bool has_hardfork( uint32_t hardfork )const;
 

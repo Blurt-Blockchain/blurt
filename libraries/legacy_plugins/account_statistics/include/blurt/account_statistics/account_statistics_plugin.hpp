@@ -83,9 +83,6 @@ struct account_stats_bucket_object : public object< account_stats_bucket_object_
    share_type           blurt_received_from_withdrawls = 0;       ///< BLURT received from this account's vesting withdrawals
    share_type           blurt_received_from_routes = 0;           ///< BLURT received from another account's vesting withdrawals
    share_type           vests_received_from_routes = 0;           ///< VESTS received from another account's vesting withdrawals
-   share_type           blurt_converted = 0;                      ///< Amount of BLURT that was converted
-   uint32_t             total_pow = 0;                            ///< POW completed
-   uint128_t            estimated_hashpower = 0;                  ///< Estimated hashpower
 };
 
 typedef account_stats_bucket_object::id_type account_stats_bucket_id_type;
@@ -182,9 +179,6 @@ FC_REFLECT( blurt::account_statistics::account_stats_bucket_object,
    (blurt_received_from_withdrawls)
    (blurt_received_from_routes)
    (vests_received_from_routes)
-   (blurt_converted)
-   (total_pow)
-   (estimated_hashpower)
 )
 //SET_INDEX_TYPE( blurt::account_statistics::account_stats_bucket_object,)
 

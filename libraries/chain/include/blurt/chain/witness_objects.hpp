@@ -32,27 +32,26 @@ namespace blurt { namespace chain {
        *  fee requires all accounts to have some kind of commitment to the network that includes the
        *  ability to vote and make transactions.
        */
-      asset             account_creation_fee =
-         asset( BLURT_MIN_ACCOUNT_CREATION_FEE, BLURT_SYMBOL );
+      asset account_creation_fee = asset( BLURT_MIN_ACCOUNT_CREATION_FEE, BLURT_SYMBOL );
 
       /**
        *  This witnesses vote for the maximum_block_size which is used by the network
        *  to tune rate limiting and capacity
        */
-      uint32_t          maximum_block_size = BLURT_MIN_BLOCK_SIZE_LIMIT * 2;
+      uint32_t maximum_block_size = BLURT_MIN_BLOCK_SIZE_LIMIT * 2;
 
       /**
        * How many free accounts should be created per elected witness block.
        * Scaled so that BLURT_ACCOUNT_SUBSIDY_PRECISION represents one account.
        */
-      int32_t           account_subsidy_budget = BLURT_DEFAULT_ACCOUNT_SUBSIDY_BUDGET;
+      int32_t account_subsidy_budget = BLURT_DEFAULT_ACCOUNT_SUBSIDY_BUDGET;
 
       /**
        * What fraction of the "stockpiled" free accounts "expire" per elected witness block.
        * Scaled so that 1 << BLURT_RD_DECAY_DENOM_SHIFT represents 100% of accounts
        * expiring.
        */
-      uint32_t          account_subsidy_decay = BLURT_DEFAULT_ACCOUNT_SUBSIDY_DECAY;
+      uint32_t account_subsidy_decay = BLURT_DEFAULT_ACCOUNT_SUBSIDY_DECAY;
    };
 
    /**
@@ -69,7 +68,6 @@ namespace blurt { namespace chain {
          {
             elected,
             timeshare,
-            miner,
             none
          };
 
@@ -89,14 +87,6 @@ namespace blurt { namespace chain {
          uint32_t          total_missed = 0;
          uint64_t          last_aslot = 0;
          uint64_t          last_confirmed_block_num = 0;
-
-         /**
-          * Some witnesses have the job because they did a proof of work,
-          * this field indicates where they were in the POW order. After
-          * each round, the witness with the lowest pow_worker value greater
-          * than 0 is removed.
-          */
-         uint64_t          pow_worker = 0;
 
          /**
           *  This is the key used to sign blocks on behalf of this witness
@@ -140,8 +130,6 @@ namespace blurt { namespace chain {
          fc::uint128       virtual_position;
          fc::uint128       virtual_scheduled_time = fc::uint128::max_value();
          ///@}
-
-         digest_type       last_work;
 
          /**
           * This field represents the Steem blockchain version the witness is running.
@@ -187,18 +175,16 @@ namespace blurt { namespace chain {
 
          fc::uint128                                                       current_virtual_time;
          uint32_t                                                          next_shuffle_block_num = 1;
-         fc::array< account_name_type, BLURT_MAX_WITNESSES >             current_shuffled_witnesses;
+         fc::array< account_name_type, BLURT_MAX_WITNESSES >               current_shuffled_witnesses;
          uint8_t                                                           num_scheduled_witnesses = 1;
          uint8_t                                                           elected_weight = 1;
          uint8_t                                                           timeshare_weight = 5;
-         uint8_t                                                           miner_weight = 1;
          uint32_t                                                          witness_pay_normalization_factor = 25;
          chain_properties                                                  median_props;
          version                                                           majority_version;
 
-         uint8_t max_voted_witnesses            = BLURT_MAX_VOTED_WITNESSES_HF0;
-         uint8_t max_miner_witnesses            = BLURT_MAX_MINER_WITNESSES_HF0;
-         uint8_t max_runner_witnesses           = BLURT_MAX_RUNNER_WITNESSES_HF0;
+         uint8_t max_voted_witnesses            = BLURT_MAX_VOTED_WITNESSES_HF17;
+         uint8_t max_runner_witnesses           = BLURT_MAX_RUNNER_WITNESSES_HF17;
          uint8_t hardfork_required_witnesses    = BLURT_HARDFORK_REQUIRED_WITNESSES;
 
          // Derived fields that are stored for easy caching and reading of values.
@@ -210,8 +196,6 @@ namespace blurt { namespace chain {
 
 
    struct by_vote_name;
-   struct by_pow;
-   struct by_work;
    struct by_schedule_time;
    /**
     * @ingroup object_index
@@ -220,19 +204,7 @@ namespace blurt { namespace chain {
       witness_object,
       indexed_by<
          ordered_unique< tag< by_id >, member< witness_object, witness_id_type, &witness_object::id > >,
-         ordered_unique< tag< by_work >,
-            composite_key< witness_object,
-               member< witness_object, digest_type, &witness_object::last_work >,
-               member< witness_object, witness_id_type, &witness_object::id >
-            >
-         >,
          ordered_unique< tag< by_name >, member< witness_object, account_name_type, &witness_object::owner > >,
-         ordered_unique< tag< by_pow >,
-            composite_key< witness_object,
-               member< witness_object, uint64_t, &witness_object::pow_worker >,
-               member< witness_object, witness_id_type, &witness_object::id >
-            >
-         >,
          ordered_unique< tag< by_vote_name >,
             composite_key< witness_object,
                member< witness_object, share_type, &witness_object::votes >,
@@ -293,7 +265,7 @@ template<> struct is_static_length< blurt::chain::witness_schedule_object > : pu
 } // mira
 #endif
 
-FC_REFLECT_ENUM( blurt::chain::witness_object::witness_schedule_type, (elected)(timeshare)(miner)(none) )
+FC_REFLECT_ENUM( blurt::chain::witness_object::witness_schedule_type, (elected)(timeshare)(none) )
 
 FC_REFLECT( blurt::chain::chain_properties,
              (account_creation_fee)
@@ -307,9 +279,8 @@ FC_REFLECT( blurt::chain::witness_object,
              (owner)
              (created)
              (url)(votes)(schedule)(virtual_last_update)(virtual_position)(virtual_scheduled_time)(total_missed)
-             (last_aslot)(last_confirmed_block_num)(pow_worker)(signing_key)
+             (last_aslot)(last_confirmed_block_num)(signing_key)
              (props)
-             (last_work)
              (running_version)
              (hardfork_version_vote)(hardfork_time_vote)
              (available_witness_account_subsidies)
@@ -321,10 +292,9 @@ CHAINBASE_SET_INDEX_TYPE( blurt::chain::witness_vote_object, blurt::chain::witne
 
 FC_REFLECT( blurt::chain::witness_schedule_object,
              (id)(current_virtual_time)(next_shuffle_block_num)(current_shuffled_witnesses)(num_scheduled_witnesses)
-             (elected_weight)(timeshare_weight)(miner_weight)(witness_pay_normalization_factor)
+             (elected_weight)(timeshare_weight)(witness_pay_normalization_factor)
              (median_props)(majority_version)
              (max_voted_witnesses)
-             (max_miner_witnesses)
              (max_runner_witnesses)
              (hardfork_required_witnesses)
              (account_subsidy_rd)

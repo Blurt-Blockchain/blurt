@@ -138,9 +138,6 @@ statistics& statistics::operator +=( const bucket_object& b )
    this->finished_vesting_withdrawals           += b.finished_vesting_withdrawals;
    this->vests_withdrawn                        += b.vests_withdrawn;
    this->vests_transferred                      += b.vests_transferred;
-   this->blurt_converted                        += b.blurt_converted;
-   this->total_pow                              += b.total_pow;
-   this->estimated_hashpower                    += b.estimated_hashpower;
 
    return ( *this );
 }

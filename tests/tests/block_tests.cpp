@@ -56,7 +56,7 @@ void open_test_database( database& db, const fc::path& dir )
    database::open_args args;
    args.data_dir = dir;
    args.shared_mem_dir = dir;
-   args.initial_supply = INITIAL_TEST_SUPPLY;
+   args.initial_supply = BLURT_INIT_SUPPLY;
    args.shared_file_size = TEST_SHARED_MEM_SIZE;
    args.database_cfg = blurt::utilities::default_database_configuration();
    db.open( args );
@@ -146,36 +146,36 @@ BOOST_AUTO_TEST_CASE( undo_block )
          std::vector< time_point_sec > time_stack;
 
          auto init_account_priv_key  = fc::ecc::private_key::regenerate(fc::sha256::hash(string("init_key")) );
+         for( uint32_t i = 0; i < 30; ++i )
+         {
+            now = db.get_slot_time(1);
+            time_stack.push_back( now );
+            auto b = bp.generate_block( now, db.get_scheduled_witness( 1 ), init_account_priv_key, database::skip_nothing );
+         }
+         BOOST_CHECK( db.head_block_num() == 30 );
+         BOOST_CHECK( db.head_block_time() == now );
+         db.pop_block();
+         time_stack.pop_back();
+         now = time_stack.back();
+         BOOST_CHECK( db.head_block_num() == 29 );
+         BOOST_CHECK( db.head_block_time() == now );
+         db.pop_block();
+         time_stack.pop_back();
+         now = time_stack.back();
+         BOOST_CHECK( db.head_block_num() == 28 );
+         BOOST_CHECK( db.head_block_time() == now );
+         db.pop_block();
+         time_stack.pop_back();
+         now = time_stack.back();
+         BOOST_CHECK( db.head_block_num() == 27 );
+         BOOST_CHECK( db.head_block_time() == now );
          for( uint32_t i = 0; i < 5; ++i )
          {
             now = db.get_slot_time(1);
             time_stack.push_back( now );
             auto b = bp.generate_block( now, db.get_scheduled_witness( 1 ), init_account_priv_key, database::skip_nothing );
          }
-         BOOST_CHECK( db.head_block_num() == 5 );
-         BOOST_CHECK( db.head_block_time() == now );
-         db.pop_block();
-         time_stack.pop_back();
-         now = time_stack.back();
-         BOOST_CHECK( db.head_block_num() == 4 );
-         BOOST_CHECK( db.head_block_time() == now );
-         db.pop_block();
-         time_stack.pop_back();
-         now = time_stack.back();
-         BOOST_CHECK( db.head_block_num() == 3 );
-         BOOST_CHECK( db.head_block_time() == now );
-         db.pop_block();
-         time_stack.pop_back();
-         now = time_stack.back();
-         BOOST_CHECK( db.head_block_num() == 2 );
-         BOOST_CHECK( db.head_block_time() == now );
-         for( uint32_t i = 0; i < 5; ++i )
-         {
-            now = db.get_slot_time(1);
-            time_stack.push_back( now );
-            auto b = bp.generate_block( now, db.get_scheduled_witness( 1 ), init_account_priv_key, database::skip_nothing );
-         }
-         BOOST_CHECK( db.head_block_num() == 7 );
+         BOOST_CHECK( db.head_block_num() == 32 );
       }
    } catch (fc::exception& e) {
       edump((e.to_detail_string()));
@@ -201,20 +201,20 @@ BOOST_AUTO_TEST_CASE( fork_blocks )
       open_test_database( db2, data_dir2.path() );
 
       auto init_account_priv_key  = fc::ecc::private_key::regenerate(fc::sha256::hash(string("init_key")) );
-      for( uint32_t i = 0; i < 10; ++i )
+      for( uint32_t i = 0; i < 40; ++i )
       {
          auto b = bp1.generate_block(db1.get_slot_time(1), db1.get_scheduled_witness(1), init_account_priv_key, database::skip_nothing);
          try {
             PUSH_BLOCK( db2, b );
          } FC_CAPTURE_AND_RETHROW( ("db2") );
       }
-      for( uint32_t i = 10; i < 13; ++i )
+      for( uint32_t i = 40; i < 43; ++i )
       {
          auto b =  bp1.generate_block(db1.get_slot_time(1), db1.get_scheduled_witness(1), init_account_priv_key, database::skip_nothing);
       }
       string db1_tip = db1.head_block_id().str();
       uint32_t next_slot = 3;
-      for( uint32_t i = 13; i < 16; ++i )
+      for( uint32_t i = 43; i < 46; ++i )
       {
          auto b =  bp2.generate_block(db2.get_slot_time(next_slot), db2.get_scheduled_witness(next_slot), init_account_priv_key, database::skip_nothing);
          next_slot = 1;
@@ -228,22 +228,22 @@ BOOST_AUTO_TEST_CASE( fork_blocks )
       //The two databases are on distinct forks now, but at the same height. Make a block on db2, make it invalid, then
       //pass it to db1 and assert that db1 doesn't switch to the new fork.
       signed_block good_block;
-      BOOST_CHECK_EQUAL(db1.head_block_num(), 13);
-      BOOST_CHECK_EQUAL(db2.head_block_num(), 13);
+      BOOST_CHECK_EQUAL(db1.head_block_num(), 43);
+      BOOST_CHECK_EQUAL(db2.head_block_num(), 43);
       {
          auto b = bp2.generate_block(db2.get_slot_time(1), db2.get_scheduled_witness(1), init_account_priv_key, database::skip_nothing);
          good_block = b;
          b.transactions.emplace_back(signed_transaction());
          b.transactions.back().operations.emplace_back(transfer_operation());
          b.sign( init_account_priv_key );
-         BOOST_CHECK_EQUAL(b.block_num(), 14);
+         BOOST_CHECK_EQUAL(b.block_num(), 44);
          BLURT_CHECK_THROW(PUSH_BLOCK( db1, b ), fc::exception);
       }
-      BOOST_CHECK_EQUAL(db1.head_block_num(), 13);
+      BOOST_CHECK_EQUAL(db1.head_block_num(), 43);
       BOOST_CHECK_EQUAL(db1.head_block_id().str(), db1_tip);
 
       // assert that db1 switches to new fork with good block
-      BOOST_CHECK_EQUAL(db2.head_block_num(), 14);
+      BOOST_CHECK_EQUAL(db2.head_block_num(), 44);
       PUSH_BLOCK( db1, good_block );
       BOOST_CHECK_EQUAL(db1.head_block_id().str(), db2.head_block_id().str());
    } catch (fc::exception& e) {
@@ -269,6 +269,13 @@ BOOST_AUTO_TEST_CASE( switch_forks_undo_create )
       auto init_account_priv_key  = fc::ecc::private_key::regenerate(fc::sha256::hash(string("init_key")) );
       public_key_type init_account_pub_key  = init_account_priv_key.get_public_key();
       db1.get_index< account_index >();
+
+      for( uint32_t i = 0; i < 30; ++i )
+      {
+         auto b1 = bp1.generate_block(db1.get_slot_time(1), db1.get_scheduled_witness(1), init_account_priv_key, database::skip_nothing);
+         db1.push_block(b1);
+         db2.push_block(b1);
+      }
 
       //*
       signed_transaction trx;
@@ -715,7 +722,7 @@ BOOST_FIXTURE_TEST_CASE( skip_block, clean_database_fixture )
    try
    {
       BOOST_TEST_MESSAGE( "Skipping blocks through db" );
-      BOOST_REQUIRE( db->head_block_num() == 2 );
+      BOOST_REQUIRE( db->head_block_num() == 23 );
 
       witness::block_producer bp( *db );
       int init_block_num = db->head_block_num();
@@ -772,7 +779,7 @@ BOOST_FIXTURE_TEST_CASE( hardfork_test, database_fixture )
 //      vest( "initminer", 10000 );
 //
 //      // Fill up the rest of the required miners
-//      for( int i = BLURT_NUM_INIT_MINERS; i < BLURT_MAX_WITNESSES; i++ )
+//      for( int i = 1; i < BLURT_MAX_WITNESSES; i++ )
 //      {
 //         account_create( BLURT_INIT_MINER_NAME + fc::to_string( i ), init_account_pub_key );
 //         fund( BLURT_INIT_MINER_NAME + fc::to_string( i ), BLURT_MIN_PRODUCER_REWARD.amount.value );

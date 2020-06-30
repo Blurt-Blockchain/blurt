@@ -65,11 +65,22 @@ struct db_schema
    std::vector< operation_schema_repr > custom_operation_types;
 };
 
+struct account_snapshot {
+   account_name_type name;
+   authority owner;
+   authority active;
+   authority posting;
+   public_key_type memo;
+   share_type balance; // BLURT
+   share_type power; // BLURT POWER
+};
+
 } }
 
 FC_REFLECT( blurt::chain::object_schema_repr, (space_type)(type) )
 FC_REFLECT( blurt::chain::operation_schema_repr, (id)(type) )
 FC_REFLECT( blurt::chain::db_schema, (types)(object_types)(operation_type)(custom_operation_types) )
+FC_REFLECT( blurt::chain::account_snapshot, (name)(owner)(active)(posting)(memo)(balance)(power) )
 
 namespace blurt { namespace chain {
 
@@ -115,7 +126,7 @@ void database::open( const open_args& args )
       if( !find< dynamic_global_property_object >() )
          with_write_lock( [&]()
          {
-            init_genesis( args.initial_supply );
+            init_genesis( args );
          });
 
       _benchmark_dumper.set_enabled( args.benchmark_is_enabled );
@@ -735,10 +746,6 @@ void database::_maybe_warn_multiple_production( uint32_t height )const
 
 bool database::_push_block(const signed_block& new_block)
 { try {
-   #ifdef IS_TEST_NET
-   FC_ASSERT(new_block.block_num() < TESTNET_BLOCK_LIMIT, "Testnet block limit exceeded");
-   #endif /// IS_TEST_NET
-
    uint32_t skip = get_node_properties().skip_flags;
    //uint32_t skip_undo_db = skip & skip_undo_block;
 
@@ -1116,27 +1123,6 @@ asset database::create_vesting( const account_object& to_account, asset liquid, 
    return create_vesting2( *this, to_account, liquid, to_reward_balance, []( asset vests_created ) {} );
 }
 
-fc::sha256 database::get_pow_target()const
-{
-   const auto& dgp = get_dynamic_global_properties();
-   fc::sha256 target;
-   target._hash[0] = -1;
-   target._hash[1] = -1;
-   target._hash[2] = -1;
-   target._hash[3] = -1;
-   target = target >> ((dgp.num_pow_witnesses/4)+4);
-   return target;
-}
-
-uint32_t database::get_pow_summary_target()const
-{
-   const dynamic_global_property_object& dgp = get_dynamic_global_properties();
-   if( dgp.num_pow_witnesses >= 1004 )
-      return 0;
-
-   return (0xFE00 - 0x0040 * dgp.num_pow_witnesses ) << 0x10;
-}
-
 void database::adjust_proxied_witness_votes( const account_object& a,
                                    const std::array< share_type, BLURT_MAX_PROXY_RECURSION_DEPTH+1 >& delta,
                                    int depth )
@@ -1390,15 +1376,12 @@ void database::adjust_rshares2( const comment_object& c, fc::uint128_t old_rshar
 
 void database::update_owner_authority( const account_object& account, const authority& owner_authority )
 {
-   if( head_block_num() >= BLURT_OWNER_AUTH_HISTORY_TRACKING_START_BLOCK_NUM )
+   create< owner_authority_history_object >( [&]( owner_authority_history_object& hist )
    {
-      create< owner_authority_history_object >( [&]( owner_authority_history_object& hist )
-      {
-         hist.account = account.name;
-         hist.previous_owner_authority = get< account_authority_object, by_account >( account.name ).owner;
-         hist.last_valid_time = head_block_time();
-      });
-   }
+      hist.account = account.name;
+      hist.previous_owner_authority = get< account_authority_object, by_account >( account.name ).owner;
+      hist.last_valid_time = head_block_time();
+   });
 
    modify( get< account_authority_object, by_account >( account.name ), [&]( account_authority_object& auth )
    {
@@ -1894,8 +1877,6 @@ void database::process_funds()
 
    if( cwit.schedule == witness_object::timeshare )
       witness_reward *= wso.timeshare_weight;
-   else if( cwit.schedule == witness_object::miner )
-      witness_reward *= wso.miner_weight;
    else if( cwit.schedule == witness_object::elected )
       witness_reward *= wso.elected_weight;
    else
@@ -1968,70 +1949,6 @@ void database::process_subsidized_accounts()
          w.available_witness_account_subsidies = rd_apply( wso.account_subsidy_witness_rd, w.available_witness_account_subsidies );
       } );
    }
-}
-
-asset database::get_content_reward()const
-{
-   const auto& props = get_dynamic_global_properties();
-   static_assert( BLURT_BLOCK_INTERVAL == 3, "this code assumes a 3-second time interval" );
-   asset percent( protocol::calc_percent_reward_per_block< BLURT_CONTENT_APR_PERCENT >( props.current_supply.amount ), BLURT_SYMBOL );
-   return std::max( percent, BLURT_MIN_CONTENT_REWARD );
-}
-
-asset database::get_curation_reward()const
-{
-   const auto& props = get_dynamic_global_properties();
-   static_assert( BLURT_BLOCK_INTERVAL == 3, "this code assumes a 3-second time interval" );
-   asset percent( protocol::calc_percent_reward_per_block< BLURT_CURATE_APR_PERCENT >( props.current_supply.amount ), BLURT_SYMBOL);
-   return std::max( percent, BLURT_MIN_CURATE_REWARD );
-}
-
-asset database::get_producer_reward()
-{
-   const auto& props = get_dynamic_global_properties();
-   static_assert( BLURT_BLOCK_INTERVAL == 3, "this code assumes a 3-second time interval" );
-   asset percent( protocol::calc_percent_reward_per_block< BLURT_PRODUCER_APR_PERCENT >( props.current_supply.amount ), BLURT_SYMBOL);
-   auto pay = std::max( percent, BLURT_MIN_PRODUCER_REWARD );
-   const auto& witness_account = get_account( props.current_witness );
-
-   /// pay witness in vesting shares
-   if( props.head_block_number >= BLURT_START_MINER_VOTING_BLOCK || (witness_account.vesting_shares.amount.value == 0) )
-   {
-      // const auto& witness_obj = get_witness( props.current_witness );
-      operation vop = producer_reward_operation( witness_account.name, asset( 0, VESTS_SYMBOL ) );
-      create_vesting2( *this, witness_account, pay, false,
-         [&]( const asset& vesting_shares )
-         {
-            vop.get< producer_reward_operation >().vesting_shares = vesting_shares;
-            pre_push_virtual_operation( vop );
-         } );
-      post_push_virtual_operation( vop );
-   }
-   else
-   {
-      modify( get_account( witness_account.name), [&]( account_object& a )
-      {
-         a.balance += pay;
-      } );
-   }
-
-   return pay;
-}
-
-asset database::get_pow_reward()const
-{
-   const auto& props = get_dynamic_global_properties();
-
-#ifndef IS_TEST_NET
-   /// 0 block rewards until at least BLURT_MAX_WITNESSES have produced a POW
-   if( props.num_pow_witnesses < BLURT_MAX_WITNESSES && props.head_block_number < BLURT_START_VESTING_BLOCK )
-      return asset( 0, BLURT_SYMBOL );
-#endif
-
-   static_assert( BLURT_BLOCK_INTERVAL == 3, "this code assumes a 3-second time interval" );
-   static_assert( BLURT_MAX_WITNESSES == 21, "this code assumes 21 per round" );
-   asset percent( calc_percent_reward_per_round< BLURT_POW_APR_PERCENT >( props.current_supply.amount ), BLURT_SYMBOL);
-   return std::max( percent, BLURT_MIN_POW_REWARD );
 }
 
 uint16_t database::get_curation_rewards_percent( const comment_object& c ) const
@@ -2304,7 +2221,7 @@ void database::init_schema()
    return;*/
 }
 
-void database::init_genesis( uint64_t init_supply )
+void database::init_genesis( const open_args& args )
 {
    try
    {
@@ -2322,73 +2239,96 @@ void database::init_genesis( uint64_t init_supply )
       // Create blockchain accounts
       public_key_type      init_public_key(BLURT_INIT_PUBLIC_KEY);
 
-      create< account_object >( [&]( account_object& a )
-      {
-         a.name = BLURT_MINER_ACCOUNT;
-      } );
-      create< account_authority_object >( [&]( account_authority_object& auth )
-      {
-         auth.account = BLURT_MINER_ACCOUNT;
-         auth.owner.weight_threshold = 1;
-         auth.active.weight_threshold = 1;
-      });
-
-      create< account_object >( [&]( account_object& a )
-      {
-         a.name = BLURT_NULL_ACCOUNT;
-      } );
-      create< account_authority_object >( [&]( account_authority_object& auth )
-      {
-         auth.account = BLURT_NULL_ACCOUNT;
-         auth.owner.weight_threshold = 1;
-         auth.active.weight_threshold = 1;
-      });
-
-//#ifdef IS_TEST_NET
-      create< account_object >( [&]( account_object& a )
-      {
-         a.name = BLURT_TREASURY_ACCOUNT;
-      } );
-//#endif
-
-      create< account_object >( [&]( account_object& a )
-      {
-         a.name = BLURT_TEMP_ACCOUNT;
-      } );
-      create< account_authority_object >( [&]( account_authority_object& auth )
-      {
-         auth.account = BLURT_TEMP_ACCOUNT;
-         auth.owner.weight_threshold = 0;
-         auth.active.weight_threshold = 0;
-      });
-
-      for( int i = 0; i < BLURT_NUM_INIT_MINERS; ++i )
-      {
+      { // BLURT_MINER_ACCOUNT
          create< account_object >( [&]( account_object& a )
          {
-            a.name = BLURT_INIT_MINER_NAME + ( i ? fc::to_string( i ) : std::string() );
-            a.memo_key = init_public_key;
-            a.balance  = asset( i ? 0 : init_supply, BLURT_SYMBOL );
+            a.name = BLURT_MINER_ACCOUNT;
+         } );
+         create< account_authority_object >( [&]( account_authority_object& auth )
+         {
+            auth.account = BLURT_MINER_ACCOUNT;
+            auth.owner.weight_threshold = 1;
+            auth.active.weight_threshold = 1;
+            auth.posting = authority();
+            auth.posting.weight_threshold = 1;
+         });
+      }
+
+      { // BLURT_NULL_ACCOUNT
+         create< account_object >( [&]( account_object& a )
+         {
+            a.name = BLURT_NULL_ACCOUNT;
+         } );
+         create< account_authority_object >( [&]( account_authority_object& auth )
+         {
+            auth.account = BLURT_NULL_ACCOUNT;
+            auth.owner.weight_threshold = 1;
+            auth.active.weight_threshold = 1;
+            auth.posting = authority();
+            auth.posting.weight_threshold = 1;
+         });
+      }
+
+      { // BLURT_TREASURY_ACCOUNT
+         create< account_object >( [&]( account_object& a )
+         {
+            a.name = BLURT_TREASURY_ACCOUNT;
+            a.recovery_account = BLURT_TREASURY_ACCOUNT;
          } );
 
          create< account_authority_object >( [&]( account_authority_object& auth )
          {
-            auth.account = BLURT_INIT_MINER_NAME + ( i ? fc::to_string( i ) : std::string() );
-            auth.owner.add_authority( init_public_key, 1 );
+            auth.account = BLURT_TREASURY_ACCOUNT;
             auth.owner.weight_threshold = 1;
-            auth.active  = auth.owner;
-            auth.posting = auth.active;
+            auth.active.weight_threshold = 1;
+            auth.posting.weight_threshold = 1;
          });
-
-         create< witness_object >( [&]( witness_object& w )
-         {
-            w.owner        = BLURT_INIT_MINER_NAME + ( i ? fc::to_string(i) : std::string() );
-            w.signing_key  = init_public_key;
-            w.schedule = witness_object::miner;
-         } );
       }
 
-      { // create regent account
+      { // BLURT_TEMP_ACCOUNT
+         create< account_object >( [&]( account_object& a )
+         {
+            a.name = BLURT_TEMP_ACCOUNT;
+         } );
+         create< account_authority_object >( [&]( account_authority_object& auth )
+         {
+            auth.account = BLURT_TEMP_ACCOUNT;
+            auth.owner.weight_threshold = 0;
+            auth.active.weight_threshold = 0;
+            auth.posting = authority();
+            auth.posting.weight_threshold = 1;
+         });
+      }
+
+      { // BLURT_INIT_MINER
+         for( int i = 0; i < BLURT_MAX_WITNESSES; ++i )
+         {
+            create< account_object >( [&]( account_object& a )
+            {
+               a.name = BLURT_INIT_MINER_NAME + ( i ? fc::to_string( i ) : std::string() );
+               a.memo_key = init_public_key;
+               a.balance  = asset( i ? 0 : args.initial_supply - BLURT_INIT_POST_REWARD_BALANCE, BLURT_SYMBOL );
+            } );
+
+            create< account_authority_object >( [&]( account_authority_object& auth )
+            {
+               auth.account = BLURT_INIT_MINER_NAME + ( i ? fc::to_string( i ) : std::string() );
+               auth.owner.add_authority( init_public_key, 1 );
+               auth.owner.weight_threshold = 1;
+               auth.active  = auth.owner;
+               auth.posting = auth.active;
+            });
+
+            create< witness_object >( [&]( witness_object& w )
+            {
+               w.owner        = BLURT_INIT_MINER_NAME + ( i ? fc::to_string(i) : std::string() );
+               w.signing_key  = init_public_key;
+               w.schedule = (i < BLURT_MAX_VOTED_WITNESSES_HF17) ? witness_object::elected : witness_object::timeshare;
+            } );
+         }
+      }
+
+      { // BLURT_REGENT_ACCOUNT
          create< account_object >( [&]( account_object& a )
          {
             a.name = BLURT_REGENT_ACCOUNT;
@@ -2410,13 +2350,18 @@ void database::init_genesis( uint64_t init_supply )
          p.time = BLURT_GENESIS_TIME;
          p.recent_slots_filled = fc::uint128::max_value();
          p.participation_count = 128;
-         p.current_supply = asset( init_supply, BLURT_SYMBOL );
+         p.current_supply = asset( args.initial_supply, BLURT_SYMBOL );
          p.maximum_block_size = BLURT_MAX_BLOCK_SIZE;
-         p.reverse_auction_seconds = BLURT_REVERSE_AUCTION_WINDOW_SECONDS_HF6;
+         p.reverse_auction_seconds = BLURT_REVERSE_AUCTION_WINDOW_SECONDS_HF21;
          p.next_maintenance_time = BLURT_GENESIS_TIME;
          p.last_budget_time = BLURT_GENESIS_TIME;
-         p.regent_init_vesting_shares = asset(init_supply / 2, BLURT_SYMBOL) * p.get_vesting_share_price(); // 50% of the init_supply
+         p.regent_init_vesting_shares = asset(args.initial_supply / 2, BLURT_SYMBOL) * p.get_vesting_share_price(); // 50% of the init_supply
          p.regent_vesting_shares = p.regent_init_vesting_shares;
+         p.total_reward_fund_blurt = asset( 0, BLURT_SYMBOL );
+         p.total_reward_shares2 = 0;
+         p.sps_fund_percent = BLURT_PROPOSAL_FUND_PERCENT_HF21;
+         p.content_reward_percent = BLURT_CONTENT_REWARD_PERCENT_HF21;
+         p.reverse_auction_seconds = BLURT_REVERSE_AUCTION_WINDOW_SECONDS_HF21;
       } );
 
       for( int i = 0; i < 0x10000; i++ )
@@ -2453,316 +2398,162 @@ void database::init_genesis( uint64_t init_supply )
          util::rd_setup_dynamics_params( account_subsidy_per_witness_user_params, account_subsidy_system_params, wso.account_subsidy_witness_rd );
       } );
 
+#ifndef IS_TEST_NET
+      { // IMPORT snapshot.json
+         /**
+          * Path: {data_dir}/snapshot.json
+          *
+          * Sample data each line:
+          * {
+          *     "name":"a-0",
+          *     "owner":{"weight_threshold":1,"account_auths":[],"key_auths":[["BLT5RrTRNDhhrMaA24SzSeE5AvmUcutb1q1VZp1imnT8p871s3UjN",1]]},
+          *     "active":{"weight_threshold":1,"account_auths":[],"key_auths":[["BLT5RrTRNDhhrMaA24SzSeE5AvmUcutb1q1VZp1imnT8p871s3UjN",1]]},
+          *     "posting":{"weight_threshold":1,"account_auths":[],"key_auths":[["BLT5RrTRNDhhrMaA24SzSeE5AvmUcutb1q1VZp1imnT8p871s3UjN",1]]},
+          *     "memo":"BLT5RrTRNDhhrMaA24SzSeE5AvmUcutb1q1VZp1imnT8p871s3UjN",
+          *     "balance":1,
+          *     "power":7107
+          *  }
+          */
+
+         auto snapshot_path = args.data_dir.string() + std::string("/../snapshot.json");
+         FC_ASSERT(boost::filesystem::exists(snapshot_path), "Snapshot '${path}' was not found.", ("path", snapshot_path));
+         ilog( "importing snapshot.json..." );
+
+         std::ifstream snapshot(snapshot_path);
+         const auto& gpo = get_dynamic_global_properties();
+         price vesting_share_price = gpo.get_vesting_share_price();
+         asset snapshot_total_balance = asset( 0, BLURT_SYMBOL );
+         asset snapshot_total_vesting_fund_blurt = asset( 0, BLURT_SYMBOL );
+         asset snapshot_total_vesting_shares = asset( 0, VESTS_SYMBOL );
+
+         // Create account first
+         ilog( "creating accounts..." );
+         uint32_t counter = 0;
+         std::string line;
+         while (std::getline(snapshot, line)) {
+            if (line.length() > 0) {
+               account_snapshot ss_account = fc::json::from_string(line).as<account_snapshot>();
+//               ilog( "creating account ${a}", ("a", ss_account.name) );
+
+               auto blurt_power = asset( ss_account.power, BLURT_SYMBOL );
+
+               create< account_object >( [&]( account_object& a ) {
+                  a.name = ss_account.name;
+                  a.memo_key = ss_account.memo;
+                  a.balance = asset( ss_account.balance, BLURT_SYMBOL );
+                  a.vesting_shares = blurt_power * vesting_share_price;
+
+                  snapshot_total_balance += a.balance;
+                  snapshot_total_vesting_fund_blurt += blurt_power;
+                  snapshot_total_vesting_shares += a.vesting_shares;
+               } );
+
+               if (counter % 100000 == 0) ilog( "creating account ${i}...", ("i", counter) );
+               counter ++;
+            }
+         }
+
+         // Then create authority
+         ilog( "creating authority..." );
+         snapshot.clear();
+         snapshot.seekg (0, snapshot.beg);
+         counter = 0;
+
+         while (std::getline(snapshot, line)) {
+            if (line.length() > 0) {
+               account_snapshot ss_account = fc::json::from_string(line).as<account_snapshot>();
+               create< account_authority_object >( [&]( account_authority_object& auth ) {
+                  auth.account = ss_account.name;
+                  auth.owner = ss_account.owner;
+                  auth.active = ss_account.active;
+                  auth.posting = ss_account.posting;
+               });
+
+               if (counter % 100000 == 0) ilog( "creating authority ${i}...", ("i", counter) );
+               counter ++;
+            }
+         }
+
+         snapshot.close();
+
+
+         // update global properties and initblurt balance
+          modify( get_dynamic_global_properties(), [&]( dynamic_global_property_object& _dgpo ) {
+            _dgpo.total_vesting_fund_blurt = snapshot_total_vesting_fund_blurt;
+            _dgpo.total_vesting_shares = snapshot_total_vesting_shares;
+         } );
+
+         modify( get_account( BLURT_INIT_MINER_NAME ), [&]( account_object& a ) {
+            a.balance -= (snapshot_total_balance + snapshot_total_vesting_fund_blurt);
+         });
+
+         ilog( "importing snapshot.json... OK!" );
+      }
+#endif
 
       //////////////////////////////
       { // pre-apply HF 1 to 22 here
-          { // BLURT_HARDFORK_0_1:
-//             perform_vesting_share_split( 1000000 );
-          }
+          // BLURT_HARDFORK_0_1:
+          // BLURT_HARDFORK_0_2
+          // BLURT_HARDFORK_0_3
+          // BLURT_HARDFORK_0_4
+          // BLURT_HARDFORK_0_5
+          // BLURT_HARDFORK_0_6
+          // BLURT_HARDFORK_0_7:
+          // BLURT_HARDFORK_0_8:
+          // BLURT_HARDFORK_0_9:
+          // BLURT_HARDFORK_0_10:
+          // BLURT_HARDFORK_0_11:
 
-          { // BLURT_HARDFORK_0_2
-//            retally_witness_votes();
-          }
+          // retally_witness_votes();
+//          retally_witness_votes();
+          reset_virtual_schedule_time(*this);
+//          retally_witness_vote_counts();
+//          retally_comment_children();
+//          retally_witness_vote_counts(true);
 
-          { // BLURT_HARDFORK_0_3
-            retally_witness_votes();
-          }
-
-          { // BLURT_HARDFORK_0_4
-            reset_virtual_schedule_time(*this);
-          }
-
-          { // BLURT_HARDFORK_0_5
-          }
-
-          { // BLURT_HARDFORK_0_6
-            retally_witness_vote_counts();
-            retally_comment_children();
-          }
-
-          { // BLURT_HARDFORK_0_7:
-          }
-
-          { // BLURT_HARDFORK_0_8:
-            retally_witness_vote_counts(true);
-          }
-
-          { // BLURT_HARDFORK_0_9:
-          }
-
-          { // BLURT_HARDFORK_0_10:
-//            retally_liquidity_weight();
-          }
-
-          { // BLURT_HARDFORK_0_11:
-          }
-
-          { // BLURT_HARDFORK_0_12:
-//            const auto& comment_idx = get_index< comment_index >().indices();
-//
-//            for( auto itr = comment_idx.begin(); itr != comment_idx.end(); ++itr )
-//            {
-//               // At the hardfork time, all new posts with no votes get their cashout time set to +12 hrs from head block time.
-//               // All posts with a payout get their cashout time set to +30 days. This hardfork takes place within 30 days
-//               // initial payout so we don't have to handle the case of posts that should be frozen that aren't
-//               if( itr->parent_author == BLURT_ROOT_POST_PARENT )
-//               {
-//                  // Post has not been paid out and has no votes (cashout_time == 0 === net_rshares == 0, under current semmantics)
-//                  if( itr->last_payout == fc::time_point_sec::min() && itr->cashout_time == fc::time_point_sec::maximum() )
-//                  {
-//                     modify( *itr, [&]( comment_object & c )
-//                     {
-//                        c.cashout_time = head_block_time() + BLURT_CASHOUT_WINDOW_SECONDS_PRE_HF17;
-//                     });
-//                  }
-//                  // Has been paid out, needs to be on second cashout window
-//                  else if( itr->last_payout > fc::time_point_sec() )
-//                  {
-//                     modify( *itr, [&]( comment_object& c )
-//                     {
-//                        c.cashout_time = c.last_payout + BLURT_SECOND_CASHOUT_WINDOW;
-//                     });
-//                  }
-//               }
-//            }
-//
-//            modify( get< account_authority_object, by_account >( BLURT_MINER_ACCOUNT ), [&]( account_authority_object& auth )
-//            {
-//               auth.posting = authority();
-//               auth.posting.weight_threshold = 1;
-//            });
-//
-//            modify( get< account_authority_object, by_account >( BLURT_NULL_ACCOUNT ), [&]( account_authority_object& auth )
-//            {
-//               auth.posting = authority();
-//               auth.posting.weight_threshold = 1;
-//            });
-//
-//            modify( get< account_authority_object, by_account >( BLURT_TEMP_ACCOUNT ), [&]( account_authority_object& auth )
-//            {
-//               auth.posting = authority();
-//               auth.posting.weight_threshold = 1;
-//            });
-         }
-
-         { // BLURT_HARDFORK_0_13:
-         }
-
-         { // BLURT_HARDFORK_0_14:
-         }
-
-         { // BLURT_HARDFORK_0_15:
-         }
-
-         { // BLURT_HARDFORK_0_16:
-         }
+         // BLURT_HARDFORK_0_12:
+         // BLURT_HARDFORK_0_13:
+         // BLURT_HARDFORK_0_14:
+         // BLURT_HARDFORK_0_15:
+         // BLURT_HARDFORK_0_16:
 
          { // BLURT_HARDFORK_0_17:
-            static_assert(
-               BLURT_MAX_VOTED_WITNESSES_HF0 + BLURT_MAX_MINER_WITNESSES_HF0 + BLURT_MAX_RUNNER_WITNESSES_HF0 == BLURT_MAX_WITNESSES,
-               "HF0 witness counts must add up to BLURT_MAX_WITNESSES" );
-            static_assert(
-               BLURT_MAX_VOTED_WITNESSES_HF17 + BLURT_MAX_MINER_WITNESSES_HF17 + BLURT_MAX_RUNNER_WITNESSES_HF17 == BLURT_MAX_WITNESSES,
+            static_assert(BLURT_MAX_VOTED_WITNESSES_HF17 + BLURT_MAX_RUNNER_WITNESSES_HF17 == BLURT_MAX_WITNESSES,
                "HF17 witness counts must add up to BLURT_MAX_WITNESSES" );
-
-            modify( get_witness_schedule_object(), [&]( witness_schedule_object& wso )
-            {
-               wso.max_voted_witnesses = BLURT_MAX_VOTED_WITNESSES_HF17;
-               wso.max_miner_witnesses = BLURT_MAX_MINER_WITNESSES_HF17;
-               wso.max_runner_witnesses = BLURT_MAX_RUNNER_WITNESSES_HF17;
-            });
-
-            const auto& gpo = get_dynamic_global_properties();
 
             auto post_rf = create< reward_fund_object >( [&]( reward_fund_object& rfo )
             {
                rfo.name = BLURT_POST_REWARD_FUND_NAME;
                rfo.last_update = head_block_time();
-               rfo.content_constant = BLURT_CONTENT_CONSTANT_HF0;
-               rfo.percent_curation_rewards = BLURT_1_PERCENT * 25;
+               rfo.content_constant = BLURT_CONTENT_CONSTANT_HF21;
+               rfo.percent_curation_rewards = 50 * BLURT_1_PERCENT;
                rfo.percent_content_rewards = BLURT_100_PERCENT;
-               rfo.reward_balance = gpo.total_reward_fund_blurt;
-//  #ifndef IS_TEST_NET
-//               rfo.recent_claims = BLURT_HF_17_RECENT_CLAIMS; // set to BLURT_HF_19_RECENT_CLAIMS
-//  #endif
-               rfo.author_reward_curve = curve_id::quadratic;
-               rfo.curation_reward_curve = curve_id::bounded_curation;
+               rfo.reward_balance = asset( BLURT_INIT_POST_REWARD_BALANCE, BLURT_SYMBOL );
+#ifndef IS_TEST_NET
+               rfo.recent_claims = BLURT_HF21_CONVERGENT_LINEAR_RECENT_CLAIMS;
+#endif
+               rfo.author_reward_curve = curve_id::convergent_linear;
+               rfo.curation_reward_curve = curve_id::convergent_square_root;
             });
 
             // As a shortcut in payout processing, we use the id as an array index.
             // The IDs must be assigned this way. The assertion is a dummy check to ensure this happens.
             FC_ASSERT( post_rf.id._id == 0 );
-
-            modify( gpo, [&]( dynamic_global_property_object& g )
-            {
-               g.total_reward_fund_blurt = asset( 0, BLURT_SYMBOL );
-               g.total_reward_shares2 = 0;
-            });
-
-//            /*
-//            * For all current comments we will either keep their current cashout time, or extend it to 1 week
-//            * after creation.
-//            *
-//            * We cannot do a simple iteration by cashout time because we are editting cashout time.
-//            * More specifically, we will be adding an explicit cashout time to all comments with parents.
-//            * To find all discussions that have not been paid out we fir iterate over posts by cashout time.
-//            * Before the hardfork these are all root posts. Iterate over all of their children, adding each
-//            * to a specific list. Next, update payout times for all discussions on the root post. This defines
-//            * the min cashout time for each child in the discussion. Then iterate over the children and set
-//            * their cashout time in a similar way, grabbing the root post as their inherent cashout time.
-//            */
-//            const auto& comment_idx = get_index< comment_index, by_cashout_time >();
-//            const auto& by_root_idx = get_index< comment_index, by_root >();
-//            vector< const comment_object* > root_posts;
-//            root_posts.reserve( BLURT_HF_17_NUM_POSTS );
-//            vector< const comment_object* > replies;
-//            replies.reserve( BLURT_HF_17_NUM_REPLIES );
-//
-//            for( auto itr = comment_idx.begin(); itr != comment_idx.end() && itr->cashout_time < fc::time_point_sec::maximum(); ++itr )
-//            {
-//               root_posts.push_back( &(*itr) );
-//
-//               for( auto reply_itr = by_root_idx.lower_bound( itr->id ); reply_itr != by_root_idx.end() && reply_itr->root_comment == itr->id; ++reply_itr )
-//               {
-//                  replies.push_back( &(*reply_itr) );
-//               }
-//            }
-//
-//            for( const auto& itr : root_posts )
-//            {
-//               modify( *itr, [&]( comment_object& c )
-//               {
-//                  c.cashout_time = std::max( c.created + BLURT_CASHOUT_WINDOW_SECONDS, c.cashout_time );
-//               });
-//            }
-//
-//            for( const auto& itr : replies )
-//            {
-//               modify( *itr, [&]( comment_object& c )
-//               {
-//                  c.cashout_time = std::max( calculate_discussion_payout_time( c ), c.created + BLURT_CASHOUT_WINDOW_SECONDS );
-//               });
-//            }
         }
 
-        { // BLURT_HARDFORK_0_18:
-        }
-
-        { //  BLURT_HARDFORK_0_19:
-            modify( get_dynamic_global_properties(), [&]( dynamic_global_property_object& gpo )
-            {
-               gpo.vote_power_reserve_rate = BLURT_REDUCED_VOTE_POWER_RATE;
-            });
-
-            modify( get< reward_fund_object, by_name >( BLURT_POST_REWARD_FUND_NAME ), [&]( reward_fund_object &rfo )
-            {
-#ifndef IS_TEST_NET
-               rfo.recent_claims = BLURT_HF_19_RECENT_CLAIMS;
-#endif
-               rfo.author_reward_curve = curve_id::linear;
-               rfo.curation_reward_curve = curve_id::square_root;
-            });
-
-            /* Remove all 0 delegation objects */
-            vector< const vesting_delegation_object* > to_remove;
-            const auto& delegation_idx = get_index< vesting_delegation_index, by_id >();
-            auto delegation_itr = delegation_idx.begin();
-
-            while( delegation_itr != delegation_idx.end() )
-            {
-               if( delegation_itr->vesting_shares.amount == 0 )
-                  to_remove.push_back( &(*delegation_itr) );
-
-               ++delegation_itr;
-            }
-
-            for( const vesting_delegation_object* delegation_ptr: to_remove )
-            {
-               remove( *delegation_ptr );
-            }
-        }
-
-        { // BLURT_HARDFORK_0_20:
-            modify( get_dynamic_global_properties(), [&]( dynamic_global_property_object& gpo )
-            {
-               gpo.delegation_return_period = BLURT_DELEGATION_RETURN_PERIOD_HF20;
-               gpo.reverse_auction_seconds = BLURT_REVERSE_AUCTION_WINDOW_SECONDS_HF20;
-               gpo.available_account_subsidies = 0;
-            });
-
-            const auto& wso = get_witness_schedule_object();
-
-            for( const auto& witness : wso.current_shuffled_witnesses )
-            {
-               // Required check when applying hardfork at genesis
-               if( witness != account_name_type() )
-               {
-                  modify( get< witness_object, by_name >( witness ), [&]( witness_object& w )
-                  {
-                     w.props.account_creation_fee = asset( w.props.account_creation_fee.amount * BLURT_CREATE_ACCOUNT_WITH_BLURT_MODIFIER, BLURT_SYMBOL );
-                  });
-               }
-            }
-
-            modify( wso, [&]( witness_schedule_object& wso )
-            {
-               wso.median_props.account_creation_fee = asset( wso.median_props.account_creation_fee.amount * BLURT_CREATE_ACCOUNT_WITH_BLURT_MODIFIER, BLURT_SYMBOL );
-            });
-        }
+        // BLURT_HARDFORK_0_18:
+        // BLURT_HARDFORK_0_19:
+        // BLURT_HARDFORK_0_20:
 
         { // BLURT_HARDFORK_0_21:
-           modify( get_dynamic_global_properties(), [&]( dynamic_global_property_object& gpo )
-           {
-              gpo.sps_fund_percent = BLURT_PROPOSAL_FUND_PERCENT_HF21;
-              gpo.content_reward_percent = BLURT_CONTENT_REWARD_PERCENT_HF21;
-              gpo.reverse_auction_seconds = BLURT_REVERSE_AUCTION_WINDOW_SECONDS_HF21;
-           });
-
-           auto account_auth = find< account_authority_object, by_account >( BLURT_TREASURY_ACCOUNT );
-           if( account_auth == nullptr )
-              create< account_authority_object >( [&]( account_authority_object& auth )
-              {
-                 auth.account = BLURT_TREASURY_ACCOUNT;
-                 auth.owner.weight_threshold = 1;
-                 auth.active.weight_threshold = 1;
-                 auth.posting.weight_threshold = 1;
-              });
-           else
-              modify( *account_auth, [&]( account_authority_object& auth )
-              {
-                 auth.owner.weight_threshold = 1;
-                 auth.owner.clear();
-
-                 auth.active.weight_threshold = 1;
-                 auth.active.clear();
-
-                 auth.posting.weight_threshold = 1;
-                 auth.posting.clear();
-              });
-
-           modify( get_account( BLURT_TREASURY_ACCOUNT ), [&]( account_object& a )
-           {
-              a.recovery_account = BLURT_TREASURY_ACCOUNT;
-           });
-
-           auto rec_req = find< account_recovery_request_object, by_account >( BLURT_TREASURY_ACCOUNT );
-           if( rec_req )
-              remove( *rec_req );
-
-           auto change_request = find< change_recovery_account_request_object, by_account >( BLURT_TREASURY_ACCOUNT );
-           if( change_request )
-              remove( *change_request );
-
-           modify( get< reward_fund_object, by_name >( BLURT_POST_REWARD_FUND_NAME ), [&]( reward_fund_object& rfo )
-           {
-              rfo.percent_curation_rewards = 50 * BLURT_1_PERCENT;
-              rfo.author_reward_curve = convergent_linear;
-              rfo.curation_reward_curve = convergent_square_root;
-              rfo.content_constant = BLURT_CONTENT_CONSTANT_HF21;
-  #ifndef  IS_TEST_NET
-              rfo.recent_claims = BLURT_HF21_CONVERGENT_LINEAR_RECENT_CLAIMS;
-  #endif
-           });
+//           auto rec_req = find< account_recovery_request_object, by_account >( BLURT_TREASURY_ACCOUNT );
+//           if( rec_req )
+//              remove( *rec_req );
+//
+//           auto change_request = find< change_recovery_account_request_object, by_account >( BLURT_TREASURY_ACCOUNT );
+//           if( change_request )
+//              remove( *change_request );
         }
       } // ~end  pre-apply HF 1 to 21
    }
@@ -3399,8 +3190,7 @@ void database::create_block_summary(const signed_block& next_block)
 
 void database::update_global_dynamic_data( const signed_block& b )
 { try {
-   const dynamic_global_property_object& _dgp =
-      get_dynamic_global_properties();
+   const dynamic_global_property_object& _dgp = get_dynamic_global_properties();
 
    uint32_t missed_blocks = 0;
    if( head_block_time() != fc::time_point_sec() )
@@ -3466,51 +3256,35 @@ void database::update_last_irreversible_block()
 { try {
    const dynamic_global_property_object& dpo = get_dynamic_global_properties();
    auto old_last_irreversible = dpo.last_irreversible_block_num;
+   const witness_schedule_object& wso = get_witness_schedule_object();
 
-   /**
-    * Prior to voting taking over, we must be more conservative...
-    *
-    */
-   if( head_block_num() < BLURT_START_MINER_VOTING_BLOCK )
+   vector< const witness_object* > wit_objs;
+   wit_objs.reserve( wso.num_scheduled_witnesses );
+   for( int i = 0; i < wso.num_scheduled_witnesses; i++ )
+      wit_objs.push_back( &get_witness( wso.current_shuffled_witnesses[i] ) );
+
+   static_assert( BLURT_IRREVERSIBLE_THRESHOLD > 0, "irreversible threshold must be nonzero" );
+
+   // 1 1 1 2 2 2 2 2 2 2 -> 2     .7*10 = 7
+   // 1 1 1 1 1 1 1 2 2 2 -> 1
+   // 3 3 3 3 3 3 3 3 3 3 -> 3
+
+   size_t offset = ((BLURT_100_PERCENT - BLURT_IRREVERSIBLE_THRESHOLD) * wit_objs.size() / BLURT_100_PERCENT);
+
+   std::nth_element( wit_objs.begin(), wit_objs.begin() + offset, wit_objs.end(),
+      []( const witness_object* a, const witness_object* b )
+      {
+         return a->last_confirmed_block_num < b->last_confirmed_block_num;
+      } );
+
+   uint32_t new_last_irreversible_block_num = wit_objs[offset]->last_confirmed_block_num;
+
+   if( new_last_irreversible_block_num > dpo.last_irreversible_block_num )
    {
       modify( dpo, [&]( dynamic_global_property_object& _dpo )
       {
-         if ( head_block_num() > BLURT_MAX_WITNESSES )
-            _dpo.last_irreversible_block_num = head_block_num() - BLURT_MAX_WITNESSES;
+         _dpo.last_irreversible_block_num = new_last_irreversible_block_num;
       } );
-   }
-   else
-   {
-      const witness_schedule_object& wso = get_witness_schedule_object();
-
-      vector< const witness_object* > wit_objs;
-      wit_objs.reserve( wso.num_scheduled_witnesses );
-      for( int i = 0; i < wso.num_scheduled_witnesses; i++ )
-         wit_objs.push_back( &get_witness( wso.current_shuffled_witnesses[i] ) );
-
-      static_assert( BLURT_IRREVERSIBLE_THRESHOLD > 0, "irreversible threshold must be nonzero" );
-
-      // 1 1 1 2 2 2 2 2 2 2 -> 2     .7*10 = 7
-      // 1 1 1 1 1 1 1 2 2 2 -> 1
-      // 3 3 3 3 3 3 3 3 3 3 -> 3
-
-      size_t offset = ((BLURT_100_PERCENT - BLURT_IRREVERSIBLE_THRESHOLD) * wit_objs.size() / BLURT_100_PERCENT);
-
-      std::nth_element( wit_objs.begin(), wit_objs.begin() + offset, wit_objs.end(),
-         []( const witness_object* a, const witness_object* b )
-         {
-            return a->last_confirmed_block_num < b->last_confirmed_block_num;
-         } );
-
-      uint32_t new_last_irreversible_block_num = wit_objs[offset]->last_confirmed_block_num;
-
-      if( new_last_irreversible_block_num > dpo.last_irreversible_block_num )
-      {
-         modify( dpo, [&]( dynamic_global_property_object& _dpo )
-         {
-            _dpo.last_irreversible_block_num = new_last_irreversible_block_num;
-         } );
-      }
    }
 
    for( uint32_t i = old_last_irreversible; i <= dpo.last_irreversible_block_num; ++i )
@@ -3945,7 +3719,6 @@ void database::validate_invariants()const
       }
 
       const auto& reward_idx = get_index< reward_fund_index, by_id >();
-
       for( auto itr = reward_idx.begin(); itr != reward_idx.end(); ++itr )
       {
          total_supply += itr->reward_balance;
@@ -3959,54 +3732,6 @@ void database::validate_invariants()const
       FC_ASSERT( gpo.pending_rewarded_vesting_blurt == pending_vesting_steem, "", ("pending_rewarded_vesting_blurt",gpo.pending_rewarded_vesting_blurt)("pending_vesting_steem", pending_vesting_steem));
    }
    FC_CAPTURE_LOG_AND_RETHROW( (head_block_num()) );
-}
-
-void database::perform_vesting_share_split( uint32_t magnitude )
-{
-   try
-   {
-      modify( get_dynamic_global_properties(), [&]( dynamic_global_property_object& d )
-      {
-         d.total_vesting_shares.amount *= magnitude;
-         d.total_reward_shares2 = 0;
-      } );
-
-      // Need to update all VESTS in accounts and the total VESTS in the dgpo
-      for( const auto& account : get_index< account_index, by_id >() )
-      {
-         modify( account, [&]( account_object& a )
-         {
-            a.vesting_shares.amount *= magnitude;
-            a.withdrawn             *= magnitude;
-            a.to_withdraw           *= magnitude;
-            a.vesting_withdraw_rate  = asset( a.to_withdraw / BLURT_VESTING_WITHDRAW_INTERVALS_PRE_HF_16, VESTS_SYMBOL );
-            if( a.vesting_withdraw_rate.amount == 0 )
-               a.vesting_withdraw_rate.amount = 1;
-
-            for( uint32_t i = 0; i < BLURT_MAX_PROXY_RECURSION_DEPTH; ++i )
-               a.proxied_vsf_votes[i] *= magnitude;
-         } );
-      }
-
-      const auto& comments = get_index< comment_index >().indices();
-      for( const auto& comment : comments )
-      {
-         modify( comment, [&]( comment_object& c )
-         {
-            c.net_rshares       *= magnitude;
-            c.abs_rshares       *= magnitude;
-            c.vote_rshares      *= magnitude;
-         } );
-      }
-
-      for( const auto& c : comments )
-      {
-         if( c.net_rshares.value > 0 )
-            adjust_rshares2( c, 0, util::evaluate_reward_curve( c.net_rshares.value ) );
-      }
-
-   }
-   FC_CAPTURE_AND_RETHROW()
 }
 
 void database::retally_comment_children()

@@ -15,7 +15,6 @@ struct witness_properties
    // Chain properties
    fc::optional< asset >               account_creation_fee;
    fc::optional< uint32_t >            maximum_block_size;
-   fc::optional< uint16_t >            sbd_interest_rate;
    fc::optional< int32_t >             account_subsidy_budget;
    fc::optional< uint32_t >            account_subsidy_decay;
 
@@ -29,7 +28,6 @@ struct witness_properties
 FC_REFLECT( witness_properties,
    (account_creation_fee)
    (maximum_block_size)
-   (sbd_interest_rate)
    (account_subsidy_budget)
    (account_subsidy_decay)
 

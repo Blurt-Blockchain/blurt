@@ -85,15 +85,7 @@ clean_database_fixture::clean_database_fixture( uint16_t shared_file_size_in_mb 
    generate_block();
 
    vest( "initminer", 10000 );
-
-   // Fill up the rest of the required miners
-   for( int i = BLURT_NUM_INIT_MINERS; i < BLURT_MAX_WITNESSES; i++ )
-   {
-      account_create( BLURT_INIT_MINER_NAME + fc::to_string( i ), init_account_pub_key );
-      fund( BLURT_INIT_MINER_NAME + fc::to_string( i ), BLURT_MIN_PRODUCER_REWARD.amount.value );
-      witness_create( BLURT_INIT_MINER_NAME + fc::to_string( i ), init_account_priv_key, "foo.bar", init_account_pub_key, BLURT_MIN_PRODUCER_REWARD.amount );
-   }
-
+   
    validate_database();
    } catch ( const fc::exception& e )
    {
@@ -145,7 +137,7 @@ void clean_database_fixture::resize_shared_mem( uint64_t size )
       database::open_args args;
       args.data_dir = data_dir->path();
       args.shared_mem_dir = args.data_dir;
-      args.initial_supply = INITIAL_TEST_SUPPLY;
+      args.initial_supply = BLURT_INIT_SUPPLY;
       args.shared_file_size = size;
       args.database_cfg = blurt::utilities::default_database_configuration();
       db->open( args );
@@ -159,14 +151,6 @@ void clean_database_fixture::resize_shared_mem( uint64_t size )
    generate_block();
 
    vest( "initminer", 10000 );
-
-   // Fill up the rest of the required miners
-   for( int i = BLURT_NUM_INIT_MINERS; i < BLURT_MAX_WITNESSES; i++ )
-   {
-      account_create( BLURT_INIT_MINER_NAME + fc::to_string( i ), init_account_pub_key );
-      fund( BLURT_INIT_MINER_NAME + fc::to_string( i ), BLURT_MIN_PRODUCER_REWARD.amount.value );
-      witness_create( BLURT_INIT_MINER_NAME + fc::to_string( i ), init_account_priv_key, "foo.bar", init_account_pub_key, BLURT_MIN_PRODUCER_REWARD.amount );
-   }
 
    validate_database();
 }
@@ -245,7 +229,7 @@ void database_fixture::open_database( uint16_t shared_file_size_in_mb )
       database::open_args args;
       args.data_dir = data_dir->path();
       args.shared_mem_dir = args.data_dir;
-      args.initial_supply = INITIAL_TEST_SUPPLY;
+      args.initial_supply = BLURT_INIT_SUPPLY;
       args.shared_file_size = 1024 * 1024 * shared_file_size_in_mb; // 8MB(default) or more:  file for testing
       args.database_cfg = blurt::utilities::default_database_configuration();
       args.sps_remove_threshold = 20;
@@ -255,6 +239,8 @@ void database_fixture::open_database( uint16_t shared_file_size_in_mb )
    {
       idump( (data_dir->path()) );
    }
+
+   generate_blocks(BLURT_MAX_WITNESSES);
 }
 
 void database_fixture::generate_block(uint32_t skip, const fc::ecc::private_key& key, int miss_blocks)
@@ -332,7 +318,7 @@ const account_object& database_fixture::account_create(
          name,
          BLURT_INIT_MINER_NAME,
          init_account_priv_key,
-         std::max( db->get_witness_schedule_object().median_props.account_creation_fee.amount * BLURT_CREATE_ACCOUNT_WITH_BLURT_MODIFIER, share_type( 100 ) ),
+         std::max( db->get_witness_schedule_object().median_props.account_creation_fee.amount, share_type( 100 ) ),
          key,
          post_key,
          "" );
@@ -786,14 +772,6 @@ json_rpc_database_fixture::json_rpc_database_fixture()
    generate_block();
 
    vest( "initminer", 10000 );
-
-   // Fill up the rest of the required miners
-   for( int i = BLURT_NUM_INIT_MINERS; i < BLURT_MAX_WITNESSES; i++ )
-   {
-      account_create( BLURT_INIT_MINER_NAME + fc::to_string( i ), init_account_pub_key );
-      fund( BLURT_INIT_MINER_NAME + fc::to_string( i ), BLURT_MIN_PRODUCER_REWARD.amount.value );
-      witness_create( BLURT_INIT_MINER_NAME + fc::to_string( i ), init_account_priv_key, "foo.bar", init_account_pub_key, BLURT_MIN_PRODUCER_REWARD.amount );
-   }
 
    validate_database();
    } catch ( const fc::exception& e )

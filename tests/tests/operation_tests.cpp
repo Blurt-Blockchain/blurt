@@ -82,6 +82,12 @@ BOOST_AUTO_TEST_CASE( account_create_apply )
    {
       BOOST_TEST_MESSAGE( "Testing: account_create_apply" );
 
+      {
+         flat_map< string, vector<char> > props;
+         props["account_creation_fee"] = fc::raw::pack_to_vector( ASSET( "0.100 TESTS" ) );
+         set_witness_props( props );
+      }
+
       db_plugin->debug_update( [=]( database& db )
       {
          db.modify( db.get_witness_schedule_object(), [&]( witness_schedule_object& wso )
@@ -2288,6 +2294,12 @@ BOOST_AUTO_TEST_CASE( account_recovery )
       fund( "alice", 1000000 );
       generate_block();
 
+      {
+         flat_map< string, vector<char> > props;
+         props["account_creation_fee"] = fc::raw::pack_to_vector( ASSET( "0.100 TESTS" ) );
+         set_witness_props( props );
+      }
+
       db_plugin->debug_update( [=]( database& db )
       {
          db.modify( db.get_witness_schedule_object(), [&]( witness_schedule_object& wso )
@@ -4003,6 +4015,7 @@ BOOST_AUTO_TEST_CASE( transfer_to_savings_apply )
       generate_block();
 
       fund( "alice", ASSET( "10.000 TESTS" ) );
+      generate_block();
 
       BOOST_REQUIRE( db->get_account( "alice" ).balance == ASSET( "10.000 TESTS" ) );
 
@@ -4687,6 +4700,8 @@ BOOST_AUTO_TEST_CASE( claim_reward_balance_apply )
       });
 
       generate_block();
+      BOOST_REQUIRE( db->get_account( "alice" ).reward_blurt_balance == ASSET( "10.000 TESTS" ) );
+
       validate_database();
 
       auto alice_steem = db->get_account( "alice" ).balance;
@@ -4816,7 +4831,7 @@ BOOST_AUTO_TEST_CASE( delegate_vesting_shares_apply )
       ACTORS( (alice)(bob)(charlie) )
       generate_block();
 
-      vest( BLURT_INIT_MINER_NAME, "alice", ASSET( "1000.000 TESTS" ) );
+      vest( BLURT_INIT_MINER_NAME, "alice", ASSET( "10000.000 TESTS" ) );
 
       generate_block();
 
@@ -5148,7 +5163,7 @@ BOOST_AUTO_TEST_CASE( issue_971_vesting_removal )
       ACTORS( (alice)(bob) )
       generate_block();
 
-      vest( BLURT_INIT_MINER_NAME, "alice", ASSET( "1000.000 TESTS" ) );
+      vest( BLURT_INIT_MINER_NAME, "alice", ASSET( "10000.000 TESTS" ) );
 
       generate_block();
 
@@ -5352,9 +5367,9 @@ BOOST_AUTO_TEST_CASE( comment_beneficiaries_apply )
       vote.weight = BLURT_100_PERCENT;
 
       b.beneficiaries.clear();
+      b.beneficiaries.push_back( beneficiary_route_type( account_name_type( BLURT_TREASURY_ACCOUNT ), 10 * BLURT_1_PERCENT ) );
       b.beneficiaries.push_back( beneficiary_route_type( account_name_type( "bob" ), 25 * BLURT_1_PERCENT ) );
       b.beneficiaries.push_back( beneficiary_route_type( account_name_type( "sam" ), 50 * BLURT_1_PERCENT ) );
-      b.beneficiaries.push_back( beneficiary_route_type( account_name_type( BLURT_TREASURY_ACCOUNT ), 10 * BLURT_1_PERCENT ) );
       op.extensions.clear();
       op.extensions.insert( b );
 
@@ -5403,10 +5418,10 @@ BOOST_AUTO_TEST_CASE( comment_beneficiaries_apply )
       generate_block();
 
       BOOST_REQUIRE( db->get_account( "bob" ).reward_vesting_blurt.amount + db->get_account( "sam" ).reward_vesting_blurt.amount + db->get_account( BLURT_TREASURY_ACCOUNT ).balance.amount == db->get_comment( "alice", string( "test" ) ).beneficiary_payout_value.amount );
-      BOOST_REQUIRE( ( db->get_account( "alice" ).reward_vesting_blurt.amount + db->get_account( BLURT_TREASURY_ACCOUNT ).balance.amount ) == db->get_account( "bob" ).reward_vesting_blurt.amount );
-      BOOST_REQUIRE( ( db->get_account( "alice" ).reward_vesting_blurt.amount + db->get_account( BLURT_TREASURY_ACCOUNT ).balance.amount ) == ( db->get_account( "sam" ).reward_vesting_blurt.amount ) / 2 );
-      BOOST_REQUIRE( db->get_account( "bob" ).reward_vesting_blurt.amount == 45);
-      BOOST_REQUIRE( db->get_account( "sam" ).reward_vesting_blurt.amount == 90 );
+      BOOST_REQUIRE( ( db->get_account( "alice" ).reward_vesting_blurt.amount + db->get_account( BLURT_TREASURY_ACCOUNT ).balance.amount ) == db->get_account( "bob" ).reward_vesting_blurt.amount + 1 );
+      BOOST_REQUIRE( ( db->get_account( "alice" ).reward_vesting_blurt.amount + db->get_account( BLURT_TREASURY_ACCOUNT ).balance.amount ) == ( db->get_account( "sam" ).reward_vesting_blurt.amount ) / 2 + 1 );
+      BOOST_REQUIRE( db->get_account( "bob" ).reward_vesting_blurt.amount == 115409207);
+      BOOST_REQUIRE( db->get_account( "sam" ).reward_vesting_blurt.amount == 230818414 );
    }
    FC_LOG_AND_RETHROW()
 }

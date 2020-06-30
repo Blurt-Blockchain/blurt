@@ -39,20 +39,7 @@ namespace blurt { namespace chain {
          time_point_sec    time;
          account_name_type current_witness;
 
-
-         /**
-          *  The total POW accumulated, aka the sum of num_pow_witness at the time new POW is added
-          */
-         uint64_t total_pow = -1;
-
-         /**
-          * The current count of how many pending POW witnesses there are, determines the difficulty
-          * of doing pow
-          */
-         uint32_t num_pow_witnesses = 0;
-
          asset       current_supply             = asset( 0, BLURT_SYMBOL );
-         asset       confidential_supply        = asset( 0, BLURT_SYMBOL ); ///< total asset held in confidential balances
          asset       total_vesting_fund_blurt   = asset( 0, BLURT_SYMBOL );
          asset       total_vesting_shares       = asset( 0, VESTS_SYMBOL );
          asset       total_reward_fund_blurt    = asset( 0, BLURT_SYMBOL );
@@ -107,11 +94,11 @@ namespace blurt { namespace chain {
           * "wasting" voting power through spillover; any user voting faster than this rate will have
           * their votes reduced.
           */
-         uint32_t vote_power_reserve_rate = BLURT_INITIAL_VOTE_POWER_RATE;
+         uint32_t vote_power_reserve_rate = BLURT_REDUCED_VOTE_POWER_RATE;
 
-         uint32_t delegation_return_period = BLURT_DELEGATION_RETURN_PERIOD_HF0;
+         uint32_t delegation_return_period = BLURT_DELEGATION_RETURN_PERIOD_HF20;
 
-         uint64_t reverse_auction_seconds = 0;
+         uint64_t reverse_auction_seconds = BLURT_REVERSE_AUCTION_WINDOW_SECONDS_HF21;
 
          int64_t available_account_subsidies = 0;
 
@@ -119,9 +106,9 @@ namespace blurt { namespace chain {
          time_point_sec next_maintenance_time;
          time_point_sec last_budget_time;
 
-         uint16_t content_reward_percent = BLURT_CONTENT_REWARD_PERCENT_HF16;
+         uint16_t content_reward_percent = BLURT_CONTENT_REWARD_PERCENT_HF21;
          uint16_t vesting_reward_percent = BLURT_VESTING_FUND_PERCENT_HF16;
-         uint16_t sps_fund_percent = BLURT_PROPOSAL_FUND_PERCENT_HF0;
+         uint16_t sps_fund_percent = BLURT_PROPOSAL_FUND_PERCENT_HF21;
 
          asset sps_interval_ledger = asset( 0, BLURT_SYMBOL );
 
@@ -158,10 +145,7 @@ FC_REFLECT( blurt::chain::dynamic_global_property_object,
              (head_block_id)
              (time)
              (current_witness)
-             (total_pow)
-             (num_pow_witnesses)
              (current_supply)
-             (confidential_supply)
              (total_vesting_fund_blurt)
              (total_vesting_shares)
              (total_reward_fund_blurt)

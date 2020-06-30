@@ -72,30 +72,6 @@ namespace blurt { namespace chain {
 
 
    /**
-    *  This object gets updated once per hour, on the hour
-    */
-   class feed_history_object  : public object< feed_history_object_type, feed_history_object >
-   {
-      BLURT_STD_ALLOCATOR_CONSTRUCTOR( feed_history_object )
-
-      public:
-         template< typename Constructor, typename Allocator >
-         feed_history_object( Constructor&& c, allocator< Allocator > a )
-            :price_history( a )
-         {
-            c( *this );
-         }
-
-         id_type                                   id;
-
-         price                                     current_median_history; ///< the current median of the price history, used as the base for convert operations
-
-         using t_price_history = t_deque< price >;
-
-         t_deque< price >   price_history; ///< tracks this last week of median_feed one per hour
-   };
-
-   /**
     * @breif a route to send withdrawn vesting shares.
     */
    class withdraw_vesting_route_object : public object< withdraw_vesting_route_object_type, withdraw_vesting_route_object >
@@ -154,18 +130,10 @@ namespace blurt { namespace chain {
          uint128_t               content_constant = 0;
          uint16_t                percent_curation_rewards = 0;
          uint16_t                percent_content_rewards = 0;
-         protocol::curve_id                author_reward_curve;
-         protocol::curve_id                curation_reward_curve;
+         protocol::curve_id      author_reward_curve;
+         protocol::curve_id      curation_reward_curve;
    };
 
-
-   typedef multi_index_container<
-      feed_history_object,
-      indexed_by<
-         ordered_unique< tag< by_id >, member< feed_history_object, feed_history_id_type, &feed_history_object::id > >
-      >,
-      allocator< feed_history_object >
-   > feed_history_index;
 
    struct by_withdraw_route;
    struct by_destination;
@@ -289,10 +257,6 @@ template<> struct is_static_length< blurt::chain::reward_fund_object > : public 
 
 #include <blurt/chain/comment_object.hpp>
 #include <blurt/chain/account_object.hpp>
-
-FC_REFLECT( blurt::chain::feed_history_object,
-             (id)(current_median_history)(price_history) )
-CHAINBASE_SET_INDEX_TYPE( blurt::chain::feed_history_object, blurt::chain::feed_history_index )
 
 FC_REFLECT( blurt::chain::withdraw_vesting_route_object,
              (id)(from_account)(to_account)(percent)(auto_vest) )

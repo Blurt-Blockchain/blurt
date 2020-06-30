@@ -123,8 +123,14 @@ void update_median_witness_props( database& db )
    } );
 }
 
-void update_witness_schedule4( database& db )
+/**
+ *
+ *  See @ref witness_object::virtual_last_update
+ */
+void update_witness_schedule(database& db)
 {
+   if( (db.head_block_num() % BLURT_MAX_WITNESSES) != 0 ) return;
+
    const witness_schedule_object& wso = db.get_witness_schedule_object();
    vector< account_name_type > active_witnesses;
    active_witnesses.reserve( BLURT_MAX_WITNESSES );
@@ -147,35 +153,12 @@ void update_witness_schedule4( database& db )
 
    auto num_elected = active_witnesses.size();
 
-   /// Add miners from the top of the mining queue
-   flat_set< witness_id_type > selected_miners;
-   selected_miners.reserve( wso.max_miner_witnesses );
-   const auto& gprops = db.get_dynamic_global_properties();
-   const auto& pow_idx      = db.get_index<witness_index>().indices().get<by_pow>();
-   auto mitr = pow_idx.upper_bound(0);
-   while( mitr != pow_idx.end() && selected_miners.size() < wso.max_miner_witnesses )
-   {
-      // Remove processed miner from the queue
-      auto itr = mitr;
-      ++mitr;
-      db.modify( *itr, [&](witness_object& wit )
-      {
-         wit.pow_worker = 0;
-      } );
-      db.modify( gprops, [&]( dynamic_global_property_object& obj )
-      {
-         obj.num_pow_witnesses--;
-      } );
-   }
-
-   auto num_miners = selected_miners.size();
-
    /// Add the running witnesses in the lead
    fc::uint128 new_virtual_time = wso.current_virtual_time;
    const auto& schedule_idx = db.get_index<witness_index>().indices().get<by_schedule_time>();
    auto sitr = schedule_idx.begin();
    vector<decltype(sitr)> processed_witnesses;
-   for( auto witness_count = selected_voted.size() + selected_miners.size();
+   for( auto witness_count = selected_voted.size();
         sitr != schedule_idx.end() && witness_count < BLURT_MAX_WITNESSES;
         ++sitr )
    {
@@ -185,8 +168,7 @@ void update_witness_schedule4( database& db )
       if( sitr->signing_key == public_key_type() )
          continue; /// skip witnesses without a valid block signing key
 
-      if( selected_miners.find(sitr->id) == selected_miners.end()
-          && selected_voted.find(sitr->id) == selected_voted.end() )
+      if( selected_voted.find(sitr->id) == selected_voted.end() )
       {
          active_witnesses.push_back(sitr->owner);
          db.modify( *sitr, [&]( witness_object& wo ) { wo.schedule = witness_object::timeshare; } );
@@ -194,7 +176,7 @@ void update_witness_schedule4( database& db )
       }
    }
 
-   auto num_timeshare = active_witnesses.size() - num_miners - num_elected;
+   auto num_timeshare = active_witnesses.size() - num_elected;
 
    /// Update virtual schedule of processed witnesses
    bool reset_virtual_time = false;
@@ -293,7 +275,7 @@ void update_witness_schedule4( database& db )
       }
    }
 
-   assert( num_elected + num_miners + num_timeshare == active_witnesses.size() );
+   assert( num_elected + num_timeshare == active_witnesses.size() );
 
    db.modify( wso, [&]( witness_schedule_object& _wso )
    {
@@ -308,10 +290,7 @@ void update_witness_schedule4( database& db )
       }
 
       _wso.num_scheduled_witnesses = std::max< uint8_t >( active_witnesses.size(), 1 );
-      _wso.witness_pay_normalization_factor =
-           _wso.elected_weight * num_elected
-         + _wso.miner_weight * num_miners
-         + _wso.timeshare_weight * num_timeshare;
+      _wso.witness_pay_normalization_factor = _wso.elected_weight * num_elected + _wso.timeshare_weight * num_timeshare;
 
       /// shuffle current shuffled witnesses
       auto now_hi = uint64_t(db.head_block_time().sec_since_epoch()) << 32;
@@ -337,19 +316,6 @@ void update_witness_schedule4( database& db )
    } );
 
    update_median_witness_props(db);
-}
-
-
-/**
- *
- *  See @ref witness_object::virtual_last_update
- */
-void update_witness_schedule(database& db)
-{
-   if( (db.head_block_num() % BLURT_MAX_WITNESSES) == 0 ) //wso.next_shuffle_block_num )
-   {
-      update_witness_schedule4(db);
-   }
 }
 
 } }

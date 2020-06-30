@@ -2,19 +2,90 @@ image: debian:10
 
 stages: 
  - build
+ - pdfs
 
-build:
-  stage: build 
-  before_script: 
+# Installs dependencies just once!
+before_script: 
+# Update apt
   - apt-get update -qq
-  - apt-get install -y -qq autoconf automake cmake g++ git libbz2-dev libsnappy-dev libssl-dev libtool make pkg-config python3 python3-jinja2 doxygen
-  - apt-get install -y -qq libboost-chrono-dev libboost-context-dev libboost-coroutine-dev libboost-date-time-dev libboost-filesystem-dev libboost-iostreams-dev libboost-locale-dev libboost-program-options-dev libboost-serialization-dev libboost-signals-dev libboost-system-dev libboost-test-dev libboost-thread-dev
-  - apt-get install -y -qq libncurses5-dev libreadline-dev perl
+# Install Blurt Build Dependencies
+  - apt-get install -y -qq autoconf automake cmake g++ git libbz2-dev libsnappy-dev libssl-dev libtool make pkg-config python3 python3-jinja2 doxygen libboost-chrono-dev libboost-context-dev libboost-coroutine-dev libboost-date-time-dev libboost-filesystem-dev libboost-iostreams-dev libboost-locale-dev libboost-program-options-dev libboost-serialization-dev libboost-signals-dev libboost-system-dev libboost-test-dev libboost-thread-dev libncurses5-dev libreadline-dev perl ccache
+# Pull in submodules
   - git submodule update --init --recursive
+# ccache for acceleration
+  - mkdir -p ccache
+  - export CCACHE_BASEDIR=${PWD}
+  - export CCACHE_DIR=${PWD}/ccache
+
+# caches ccache for future use (how is this going to work out with the parallelism I wonder?)
+cache:
+  paths:
+  - ccache/
+
+build_default:
+  stage: build 
   script:
   - mkdir build
   - cd build
-  - cmake -DBLURT_STATIC_BUILD=OFF -DLOW_MEMORY_NODE=ON -DCLEAR_VOTES=ON -DBUILD_BLURT_TESTNET=OFF -DSKIP_BY_TX_ID=ON -DBLURT_LINT_LEVEL=OFF -DENABLE_MIRA=OFF -DCMAKE_BUILD_TYPE=Debug ..
-  - make blurtd
-  tags:
-   - cpp
+# Debug Build Config: (Note: DCMAKE_BUILD_TYPE=Debug)
+  - cmake -DCMAKE_CXX_COMPILER_LAUNCHER=ccache -DBLURT_STATIC_BUILD=OFF -DLOW_MEMORY_NODE=ON -DCLEAR_VOTES=ON -DBUILD_BLURT_TESTNET=OFF -DSKIP_BY_TX_ID=ON -DBLURT_LINT_LEVEL=OFF -DENABLE_MIRA=OFF -DCMAKE_BUILD_TYPE=Debug ..
+  - make -j$(nproc) blurtd cli_wallet
+  - mv programs/blurtd/blurtd programs/blurtd/blurtd_debug
+# Fix recovery of artifacts :/
+  - pwd
+  artifacts:
+    paths:
+    - /builds/blurt/blurt/build/programs/blurtd/blurtd_debug
+
+
+build_witness:
+  stage: build 
+  script:
+  - mkdir build
+  - cd build
+# Witness Build Config: -DLOW_MEMORY_NODE=ON -DCLEAR_VOTES=ON
+  - cmake -DCMAKE_CXX_COMPILER_LAUNCHER=ccache -DBLURT_STATIC_BUILD=ON -DLOW_MEMORY_NODE=ON -DCLEAR_VOTES=ON -DBUILD_BLURT_TESTNET=OFF -DSKIP_BY_TX_ID=ON -DBLURT_LINT_LEVEL=OFF -DENABLE_MIRA=ON -DCMAKE_BUILD_TYPE=Release ..
+  - make -j$(nproc) blurtd cli_wallet
+  - mv programs/blurtd/blurtd programs/blurtd/blurtd_witness
+# fix recovery of artifacts :(
+  - pwd
+# cli wallet is only used for witness, so we capture it from the witness build
+  artifacts:
+    paths:
+    - /builds/blurt/blurt/build/programs/blurtd/blurtd_witness
+    - /builds/blurt/blurt/build/programs/cli_wallet/cli_wallet
+
+build_fullnode:
+  stage: build 
+  script:
+  - mkdir build
+  - cd build
+# Full Node Build Configuration -DLOW_MEMORY_NODE=OFF -DCLEAR_VOTES=OFF
+  - cmake -DCMAKE_CXX_COMPILER_LAUNCHER=ccache -DBLURT_STATIC_BUILD=ON -DLOW_MEMORY_NODE=OFF -DCLEAR_VOTES=OFF -DBUILD_BLURT_TESTNET=OFF -DSKIP_BY_TX_ID=ON -DBLURT_LINT_LEVEL=OFF -DENABLE_MIRA=ON -DCMAKE_BUILD_TYPE=Release ..
+  - make -j$(nproc) blurtd cli_wallet
+  - mv programs/blurtd/blurtd programs/blurtd/blurtd_fullnode
+  artifacts:
+    paths:
+    - /builds/blurt/blurt/build/programs/blurtd_fullnode
+
+pdfs:
+  stage: build
+#makes sure that the document generator does not pick up the cache and do strange things. 
+  cache: {}
+  before_script:
+    # Download and install pandoc and kramdown before we begin
+    # pandoc does PDF, but requires pdflatex, which can be a ~500mb download
+    # so we go for kramdown, which handles PDF, but doesn't handle DOCX
+    - apt-get update -y
+    - apt-get install -y pandoc texlive-xetex
+  script:
+  # Runs pandoc on all .md files in the repo and outputs them as PDF and DOCX
+    - pandoc doc/witnesses.md --pdf-engine=xelatex --o witnesses.pdf 
+  artifacts:
+    # Attach all untracked files (e.g. files that were recently created and not yet committed to git) as artifacts.
+    # These are the files you then download after the job has finished.
+    untracked: true
+  only:
+    # Only run on the master branch
+    - dev
+    - master

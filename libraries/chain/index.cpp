@@ -26,7 +26,6 @@ void initialize_core_indexes( database& db )
    BLURT_ADD_CORE_INDEX(db, comment_content_index);
    BLURT_ADD_CORE_INDEX(db, comment_vote_index);
    BLURT_ADD_CORE_INDEX(db, witness_vote_index);
-   BLURT_ADD_CORE_INDEX(db, feed_history_index);
    BLURT_ADD_CORE_INDEX(db, operation_index);
    BLURT_ADD_CORE_INDEX(db, account_history_index);
    BLURT_ADD_CORE_INDEX(db, hardfork_property_index);

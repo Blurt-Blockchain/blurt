@@ -54,10 +54,6 @@ tests = [
       "params": []
    },
    {
-      "method": "condenser_api.get_feed_history",
-      "params": []
-   },
-   {
       "method": "condenser_api.get_witness_schedule",
       "params": []
    },
@@ -152,10 +148,6 @@ tests = [
    {
       "method": "condenser_api.get_witness_count",
       "params": []
-   },
-   {
-      "method": "condenser_api.get_open_orders",
-      "params": ["temp"]
    },
    {
       "method": "condenser_api.get_transaction_hex",
@@ -301,34 +293,6 @@ tests = [
       "params": ["temp"]
    },
    {
-      "method": "condenser_api.get_ticker",
-      "params": []
-   },
-   {
-      "method": "condenser_api.get_volume",
-      "params": []
-   },
-   {
-      "method": "condenser_api.get_order_book",
-      "params": [10]
-   },
-   {
-      "method": "condenser_api.get_trade_history",
-      "params": ["2016-3-24T00:00:00", "2017-3-24T00:00:00", 10]
-   },
-   {
-      "method": "condenser_api.get_recent_trades",
-      "params": [10]
-   },
-   {
-      "method": "condenser_api.get_market_history",
-      "params": [60, "2016-3-24T00:00:00", "2017-3-24T00:00:00", ]
-   },
-   {
-      "method": "condenser_api.get_market_history_buckets",
-      "params": []
-   },
-   {
       "method": "account_by_key_api.get_key_references",
       "params": {"keys":["BLT8GC13uCZbP44HzMLV6zPZGwVQ8Nt4Kji8PapsPiNq1BK153XTX"]}
    },
@@ -396,34 +360,6 @@ tests = [
    {
       "method": "follow_api.get_blog_authors",
       "params": {"blog_account":"temp"}
-   },
-   {
-      "method": "market_history_api.get_ticker",
-      "params": {}
-   },
-   {
-      "method": "market_history_api.get_volume",
-      "params": {}
-   },
-   {
-      "method": "market_history_api.get_order_book",
-      "params": {"limit":10}
-   },
-   {
-      "method": "market_history_api.get_trade_history",
-      "params": {"start":"2016-3-24T00:00:00", "end":"2017-3-24T00:00:00", "limit":10}
-   },
-   {
-      "method": "market_history_api.get_recent_trades",
-      "params": {"limit":10}
-   },
-   {
-      "method": "market_history_api.get_market_history",
-      "params": {"bucket_seconds":60, "start":"2017-3-24T00:00:00", "end":"2017-3-24T01:00:00"}
-   },
-   {
-      "method": "market_history_api.get_market_history_buckets",
-      "params": {}
    },
    {
       "method": "rc_api.get_resource_params",
@@ -545,14 +481,6 @@ tests = [
    },
    {
       "method": "database_api.get_reward_funds",
-      "params": {}
-   },
-   {
-      "method": "database_api.get_current_price_feed",
-      "params": {}
-   },
-   {
-      "method": "database_api.get_feed_history",
       "params": {}
    },
    {

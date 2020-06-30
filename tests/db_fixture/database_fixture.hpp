@@ -19,8 +19,6 @@
 #include <array>
 #include <iostream>
 
-#define INITIAL_TEST_SUPPLY (10000000000ll)
-
 extern uint32_t BLURT_TESTING_GENESIS_TIMESTAMP;
 
 #define PUSH_TX \

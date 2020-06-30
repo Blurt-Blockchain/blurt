@@ -80,7 +80,7 @@ BOOST_AUTO_TEST_CASE( transaction_status_test )
       vest( "initminer", 10000 );
 
       // Fill up the rest of the required miners
-      for( int i = BLURT_NUM_INIT_MINERS; i < BLURT_MAX_WITNESSES; i++ )
+      for( int i = 1; i < BLURT_MAX_WITNESSES; i++ )
       {
          account_create( BLURT_INIT_MINER_NAME + fc::to_string( i ), init_account_pub_key );
          fund( BLURT_INIT_MINER_NAME + fc::to_string( i ), BLURT_MIN_PRODUCER_REWARD.amount.value );

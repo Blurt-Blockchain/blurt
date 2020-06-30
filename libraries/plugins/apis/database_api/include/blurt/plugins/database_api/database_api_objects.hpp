@@ -344,21 +344,6 @@ struct api_savings_withdraw_object
    time_point_sec             complete;
 };
 
-struct api_feed_history_object
-{
-   api_feed_history_object( const feed_history_object& f ) :
-      id( f.id ),
-      current_median_history( f.current_median_history ),
-      price_history( f.price_history.begin(), f.price_history.end() )
-   {}
-
-   api_feed_history_object() {}
-
-   feed_history_id_type id;
-   price                current_median_history;
-   deque< price >       price_history;
-};
-
 struct api_witness_object
 {
    api_witness_object( const witness_object& w ) :
@@ -369,14 +354,12 @@ struct api_witness_object
       total_missed( w.total_missed ),
       last_aslot( w.last_aslot ),
       last_confirmed_block_num( w.last_confirmed_block_num ),
-      pow_worker( w.pow_worker ),
       signing_key( w.signing_key ),
       props( w.props ),
       votes( w.votes ),
       virtual_last_update( w.virtual_last_update ),
       virtual_position( w.virtual_position ),
       virtual_scheduled_time( w.virtual_scheduled_time ),
-      last_work( w.last_work ),
       running_version( w.running_version ),
       hardfork_version_vote( w.hardfork_version_vote ),
       hardfork_time_vote( w.hardfork_time_vote ),
@@ -392,14 +375,12 @@ struct api_witness_object
    uint32_t          total_missed = 0;
    uint64_t          last_aslot = 0;
    uint64_t          last_confirmed_block_num = 0;
-   uint64_t          pow_worker = 0;
    public_key_type   signing_key;
    chain_properties  props;
    share_type        votes;
    fc::uint128       virtual_last_update;
    fc::uint128       virtual_position;
    fc::uint128       virtual_scheduled_time;
-   digest_type       last_work;
    version           running_version;
    hardfork_version  hardfork_version_vote;
    time_point_sec    hardfork_time_vote;
@@ -417,12 +398,10 @@ struct api_witness_schedule_object
       num_scheduled_witnesses( wso.num_scheduled_witnesses ),
       elected_weight( wso.elected_weight ),
       timeshare_weight( wso.timeshare_weight ),
-      miner_weight( wso.miner_weight ),
       witness_pay_normalization_factor( wso.witness_pay_normalization_factor ),
       median_props( wso.median_props ),
       majority_version( wso.majority_version ),
       max_voted_witnesses( wso.max_voted_witnesses ),
-      max_miner_witnesses( wso.max_miner_witnesses ),
       max_runner_witnesses( wso.max_runner_witnesses ),
       hardfork_required_witnesses( wso.hardfork_required_witnesses ),
       account_subsidy_rd( wso.account_subsidy_rd ),
@@ -445,13 +424,11 @@ struct api_witness_schedule_object
    uint8_t                    num_scheduled_witnesses;
    uint8_t                    elected_weight;
    uint8_t                    timeshare_weight;
-   uint8_t                    miner_weight;
    uint32_t                   witness_pay_normalization_factor;
    chain_properties           median_props;
    version                    majority_version;
 
    uint8_t                    max_voted_witnesses;
-   uint8_t                    max_miner_witnesses;
    uint8_t                    max_runner_witnesses;
    uint8_t                    hardfork_required_witnesses;
 
@@ -624,20 +601,13 @@ FC_REFLECT( blurt::plugins::database_api::api_savings_withdraw_object,
              (complete)
           )
 
-FC_REFLECT( blurt::plugins::database_api::api_feed_history_object,
-             (id)
-             (current_median_history)
-             (price_history)
-          )
-
 FC_REFLECT( blurt::plugins::database_api::api_witness_object,
              (id)
              (owner)
              (created)
              (url)(votes)(virtual_last_update)(virtual_position)(virtual_scheduled_time)(total_missed)
-             (last_aslot)(last_confirmed_block_num)(pow_worker)(signing_key)
+             (last_aslot)(last_confirmed_block_num)(signing_key)
              (props)
-             (last_work)
              (running_version)
              (hardfork_version_vote)(hardfork_time_vote)
              (available_witness_account_subsidies)
@@ -651,12 +621,10 @@ FC_REFLECT( blurt::plugins::database_api::api_witness_schedule_object,
              (num_scheduled_witnesses)
              (elected_weight)
              (timeshare_weight)
-             (miner_weight)
              (witness_pay_normalization_factor)
              (median_props)
              (majority_version)
              (max_voted_witnesses)
-             (max_miner_witnesses)
              (max_runner_witnesses)
              (hardfork_required_witnesses)
              (account_subsidy_rd)

@@ -102,7 +102,7 @@ int main( int argc, char** argv )
          wdump((allowed_ips));
       }
 
-      blurt::protocol::chain_id_type _blurt_chain_id;
+      blurt::protocol::chain_id_type _blurt_chain_id = BLURT_CHAIN_ID;
 
 #ifdef IS_TEST_NET
       if( options.count("chain-id") )

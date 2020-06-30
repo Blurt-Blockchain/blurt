@@ -101,9 +101,6 @@ struct bucket_object : public object< bucket_object_type, bucket_object >
    uint32_t             finished_vesting_withdrawals = 0;            ///< Processed vesting withdrawals that are now finished
    share_type           vests_withdrawn = 0;                         ///< Ammount of VESTS withdrawn to BLURT
    share_type           vests_transferred = 0;                       ///< Ammount of VESTS transferred to another account
-   share_type           blurt_converted = 0;                         ///< Amount of BLURT that was converted
-   uint32_t             total_pow = 0;                               ///< POW submitted
-   uint128_t            estimated_hashpower = 0;                     ///< Estimated average hashpower over interval
 };
 
 typedef oid< bucket_object > bucket_id_type;
@@ -160,8 +157,5 @@ FC_REFLECT( blurt::blockchain_statistics::bucket_object,
    (finished_vesting_withdrawals)
    (vests_withdrawn)
    (vests_transferred)
-   (blurt_converted)
-   (total_pow)
-   (estimated_hashpower)
 )
 CHAINBASE_SET_INDEX_TYPE( blurt::blockchain_statistics::bucket_object, blurt::blockchain_statistics::bucket_index )
