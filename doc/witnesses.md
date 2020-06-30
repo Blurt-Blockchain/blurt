@@ -40,31 +40,56 @@ Your Witness machine spec is entirely **your** choice.  This recommended spec sh
 
 Accurate as of **June 15, 2020**:
 
-**Blurt Witness Spec**
+| Blurt Witness Spec | |
+|---|---|
+| CPU |  2+ Cores |
+| RAM |    4GB   |
+| Storage | 80+GB |
 
-|  Component |  Size     |
-|----------|-------------|
-| **CPU** |  2+ Cores |
-| **RAM** |    4GB   |
-| **Storage** | 80+GB |
+You'll also want to `suggest_brain_key`.  
+
+Copy down its entire output and keep it safely.  You'll be using this brain key to control your Witness.  
+
+> I (Jacob) am of the opinion that double-signing (a single hot key running on more than one node at the same time) is far more harmful to a blockchain system than a node simply going down.  
+
+> _It is my (Jacob's) recommendation that you do not use an automated failover system on your Witness.  If it goes down, and misses blocks, it's really not the end of the world.  Yes, your performance is judged by the team and community on missing blocks or not, but we're all quite rational.  At times, machines go down.  My (Jacob's) personal opinion is that **occasional** downtime is preferable to the risk of double signing created by failover systems._   
 
 ## Witness Setup Procedure
 **Valid for Testnet 1, June 16, 2020:**
 
 Blurt nodes run well on many Linux distributions, but we recommend Debian 10. 
 
-Make sure that you disable password logins on your potential witness machine and that you login to it ONLY using an SSH keypair.  If you rent a machine with password logins enabled by default, no problem.  Do like:
+Make sure that you disable password logins on your potential witness machine and that you login to it ONLY using an SSH keypair.  If you rent a machine with password logins enabled by default, no problem.  To properly fix it, first create a new user for the witness when logged in via ssh using a password as root:
+
+(note: if you run linux on your main machine, use the same username as your machine so you don't have to specify it in the SSH login command)
 
 ```bash
-ssh-copy-id root@youripaddresshere
+useradd witness -m
+passwd witness
 ```
+
+Give it a reasonable password... Next, we can now automate logging into it like this:
+
+```bash
+ssh-copy-id witness@your.ip.address.here
+```
+
 Enter your SSH password, and `ssh-copy-id` will copy your SSH public key to the server so that you no longer need to use a password to login.  
 
 Test this like:
 
 ```bash
-ssh root@youripaddresshere
+ssh witness@youripaddresshere
 ```
+
+I personally like to use my routine username for this rather than 'witness' as then I can connect to it using `ssh your.ip.address.here` which can be made neat by adding an entry to your `.ssh/config` file to have a more memorable address than `115.52.35.14`:
+
+```
+Host lokibeast1
+    HostName 95.217.121.243
+    User loki
+    Port 22
+``` 
 
 If it doesn't ask you for a password, you've been successful in setting up proper passwordless SSH that uses a signature by your SSH private key to authenticate you instead of a password.  If it asks for a password, you've failed.  
 
@@ -86,7 +111,25 @@ PasswordAuthentication no
 
 Press `ctrl + o` to save the file, and `ctrl + x` to exit the nano editor.   
 
-Then run
+You can now still access root, just not directly. If you want to set up `sudo` that's up to you (it's easy on ubuntu servers) but more directly without using sudo once you are logged into the witness account, you can just:
+
+```bash
+su root
+```
+
+and type in root's password.
+
+There is some other configuration items in the `/etc/ssh/sshd_config` you may want to check on. Importantly,
+ public key logins must be enabled. The following configuration items you should ensure are in a state you want them to be:
+ 
+```
+PermitRootLogin no
+PubkeyAuthentication yes
+PasswordAuthentication no
+PermitEmptyPasswords no
+PrintMotd yes
+```
+
 ```bash
 service ssh restart
 ```
@@ -96,6 +139,8 @@ We've reduced setting up a full node to a single-line installer:
 ```bash
 bash <(curl -s https://gitlab.com/blurt/blurt/-/raw/dev/doc/witness-full-node.bash)
 ```
+
+TODO: At this point, the node should be run until it's synced. Usually takes about 5-10 minutes but we should add something here, `journalctl -f` type command to let the blurtd print logs so you can see when it's finished syncing.
 
 There, now you're running a very nice Blurt Full Node, but you are not yet running a Witness.  In order to run a witness, you'll need to import your Steem active key using the `cli_wallet`.  
 
@@ -107,18 +152,32 @@ The first thing you should do is set a password, like:
 set_password yourpassword
 ```
 
-You'll also want to `suggest_brain_key`.  
-
-Copy down its entire output and keep it safely.  You'll be using this brain key to control your Witness.  
-
 **import your Steem Active key**
+
+You first need to import your account's _Active_ key, to allow the witness to post on behalf of your account, and from this it can generate valid delegate key that lets you run your witness without exposing either your _Active_ key or anything sensitive.
 
 ```
 import_key 5KABCDEFGHIJKLMNOPQRSTUVXYZ
 ```
 Note: the key should start with a 5
 
+This password can be anything but don't use something you use for anything else.
+
+You'll also want to `suggest_brain_key`. This will produce something like this:
+
+```
+{
+  "brain_priv_key": "SOME SEQUENCE OF NONSENSE WORDS USUALLY 18 WORDS LONG",
+  "wif_priv_key": "5J578HtXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+  "pub_key": "BLT5yjjXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+}
+```
+
+Copy down its entire output and keep it safely.  You'll be using this brain key to control your Witness. It would make sense to keep that where you store your steem keys also, KeePassXC is a good option, storing it in your keybase private files is another good option for not losing it.  
+
 **Add private key to config.ini**
+
+Next, we need to use that "wif_private_key" value to allow the witness to sign blocks.
 
 First exit the cli_wallet:
 
