@@ -15,7 +15,7 @@ Blurt is a public social blockchain with a diverse and vibrant community that st
 * No SBD (Steem Backed Dollar) stablecoin
 * A **regent account** with a controlling stake or special weighted vote has been added to Blurt. 
   * The regent account votes on consensus Blurt Producers and DAO proposals.
-  * The regent account is programmed to decay over a two-year period. 
+  * The regent account is programmed to decay over a two-year period with 24 equal monthly reductions to zero, starting at a power equal to all blurt supply. 
   * **The regent account does not impact**:
     * circulating supply
     * new inflation A.K.A. organic supply
