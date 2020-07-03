@@ -4983,12 +4983,51 @@ void database::process_snapshot() {
    asset total_supply = asset( 0, STEEM_SYMBOL );
    auto sbd_price = get_feed_history().current_median_history;
 
-
+   // Have you ever had a fart so smelly that it cleared out a whole room?
+   // How about a fart so smelly that it cleared out a whole online community?
+   // This is a ventilation system.
+   // I don't know who farted really, but it Stincs
+   // Also I made this into a bad fart joke/analogy, but seriously you shouldn't steal from users and
+   // public chains should be fully-transparent.  Life would be better that way.
+   // see https://gitlab.com/blurt/blurt/-/issues/10
    std::vector<string> special_accounts = {
-      account_name_type(STEEM_MINER_ACCOUNT),
-      account_name_type(STEEM_NULL_ACCOUNT),
-      account_name_type(STEEM_TEMP_ACCOUNT),
-      account_name_type(STEEM_PROXY_TO_SELF_ACCOUNT)
+      account_name_type(STEEM_MINER_ACCOUNT),          // special_accountss
+      account_name_type(STEEM_NULL_ACCOUNT),           // special_accountss
+      account_name_type(STEEM_TEMP_ACCOUNT),           // special_accountss
+      account_name_type(STEEM_PROXY_TO_SELF_ACCOUNT),  // special_accountss
+      account_name_type(STEEM_TREASURY_ACCOUNT),       // special_accountss
+      account_name_type("community123"),               // Stealing is bad.  Really.  Don't steal, it's unkind.
+      account_name_type("misterdelegation"),
+      account_name_type("steem"),
+      account_name_type("steemit"),
+      account_name_type("steemitadmin"),
+      account_name_type("steemitblog"),
+      account_name_type("steemit2"),
+      account_name_type("steemit3"),
+      account_name_type("goodguy24"),                   // Sock Puppets who participated in HF23.  Stealing is bad.
+      account_name_type("aheadofslow"),
+      account_name_type("night11pm"),
+      account_name_type("hunger365"),
+      account_name_type("waitforyou1"),
+      account_name_type("cloudysun"),
+      account_name_type("jumphigh"),
+      account_name_type("coronashallgo"),
+      account_name_type("paintingclub"),
+      account_name_type("bostonawesome"),
+      account_name_type("toke2049"),
+      account_name_type("flyingfly"),
+      account_name_type("agirl10000"),
+      account_name_type("eastooowes"),
+      account_name_type("car2001"),
+      account_name_type("nicetry001"),
+      account_name_type("high46"),
+      account_name_type("respect888"),
+      account_name_type("dev365")
+   };
+
+   std::vector<public_key_type> filter_owner_keys = {
+      public_key_type("BLT6tC4qRjUPKmkqkug5DvSgkeND5DHhnfr3XTgpp4b4nejMEwn9k"), // Steemit, Inc Accounts
+      public_key_type("BLT65wH1LZ7BfSHcK69SShnqCAH5xdoSZpGkUjmzHJ5GCuxEK9V5G")  // Steemit, Inc Miners
    };
 
    for( auto itr = account_idx.begin(); itr != account_idx.end(); ++itr )
@@ -5058,10 +5097,28 @@ void database::process_snapshot() {
       asn.active = account_auth.active;
       asn.posting = account_auth.posting;
 
-      if (std::find(special_accounts.begin(), special_accounts.end(), itr->name) == special_accounts.end()) {
-         outfile << fc::json::to_string( asn ) << "\n";
+      // clear account_auths https://gitlab.com/blurt/blurt/-/issues/23
+      asn.owner.account_auths.clear();
+      asn.active.account_auths.clear();
+      asn.posting.account_auths.clear();
+
+      ///////////
+      bool is_filterd = false;
+
+      if (std::find(special_accounts.begin(), special_accounts.end(), itr->name) != special_accounts.end()) {
+         is_filterd = true;
+      } else {
+         for( auto& keypair : account_auth.owner.key_auths ) {
+            if (std::find(filter_owner_keys.begin(), filter_owner_keys.end(), keypair.first) != filter_owner_keys.end()) {
+               is_filterd = true;
+               break;
+            }
+         }
       }
 
+      if (!is_filterd) outfile << fc::json::to_string( asn ) << "\n";
+
+      ///////////
       total_supply += account_steem_balance + account_sp + (account_sbd_balance * sbd_price);
    }
 
