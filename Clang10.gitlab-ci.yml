@@ -21,7 +21,7 @@ before_script:
   - export CCACHE_DIR=${PWD}/ccache
 
 
-debug:
+clang10_debug:
   stage: build
   script:
     - mkdir build
@@ -37,7 +37,7 @@ debug:
 
 
 
-low_memory:
+clang10_low_memory:
   stage: build
   script:
     - mkdir build
@@ -52,7 +52,7 @@ low_memory:
 
 
 
-rpc:
+clang10_rpc:
   stage: build
   script:
     - mkdir build
