@@ -123,4 +123,8 @@ trigger-docker:
 #      changes:
 #        - doc/*
 
+include:
+  - template: Coverage-Fuzzing.gitlab-ci.yml
+
+
 
