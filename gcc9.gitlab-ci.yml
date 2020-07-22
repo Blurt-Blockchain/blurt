@@ -1,10 +1,4 @@
-image: conanio/gcc8
-
-stages:
-  - build
-  - fuzz
-  - triggers
-  - pdfs
+image: conanio/gcc9
 
 cache:
   paths:
@@ -38,13 +32,7 @@ debug:
     - pwd
   tags:
     - metal
-  artifacts:
-    paths:
-      - /builds/blurt/blurt/build/programs/blurtd/blurtd
-      - /builds/blurt/blurt/build/programs/cli_wallet/cli_wallet
-#  except:
-#    changes:
-#        - doc/*
+
 
 
 low_memory:
@@ -59,13 +47,7 @@ low_memory:
   # cli wallet is only used for witness, so we capture it from the witness build
   tags:
     - metal
-  artifacts:
-    paths:
-      - /builds/blurt/blurt/build/programs/blurtd/blurtd
-      - /builds/blurt/blurt/build/programs/cli_wallet/cli_wallet
-#  except:
-#    changes:
-#        - doc/*
+
 
 rpc:
   stage: build
@@ -81,54 +63,4 @@ rpc:
   artifacts:
     paths:
       - /builds/blurt/blurt/build/programs/blurtd/blurtd
-#  except:
-#    changes:
-#        - doc/*
-
-pdfs:
-  stage: build
-  #makes sure that the document generator does not pick up the cache and do strange things.
-  cache: {}
-  before_script:
-    # Download and install pandoc and kramdown before we begin
-    # pandoc does PDF, but requires pdflatex, which can be a ~500mb download
-    # so we go for kramdown, which handles PDF, but doesn't handle DOCX
-    - apt-get update -y
-    - apt-get install -y pandoc texlive-xetex
-  script:
-    # Runs pandoc on all .md files in the repo and outputs them as PDF and DOCX
-    - pandoc doc/witnesses.md --pdf-engine=xelatex --o witnesses.pdf
-  artifacts:
-    # Attach all untracked files (e.g. files that were recently created and not yet committed to git) as artifacts.
-    # These are the files you then download after the job has finished.
-    untracked: true
-  only:
-    # Only run on the master branch
-    refs:
-      - dev
-      - master
-    changes:
-      - doc/witnesses.md
-
-trigger-rosetta:
-  stage: triggers
-  trigger: blurt/rosetta
-#   except:
-#     changes:
-#       - doc/*
-
-trigger-docker:
-  stage: triggers
-  trigger: blurt/docker
-  needs: ["low_memory","rpc"]
-#    except:
-#      changes:
-#        - doc/*
-
-include:
-  - template: Coverage-Fuzzing.gitlab-ci.yml
-  - template: Ggc10.gitlab-ci.yml
-  - template: Gcc10.gitlab-ci.yml
-  - template: Clang10.gitlab-ci.yml
-
 
