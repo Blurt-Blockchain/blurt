@@ -127,7 +127,7 @@ trigger-docker:
 
 include:
   - template: Coverage-Fuzzing.gitlab-ci.yml
-  - template: gcc10.gitlab-ci.yml
+  - template: gcc9.gitlab-ci.yml
   - template: gcc10.gitlab-ci.yml
   - template: clang10.gitlab-ci.yml
 
