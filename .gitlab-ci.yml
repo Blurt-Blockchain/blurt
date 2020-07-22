@@ -2,6 +2,7 @@ image: conanio/gcc8
 
 stages:
   - build
+  - fuzz
   - triggers
   - pdfs
 
