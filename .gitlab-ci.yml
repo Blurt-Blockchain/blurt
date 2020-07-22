@@ -1,4 +1,3 @@
-image: conanio/gcc8
 
 stages:
   - build
@@ -26,6 +25,7 @@ before_script:
 
 
 debug:
+  image: conanio/gcc8
   stage: build
   script:
     - mkdir build
@@ -48,6 +48,7 @@ debug:
 
 
 low_memory:
+  image: conanio/gcc8
   stage: build
   script:
     - mkdir build
@@ -68,6 +69,7 @@ low_memory:
 #        - doc/*
 
 rpc:
+  image: conanio/gcc8
   stage: build
   script:
     - mkdir build

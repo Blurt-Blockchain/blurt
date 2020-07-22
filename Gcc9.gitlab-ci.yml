@@ -1,25 +1,5 @@
-image: conanio/gcc9
-
-cache:
-  paths:
-    - .cache/conan
-    # ccache doesnt work
-    - ccache
-
-
-before_script:
-  - sudo apt-get update -qq
-  - sudo apt-get install -qq doxygen
-  - conan config set storage.path="${CI_PROJECT_DIR}/.cache/conan"
-  # Pull in submodules
-  - git submodule update --init --recursive
-  # ccache for acceleration
-  - mkdir -p ccache
-  - export CCACHE_BASEDIR=${PWD}
-  - export CCACHE_DIR=${PWD}/ccache
-
-
 gcc9_debug:
+  image: conanio/gcc9
   stage: build
   script:
     - mkdir build
@@ -36,6 +16,7 @@ gcc9_debug:
 
 
 gcc9_low_memory:
+  image: conanio/gcc9
   stage: build
   script:
     - mkdir build
@@ -50,6 +31,7 @@ gcc9_low_memory:
 
 
 gcc9_rpc:
+  image: conanio/gcc9
   stage: build
   script:
     - mkdir build
