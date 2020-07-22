@@ -131,3 +131,19 @@ This will only build `blurtd`.
   Intel and Microsoft compilers. These compilers may work, but the
   developers do not use them. Pull requests fixing warnings / errors from
   these compilers are accepted.
+
+### gitpod.io
+
+This is a free-to-use online development environment and for our project is 
+free as it is open source.
+
+It does have a small limitation - `gcc` version 9.3. so, keep in mind for 
+now while the build is being fixed to work on gitpod, this is the notes for 
+how to do it.
+
+```bash
+mkdir build && cd build
+pip install conan
+cmake -DBLURT_STATIC_BUILD=ON -DLOW_MEMORY_NODE=OFF -DCLEAR_VOTES=OFF -DBUILD_BLURT_TESTNET=OFF -DSKIP_BY_TX_ID=OFF -DBLURT_LINT_LEVEL=OFF -DENABLE_MIRA=OFF -DCMAKE_BUILD_TYPE=Release ..
+make -j$(nproc)
+```
