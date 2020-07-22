@@ -1,6 +1,5 @@
-image: conanio/gcc9
-
 gcc9_debug:
+  image: conanio/gcc9
   stage: build
   script:
     - mkdir build
@@ -17,6 +16,7 @@ gcc9_debug:
 
 
 gcc9_low_memory:
+  image: conanio/gcc9
   stage: build
   script:
     - mkdir build
@@ -31,6 +31,7 @@ gcc9_low_memory:
 
 
 gcc9_rpc:
+  image: conanio/gcc9
   stage: build
   script:
     - mkdir build
