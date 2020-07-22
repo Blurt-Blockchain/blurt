@@ -181,6 +181,6 @@ include:
   - template: Coverage-Fuzzing.gitlab-ci.yml
 #  - Gcc9.gitlab-ci.yml
   - Gcc10.gitlab-ci.yml
-  - Clang10.gitlab-ci.ymlgit
+  - Clang10.gitlab-ci.yml
 
 
