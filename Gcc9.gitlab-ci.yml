@@ -1,5 +1,4 @@
-image: conanio/gcc10
-
+image: conanio/gcc9
 
 cache:
   paths:
@@ -20,7 +19,7 @@ before_script:
   - export CCACHE_DIR=${PWD}/ccache
 
 
-debug:
+gcc9_debug:
   stage: build
   script:
     - mkdir build
@@ -36,7 +35,7 @@ debug:
 
 
 
-low_memory:
+gcc9_low_memory:
   stage: build
   script:
     - mkdir build
@@ -50,7 +49,7 @@ low_memory:
     - metal
 
 
-rpc:
+gcc9_rpc:
   stage: build
   script:
     - mkdir build
@@ -61,4 +60,7 @@ rpc:
     - make -j$(nproc) blurtd
   tags:
     - metal
+  artifacts:
+    paths:
+      - /builds/blurt/blurt/build/programs/blurtd/blurtd
 
