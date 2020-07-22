@@ -1,27 +1,5 @@
-image: conanio/clang10
-
-
-
-cache:
-  paths:
-    - .cache/conan
-    # ccache doesnt work
-    - ccache
-
-
-before_script:
-  - sudo apt-get update -qq
-  - sudo apt-get install -qq doxygen
-  - conan config set storage.path="${CI_PROJECT_DIR}/.cache/conan"
-  # Pull in submodules
-  - git submodule update --init --recursive
-  # ccache for acceleration
-  - mkdir -p ccache
-  - export CCACHE_BASEDIR=${PWD}
-  - export CCACHE_DIR=${PWD}/ccache
-
-
 clang10_debug:
+  image: conanio/clang10
   stage: build
   script:
     - mkdir build
@@ -38,6 +16,7 @@ clang10_debug:
 
 
 clang10_low_memory:
+  image: conanio/clang10
   stage: build
   script:
     - mkdir build
@@ -53,6 +32,7 @@ clang10_low_memory:
 
 
 clang10_rpc:
+  image: conanio/clang10
   stage: build
   script:
     - mkdir build
