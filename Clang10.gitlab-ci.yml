@@ -1,4 +1,4 @@
-image: conanio/gcc8
+image: conanio/clang10
 
 
 
