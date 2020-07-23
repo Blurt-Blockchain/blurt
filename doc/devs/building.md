@@ -144,6 +144,27 @@ how to do it.
 ```bash
 mkdir build && cd build
 pip install conan
+conan install .. -s compiler=gcc -s compiler.version=9.3 -s compiler.libcxx=libstdc++ -if=. -pr=default --build=missing
 cmake -DBLURT_STATIC_BUILD=ON -DLOW_MEMORY_NODE=OFF -DCLEAR_VOTES=OFF -DBUILD_BLURT_TESTNET=OFF -DSKIP_BY_TX_ID=OFF -DBLURT_LINT_LEVEL=OFF -DENABLE_MIRA=OFF -DCMAKE_BUILD_TYPE=Release ..
 make -j$(nproc)
+```
+
+Regarding building with clang:
+
+```ini
+  GNU nano 4.8                                                                                       /home/loki/.conan/profiles/default                                                                                                 
+[settings]
+os=Linux
+os_build=Linux
+arch=x86_64
+arch_build=x86_64
+compiler=clang
+compiler.version=10
+compiler.libcxx=libstdc++11
+build_type=Release
+[options]
+[build_requires]
+[env]
+CC=/usr/bin/clang
+CXX=/usr/bin/clang++
 ```
