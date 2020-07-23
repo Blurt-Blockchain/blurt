@@ -167,4 +167,9 @@ build_type=Release
 [env]
 CC=/usr/bin/clang
 CXX=/usr/bin/clang++
+CONAN_CPU_COUNT=1
 ```
+
+Note that the cpu count option is set to 1 while there is source 
+files that are too big to compile on a 4gb machine. If it is set 
+to a single job it can get through it using swap... slowly...
