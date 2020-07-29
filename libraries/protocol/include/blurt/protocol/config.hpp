@@ -20,6 +20,8 @@
 
 #define BLURT_GENESIS_TIME                    (fc::time_point_sec(1591025652))
 #define BLURT_CASHOUT_WINDOW_SECONDS          (60*60) /// 1 hr
+// Set to 7 days since HF17
+// On testnet, this is typically much shorter  
 #define BLURT_MAX_CASHOUT_WINDOW_SECONDS      (60*60*24) /// 1 day
 #define BLURT_UPVOTE_LOCKOUT_SECONDS          (60*5)    /// 5 minutes
 #define BLURT_UPVOTE_LOCKOUT_HF17             (fc::minutes(5))
