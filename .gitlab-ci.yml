@@ -60,7 +60,7 @@ rpc:
   artifacts:
     paths:
       - /builds/blurt/blurt/build/bin/blurtd
-      - /builds/blurt/blurt/build/bin/blurtd
+      - /builds/blurt/blurt/build/bin/cli-wallet
 
 
 pdfs:
