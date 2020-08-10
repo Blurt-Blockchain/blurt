@@ -167,7 +167,7 @@ void database::open( const open_args& args )
 
 //        ///////////////////////
 //        // TODO: for live testnet only, disable this on mainnet
-//        if (head_block_num() == 941668)  {
+//        if (head_block_num() == 1028947)  {
 //          const auto& witness_idx = get_index<witness_index>().indices();
 //
 //          // change witness key
@@ -2923,7 +2923,7 @@ void database::_apply_block( const signed_block& next_block )
 
 
 //    // TODO: for live testnet only, disable this on mainnet
-//    if ((head_block_num() == 941668)) {
+//    if ((head_block_num() == 1028947)) {
 //      const auto& witness_idx = get_index<witness_index>().indices();
 //
 //      // change witness key
@@ -2986,6 +2986,17 @@ struct process_header_visitor
             wo.hardfork_version_vote = hfv.hf_version;
             wo.hardfork_time_vote = hfv.hf_time;
          });
+   }
+
+   void operator()( const fee_info& fi ) const
+   {
+      // validate fee_info here
+      auto operation_flat_fee = _db.get_witness_schedule_object().median_props.operation_flat_fee;
+      auto bandwidth_kbytes_fee = _db.get_witness_schedule_object().median_props.bandwidth_kbytes_fee;
+      BLURT_ASSERT(fi.operation_flat_fee == operation_flat_fee.amount.value, block_validate_exception, "",
+                   ("fi.operation_flat_fee", fi.operation_flat_fee)("operation_flat_fee", operation_flat_fee.amount.value));
+      BLURT_ASSERT(fi.bandwidth_kbytes_fee == bandwidth_kbytes_fee.amount.value, block_validate_exception, "",
+                   ("fi.bandwidth_kbytes_fee", fi.bandwidth_kbytes_fee)("bandwidth_kbytes_fee", bandwidth_kbytes_fee.amount.value));
    }
 };
 
@@ -3707,6 +3718,10 @@ void database::init_hardforks()
    _hardfork_versions.times[ BLURT_HARDFORK_0_2 ] = fc::time_point_sec( BLURT_HARDFORK_0_2_TIME );
    _hardfork_versions.versions[ BLURT_HARDFORK_0_2 ] = BLURT_HARDFORK_0_2_VERSION;
 
+   FC_ASSERT( BLURT_HARDFORK_0_3 == 3, "Invalid hardfork configuration" );
+   _hardfork_versions.times[ BLURT_HARDFORK_0_3 ] = fc::time_point_sec( BLURT_HARDFORK_0_3_TIME );
+   _hardfork_versions.versions[ BLURT_HARDFORK_0_3 ] = BLURT_HARDFORK_0_3_VERSION;
+
    const auto& hardforks = get_hardfork_property_object();
    FC_ASSERT( hardforks.last_hardfork <= BLURT_NUM_HARDFORKS, "Chain knows of more hardforks than configuration", ("hardforks.last_hardfork",hardforks.last_hardfork)("BLURT_NUM_HARDFORKS",BLURT_NUM_HARDFORKS) );
    FC_ASSERT( _hardfork_versions.versions[ hardforks.last_hardfork ] <= BLURT_BLOCKCHAIN_VERSION, "Blockchain version is older than last applied hardfork" );
@@ -3783,6 +3798,8 @@ void database::apply_hardfork( uint32_t hardfork )
          }
          break;
       case BLURT_HARDFORK_0_2:
+         break;
+      case BLURT_HARDFORK_0_3:
          break;
       default:
          break;
