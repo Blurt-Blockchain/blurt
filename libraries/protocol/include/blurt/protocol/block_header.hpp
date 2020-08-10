@@ -3,11 +3,21 @@
 
 namespace blurt { namespace protocol {
 
+   struct fee_info
+   {
+      fee_info() {}
+      fee_info( int64_t ff, int64_t bf ):operation_flat_fee( ff ), bandwidth_kbytes_fee( bf ) {}
+
+      int64_t operation_flat_fee = 0;
+      int64_t bandwidth_kbytes_fee = 0;
+   };
+
    FC_TODO( "Remove when automated actions are created" )
    typedef static_variant<
       void_t,
-      version,                // Normal witness version reporting, for diagnostics and voting
-      hardfork_version_vote   // Voting for the next hardfork to trigger
+      version,                 // Normal witness version reporting, for diagnostics and voting
+      hardfork_version_vote,   // Voting for the next hardfork to trigger
+      fee_info
       >                                block_header_extensions;
 
    typedef flat_set<block_header_extensions > block_header_extensions_type;
@@ -38,6 +48,7 @@ namespace blurt { namespace protocol {
 
 } } // blurt::protocol
 
+FC_REFLECT( blurt::protocol::fee_info, (operation_flat_fee)(bandwidth_kbytes_fee) )
 FC_REFLECT_TYPENAME( blurt::protocol::block_header_extensions )
 
 FC_REFLECT( blurt::protocol::block_header, (previous)(timestamp)(witness)(transaction_merkle_root)(extensions) )
