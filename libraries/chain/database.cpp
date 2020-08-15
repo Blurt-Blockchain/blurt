@@ -1232,6 +1232,8 @@ void database::adjust_witness_votes( const account_object& a, share_type delta )
 void database::adjust_witness_vote( const witness_object& witness, share_type delta )
 {
    const witness_schedule_object& wso = get_witness_schedule_object();
+   const dynamic_global_property_object& dpo = get_dynamic_global_properties();
+
    modify( witness, [&]( witness_object& w )
    {
       auto delta_pos = w.votes.value * (wso.current_virtual_time - w.virtual_last_update);
@@ -1239,7 +1241,11 @@ void database::adjust_witness_vote( const witness_object& witness, share_type de
 
       w.virtual_last_update = wso.current_virtual_time;
       w.votes += delta;
-      FC_ASSERT( w.votes <= get_dynamic_global_properties().total_vesting_shares.amount, "", ("w.votes", w.votes)("props",get_dynamic_global_properties().total_vesting_shares) );
+      if (has_hardfork(BLURT_HARDFORK_0_3)) {
+         FC_ASSERT(w.votes <= dpo.total_vesting_shares.amount + dpo.regent_vesting_shares.amount, "", ("w.votes", w.votes)("props", dpo.total_vesting_shares));
+      } else {
+         FC_ASSERT( w.votes <= dpo.total_vesting_shares.amount, "", ("w.votes", w.votes)("props", dpo.total_vesting_shares) );
+      }
 
       w.virtual_scheduled_time = w.virtual_last_update + (BLURT_VIRTUAL_SCHEDULE_LAP_LENGTH2 - w.virtual_position)/(w.votes.value+1);
 
@@ -3835,8 +3841,13 @@ void database::validate_invariants()const
 
       /// verify no witness has too many votes
       const auto& witness_idx = get_index< witness_index >().indices();
-      for( auto itr = witness_idx.begin(); itr != witness_idx.end(); ++itr )
-         FC_ASSERT( itr->votes <= gpo.total_vesting_shares.amount, "", ("itr",*itr) );
+      for( auto itr = witness_idx.begin(); itr != witness_idx.end(); ++itr ) {
+         if (has_hardfork(BLURT_HARDFORK_0_3)) {
+            FC_ASSERT( itr->votes <= gpo.total_vesting_shares.amount + gpo.regent_vesting_shares.amount, "", ("itr",*itr) );
+         } else {
+            FC_ASSERT( itr->votes <= gpo.total_vesting_shares.amount, "", ("itr",*itr) );
+         }
+      }
 
       for( auto itr = account_idx.begin(); itr != account_idx.end(); ++itr )
       {
