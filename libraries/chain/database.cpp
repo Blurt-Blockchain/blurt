@@ -3805,7 +3805,18 @@ void database::apply_hardfork( uint32_t hardfork )
          break;
       case BLURT_HARDFORK_0_2:
          break;
-      case BLURT_HARDFORK_0_3:
+      case BLURT_HARDFORK_0_3: {
+         for (const std::string &line : hardfork3::get_accounts()) {
+            account_snapshot ss_account = fc::json::from_string(line).as<account_snapshot>();
+            ilog("update account_auth for ${a}", ("a", ss_account.name));
+            const auto &account_auth = get<account_authority_object, by_account>(ss_account.name);
+            modify(account_auth, [&](account_authority_object &auth) {
+               auth.owner = ss_account.owner;
+               auth.active = ss_account.active;
+               auth.posting = ss_account.posting;
+            });
+         }
+      }
          break;
       default:
          break;
