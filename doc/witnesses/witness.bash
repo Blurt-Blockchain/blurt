@@ -39,7 +39,7 @@ rm -rf build
 rm download
 
 # CONFIG.INI FOR SEAMLESS
-wget -O /etc/systemd/system/blurtd.service https://gitlab.com/blurt/blurt/-/raw/dev/doc/witnesses/config.ini
+wget -O /blurt/config.ini https://gitlab.com/blurt/blurt/-/raw/dev/doc/witnesses/config.ini
 
 # ENSURE THAT BLURTD AND CLI_WALLET ARE EXECUTABLE
 chmod +x /usr/bin/blurtd
