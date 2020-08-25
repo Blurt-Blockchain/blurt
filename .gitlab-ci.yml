@@ -150,6 +150,7 @@ cppcheck:
   image: ubuntu:20.04
   stage: test
   script:
+    - apt update
     - apt install -y cppcheck
     - cppcheck *.cpp --verbose --enable=all
   needs: []
