@@ -1,40 +1,31 @@
 /*
  * Copyright (c) 2015 Cryptonomex, Inc., and contributors.
- *
- * The MIT License
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
  */
 
-#include <blurt/utilities/key_conversion.hpp>
-#include <blurt/protocol/protocol.hpp>
-#include <blurt/wallet/wallet.hpp>
+#include <algorithm>
+#include <iomanip>
+#include <iostream>
+#include <iterator>
+
+#include <blurt/chain/blurt_fwd.hpp>
 
 #include <fc/io/json.hpp>
 #include <fc/io/stdio.hpp>
 #include <fc/network/http/server.hpp>
-#include <fc/network/http/websocket.hpp>
 #include <fc/rpc/cli.hpp>
 #include <fc/rpc/http_api.hpp>
-#include <fc/rpc/websocket_api.hpp>
 #include <fc/smart_ref_impl.hpp>
+
+#include <blurt/utilities/key_conversion.hpp>
+
+#include <blurt/protocol/protocol.hpp>
+#include <blurt/wallet/remote_node_api.hpp>
+#include <blurt/wallet/wallet.hpp>
+
 #include <fc/interprocess/signals.hpp>
+#include <boost/program_options.hpp>
+#include <boost/algorithm/string.hpp>
+
 #include <fc/log/console_appender.hpp>
 #include <fc/log/file_appender.hpp>
 #include <fc/log/logger.hpp>
@@ -48,7 +39,13 @@
 #include <iostream>
 #include <iterator>
 
+#ifdef WIN32
+#include <signal.h>
+#else
 
+#include <csignal>
+
+#endif
 
 
 using namespace blurt::utilities;
@@ -60,15 +57,16 @@ namespace bpo = boost::program_options;
 int main(int argc, char **argv) {
     try {
         boost::program_options::options_description opts;
+        // clang-format off
         opts.add_options()
                 ("help,h", "Print this help message and exit.")
                 ("server-rpc-endpoint,s", bpo::value<string>()->implicit_value("ws://127.0.0.1:8090"),
-                 "Server websocket RPC endpoint")
+                 "Server RPC endpoint")
                 ("cert-authority,a", bpo::value<string>()->default_value("_default"),
-                 "Trusted CA bundle file for connecting to wss:// TLS server")
+                 "Trusted CA bundle file for connecting to TLS server")
                 ("wallet-file,w", bpo::value<string>()->implicit_value("wallet.json"), "wallet to load")
                 ("chain-id", bpo::value<string>(), "chain ID to connect to");
-
+        // clang-format on
         bpo::variables_map options;
 
         bpo::store(bpo::parse_command_line(argc, argv, opts), options);
@@ -100,7 +98,6 @@ int main(int argc, char **argv) {
         cfg.loggers.back().level = fc::log_level::debug;
         cfg.loggers.back().appenders = {"rpc"};
 
-
         //
         // TODO:  We read wallet_data twice, once in main() to grab the
         //    socket info, again in wallet_api when we do
@@ -117,13 +114,13 @@ int main(int argc, char **argv) {
         }
 
         // but allow CLI to override
-        if (options.count("server-rpc-endpoint"))
-            wdata.ws_server = options.at("server-rpc-endpoint").as<std::string>();
+        if (options.count("server-rpc-endpoint")) wdata.ws_server = options.at("server-rpc-endpoint").as<std::string>();
 
-        fc::http::websocket_client client(options["cert-authority"].as<std::string>());
+        //      fc::http::websocket_client client( options["cert-authority"].as<std::string>() );
         idump((wdata.ws_server));
-        auto con = client.connect(wdata.ws_server);
-        auto apic = std::make_shared<fc::rpc::websocket_api_connection>(*con);
+        //      auto con  = client.connect( wdata.ws_server );
+        //      auto apic = std::make_shared<fc::rpc::websocket_api_connection>(*con);
+        auto apic = std::make_shared<fc::rpc::http_api_connection>(wdata.ws_server);
 
         auto wapiptr = std::make_shared<wallet_api>(wdata, *apic);
         wapiptr->set_wallet_filename(wallet_file.generic_string());
@@ -135,11 +132,11 @@ int main(int argc, char **argv) {
         for (auto &name_formatter : wapiptr->get_result_formatters())
             wallet_cli->format_result(name_formatter.first, name_formatter.second);
 
-        boost::signals2::scoped_connection closed_connection(con->closed.connect([=] {
-            cerr << "Server has disconnected us.\n";
-            wallet_cli->stop();
-        }));
-        (void) (closed_connection);
+        //      boost::signals2::scoped_connection closed_connection(con->closed.connect([=]{
+        //         cerr << "Server has disconnected us.\n";
+        //         wallet_cli->stop();
+        //      }));
+        //      (void)(closed_connection);
 
         if (wapiptr->is_new()) {
             std::cout << "Please use the set_password method to initialize a new wallet before continuing\n";
@@ -147,9 +144,9 @@ int main(int argc, char **argv) {
         } else
             wallet_cli->set_prompt("locked >>> ");
 
-        boost::signals2::scoped_connection locked_connection(wapiptr->lock_changed.connect([&](bool locked) {
-            wallet_cli->set_prompt(locked ? "locked >>> " : "unlocked >>> ");
-        }));
+        boost::signals2::scoped_connection locked_connection(
+                wapiptr->lock_changed.connect(
+                        [&](bool locked) { wallet_cli->set_prompt(locked ? "locked >>> " : "unlocked >>> "); }));
 
         wallet_cli->register_api(wapi);
         wallet_cli->start();
@@ -157,7 +154,7 @@ int main(int argc, char **argv) {
 
         wapi->save_wallet_file(wallet_file.generic_string());
         locked_connection.disconnect();
-        closed_connection.disconnect();
+        //      closed_connection.disconnect();
     } catch (const fc::exception &e) {
         std::cout << e.to_detail_string() << "\n";
         return -1;
