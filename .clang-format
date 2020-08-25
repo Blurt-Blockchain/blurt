@@ -1,0 +1,8 @@
+---
+Language:        Cpp
+BasedOnStyle: Google
+
+# 80 is like dinosaur
+ColumnLimit:     160
+
+SortIncludes:   false
