@@ -146,6 +146,15 @@ kaniko lm no mira:
   dependencies:
     - lm no mira
 
+cppcheck:
+  image: ubuntu:20.04
+  stage: test
+  script:
+    - apt install -y cppcheck
+    - cppcheck *.cpp --verbose --enable=all
+  needs: []
+
+
 include:
   - template: Code-Quality.gitlab-ci.yml
 
