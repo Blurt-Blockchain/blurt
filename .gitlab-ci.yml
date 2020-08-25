@@ -146,6 +146,8 @@ kaniko lm no mira:
   dependencies:
     - lm no mira
 
+include:
+  - template: Code-Quality.gitlab-ci.yml
 
 
 include:
