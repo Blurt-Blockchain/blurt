@@ -264,8 +264,8 @@ void tags_plugin_impl::update_tags( const comment_object& c, bool parse_tags )co
 {
    try {
 
-      auto hot = calculate_hot( c.net_rshares, c.created );
-      auto trending = calculate_trending( c.net_rshares, c.created );
+      auto hot = calculate_hot( c.net_votes+sizeof(c.reblogged_by)+c.children*5, c.created );
+      auto trending = calculate_trending( c.net_votes+sizeof(c.reblogged_by)+c.children*5, c.created );
 
       const auto& comment_idx = _db.get_index< tag_index >().indices().get< by_comment >();
 
