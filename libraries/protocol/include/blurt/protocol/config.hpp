@@ -77,11 +77,11 @@
 #define BLURT_BLOCKS_PER_YEAR                 (365*24*60*60/BLURT_BLOCK_INTERVAL)
 #define BLURT_BLOCKS_PER_DAY                  (24*60*60/BLURT_BLOCK_INTERVAL)
 
-#define BLURT_MAX_WITNESSES                   21
-#define BLURT_MAX_VOTED_WITNESSES_HF17        20
+#define BLURT_MAX_WITNESSES                   31
+#define BLURT_MAX_VOTED_WITNESSES_HF17        30
 #define BLURT_MAX_RUNNER_WITNESSES_HF17       1
 
-#define BLURT_HARDFORK_REQUIRED_WITNESSES     17 // 17 of the 21 dpos witnesses (20 elected and 1 virtual time) required for hardfork. This guarantees 75% participation on all subsequent rounds.
+#define BLURT_HARDFORK_REQUIRED_WITNESSES     25 // 17 of the 21 dpos witnesses (20 elected and 1 virtual time) required for hardfork. This guarantees 75% participation on all subsequent rounds.
 #define BLURT_MAX_TIME_UNTIL_EXPIRATION       (60*60) // seconds,  aka: 1 hour
 #define BLURT_MAX_MEMO_SIZE                   2048
 #define BLURT_MAX_PROXY_RECURSION_DEPTH       4
@@ -93,11 +93,11 @@
 #define BLURT_VOTING_MANA_REGENERATION_SECONDS (5*60*60*24) // 5 day
 #define BLURT_MAX_VOTE_CHANGES                5
 #define BLURT_REVERSE_AUCTION_WINDOW_SECONDS_HF21 (60*5) /// 5 minutes
-#define BLURT_MIN_VOTE_INTERVAL_SEC           3
+#define BLURT_MIN_VOTE_INTERVAL_SEC           1
 
-#define BLURT_MIN_ROOT_COMMENT_INTERVAL       (fc::seconds(60*5)) // 5 minutes
-#define BLURT_MIN_REPLY_INTERVAL_HF20         (fc::seconds(3)) // 3 seconds
-#define BLURT_MIN_COMMENT_EDIT_INTERVAL       (fc::seconds(3)) // 3 seconds
+#define BLURT_MIN_ROOT_COMMENT_INTERVAL       (fc::seconds(1)) // 1 second
+#define BLURT_MIN_REPLY_INTERVAL_HF20         (fc::seconds(1)) // 1 second
+#define BLURT_MIN_COMMENT_EDIT_INTERVAL       (fc::seconds(1)) // 1 second
 
 #define BLURT_MAX_ACCOUNT_WITNESS_VOTES       30
 
