@@ -12,6 +12,6 @@ These are some of the currently known network nodes available in the Blurt ecosy
 |-----------------------|-----------|
 | api.blurt.tools       | @blurtdev |
 | blurtd.privex.io      | privex.io |  
-| blurt-rpc.steem.buzz/ | @ericet   | 
+| rpc.blurt.buzz        | @ericet   | 
 | rpc.blurt.world       | Core Team | 
 | api.blurt.blog        | Core Team |
