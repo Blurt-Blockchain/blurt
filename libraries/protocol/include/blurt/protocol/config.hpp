@@ -32,6 +32,7 @@
 #define BLURT_ACCOUNT_RECOVERY_REQUEST_EXPIRATION_PERIOD  fc::seconds(12)
 #define BLURT_OWNER_UPDATE_LIMIT                          fc::seconds(0)
 
+// this is not needed as Blurt's network fees should discourage such dust votes
 #define BLURT_VOTE_DUST_THRESHOLD             (0)
 
 #define BLURT_INIT_MINER_NAME                 "initminer"
@@ -57,7 +58,8 @@
 #define BLURT_ACCOUNT_RECOVERY_REQUEST_EXPIRATION_PERIOD  fc::days(1)
 #define BLURT_OWNER_UPDATE_LIMIT                          fc::minutes(60)
 
-#define BLURT_VOTE_DUST_THRESHOLD             (50000000)
+// this is not needed as Blurt's network fees should discourage such dust votes
+#define BLURT_VOTE_DUST_THRESHOLD             (0)
 
 #define BLURT_INIT_MINER_NAME                 "initblurt"
 
