@@ -1,11 +1,15 @@
 #!/bin/bash
 
+set -euo pipefail
+
 # UPDATE YOUR DEBIAN 10 SYSTEM TO THE LATEST VERSIONS OF PACKAGES
 apt update
 apt upgrade -y
 
 # Install Dependencies
 apt install -y ntp unzip wget libbz2-dev libsnappy-dev libncurses5 libreadline-dev
+
+
 
 # Enable NTP
 systemctl enable ntp
