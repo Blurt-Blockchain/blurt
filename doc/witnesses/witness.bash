@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# ENSURE THE SCRIPT FAILS ON ERROR
 set -euo pipefail
 
 # UPDATE YOUR DEBIAN 10 SYSTEM TO THE LATEST VERSIONS OF PACKAGES
@@ -8,8 +9,6 @@ apt upgrade -y
 
 # Install Dependencies
 apt install -y ntp unzip wget libbz2-dev libsnappy-dev libncurses5 libreadline-dev
-
-
 
 # Enable NTP
 systemctl enable ntp
@@ -31,7 +30,7 @@ sysctl -p
 
 # DOWNLOAD BUILD ARTIFACTS OF LATEST WITNESS JOB
 # TODO: make this actually get latest artifacts instead of fixing on a known-good build
-wget -O download https://gitlab.com/blurt/blurt/-/jobs/724631987/artifacts/download
+wget -O download https://gateway.pinata.cloud/ipfs/QmVwoAoM9ssiqYTewygusy7Xdgn9UgNsugLwHvDbP7395B
 
 # UNZIP THE BUILD ARTIFACTS, BLURTD AND CLI_WALLET
 unzip download
