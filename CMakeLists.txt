@@ -50,7 +50,7 @@ LIST(APPEND BOOST_COMPONENTS thread
                              coroutine)
 SET( Boost_USE_STATIC_LIBS ON CACHE STRING "ON or OFF" )
 
-OPTION( BUILD_BLURT_TESTNET "Build source for test network (ON OR OFF)" OFF )
+OPTION( BUILD_BLURT_TESTNET "Build source for test network (ON OR OFF)" ON )
 MESSAGE( STATUS "BUILD_BLURT_TESTNET: ${BUILD_BLURT_TESTNET}" )
 if( BUILD_BLURT_TESTNET  )
   MESSAGE( STATUS "     " )
