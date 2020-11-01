@@ -16,3 +16,21 @@ These are some of the currently known network nodes available in the Blurt ecosy
 | rpc.blurt.buzz        | @ericet   | 
 | rpc.blurt.world       | Core Team | 
 | api.blurt.blog        | Core Team |
+
+
+# Global Properties Nodes
+
+
+
+| Node Url                               | Operator  |
+| ---------------------------------------|-----------|
+| https://biapi.blurt-now.com/api/blurt  | @eastmael |
+| https://api.blurt.buzz/api/methodName  | @ericet   |
+
+**Instructions:**
+
+* get global dynamic properties: https://api.blurt.buzz/api/getDynamicGlobalProperties 
+* get chain properties: https://api.blurt.buzz/api/getChainProperties
+* get account details: https://api.blurt.buzz/api/getAccounts?names[]=ericet
+All the methods listed here are supported: https://developers.steem.io/apidefinitions/#apidefinitions-condenser-api
+
