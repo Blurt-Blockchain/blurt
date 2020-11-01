@@ -12,7 +12,7 @@ Blurt is a public social blockchain with a diverse and vibrant community that st
 ## Distribution
 *  Blurt contains user balances imported from Block 4352**6969** of the STEEM public blockchain, snapshotted on the 20th May 2020. 
 *  Approx 15% or ~60 Million BLURT from the initial supply shall be allocated to the BLurt SocialGraph Foundation (See [@initblurt](https://blocks.blurtwallet.com/#/@initblurt) / [@socialgraph](https://blocks.blurtwallet.com/#/@socialgraph) blockchain accounts).
-*  SPS DAO public fund account balance was carried over to BLURT and renamed to [@blurt.dao](https://blocks.blurtwallet.com/#/@blurt.dao), initially the SocialGraph Foundation will steward this fund and gradually had it over to community control as the platform matures.
+*  SPS DAO public fund account balance was carried over to BLURT and renamed as [@blurt.dao](https://blocks.blurtwallet.com/#/@blurt.dao). Initially the SocialGraph Foundation will steward this fund and gradually had it over to community control as the platform matures.
 
 ## Features
 * No Downvotes
