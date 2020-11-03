@@ -46,6 +46,8 @@ Accurate as of **June 15, 2020**:
 ## Witness Setup Procedure
 **Valid for Mainnet, July 4, 2020:**
 
+Check out this [BLOG POST](https://blurt.blog/blurtopian/@zahidsun/how-to-setup-a-witness-node-step-by-step-video-tutorial) with instructional video!
+
 If you plan to use our automated setup, your witness node should run Debian 10.  If you're doing it manually, feel free to use any type of machine that you'd like.  
 
 ### Configure Passwordless SSH Logins: IMPORTANT!
