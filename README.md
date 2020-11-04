@@ -49,7 +49,7 @@ Blurt is a public social blockchain with a diverse and vibrant community that st
 * 10% APR inflation narrowing to 1% APR over 20 years
     * 65% of inflation to Authors/Curators.
     * 15% of inflation to Stakeholders.
-    * 10% of inflation to Blurt Producers.
+    * 10% of inflation to Blurt Producers (Witnesses).
     * 10% of inflation to Blurt DAO Fund.
 
 
@@ -64,6 +64,22 @@ Work is ongoing in the `dev` branch.
 The snapshot-verification code can be found in the `snapshot` branch.  
 
 Our next milestone is [Hard Fork 2](https://gitlab.com/blurt/blurt/-/milestones/2)
+
+## Exchange Listings
++ [Beldex.io](https://www.beldex.io/tradeAdvance?pair=BLURT_BTC)
++ [Ionomy.com](https://ionomy.com/en/markets/btc-blurt)
++ [Hive-engine.com](https://hive-engine.com/?p=market&t=BLURT)
++ [Leodex.io](https://leodex.io/market/BLURT)
++ [Steem-engine.com](https://steem-engine.com/?p=market&t=BLURT)
++ [Stex.com](https://app.stex.com/en/trade/pair/BTC/BLURT/1D)
+
+## Indexers
++ [Blockfolio.com](https://blockfolio.com/coin/BLURT)
++ [Coingecko.com](https://www.coingecko.com/en/coins/blurt)
++ [Coinmarketcap.com](https://coinmarketcap.com/currencies/blurt/)
++ [Coinpaprika.com](https://coinpaprika.com/coin/blurt-blurt/)
++ [Livecoinwatch.com](https://www.livecoinwatch.com/price/Blurt-BLURT)
+
 
 ## Documentation
 
