@@ -65,7 +65,23 @@ The snapshot-verification code can be found in the `snapshot` branch.
 
 Our next milestone is [Hard Fork 2](https://gitlab.com/blurt/blurt/-/milestones/2)
 
+## General Links
+
++ [Block Explorer](https://blocks.blurtwallet.com/#/)
++ [Official Wallet](https://blurtwallet.com/)
+
+## Social Links
+
++ [Community Blog](https://blurt.blog)
++ [Discord](https://discord.blurt.world)
++ [Facebook Group](https://www.facebook.com/groups/blurtofficial)
++ [Facebook Page](https://www.facebook.com/Blurt-106190134629628)
++ [Telegram](t.me/@blurtofficialchat)
++ [Twitter](https://twitter.com/BlurtOfficial)
++ [Youtube](https://youtube.com/channel/UCuktvTIxkdejKg_xWMz2vlQ)
+
 ## Exchange Listings
+
 + [Beldex.io](https://www.beldex.io/tradeAdvance?pair=BLURT_BTC)
 + [Ionomy.com](https://ionomy.com/en/markets/btc-blurt)
 + [Hive-engine.com](https://hive-engine.com/?p=market&t=BLURT)
@@ -74,6 +90,7 @@ Our next milestone is [Hard Fork 2](https://gitlab.com/blurt/blurt/-/milestones/
 + [Stex.com](https://app.stex.com/en/trade/pair/BTC/BLURT/1D)
 
 ## Indexers
+
 + [Blockfolio.com](https://blockfolio.com/coin/BLURT)
 + [Coingecko.com](https://www.coingecko.com/en/coins/blurt)
 + [Coinmarketcap.com](https://coinmarketcap.com/currencies/blurt/)
