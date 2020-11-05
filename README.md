@@ -96,6 +96,7 @@ Our next milestone is [Hard Fork 2](https://gitlab.com/blurt/blurt/-/milestones/
 + [Coinmarketcap.com](https://coinmarketcap.com/currencies/blurt/)
 + [Coinpaprika.com](https://coinpaprika.com/coin/blurt-blurt/)
 + [Livecoinwatch.com](https://www.livecoinwatch.com/price/Blurt-BLURT)
++ [Worldcoinindex.com](https://www.worldcoinindex.com/coin/blurt)
 
 
 ## Documentation
