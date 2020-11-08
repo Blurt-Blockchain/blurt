@@ -4,7 +4,7 @@
 [![coverage report](https://gitlab.com/blurt/blurt/badges/dev/coverage.svg)](https://gitlab.com/blurt/blurt/-/commits/dev)
 ![Twitter URL](https://img.shields.io/twitter/url?style=social&url=https%3A%2F%2Ftwitter.com%2FBlurtOfficial)
 [![Steem](https://img.shields.io/badge/-steem-blue)](https://steemit.com/steem/@blurt)
-[![Hive](https://img.shields.io/badge/-hive-red)](https://hive.blog/@blurt)
+[![Blurt Blog](https://img.shields.io/badge/-Blurt-red)](https://blurt.blog)
 
 Blurt is a public social blockchain with a diverse and vibrant community that strictly upholds [property rights](https://twitter.com/cz_binance/status/1236373815447506945?s=20).
 
