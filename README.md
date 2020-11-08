@@ -8,6 +8,7 @@
 
 Blurt is a public social blockchain with a diverse and vibrant community that strictly upholds [property rights](https://twitter.com/cz_binance/status/1236373815447506945?s=20).
 
+The Blurt blockchain is defined as social media and builds a living, breathing, and growing social economy and communities where users are getting rewarded by curators for sharing their origin content. Blurt provides a scalable blockchain protocol for publicly accessible and immutable content, along with a fast digital currency (BLURT) which enables people to earn by using their brain (A.K.A. “Proof-of-Brain”).
 
 ## Distribution
 *  Blurt contains user balances imported from Block 4352**6969** of the STEEM public blockchain, snapshotted on the 20th May 2020. 
