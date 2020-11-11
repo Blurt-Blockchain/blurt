@@ -69,6 +69,7 @@ Our next milestone is [Hard Fork 2](https://gitlab.com/blurt/blurt/-/milestones/
 
 + [Block Explorer](https://blocks.blurtwallet.com/#/)
 + [Official Wallet](https://blurtwallet.com/)
++ [WhaleVault Keychain Extension](https://chrome.google.com/webstore/detail/whalevault/hcoigoaekhfajcoingnngmfjdidhmdon?hl=en)
 
 ## Social Links
 
