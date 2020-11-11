@@ -106,6 +106,8 @@ Our next milestone is [Hard Fork 2](https://gitlab.com/blurt/blurt/-/milestones/
 
 [Developers](doc/devs/README.md)
 
+[Public Nodes](doc/devs/networknodes.md)
+
 [Exchanges](doc/exchanges/README.md)
 
 [Witnesses](doc/witnesses/README.md)
