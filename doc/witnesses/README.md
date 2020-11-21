@@ -124,7 +124,7 @@ You'll also want to `suggest_brain_key`.
 
 Copy down its entire output and keep it safely.  You'll be using this brain key to control your Witness.  
 
-**import your Steem Active key**
+**import your Blurt Active key** (_Note: Pre 20 March 2020 Steem keys will also work_)
 
 ```
 import_key 5KABCDEFGHIJKLMNOPQRSTUVXYZ
