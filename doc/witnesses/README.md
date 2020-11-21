@@ -129,7 +129,7 @@ Copy down its entire output and keep it safely.  You'll be using this brain key 
 ```
 import_key 5KABCDEFGHIJKLMNOPQRSTUVXYZ
 ```
-Note: the key should start with a 5
+Note: The key should start with a 5 as per the example key above.
 
 **Add private brain key to config.ini to sign blocks as a Witness**
 
