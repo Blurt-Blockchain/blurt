@@ -87,6 +87,7 @@ Our next milestone is [Hard Fork 2](https://gitlab.com/blurt/blurt/-/milestones/
 + [Ionomy.com](https://ionomy.com/en/markets/btc-blurt)
 + [Hive-engine.com](https://hive-engine.com/?p=market&t=BLURT)
 + [Leodex.io](https://leodex.io/market/BLURT)
++ [Probit.com](https://www.probit.com/app/exchange/BLURT-BTC)
 + [Steem-engine.com](https://steem-engine.com/?p=market&t=BLURT)
 + [Stex.com](https://app.stex.com/en/trade/pair/BTC/BLURT/1D)
 + [Swaptoken.com](https://swaptoken.com/)
