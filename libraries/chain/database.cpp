@@ -3126,7 +3126,7 @@ void database::process_tx_fee( const signed_transaction& trx ) {
          adjust_balance( acnt, -fee );
          adjust_balance( get_account( BLURT_NULL_ACCOUNT ), fee );
 #ifdef IS_TEST_NET
-         ilog( "burned transaction fee ${f} from account ${a}, for trx ${t}", ("f", fee)("a", auth)("t", trx.id() );
+         ilog( "burned transaction fee ${f} from account ${a}, for trx ${t}", ("f", fee)("a", auth)("t", trx.id()));
 #endif
       }
    } FC_CAPTURE_AND_RETHROW( (trx) )
