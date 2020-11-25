@@ -25,12 +25,12 @@ struct comment_reward_context
    uint128_t  total_reward_shares2;
    asset      total_reward_fund_blurt;
    protocol::curve_id   reward_curve = protocol::quadratic;
-   uint128_t  content_constant = BLURT_CONTENT_CONSTANT_HF21;
+   uint128_t  content_constant = BLURT_REWARD_CONTENT_CONSTANT;
 };
 
 uint64_t get_rshare_reward( const comment_reward_context& ctx );
 
-uint128_t evaluate_reward_curve( const uint128_t& rshares, const protocol::curve_id& curve = protocol::quadratic, const uint128_t& var1 = BLURT_CONTENT_CONSTANT_HF21 );
+uint128_t evaluate_reward_curve( const uint128_t& rshares, const protocol::curve_id& curve = protocol::quadratic, const uint128_t& var1 = BLURT_REWARD_CONTENT_CONSTANT );
 
 inline bool is_comment_payout_dust( uint64_t blurt_payout )
 {

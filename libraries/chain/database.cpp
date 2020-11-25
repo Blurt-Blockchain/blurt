@@ -2591,7 +2591,7 @@ void database::init_genesis( const open_args& args )
             {
                rfo.name = BLURT_POST_REWARD_FUND_NAME;
                rfo.last_update = head_block_time();
-               rfo.content_constant = BLURT_CONTENT_CONSTANT_HF21;
+               rfo.content_constant = BLURT_REWARD_CONTENT_CONSTANT;
                rfo.percent_curation_rewards = 50 * BLURT_1_PERCENT;
                rfo.percent_content_rewards = BLURT_100_PERCENT;
                rfo.reward_balance = asset( BLURT_INIT_POST_REWARD_BALANCE, BLURT_SYMBOL );
