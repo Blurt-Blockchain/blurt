@@ -63,7 +63,7 @@ Work is ongoing in the `dev` branch.
 
 The snapshot-verification code can be found in the `snapshot` branch.  
 
-Our next milestone is [Hard Fork 2](https://gitlab.com/blurt/blurt/-/milestones/2)
+Our next milestone is [Hard Fork 3](https://gitlab.com/blurt/blurt/-/milestones/2)
 
 ## General Links
 
