@@ -138,11 +138,6 @@
 
 #endif
 
-#if defined(HAVE_SSE41)
-#include <equihash/blake2b-load-sse41.h>
-#else
-#include <equihash/blake2b-load-sse2.h>
-#endif
 
 #define ROUND(r) \
   LOAD_MSG_ ##r ##_1(b0, b1); \
