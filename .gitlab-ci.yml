@@ -36,6 +36,34 @@ lm no mira:
     paths:
       - /builds/blurt/blurt/build/bin/
 
+arm lm no mira:
+  image: conanio/clang10
+  before_script:
+    - sudo apt-get update -qq
+    - sudo apt-get install -qq doxygen
+    - conan config set storage.path="${CI_PROJECT_DIR}/.cache/conan"
+    # Pull in submodules
+    - git submodule update --init --recursive
+    # ccache for acceleration
+    - mkdir -p ccache
+    - export CCACHE_BASEDIR=${PWD}
+    - export CCACHE_DIR=${PWD}/ccache
+  stage: build
+  script:
+    - mkdir build
+    - cd build
+    - conan install .. -s compiler=clang -s compiler.libcxx=libstdc++11 -s arch_target=armv8 -if=. -pr=default --build=missing 
+    # Witness Build Config: -DLOW_MEMORY_NODE=ON -DCLEAR_VOTES=ON
+    - cmake -DBLURT_STATIC_BUILD=ON -DLOW_MEMORY_NODE=ON -DCLEAR_VOTES=ON -DBUILD_BLURT_TESTNET=OFF -DSKIP_BY_TX_ID=ON -DBLURT_LINT_LEVEL=OFF -DENABLE_MIRA=OFF -DCMAKE_BUILD_TYPE=Release ..
+    - make -j$(nproc) blurtd cli_wallet
+  # cli wallet is only used for witness, so we capture it from the witness build
+  tags:
+    - metal
+  artifacts:
+    paths:
+      - /builds/blurt/blurt/build/bin/
+
+
 low_memory:
   image: conanio/clang10
   before_script:
