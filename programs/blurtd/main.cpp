@@ -47,11 +47,11 @@ void info()
 {
 #ifdef IS_TEST_NET
       std::cerr << "------------------------------------------------------\n\n";
-      std::cerr << "            STARTING TEST NETWORK\n\n";
+      std::cerr << "            STARTING EAST TEST NETWORK\n\n";
       std::cerr << "------------------------------------------------------\n";
-      auto initminer_private_key = blurt::utilities::key_to_wif( BLURT_INIT_PRIVATE_KEY );
+      //auto initminer_private_key = blurt::utilities::key_to_wif( BLURT_INIT_PRIVATE_KEY );
       std::cerr << "initminer public key: " << BLURT_INIT_PUBLIC_KEY_STR << "\n";
-      std::cerr << "initminer private key: " << initminer_private_key << "\n";
+      //std::cerr << "initminer private key: " << initminer_private_key << "\n";
       std::cerr << "blockchain version: " << fc::string( BLURT_BLOCKCHAIN_VERSION ) << "\n";
       std::cerr << "------------------------------------------------------\n";
 #else

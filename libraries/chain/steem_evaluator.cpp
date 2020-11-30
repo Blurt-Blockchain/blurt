@@ -1168,7 +1168,7 @@ void vote_evaluator::do_apply( const vote_operation& o )
             c.vote_rshares += rshares;
          if( rshares > 0 )
             c.net_votes++;
-         else
+         else if( rshares < 0 )
             c.net_votes--;
       });
 

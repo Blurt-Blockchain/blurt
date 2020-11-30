@@ -2272,6 +2272,7 @@ void database::init_genesis( const open_args& args )
 {
    try
    {
+      set_hardfork( 3, true );
       struct auth_inhibitor
       {
          auth_inhibitor(database& db) : db(db), old_flags(db.node_properties().skip_flags)
