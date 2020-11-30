@@ -34,6 +34,7 @@
 #define BLURT_ACCOUNT_RECOVERY_REQUEST_EXPIRATION_PERIOD  fc::seconds(12)
 #define BLURT_OWNER_UPDATE_LIMIT                          fc::seconds(0)
 
+// value changed in HF 0.3.0, see libraries\protocol\hardfork.d\0_3.hf
 #define BLURT_VOTE_DUST_THRESHOLD             (50000000)
 
 #define BLURT_INIT_MINER_NAME                 "initminer"
@@ -59,6 +60,7 @@
 #define BLURT_ACCOUNT_RECOVERY_REQUEST_EXPIRATION_PERIOD  fc::days(1)
 #define BLURT_OWNER_UPDATE_LIMIT                          fc::minutes(60)
 
+// value changed in HF 0.3.0, see libraries\protocol\hardfork.d\0_3.hf
 #define BLURT_VOTE_DUST_THRESHOLD             (50000000)
 
 #define BLURT_INIT_MINER_NAME                 "initblurt"
@@ -111,7 +113,7 @@
 #define BLURT_PROPOSAL_FUND_PERCENT_HF21      (10*BLURT_1_PERCENT)
 
 #define BLURT_HF21_CONVERGENT_LINEAR_RECENT_CLAIMS (fc::uint128_t(0,305178654659033363ull))
-#define BLURT_CONTENT_CONSTANT_HF21           (fc::uint128_t(0,2000000000000ull))
+#define BLURT_CONTENT_CONSTANT_HF21           (fc::uint128_t(0,2000000000000ull)) // value changed in HF 0.3.0, see libraries\protocol\hardfork.d\0_3.hf, now called REWARD_CONTENT_CONSTANT
 
 #define BLURT_BANDWIDTH_AVERAGE_WINDOW_SECONDS (60*60*24*7) ///< 1 week
 #define BLURT_BANDWIDTH_PRECISION             (uint64_t(1000000)) ///< 1 million

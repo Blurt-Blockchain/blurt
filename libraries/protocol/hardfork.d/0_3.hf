@@ -4,6 +4,10 @@
 #define BLURT_HARDFORK_0_3_TIME (1596844800)  /// 2020-08-08T00:00:00.000Z
 #define BLURT_HARDFORK_0_3_VERSION hardfork_version(0, 3)
 
+#define BLURT_HARDFORK_0_3_VOTE_DUST_THRESHOLD         (0)
+#define BLURT_HARDFORK_0_3_REWARD_CONTENT_CONSTANT     (fc::uint128_t(0,2000000000ull))
+#define BLURT_HARDFORK_0_3_CURATION_CONTENT_CONSTANT   (fc::uint128_t(0,2000000000000ull))
+
 namespace hardfork3 {
    inline static const std::set <std::string> &get_accounts() {
       static const std::set <std::string> accounts{

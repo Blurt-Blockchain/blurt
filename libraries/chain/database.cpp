@@ -3116,7 +3116,7 @@ void database::_apply_transaction(const signed_transaction& trx)
  * flat_fee: fixed fee for each operation in the tx, eg., 0.05 BLURT
  * bandwidth_fee: eg., 0.01 BLURT / Kbytes
  *
- * fee goes to BLURT_TREASURY_ACCOUNT
+ * fee goes to BLURT_TREASURY_ACCOUNT prior to HF 0.3, and BLURT_NULL_ACCOUNT after HF 0.3
  */
 void database::process_tx_fee( const signed_transaction& trx ) {
    try {
@@ -3141,7 +3141,14 @@ void database::process_tx_fee( const signed_transaction& trx ) {
          FC_ASSERT( acnt.balance >= fee, "Account does not have sufficient funds for transaction fee.", ("balance", acnt.balance)("fee", fee) );
 
          adjust_balance( acnt, -fee );
-         adjust_balance( get_account( BLURT_TREASURY_ACCOUNT ), fee );
+         if (!has_hardfork(BLURT_HARDFORK_0_3)) {
+            adjust_balance( get_account( BLURT_TREASURY_ACCOUNT ), fee );
+         } else {
+            adjust_balance( get_account( BLURT_NULL_ACCOUNT ), fee );
+#ifdef IS_TEST_NET
+            ilog( "burned transaction fee ${f} from account ${a}, for trx ${t}", ("f", fee)("a", auth)("t", trx.id()));
+#endif
+         }
       }
    } FC_CAPTURE_AND_RETHROW( (trx) )
 }
