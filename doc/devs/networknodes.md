@@ -17,6 +17,10 @@ These are some of the currently known network nodes available in the Blurt ecosy
 | rpc.blurt.world       | Core Team | 
 | api.blurt.blog        | Core Team |
 
+# Blocktivity.info api 
+https://blocktivity.blurtopian.com/api/stats
+
+Fetches virtual operations and transfers in the last hour
 
 # Global Properties Nodes
 
