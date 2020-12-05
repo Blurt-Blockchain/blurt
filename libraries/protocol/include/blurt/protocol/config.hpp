@@ -34,7 +34,7 @@
 #define BLURT_ACCOUNT_RECOVERY_REQUEST_EXPIRATION_PERIOD  fc::seconds(12)
 #define BLURT_OWNER_UPDATE_LIMIT                          fc::seconds(0)
 
-// value changed in HF 0.3.0, see libraries\protocol\hardfork.d\0_3.hf
+// removed in HF 0.3.0
 #define BLURT_VOTE_DUST_THRESHOLD             (50000000)
 
 #define BLURT_INIT_MINER_NAME                 "initminer"
@@ -60,7 +60,7 @@
 #define BLURT_ACCOUNT_RECOVERY_REQUEST_EXPIRATION_PERIOD  fc::days(1)
 #define BLURT_OWNER_UPDATE_LIMIT                          fc::minutes(60)
 
-// value changed in HF 0.3.0, see libraries\protocol\hardfork.d\0_3.hf
+// removed in HF 0.3.0
 #define BLURT_VOTE_DUST_THRESHOLD             (50000000)
 
 #define BLURT_INIT_MINER_NAME                 "initblurt"

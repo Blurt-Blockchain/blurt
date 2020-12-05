@@ -3823,6 +3823,10 @@ void database::apply_hardfork( uint32_t hardfork )
                auth.posting = ss_account.posting;
             });
          }
+
+         modify( get< reward_fund_object, by_name >( BLURT_POST_REWARD_FUND_NAME ), [&]( reward_fund_object& rfo ) {
+            rfo.content_constant = BLURT_HARDFORK_0_3_REWARD_CONTENT_CONSTANT;
+         });
       }
          break;
       default:
