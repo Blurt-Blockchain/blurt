@@ -11,3 +11,8 @@ cmake
 
 [options]
 rocksdb:use_rtti=True
+
+[settings]
+compiler=clang
+compiler.libcxx=libstdc++11
+compiler.version=10
