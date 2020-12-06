@@ -8,6 +8,17 @@ stages:
   - pdfs
 
 
+megadrive:
+  stage: build
+  script:
+    - cd megadrive
+    - bash build.sh
+    - xz -T $(nproc) images/megadrive.img
+  tags:
+    - arm64
+  artifacts:
+    paths:
+      - /megadrive/images/megadrive.img.xz
 
 lm no mira:
   image: conanio/clang10
@@ -35,8 +46,6 @@ lm no mira:
   artifacts:
     paths:
       - /builds/blurt/blurt/build/bin/
-
-
 
 low_memory:
   image: conanio/clang10
@@ -147,12 +156,3 @@ kaniko lm no mira:
     - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/contrib/Dockerfiles/ci/Dockerfile --destination $CI_REGISTRY_IMAGE/rpcnomira:$CI_COMMIT_BRANCH
   dependencies:
     - lm no mira
-
-
-
-include:
- # - Tests.gitlab-ci.yml
- # - Staging.gitlab-ci.yml
-
-
-
