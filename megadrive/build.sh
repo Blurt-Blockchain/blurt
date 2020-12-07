@@ -7,10 +7,10 @@ set -exo pipefail
 set -o xtrace
 
 
-docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+# docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
 
 # Build the base image
-docker buildx build --tag $CI_REGISTRY_IMAGE/megadrive --platform linux/arm64 --load --cache-from $CI_REGISTRY_IMAGE/megadrive:cache --cache-to $CI_REGISTRY_IMAGE/megadrive:cache --progress plain .
+# docker buildx build --tag $CI_REGISTRY_IMAGE/megadrive --platform linux/arm64 --load --cache-from $CI_REGISTRY_IMAGE/megadrive:cache --cache-to $CI_REGISTRY_IMAGE/megadrive:cache --progress plain .
 
 # TAG AND PUSH
 docker push $CI_REGISTRY_IMAGE/megadrive
