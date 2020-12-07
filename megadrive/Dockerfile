@@ -11,7 +11,8 @@ ENV CC=clang
 ENV CXX=clang++
 
 # Prepare to build
-RUN cp blurt/megadrive/default /root/.conan/profiles/default && \
+RUN mkdir -p /root/.conan/profiles/ && \
+		cp blurt/megadrive/default /root/.conan/profiles/default && \
 		cd blurt && \
 		mkdir build && \
 		cd build && \
