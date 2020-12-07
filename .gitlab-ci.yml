@@ -12,8 +12,7 @@ megadrive:
   stage: build
   script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-
-# Build the base image
+    - docker buildx create --use
     - docker buildx build --tag $CI_REGISTRY_IMAGE/megadrive --platform linux/arm64 --load --cache-from $CI_REGISTRY_IMAGE/megadrive:cache --cache-to $CI_REGISTRY_IMAGE/megadrive:cache --progress plain ..
     - docker push $CI_REGISTRY_IMAGE/megadrive
     - bash build.sh
