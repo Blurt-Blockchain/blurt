@@ -42,8 +42,8 @@ COPY --from=builder /blurt/contrib/blurtd.service /etc/systemd/system/blurtd.ser
 
 # snapshot and config
 RUN mkdir /blurt && \
-	wget -O /blurtd/snapshot.json https://cloudflare-ipfs.com/ipfs/QmPrwVpwe4Ya46CN9LXNnrUdWvaDLMwFetMUdpcdpjFbyu && \	
-	wget -O /blurtd/config.ini https://gitlab.com/blurt/blurt/-/raw/dev/doc/witnesses/config.ini
+	curl -o /blurtd/snapshot.json https://cloudflare-ipfs.com/ipfs/QmPrwVpwe4Ya46CN9LXNnrUdWvaDLMwFetMUdpcdpjFbyu && \	
+	curl -o /blurtd/config.ini https://gitlab.com/blurt/blurt/-/raw/dev/doc/witnesses/config.ini
 
 
 
