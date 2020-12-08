@@ -32,10 +32,10 @@ mkdir .tmp
 # New rootfs extraction
 # https://chromium.googlesource.com/external/github.com/docker/containerd/+/refs/tags/v0.2.0/docs/bundle.md
 # create the container with a temp name so that we can export it
-docker create --name tempmegadrive $CI_REGISTRY_IMAGE/megadrive
+docker create --name tempmegadrive $CI_REGISTRY_IMAGE/megadrive /bin/bash
 
 # export it into the rootfs directory
-docker export $CI_REGISTRY_IMAGE/megadrive | tar -C ./.tmp/result-rootfs -xf -
+docker export tempmegadrive | tar -C ./.tmp/result-rootfs -xf -
 
 # remove the container now that we have exported
 docker rm tempmegadrive
