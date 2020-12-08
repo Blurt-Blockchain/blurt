@@ -17,7 +17,7 @@ docker push $CI_REGISTRY_IMAGE/megadrive
 
 # EXTRACT IMAGE
 # Make a temporary directory
-rm -rf .tmp || true
+sudo rm -rf .tmp || true
 mkdir -p .tmp/result-rootfs
 
 # remove anything in the way of extraction
