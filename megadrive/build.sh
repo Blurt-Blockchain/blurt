@@ -18,7 +18,7 @@ docker push $CI_REGISTRY_IMAGE/megadrive
 # EXTRACT IMAGE
 # Make a temporary directory
 rm -rf .tmp | true
-mkdir .tmp
+mkdir -p .tmp/result-rootfs
 
 # remove anything in the way of extraction
 # docker run --rm --tty --volume $(pwd)/./.tmp:/root/./.tmp --workdir /root/./.tmp/.. faddat/toolbox rm -rf ./.tmp/result-rootfs
