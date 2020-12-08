@@ -30,7 +30,7 @@ docker save --output ./.tmp/result-rootfs.tar $CI_REGISTRY_IMAGE/megadrive
 docker run --rm --tty --volume $(pwd)/./.tmp:/root/./.tmp --workdir /root/./.tmp/.. faddat/toolbox /tools/docker-extract --root ./.tmp/result-rootfs  ./.tmp/result-rootfs.tar
 
 # Set hostname while the image is just in the filesystem.
-sudo bash -c "echo blurt > ./.tmp/result-rootfs/etc/hostname"
+sudo echo "blurt" > ./.tmp/result-rootfs/etc/hostname
 
 
 # ===================================================================================
