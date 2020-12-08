@@ -17,28 +17,28 @@ docker push $CI_REGISTRY_IMAGE/megadrive
 
 # EXTRACT IMAGE
 # Make a temporary directory
-rm -rf .tmp | true
+rm -rf .tmp || true
 mkdir -p .tmp/result-rootfs
 
 # remove anything in the way of extraction
 # docker run --rm --tty --volume $(pwd)/./.tmp:/root/./.tmp --workdir /root/./.tmp/.. faddat/toolbox rm -rf ./.tmp/result-rootfs
 
 # save the image to result-rootfs.tar
-# docker save --output ./.tmp/result-rootfs.tar $CI_REGISTRY_IMAGE/megadrive
+docker save --output ./.tmp/result-rootfs.tar $CI_REGISTRY_IMAGE/megadrive
 
 # Extract the image using docker-extract
-# docker run --rm --tty --volume $(pwd)/./.tmp:/root/./.tmp --workdir /root/./.tmp/.. faddat/toolbox /tools/docker-extract --root ./.tmp/result-rootfs  ./.tmp/result-rootfs.tar
+docker run --rm --tty --volume $(pwd)/./.tmp:/root/./.tmp --workdir /root/./.tmp/.. faddat/toolbox /tools/docker-extract --root ./.tmp/result-rootfs  ./.tmp/result-rootfs.tar
 
 # New rootfs extraction
 # https://chromium.googlesource.com/external/github.com/docker/containerd/+/refs/tags/v0.2.0/docs/bundle.md
 # create the container with a temp name so that we can export it
-docker create --name tempmegadrive $CI_REGISTRY_IMAGE/megadrive /bin/bash
+# docker create --name tempmegadrive $CI_REGISTRY_IMAGE/megadrive /bin/bash
 
 # export it into the rootfs directory
-docker export tempmegadrive | tar -C ./.tmp/result-rootfs -xf -
+# docker export tempmegadrive | tar -C ./.tmp/result-rootfs -xf -
 
 # remove the container now that we have exported
-docker rm tempmegadrive
+# docker rm tempmegadrive
 
 # Set hostname while the image is just in the filesystem.
 sudo echo "blurt" > ./.tmp/result-rootfs/etc/hostname
