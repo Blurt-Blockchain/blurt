@@ -29,8 +29,8 @@ mkdir .tmp
 # Extract the image using docker-extract
 # docker run --rm --tty --volume $(pwd)/./.tmp:/root/./.tmp --workdir /root/./.tmp/.. faddat/toolbox /tools/docker-extract --root ./.tmp/result-rootfs  ./.tmp/result-rootfs.tar
 
-docker pull redis
-
+# New rootfs extraction
+# https://chromium.googlesource.com/external/github.com/docker/containerd/+/refs/tags/v0.2.0/docs/bundle.md
 # create the container with a temp name so that we can export it
 docker create --name tempmegadrive $CI_REGISTRY_IMAGE/megadrive
 
