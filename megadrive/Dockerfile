@@ -1,8 +1,8 @@
 FROM faddat/sos-full
 
-COPY --from=builder /blurt/build/bin/* /usr/bin
+COPY --from=registry.gitlab.com/blurt/blurt/ /blurt/build/bin/* /usr/bin
 
-COPY --from=builder /blurt/contrib/blurtd.service /etc/systemd/system/blurtd.service
+COPY --from=registry.gitlab.com/blurt/blurt /blurt/contrib/blurtd.service /etc/systemd/system/blurtd.service
 
 # snapshot and config
 RUN systemctl enable blurtd && \
