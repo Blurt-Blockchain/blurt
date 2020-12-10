@@ -1,1 +1,3 @@
-megadrive
+megadrive/Dockerfile
+megadrive/Dockerfile.build
+megadrive/build.sh
