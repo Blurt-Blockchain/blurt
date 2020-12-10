@@ -24,6 +24,8 @@ megadrive:
   artifacts:
     paths:
       - /megadrive/images/megadrive.img.xz
+      - /megadrive/blurtd
+      - /megadrive/cli_wallet
 
 lm no mira:
   image: conanio/clang10
