@@ -1,8 +1,8 @@
 FROM faddat/sos-full
 
-COPY --from=registry.gitlab.com/blurt/blurt/md-build /blurt/build/bin/* /usr/bin
+# COPY --from=registry.gitlab.com/blurt/blurt/md-build /blurt/build/bin/* /usr/bin
 
-COPY --from=registry.gitlab.com/blurt/blurt/md-build /blurt/contrib/blurtd.service /etc/systemd/system/blurtd.service
+# COPY --from=registry.gitlab.com/blurt/blurt/md-build /blurt/contrib/blurtd.service /etc/systemd/system/blurtd.service
 
 # snapshot and config
 RUN systemctl enable blurtd && \
@@ -11,5 +11,7 @@ RUN systemctl enable blurtd && \
 		curl -o /blurt/config.ini https://gitlab.com/blurt/blurt/-/raw/dev/doc/witnesses/config.ini
 
 
+COPY megadrive/blurtd .
+COPY megadrive/cli_wallet .
 
 
