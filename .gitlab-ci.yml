@@ -8,11 +8,24 @@ stages:
   - pdfs
 
 
-megadrive:
+# Build only when dev branch changes.  Note: update Dockerfile to clone dev
+megadrive-build:
   stage: build
   script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - docker buildx build --file megadrive/build/Dockerfile --tag $CI_REGISTRY_IMAGE/md-build --cache-from $CI_REGISTRY_IMAGE/md-build:cache --cache-to $CI_REGISTRY_IMAGE/md-build:cache --platform linux/arm64 --load --progress plain .
+  tags:
+    - arm64
+  only:
+    - dev
+
+
+# construct the megadrive image
+megadrive:
+  stage: build
+  script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker pull $CI_REGISTRY_IMAGE/md-build
     - docker container create --name blurtarm $CI_REGISTRY_IMAGE/md-build /bin/bash
     - docker cp blurtarm:/blurt/build/bin megadrive/
     - docker buildx build --file megadrive/Dockerfile --tag $CI_REGISTRY_IMAGE/megadrive --platform linux/arm64 --load --cache-from $CI_REGISTRY_IMAGE/megadrive:cache --cache-to $CI_REGISTRY_IMAGE/megadrive:cache --progress plain .
