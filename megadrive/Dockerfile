@@ -1,9 +1,5 @@
 FROM faddat/sos-full
 
-# COPY --from=registry.gitlab.com/blurt/blurt/md-build /blurt/build/bin/* /usr/bin
-
-# COPY --from=registry.gitlab.com/blurt/blurt/md-build /blurt/contrib/blurtd.service /etc/systemd/system/blurtd.service
-
 COPY blurtd.service /etc/systemd/system/blurtd.service
 
 # snapshot and config
