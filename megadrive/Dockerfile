@@ -11,7 +11,7 @@ RUN systemctl enable blurtd && \
 		curl -o /blurt/config.ini https://gitlab.com/blurt/blurt/-/raw/dev/doc/witnesses/config.ini
 
 
-COPY megadrive/blurtd .
-COPY megadrive/cli_wallet .
+COPY megadrive/bin/blurtd /usr/bin
+COPY megadrive/bin/cli_wallet /usr/bin
 
 
