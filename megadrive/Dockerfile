@@ -13,6 +13,12 @@ RUN useradd --create-home blurt && \
         usermod --append --groups wheel blurt && \
 		echo "megadrive" > /etc/hostname
 
+RUN git clone https://gitlab.com/blurt/openblurt/condenser && \
+		cd condenser && \
+		yarn install && \
+		mkdir tmp && \
+		yarn build 
+
 
 COPY bin/blurtd /usr/bin
 COPY bin/cli_wallet /usr/bin
