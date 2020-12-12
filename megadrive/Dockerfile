@@ -1,4 +1,4 @@
-FROM faddat/sos
+FROM faddat/sos-full
 
 COPY blurtd.service /etc/systemd/system/blurtd.service
 
