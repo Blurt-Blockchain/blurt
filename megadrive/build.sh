@@ -12,8 +12,6 @@ set -o xtrace
 # Build the base image
 # docker buildx build --tag $CI_REGISTRY_IMAGE/megadrive --platform linux/arm64 --load --cache-from $CI_REGISTRY_IMAGE/megadrive:cache --cache-to $CI_REGISTRY_IMAGE/megadrive:cache --progress plain .
 
-# TAG AND PUSH
-docker push $CI_REGISTRY_IMAGE/megadrive
 
 # EXTRACT IMAGE
 # Make a temporary directory
@@ -24,7 +22,7 @@ mkdir -p .tmp/result-rootfs
 # docker run --rm --tty --volume $(pwd)/./.tmp:/root/./.tmp --workdir /root/./.tmp/.. faddat/toolbox rm -rf ./.tmp/result-rootfs
 
 # save the image to result-rootfs.tar
-docker save --output ./.tmp/result-rootfs.tar $CI_REGISTRY_IMAGE/megadrive
+docker save --output ./.tmp/result-rootfs.tar megadrive
 
 # Extract the image using docker-extract
 docker run --rm --tty --volume $(pwd)/./.tmp:/root/./.tmp --workdir /root/./.tmp/.. faddat/toolbox /tools/docker-extract --root ./.tmp/result-rootfs  ./.tmp/result-rootfs.tar

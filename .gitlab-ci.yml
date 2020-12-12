@@ -31,7 +31,7 @@ megadrive:
     - docker cp blurtarm:blurt/contrib/blurtd.service megadrive/
     - docker container rm blurtarm
     - cd megadrive
-    - docker buildx build --file Dockerfile --tag $CI_REGISTRY_IMAGE/megadrive --load --progress plain .
+    - docker buildx build --file Dockerfile --tag megadrive --load --progress plain .
     - cd ..
     - bash megadrive/build.sh
     - xz -T $(nproc) images/megadrive.img
