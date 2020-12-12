@@ -16,7 +16,7 @@ set -o xtrace
 # EXTRACT IMAGE
 # Make a temporary directory
 sudo rm -rf .tmp || true
-mkdir -p .tmp/result-rootfs
+mkdir .tmp/
 
 # remove anything in the way of extraction
 # docker run --rm --tty --volume $(pwd)/./.tmp:/root/./.tmp --workdir /root/./.tmp/.. faddat/toolbox rm -rf ./.tmp/result-rootfs
