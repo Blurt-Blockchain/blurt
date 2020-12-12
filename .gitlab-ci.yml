@@ -30,7 +30,7 @@ megadrive:
     - docker cp blurtarm:/blurt/build/bin megadrive/
     - docker cp blurtarm:blurt/contrib/blurtd.service megadrive/
     - docker container rm blurtarm
-    - docker image rm faddat/sos-full
+    - docker image rm faddat/sos-full || true
     - docker image rm $CI_REGISTRY_IMAGE/megadrive
     - cd megadrive
     - docker build --file Dockerfile --tag $CI_REGISTRY_IMAGE/megadrive --progress plain .
