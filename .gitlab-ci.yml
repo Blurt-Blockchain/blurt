@@ -39,7 +39,7 @@ megadrive:
     - arm64
   artifacts:
     paths:
-      - megadrive/images/megadrive.img.xz
+      - images/megadrive.img.xz
       - megadrive/bin/blurtd
       - megadrive/bin/cli_wallet
 
