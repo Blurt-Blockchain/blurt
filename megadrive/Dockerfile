@@ -8,8 +8,10 @@ RUN systemctl enable blurtd && \
 		curl -o /blurt/snapshot.json https://cloudflare-ipfs.com/ipfs/QmPrwVpwe4Ya46CN9LXNnrUdWvaDLMwFetMUdpcdpjFbyu && \	
 		curl -o /blurt/config.ini https://gitlab.com/blurt/blurt/-/raw/dev/doc/witnesses/config.ini
 
-
-RUN echo "megadrive" > /etc/hostname
+RUN useradd --create-home blurt && \
+        echo "blurt:blurt" | chpasswd && \
+        usermod --append --groups wheel blurt && \
+		echo "megadrive" > /etc/hostname
 
 
 COPY bin/blurtd /usr/bin
