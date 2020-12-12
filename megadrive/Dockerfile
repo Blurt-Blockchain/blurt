@@ -9,6 +9,9 @@ RUN systemctl enable blurtd && \
 		curl -o /blurt/config.ini https://gitlab.com/blurt/blurt/-/raw/dev/doc/witnesses/config.ini
 
 
+RUN echo "megadrive" > /etc/hostname
+
+
 COPY bin/blurtd /usr/bin
 COPY bin/cli_wallet /usr/bin
 
