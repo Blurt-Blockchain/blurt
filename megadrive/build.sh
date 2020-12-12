@@ -38,9 +38,6 @@ docker run --rm --tty --volume $(pwd)/./.tmp:/root/./.tmp --workdir /root/./.tmp
 # remove the container now that we have exported
 # docker rm tempmegadrive
 
-# Set hostname while the image is just in the filesystem.
-sudo echo "blurt" > ./.tmp/result-rootfs/etc/hostname
-
 
 # ===================================================================================
 # IMAGE: Make a .img file and compress it.
