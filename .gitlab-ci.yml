@@ -24,6 +24,7 @@ megadrive-build:
 megadrive:
   stage: build
   script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - docker pull $CI_REGISTRY_IMAGE/md-build
     - docker container create --name blurtarm $CI_REGISTRY_IMAGE/md-build /bin/bash
     - docker cp blurtarm:/blurt/build/bin megadrive/
