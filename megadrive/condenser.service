@@ -1,0 +1,9 @@
+[Unit]
+Description=Condenser
+
+[Service]
+ExecStart=/usr/bin/yarn run production
+WorkingDirectory=/condenser
+
+[Install]
+WantedBy=multi-user.target
