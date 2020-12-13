@@ -14,7 +14,7 @@ RUN useradd --create-home blurt && \
 		echo "megadrive" > /etc/hostname
 
 RUN git clone https://gitlab.com/blurt/openblurt/condenser && \
-		pacman -Syyu --noconfirm yarn && \
+		pacman -Syyu --noconfirm yarn node-gyp npm && \
 		cd condenser && \
 		yarn install && \
 		mkdir tmp && \
