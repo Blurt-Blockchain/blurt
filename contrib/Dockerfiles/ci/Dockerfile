@@ -8,7 +8,7 @@ COPY ./build/bin/blurtd /usr/bin/blurtd
 COPY ./build/bin/cli_wallet /usr/bin/cli_wallet
 
 # FETCH DEPENDENCIES
-RUN pacman -Syyu --nnoconfirm wget ncurses
+RUN pacman -Syyu --noconfirm wget ncurses
 
 RUN mkdir /blurt && \
             wget --progress=bar:force:noscroll -O /blurt/snapshot.json  https://cloudflare-ipfs.com/ipfs/QmPrwVpwe4Ya46CN9LXNnrUdWvaDLMwFetMUdpcdpjFbyu
