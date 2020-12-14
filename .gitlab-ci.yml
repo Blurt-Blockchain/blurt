@@ -60,7 +60,7 @@ lm no mira:
     - shell-arch
   artifacts:
     paths:
-      - /builds/blurt/blurt/build/bin/
+      - build/bin/
 
 low_memory:
   stage: build
@@ -76,7 +76,7 @@ low_memory:
     - shell-arch
   artifacts:
     paths:
-      - /builds/blurt/blurt/build/bin/
+      - build/bin/
 
 rpc:
   stage: build
@@ -90,7 +90,7 @@ rpc:
     - shell-arch
   artifacts:
     paths:
-      - /builds/blurt/blurt/build/bin/
+      - build/bin/
 
 pdfs:
   image: debian:10
