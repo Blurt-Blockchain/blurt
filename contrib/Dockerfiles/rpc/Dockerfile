@@ -9,7 +9,7 @@ COPY ./contrib/rpc-config.ini /blurt/config.ini
 COPY ./build/bin/cli_wallet /usr/bin/cli_wallet
 
 # FETCH DEPENDENCIES
-RUN pacman -Syyu --noconfig wget ncurses
+RUN pacman -Syyu --noconfirm wget ncurses
 
 RUN wget --progress=bar:force:noscroll -O /blurt/snapshot.json  https://cloudflare-ipfs.com/ipfs/QmPrwVpwe4Ya46CN9LXNnrUdWvaDLMwFetMUdpcdpjFbyu
 
