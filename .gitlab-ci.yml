@@ -19,6 +19,9 @@ megadrive-build:
   only:
     - master
 
+# Megadrive will now just run as an arm container on Pi, leading to cleaner abstraction
+
+
 
 # construct the megadrive image
 megadrive:
@@ -31,12 +34,12 @@ megadrive:
     - docker cp blurtarm:blurt/contrib/blurtd.service megadrive/
     - docker container rm blurtarm
     - cd megadrive
-    - docker buildx build --file Dockerfile --tag megadrive --load --progress plain .
+    - docker buildx build --file Dockerfile --platform linux/arm64 --tag megadrive --load --progress plain .
     - cd ..
     - bash megadrive/build.sh
     - xz -T $(nproc) images/megadrive.img
   tags:
-    - arm64
+    - shell-arch
   artifacts:
     paths:
 #      - images/megadrive.img.xz
@@ -65,7 +68,7 @@ lm no mira:
     - make -j$(nproc) blurtd cli_wallet
   # cli wallet is only used for witness, so we capture it from the witness build
   tags:
-    - metal
+    - shell-arch
   artifacts:
     paths:
       - /builds/blurt/blurt/build/bin/
@@ -92,23 +95,12 @@ low_memory:
     - make -j$(nproc) blurtd cli_wallet
   # cli wallet is only used for witness, so we capture it from the witness build
   tags:
-    - metal
+    - shell-arch
   artifacts:
     paths:
       - /builds/blurt/blurt/build/bin/
 
 rpc:
-  image: conanio/clang10
-  before_script:
-    - sudo apt-get update -qq
-    - sudo apt-get install -qq doxygen
-    - conan config set storage.path="${CI_PROJECT_DIR}/.cache/conan"
-    # Pull in submodules
-    - git submodule update --init --recursive
-    # ccache for acceleration
-    - mkdir -p ccache
-    - export CCACHE_BASEDIR=${PWD}
-    - export CCACHE_DIR=${PWD}/ccache
   stage: build
   script:
     - mkdir build
@@ -117,7 +109,7 @@ rpc:
     - cmake -DBLURT_STATIC_BUILD=ON -DLOW_MEMORY_NODE=OFF -DCLEAR_VOTES=OFF -DBUILD_BLURT_TESTNET=OFF -DSKIP_BY_TX_ID=OFF -DBLURT_LINT_LEVEL=OFF -DENABLE_MIRA=OFF -DCMAKE_BUILD_TYPE=Release ..
     - make -j$(nproc) blurtd cli_wallet
   tags:
-    - metal
+    - shell-arch
   artifacts:
     paths:
       - /builds/blurt/blurt/build/bin/
