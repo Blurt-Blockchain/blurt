@@ -78,7 +78,7 @@ Our next milestone is [Hard Fork 3](https://gitlab.com/blurt/blurt/-/milestones/
 + [Discord](https://discord.blurt.world)
 + [Facebook Group](https://www.facebook.com/groups/blurtofficial)
 + [Facebook Page](https://www.facebook.com/Blurt-106190134629628)
-+ [Telegram](https://t.me/@blurtofficialchat)
++ [Telegram](https://t.me/blurtofficialchat)
 + [Twitter](https://twitter.com/BlurtOfficial)
 + [Youtube](https://youtube.com/channel/UCuktvTIxkdejKg_xWMz2vlQ)
 
