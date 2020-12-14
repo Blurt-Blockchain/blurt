@@ -64,7 +64,7 @@ rm -rf images || true
 mkdir -p images
 
 # Make the image file
-fallocate -l 4G "images/megadrive.img"
+fallocate -l 6G "images/megadrive.img"
 
 # loop-mount the image file so it becomes a disk
 export LOOP=$(sudo losetup --find --show images/megadrive.img)

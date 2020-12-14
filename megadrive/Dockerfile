@@ -11,7 +11,17 @@ RUN systemctl enable blurtd && \
 RUN useradd --create-home blurt && \
         echo "blurt:blurt" | chpasswd && \
         usermod --append --groups wheel blurt && \
-		echo "megadrive" > /etc/hostname
+		echo "megadrive" > /etc/hostname && \
+		echo "password  include   system-local-login" >> /etc/pam.d/login && \
+		passwd -e blurt
+
+
+RUN git clone https://gitlab.com/blurt/openblurt/condenser && \
+		pacman -Syyu --noconfirm yarn node-gyp npm && \
+		cd condenser && \
+		yarn install && \
+		mkdir tmp && \
+		yarn build 
 
 
 COPY bin/blurtd /usr/bin
