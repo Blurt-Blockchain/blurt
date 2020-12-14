@@ -73,7 +73,8 @@ Our next milestone is [Hard Fork 3](https://gitlab.com/blurt/blurt/-/milestones/
 
 ## Social Links
 
-+ [Community Blog](https://blurt.blog)
++ [Bitcointalk](https://bitcointalk.org/index.php?topic=5284933.0)
++ [Blurt.blog](https://blurt.blog)
 + [Discord](https://discord.blurt.world)
 + [Facebook Group](https://www.facebook.com/groups/blurtofficial)
 + [Facebook Page](https://www.facebook.com/Blurt-106190134629628)
