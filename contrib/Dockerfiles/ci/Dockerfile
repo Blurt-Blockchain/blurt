@@ -1,4 +1,4 @@
-FROM ubuntu:20.04
+FROM archlinux
 
 MAINTAINER Jacob Gadikian <jacob@blurt.foundation>
 
@@ -8,9 +8,7 @@ COPY ./build/bin/blurtd /usr/bin/blurtd
 COPY ./build/bin/cli_wallet /usr/bin/cli_wallet
 
 # FETCH DEPENDENCIES
-RUN apt update
-RUN apt upgrade -y
-RUN apt install -y wget libncurses5 libncurses5-dev
+RUN pacman -Syyu --nnoconfirm wget ncurses
 
 RUN mkdir /blurt && \
             wget --progress=bar:force:noscroll -O /blurt/snapshot.json  https://cloudflare-ipfs.com/ipfs/QmPrwVpwe4Ya46CN9LXNnrUdWvaDLMwFetMUdpcdpjFbyu
