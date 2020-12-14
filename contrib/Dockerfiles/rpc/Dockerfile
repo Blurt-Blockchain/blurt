@@ -1,4 +1,4 @@
-FROM archliux
+FROM archlinux
 
 MAINTAINER Jacob Gadikian <jacob@blurt.foundation>
 
