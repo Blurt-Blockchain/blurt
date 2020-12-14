@@ -48,6 +48,9 @@ megadrive:
 
 lm no mira:
   stage: build
+  variables: 
+    CC: "ccache clang" 
+    CXX: "ccache clang++"
   script:
     - mkdir build
     - cd build
@@ -64,6 +67,9 @@ lm no mira:
 
 low_memory:
   stage: build
+  variables:
+    CC: "ccache clang" 
+    CXX: "ccache clang++"
   script:
     - mkdir build
     - cd build
@@ -80,6 +86,9 @@ low_memory:
 
 rpc:
   stage: build
+  variables:
+    CC: "ccache clang" 
+    CXX: "ccache clang++"
   script:
     - mkdir build
     - cd build
