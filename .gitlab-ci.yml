@@ -17,7 +17,7 @@ megadrive-build:
   tags:
     - arm64
   only:
-    - master
+    - dev
 
 # Megadrive will now just run as an arm container on Pi, leading to cleaner abstraction
 
