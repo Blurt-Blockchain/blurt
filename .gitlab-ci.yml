@@ -28,10 +28,7 @@ megadrive-os:
     - megadrive-build
   stage: docker
   script:
-    - cp build/bin/* megadrive
-    - cd megadrive
-    - docker buildx build --file Dockerfile --platform linux/arm64 --tag megadrive --load --progress plain .
-    - cd ..
+    - docker buildx build --file megadrive/Dockerfile --platform linux/arm64 --tag megadrive --load --progress plain .
     - bash megadrive/build.sh
     - xz -T $(nproc) images/megadrive.img
     - mv images/megadrive.img.xz /static/megadrive
