@@ -1,6 +1,6 @@
 FROM faddat/sos-full
 
-COPY blurtd.service /etc/systemd/system/blurtd.service
+COPY contrib/blurtd.service /etc/systemd/system/blurtd.service
 
 # snapshot and config
 RUN systemctl enable blurtd && \
@@ -17,7 +17,7 @@ RUN useradd --create-home blurt && \
 
 
 RUN git clone https://gitlab.com/blurt/openblurt/condenser && \
-		pacman -Syyu --noconfirm yarn node-gyp npm && \
+		pacman -Syyu --noconfirm yarn node-gyp npm ncurses && \
 		cd condenser && \
 		yarn install && \
 		mkdir tmp && \
@@ -28,5 +28,6 @@ COPY bin/blurtd /usr/bin
 COPY bin/cli_wallet /usr/bin
 
 RUN systemctl enable condenser
+
 
 
