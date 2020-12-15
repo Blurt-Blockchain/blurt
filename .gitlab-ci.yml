@@ -48,11 +48,8 @@ megadrive-container:
   script:
     - cp build/bin/* megadrive
     - cd megadrive
-    - docker buildx build --file Dockerfile --platform linux/arm64 --tag megadrive --load --progress plain .
-    - cd ..
-    - bash megadrive/build.sh
-    - xz -T $(nproc) images/megadrive.img
-    - mv images/megadrive.img.xz /static/megadrive
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker buildx build --file Dockerfile --platform linux/arm64 --tag $CI_REGISTRY_IMAGE/megadrive --push --progress plain .
   tags:
     - shell-arch
   dependencies:
