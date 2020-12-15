@@ -124,6 +124,8 @@ pdfs:
 
 kaniko low memory:
   stage: docker
+  needs:
+    - low memory
   image:
     name: gcr.io/kaniko-project/executor:debug
     entrypoint: [""]
@@ -135,6 +137,8 @@ kaniko low memory:
 
 kaniko rpc:
   stage: docker
+  needs:
+    - rpc
   image:
     name: gcr.io/kaniko-project/executor:debug
     entrypoint: [""]
@@ -146,6 +150,8 @@ kaniko rpc:
 
 kaniko lm no mira:
   stage: docker
+  needs: 
+    - lm no mira
   image:
     name: gcr.io/kaniko-project/executor:debug
     entrypoint: [""]
