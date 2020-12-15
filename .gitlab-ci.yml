@@ -67,7 +67,7 @@ lm no mira:
     paths:
       - build/bin/
 
-low_memory:
+low memory:
   stage: build
   script:
     - mkdir build
