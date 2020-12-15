@@ -24,6 +24,8 @@ megadrive-build:
 
 # construct the megadrive image
 megadrive:
+  needs: 
+    - megadrive-build
   stage: build
   script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
@@ -37,6 +39,7 @@ megadrive:
     - cd ..
     - bash megadrive/build.sh
     - xz -T $(nproc) images/megadrive.img
+    - mv images/megadrive.img.xz /static/megadrive
   tags:
     - shell-arch
   artifacts:
