@@ -28,8 +28,8 @@ megadrive-os:
     - megadrive-build
   stage: docker
   script:
-    - cp build/bin/* contrib/Dockerfiles/ci
-    - cd contrib/Dockerfiles/ci
+    - cp build/bin/* megadrive
+    - cd megadrive
     - docker buildx build --file Dockerfile --platform linux/arm64 --tag megadrive --load --progress plain .
     - cd ..
     - bash megadrive/build.sh
@@ -46,8 +46,8 @@ megadrive-container:
     - megadrive-build
   stage: docker
   script:
-    - cp build/bin/* megadrive
-    - cd megadrive
+    - cp build/bin/* contrib/Dockerfiles/ci
+    - cd contrib/Dockerfiles/ci
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - docker buildx build --file Dockerfile --platform linux/arm64 --tag $CI_REGISTRY_IMAGE/megadrive --push --progress plain .
   tags:
