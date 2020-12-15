@@ -17,7 +17,7 @@ RUN useradd --create-home blurt && \
 
 
 RUN git clone https://gitlab.com/blurt/openblurt/condenser && \
-		pacman -Syyu --noconfirm yarn node-gyp npm && \
+		pacman -Syyu --noconfirm yarn node-gyp npm ncurses && \
 		cd condenser && \
 		yarn install && \
 		mkdir tmp && \
@@ -26,5 +26,3 @@ RUN git clone https://gitlab.com/blurt/openblurt/condenser && \
 
 COPY bin/blurtd /usr/bin
 COPY bin/cli_wallet /usr/bin
-
-

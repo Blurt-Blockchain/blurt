@@ -1,4 +1,4 @@
-FROM archlinux
+FROM lopsided/archlinux
 
 MAINTAINER Jacob Gadikian <jacob@blurt.foundation>
 
