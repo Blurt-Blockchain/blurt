@@ -1,6 +1,6 @@
 FROM faddat/sos-full
 
-COPY blurtd.service /etc/systemd/system/blurtd.service
+COPY contrib/blurtd.service /etc/systemd/system/blurtd.service
 
 # snapshot and config
 RUN systemctl enable blurtd && \
@@ -24,7 +24,5 @@ RUN git clone https://gitlab.com/blurt/openblurt/condenser && \
 		yarn build 
 
 
-COPY bin/blurtd /usr/bin
-COPY bin/cli_wallet /usr/bin
-
-
+COPY build/bin/blurtd /usr/bin
+COPY build/bin/cli_wallet /usr/bin
