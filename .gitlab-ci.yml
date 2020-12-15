@@ -31,7 +31,7 @@ megadrive-os:
     - docker buildx build --file megadrive/Dockerfile --platform linux/arm64 --tag megadrive --load --progress plain .
     - bash megadrive/build.sh
     - xz -T $(nproc) images/megadrive.img
-    - mv images/megadrive.img.xz /static/megadrive
+    - sudo mv images/megadrive.img.xz /static/megadrive
   tags:
     - shell-arch
   dependencies:
