@@ -24,7 +24,7 @@ RUN git clone https://gitlab.com/blurt/openblurt/condenser && \
 		yarn build 
 
 
-COPY bin/blurtd /usr/bin
-COPY bin/cli_wallet /usr/bin
+COPY blurtd /usr/bin
+COPY cli_wallet /usr/bin
 
 
