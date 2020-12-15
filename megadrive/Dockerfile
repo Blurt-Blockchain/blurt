@@ -23,7 +23,7 @@ RUN git clone https://gitlab.com/blurt/openblurt/condenser && \
 		mkdir tmp && \
 		yarn build 
 
-COPY megadrive/condenser.service /etc/systemd/system/condenser.service
+COPY condenser.service /etc/systemd/system/condenser.service
 COPY bin/blurtd /usr/bin
 COPY bin/cli_wallet /usr/bin
 
