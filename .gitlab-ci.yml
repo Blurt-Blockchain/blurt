@@ -1,10 +1,6 @@
 stages:
   - build
   - docker
-  - test
-  - review
-  - staging
-  - production
   - pdfs
 
 
@@ -26,18 +22,14 @@ megadrive-build:
       - build/bin
 
 
-# Megadrive will now just run as an arm container on Pi, leading to cleaner abstraction
-
-
-
-# construct the megadrive image
+# construct the megadrive device image, runs blurt on SOS as a systemd service without docker
 megadrive-os:
   needs: 
     - megadrive-build
   stage: docker
   script:
-    - cp build/bin/* megadrive
-    - cd megadrive
+    - cp build/bin/* contrib/Dockerfiles/ci
+    - cd contrib/Dockerfiles/ci
     - docker buildx build --file Dockerfile --platform linux/arm64 --tag megadrive --load --progress plain .
     - cd ..
     - bash megadrive/build.sh
@@ -45,6 +37,8 @@ megadrive-os:
     - mv images/megadrive.img.xz /static/megadrive
   tags:
     - shell-arch
+  dependencies:
+    - megadrive-build
 
 # construct the megadrive image
 megadrive-container:
@@ -61,6 +55,8 @@ megadrive-container:
     - mv images/megadrive.img.xz /static/megadrive
   tags:
     - shell-arch
+  dependencies:
+    - megadrive-build
 
 
 lm no mira:
