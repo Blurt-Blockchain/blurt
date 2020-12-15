@@ -23,9 +23,9 @@ RUN git clone https://gitlab.com/blurt/openblurt/condenser && \
 		mkdir tmp && \
 		yarn build 
 
-COPY condenser.service /etc/systemd/system/condenser.service
-COPY bin/blurtd /usr/bin
-COPY bin/cli_wallet /usr/bin
+COPY megadrive/condenser.service /etc/systemd/system/condenser.service
+COPY build/bin/blurtd /usr/bin
+COPY build/bin/cli_wallet /usr/bin
 
 RUN systemctl enable condenser
 
