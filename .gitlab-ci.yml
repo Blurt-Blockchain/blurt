@@ -21,6 +21,9 @@ megadrive-build:
   # cli wallet is only used for witness, so we capture it from the witness build
   tags:
     - arm64-shell
+  artifacts:
+    paths:
+      - build/bin
 
 
 # Megadrive will now just run as an arm container on Pi, leading to cleaner abstraction
@@ -33,12 +36,7 @@ megadrive:
     - megadrive-build
   stage: docker
   script:
-    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-    - docker pull $CI_REGISTRY_IMAGE/md-build
-    - docker container create --name blurtarm $CI_REGISTRY_IMAGE/md-build /bin/bash
-    - docker cp blurtarm:/blurt/build/bin megadrive/
-    - docker cp blurtarm:blurt/contrib/blurtd.service megadrive/
-    - docker container rm blurtarm
+    - cp build/bin/* megadrive
     - cd megadrive
     - docker buildx build --file Dockerfile --platform linux/arm64 --tag megadrive --load --progress plain .
     - cd ..
