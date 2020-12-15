@@ -1,10 +1,9 @@
-FROM archlinux
+FROM lopsided/archlinux
 
 MAINTAINER Jacob Gadikian <jacob@blurt.foundation>
 
 
 COPY ./build/bin/blurtd /usr/bin/blurtd
-
 COPY ./build/bin/cli_wallet /usr/bin/cli_wallet
 
 # FETCH DEPENDENCIES

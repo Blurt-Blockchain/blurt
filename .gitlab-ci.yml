@@ -31,7 +31,7 @@ megadrive-build:
 
 
 # construct the megadrive image
-megadrive:
+megadrive-os:
   needs: 
     - megadrive-build
   stage: docker
@@ -45,10 +45,23 @@ megadrive:
     - mv images/megadrive.img.xz /static/megadrive
   tags:
     - shell-arch
-  artifacts:
-    paths:
-      - megadrive/bin/blurtd
-      - megadrive/bin/cli_wallet
+
+# construct the megadrive image
+megadrive-container:
+  needs: 
+    - megadrive-build
+  stage: docker
+  script:
+    - cp build/bin/* megadrive
+    - cd megadrive
+    - docker buildx build --file Dockerfile --platform linux/arm64 --tag megadrive --load --progress plain .
+    - cd ..
+    - bash megadrive/build.sh
+    - xz -T $(nproc) images/megadrive.img
+    - mv images/megadrive.img.xz /static/megadrive
+  tags:
+    - shell-arch
+
 
 lm no mira:
   stage: build
