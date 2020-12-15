@@ -1,6 +1,6 @@
 FROM faddat/sos-full
 
-COPY megadrive/blurtd.service /etc/systemd/system/blurtd.service
+COPY contrib/blurtd.service /etc/systemd/system/blurtd.service
 
 # snapshot and config
 RUN systemctl enable blurtd && \
