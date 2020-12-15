@@ -133,7 +133,7 @@ kaniko low memory:
     - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
     - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/contrib/Dockerfiles/ci/Dockerfile --destination $CI_REGISTRY_IMAGE/low_memory:$CI_COMMIT_BRANCH
   dependencies:
-    - low_memory
+    - low memory
 
 kaniko rpc:
   stage: docker
