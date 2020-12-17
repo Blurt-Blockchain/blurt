@@ -1,0 +1,31 @@
+   __  ___              ___      _            ____  ____        ___  __         __    ___             ___                  
+  /  |/  /__ ___ ____ _/ _ \____(_)  _____   / __ \/ __/ ____  / _ )/ /_ ______/ /_  / _ | ___  ___  / (_)__ ____  _______ 
+ / /|_/ / -_) _ `/ _ `/ // / __/ / |/ / -_) / /_/ /\ \  /___/ / _  / / // / __/ __/ / __ |/ _ \/ _ \/ / / _ `/ _ \/ __/ -_)
+/_/  /_/\__/\_, /\_,_/____/_/ /_/|___/\__/  \____/___/       /____/_/\_,_/_/  \__/ /_/ |_/ .__/ .__/_/_/\_,_/_//_/\__/\__/ 
+           /___/                                                                        /_/  /_/                           
+
+
+ MegaDrive OS - Self-contained Arch Linux Blurt blockchain node
+ _______________________________________________________________________
+
+ This build has everything you need to deploy a Blurt Witness, Full Node
+ or Condenser blog UI appliance in your local network environment.
+
+ System Requirements:
+      * 1GB RAM Minimum
+      * Ethernet Port
+      * 64-Bit Architecture 
+      * Example - Raspberry Pi, NanoPi etc 	 
+
+ Global distribution of privately operated, self-sovereign Blurt blockchain appliances
+ serves to harden the Blurt social media blockchain to become uncensorable and unstoppable,
+ with less overall dependencies on cloud services.
+
+ By deploying the Blurt blockchain as hardware, the community gains independence!
+
+ Useful links:
+
+      * https://gitlab.com/blurt/blurt
+      * https://blocks.blurtwallet.com
+      * https://blurtwallet.com
+      * https://discord.blurt.world
