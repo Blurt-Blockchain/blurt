@@ -8,7 +8,6 @@ stages:
 
 
 
-# Build only when dev branch changes.  Note: update Dockerfile to clone dev
 megadrive-build-env:
   stage: build-env
   script:
@@ -21,7 +20,6 @@ megadrive-build-env:
 
 
 
-# Build only when dev branch changes.  Note: update Dockerfile to clone dev
 megadrive-build-arch:
   stage: build
   image: $CI_REGISTRY_IMAGE/md-env
@@ -75,6 +73,9 @@ megadrive-os:
   dependencies:
     - megadrive-build-arch
 
+# construct the light megadrive device image.  runs blurt on sos-lite as a systemd service which in turn runs using docker.
+
+
 # construct the megadrive arch container
 megadrive-container:
   needs: 
@@ -104,6 +105,7 @@ lm no mira:
   artifacts:
     paths:
       - build/bin/
+  needs: []
 
 low memory:
   stage: build
@@ -111,15 +113,14 @@ low memory:
     - mkdir build
     - cd build
     - conan install .. -s compiler=clang -s compiler.libcxx=libstdc++11 -if=. -pr=default --build=missing
-    # Witness Build Config: -DLOW_MEMORY_NODE=ON -DCLEAR_VOTES=ON
     - cmake -DBLURT_STATIC_BUILD=ON -DLOW_MEMORY_NODE=ON -DCLEAR_VOTES=ON -DBUILD_BLURT_TESTNET=OFF -DSKIP_BY_TX_ID=ON -DBLURT_LINT_LEVEL=OFF -DENABLE_MIRA=ON -DCMAKE_BUILD_TYPE=Release ..
     - make -j$(nproc) blurtd cli_wallet
-  # cli wallet is only used for witness, so we capture it from the witness build
   tags:
     - shell-arch
   artifacts:
     paths:
       - build/bin/
+  needs: []
 
 rpc:
   stage: build
@@ -134,6 +135,7 @@ rpc:
   artifacts:
     paths:
       - build/bin/
+  needs: []
 
 pdfs:
   image: debian:10
