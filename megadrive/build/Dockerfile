@@ -2,7 +2,7 @@ FROM lopsided/archlinux
 
 MAINTAINER jacobgadikian@gmail.com
 
-RUN pacman -Syyu --noconfirm python-pip wget bison doxygen clang ccache cmake npm yarn && \
+RUN pacman -Syyu --noconfirm python-pip wget bison doxygen base-devel clang ccache cmake npm yarn && \
 		pip install conan
 
 COPY ./megadrive/default /root/.conan/profiles/default
