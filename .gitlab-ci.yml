@@ -39,22 +39,19 @@ megadrive-build-arch:
   artifacts:
     paths:
       - build/bin
-  needs: []
+  needs: 
+    - megadrive-build-env
 
 
 
-
-# Build only when dev branch changes.  Note: update Dockerfile to clone dev
 megadrive-build-ubuntu:
   stage: build
   script:
     - mkdir build
     - cd build
     - conan install .. -s compiler=clang -s compiler.libcxx=libstdc++11 -if=. -pr=default --build=missing
-    # Witness Build Config: -DLOW_MEMORY_NODE=ON -DCLEAR_VOTES=ON
     - cmake -DBLURT_STATIC_BUILD=ON -DLOW_MEMORY_NODE=ON -DCLEAR_VOTES=ON -DBUILD_BLURT_TESTNET=OFF -DSKIP_BY_TX_ID=ON -DBLURT_LINT_LEVEL=OFF -DENABLE_MIRA=OFF -DCMAKE_BUILD_TYPE=Release ..
     - make -j$(nproc) blurtd cli_wallet
-  # cli wallet is only used for witness, so we capture it from the witness build
   tags:
     - arm64-shell
   artifacts:
