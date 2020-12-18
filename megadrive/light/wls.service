@@ -1,0 +1,9 @@
+[Unit]
+Description=Whaleshares
+After=Docker.service
+Requires=Docker.service
+
+[Service]
+TimeooutStartSec=0
+Restart=always
+ExecStart=/usr/bin/docker run --net=host -v /blurt:/blurt faddat/wls-pi /usr/bin/whaled --data-dir /whaled

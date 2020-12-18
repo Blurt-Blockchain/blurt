@@ -1,0 +1,9 @@
+[Unit]
+Description=Whaleshares
+After=Docker.service
+Requires=Docker.service
+
+[Service]
+TimeooutStartSec=0
+Restart=always
+ExecStart=/usr/bin/docker run --net=host -v /blurt:/blurt registry.gitlab.com/blurt/blurt/megadrive:latest /usr/bin/blurt --data-dir /blurt
