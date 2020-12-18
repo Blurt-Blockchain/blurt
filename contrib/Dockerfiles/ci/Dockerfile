@@ -10,7 +10,8 @@ COPY ./build/bin/cli_wallet /usr/bin/cli_wallet
 RUN pacman -Syyu --noconfirm wget ncurses
 
 RUN mkdir /blurt && \
-            wget --progress=bar:force:noscroll -O /blurt/snapshot.json  https://cloudflare-ipfs.com/ipfs/QmPrwVpwe4Ya46CN9LXNnrUdWvaDLMwFetMUdpcdpjFbyu
+            wget --progress=bar:force:noscroll -O /blurt/snapshot.json  https://cloudflare-ipfs.com/ipfs/QmPrwVpwe4Ya46CN9LXNnrUdWvaDLMwFetMUdpcdpjFbyu && \
+            ln -s /usr/lib/libncursesw.so.6 /usr/lib/libncurses.so.6
 
 
 # RUN BLURT

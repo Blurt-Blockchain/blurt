@@ -20,26 +20,25 @@ megadrive-build-env:
 
 
 
-megadrive-build-arch:
-  stage: build
-  image: $CI_REGISTRY_IMAGE/md-env
-  cache: 
-    paths:
-      - /root/.ccache
-  script:
-    - mkdir build
-    - cd build
-    - conan install .. -s compiler=clang -s compiler.libcxx=libstdc++11 -if=. -pr=default --build=missing
-    - cmake -DBLURT_STATIC_BUILD=ON -DLOW_MEMORY_NODE=ON -DCLEAR_VOTES=ON -DBUILD_BLURT_TESTNET=OFF -DSKIP_BY_TX_ID=ON -DBLURT_LINT_LEVEL=OFF -DENABLE_MIRA=OFF -DCMAKE_BUILD_TYPE=Release ..
-    - make -j$(nproc) blurtd cli_wallet
-  tags:
-    - arm64
-  artifacts:
-    paths:
-      - build/bin
-  needs: 
-    - megadrive-build-env
-
+# megadrive-build-arch:
+#  stage: build
+#  image: $CI_REGISTRY_IMAGE/md-env
+#  cache: 
+#    paths:
+#      - /root/.ccache
+#  script:
+#    - mkdir build
+#    - cd build
+#    - conan install .. -s compiler=clang -s compiler.libcxx=libstdc++11 -if=. -pr=default --build=missing
+#    - cmake -DBLURT_STATIC_BUILD=ON -DLOW_MEMORY_NODE=ON -DCLEAR_VOTES=ON -DBUILD_BLURT_TESTNET=OFF -DSKIP_BY_TX_ID=ON -DBLURT_LINT_LEVEL=OFF -DENABLE_MIRA=OFF -DCMAKE_BUILD_TYPE=Release ..
+#    - make -j$(nproc) blurtd cli_wallet
+#  tags:
+#    - arm64
+#  artifacts:
+#    paths:
+#      - build/bin
+#  needs: 
+#    - megadrive-build-env
 
 
 megadrive-build-ubuntu:
@@ -61,7 +60,7 @@ megadrive-build-ubuntu:
 # construct the megadrive device image, runs blurt on SOS as a systemd service without docker
 megadrive-os:
   needs: 
-    - megadrive-build-arch
+    - megadrive-build-ubuntu
   stage: docker
   script:
     - docker buildx build --file megadrive/Dockerfile --platform linux/arm64 --tag megadrive --load --progress plain .
@@ -71,7 +70,7 @@ megadrive-os:
   tags:
     - shell-arch
   dependencies:
-    - megadrive-build-arch
+    - megadrive-build-ubuntu
 
 # construct the light megadrive device image.  runs blurt on sos-lite as a systemd service which in turn runs using docker.
 
@@ -79,7 +78,7 @@ megadrive-os:
 # construct the megadrive arch container
 megadrive-container:
   needs: 
-    - megadrive-build-arch
+    - megadrive-build-ubuntu
   stage: docker
   script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
@@ -87,7 +86,7 @@ megadrive-container:
   tags:
     - shell-arch
   dependencies:
-    - megadrive-build-arch
+    - megadrive-build-ubuntu
 
 
 lm no mira:

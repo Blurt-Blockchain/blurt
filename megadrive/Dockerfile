@@ -2,11 +2,12 @@ FROM faddat/sos-full
 
 COPY contrib/blurtd.service /etc/systemd/system/blurtd.service
 
-# snapshot and config
+# snapshot and config and ridiculous symbolic link that ate a week
 RUN systemctl enable blurtd && \
 		mkdir /blurt && \
 		curl -o /blurt/snapshot.json https://cloudflare-ipfs.com/ipfs/QmPrwVpwe4Ya46CN9LXNnrUdWvaDLMwFetMUdpcdpjFbyu && \	
-		curl -o /blurt/config.ini https://gitlab.com/blurt/blurt/-/raw/dev/doc/witnesses/config.ini
+		curl -o /blurt/config.ini https://gitlab.com/blurt/blurt/-/raw/dev/doc/witnesses/config.ini && \
+		ln -s /usr/lib/libncursesw.so.6 /usr/lib/libncurses.so.6
 
 RUN useradd --create-home blurt && \
         echo "blurt:blurt" | chpasswd && \
@@ -26,7 +27,6 @@ RUN git clone https://gitlab.com/blurt/openblurt/condenser && \
 COPY megadrive/condenser.service /etc/systemd/system/condenser.service
 COPY build/bin/blurtd /usr/bin
 COPY build/bin/cli_wallet /usr/bin
-
 RUN systemctl enable condenser
 
 
