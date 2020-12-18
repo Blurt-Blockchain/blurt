@@ -66,7 +66,7 @@ megadrive-build-ubuntu:
 # construct the megadrive device image, runs blurt on SOS as a systemd service without docker
 megadrive-os:
   needs: 
-    - megadrive-build
+    - megadrive-build-arch
   stage: docker
   script:
     - docker buildx build --file megadrive/Dockerfile --platform linux/arm64 --tag megadrive --load --progress plain .
@@ -78,10 +78,10 @@ megadrive-os:
   dependencies:
     - megadrive-build-arch
 
-# construct the megadrive image
+# construct the megadrive arch container
 megadrive-container:
   needs: 
-    - megadrive-build
+    - megadrive-build-arch
   stage: docker
   script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
@@ -89,7 +89,7 @@ megadrive-container:
   tags:
     - shell-arch
   dependencies:
-    - megadrive-build
+    - megadrive-build-arch
 
 
 lm no mira:
