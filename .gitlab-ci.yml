@@ -24,7 +24,7 @@ megadrive-build-env:
 # Build only when dev branch changes.  Note: update Dockerfile to clone dev
 megadrive-build-arch:
   stage: build
-  image: md-env
+  image: $CI_REGISTRY_IMAGE/md-env
   cache: 
     paths:
       - /root/.ccache
