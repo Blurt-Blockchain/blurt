@@ -76,7 +76,7 @@ megadrive-os:
   tags:
     - shell-arch
   dependencies:
-    - megadrive-build
+    - megadrive-build-arch
 
 # construct the megadrive image
 megadrive-container:
