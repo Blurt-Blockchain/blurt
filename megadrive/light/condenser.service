@@ -6,4 +6,7 @@ Requires=Docker.service
 [Service]
 TimeooutStartSec=0
 Restart=always
-ExecStart=/usr/bin/docker run --net=host -v /blurt:/blurt -p 80:8080 registry.gitlab.com/blurt/openblurt/condenser:latest
+ExecStart=/usr/bin/docker run -v /blurt:/blurt -p 80:8080 registry.gitlab.com/blurt/openblurt/condenser:latest
+
+[Install]
+WantedBy=multi-user.target

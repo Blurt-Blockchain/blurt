@@ -7,3 +7,6 @@ Requires=Docker.service
 TimeooutStartSec=0
 Restart=always
 ExecStart=/usr/bin/docker run --net=host -v /blurt:/blurt registry.gitlab.com/blurt/blurt/megadrive:latest /usr/bin/blurt --data-dir /blurt
+
+[Install]
+WantedBy=multi-user.target
