@@ -9,12 +9,8 @@ Description=blurtd
 
 [Service]
 ExecStart=/usr/bin/blurtd --data-dir /blurt
-User=blurt
 
 [Install]
 WantedBy=multi-user.target
 
-## security
-PrivateTmp=true
-ProtectSystem=full
-NoNewPrivileges=true
+
