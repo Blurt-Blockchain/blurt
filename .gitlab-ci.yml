@@ -68,8 +68,8 @@ megadrive-os:
     - bash megadrive/build.sh
     - xz -T $(nproc) images/megadrive.img
     - export STAMP=$(date "+%F-%T")
-    - sudo mv images/megadrive.img.xz /static/megadrive/megadrive$(echo $STAMP).img.xz
-    - sudo ipfs add -Q /static/megadrive/megadrive$(echo $STAMP).img.xz > /static/megadrive/md-ipfs$(echo $STAMP).html
+    - mv images/megadrive.img.xz /static/megadrive/megadrive$(echo $STAMP).img.xz
+    - ipfs add -Q /static/megadrive/megadrive$(echo $STAMP).img.xz > /static/megadrive/md-ipfs$(echo $STAMP).html
   tags:
     - shell-arch
   dependencies:
@@ -84,8 +84,8 @@ megadrive-light:
     - bash megadrive/light/build.sh
     - xz -T $(nproc) images/megadrive-light.img
     - export STAMP=$(date "+%F-%T")
-    - sudo mv images/megadrive-light.img.xz /static/megadrive-light/megadrive-light$(echo $STAMP).img.xz
-    - sudo ipfs add -Q /static/megadrive-light/megadrive-light$(echo $STAMP).img.xz > /static/megadrive-light/mdl-ipfs$(echo $STAMP).html
+    - mv images/megadrive-light.img.xz /static/megadrive-light/megadrive-light$(echo $STAMP).img.xz
+    - ipfs add -Q /static/megadrive-light/megadrive-light$(echo $STAMP).img.xz > /static/megadrive-light/mdl-ipfs$(echo $STAMP).html
   tags:
     - shell-arch
 
