@@ -1676,7 +1676,8 @@ share_type database::cashout_comment_helper( util::comment_reward_context& ctx, 
             ctx.content_constant = rf.content_constant;
          }
 
-         const share_type reward = util::get_rshare_reward( ctx );
+         const auto& gpo = get_dynamic_global_properties();
+         const share_type reward = util::get_rshare_reward( ctx, gpo );
          uint128_t reward_tokens = uint128_t( reward.value );
 
          if( reward_tokens > 0 )
