@@ -1,12 +1,16 @@
 [Unit]
-Description=Whaleshares
-After=Docker.service
-Requires=Docker.service
+Description=condenser
+After=docker.service
+Requires=docker.service
 
 [Service]
 TimeooutStartSec=0
 Restart=always
-ExecStart=/usr/bin/docker run -v /blurt:/blurt -p 80:8080 registry.gitlab.com/blurt/openblurt/condenser:latest
+ExecStartPre=-/usr/bin/docker kill condenser
+ExecStartPre=-/usr/bin/docker rm condenser
+ExecStartPre=/usr/bin/docker pull registry.gitlab.com/blurt/openblurt/condenser:latest
+ExecStart=/usr/bin/docker run --name condenser -v /blurt:/blurt -p 80:8080 registry.gitlab.com/blurt/openblurt/condenser:latest
+ExecStop=/usr/bin/docker stop condenser
 
 [Install]
 WantedBy=multi-user.target

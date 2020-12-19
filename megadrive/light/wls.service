@@ -1,12 +1,16 @@
 [Unit]
-Description=Whaleshares
-After=Docker.service
-Requires=Docker.service
+Description=wls
+After=docker.service
+Requires=docker.service
 
 [Service]
 TimeooutStartSec=0
 Restart=always
-ExecStart=/usr/bin/docker run --net=host -v /whaled:/whaled faddat/wls-pi /usr/bin/whaled --data-dir /whaled
+ExecStartPre=-/usr/bin/docker kill wls
+ExecStartPre=-/usr/bin/docker rm wls
+ExecStartPre=/usr/bin/docker pull faddat/wls-pi
+ExecStart=/usr/bin/docker run --name wls --net=host -v /whaled:/whaled faddat/wls-pi /usr/bin/whaled --data-dir /whaled --p2p-endpoint 0.0.0.0:6969 --seed-node 89.28.97.199:2025 --seed-node 51.15.253.50:2001 --seed-node wseed.kidw.space:2001
+ExecStop=/usr/bin/docker stop wls
 
 [Install]
 WantedBy=multi-user.target

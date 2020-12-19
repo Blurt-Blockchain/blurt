@@ -1,12 +1,16 @@
 [Unit]
-Description=Whaleshares
-After=Docker.service
-Requires=Docker.service
+Description=blurt
+After=docker.service
+Requires=docker.service
 
 [Service]
-TimeooutStartSec=0
+TimeoutStartSec=0
 Restart=always
-ExecStart=/usr/bin/docker run --net=host -v /blurt:/blurt registry.gitlab.com/blurt/blurt/megadrive:latest /usr/bin/blurt --data-dir /blurt
+ExecStartPre=-/usr/bin/docker kill blurt
+ExecStartPre=-/usr/bin/docker rm blurt
+ExecStartPre=/usr/bin/docker pull registry.gitlab.com/blurt/blurt/megadrive:latest
+ExecStart=/usr/bin/docker run --net=host --name blurt -v /blurt:/blurt registry.gitlab.com/blurt/blurt/megadrive:latest /usr/bin/blurt --data-dir /blurt
+ExecStop=/usr/bin/docker stop blurt
 
 [Install]
 WantedBy=multi-user.target
