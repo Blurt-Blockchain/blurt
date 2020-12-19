@@ -44,8 +44,8 @@ uint64_t get_rshare_reward( const comment_reward_context& ctx, const dynamic_glo
 
    u256 rf(ctx.total_reward_fund_blurt.amount.value);
    u256 total_claims = to256( ctx.total_reward_shares2 );
-   u256 staked_supply(gpo.total_vesting_fund_blurt.amount);
-   u256 current_supply(gpo.current_supply.amount);
+   u256 staked_supply(gpo.total_vesting_fund_blurt.amount.value);
+   u256 current_supply(gpo.current_supply.amount.value);
 
    //idump( (ctx) );
 
