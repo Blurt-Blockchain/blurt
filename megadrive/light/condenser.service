@@ -6,6 +6,7 @@ Requires=docker.service
 [Service]
 TimeooutStartSec=0
 Restart=always
+Environment=HOME=/root
 ExecStartPre=-/usr/bin/docker kill condenser
 ExecStartPre=-/usr/bin/docker rm condenser
 ExecStartPre=/usr/bin/docker pull registry.gitlab.com/blurt/openblurt/condenser:latest
