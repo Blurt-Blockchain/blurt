@@ -73,14 +73,14 @@ megadrive-os:
     - megadrive-build-ubuntu
 
 # construct the light megadrive device image.  runs blurt on sos-lite as a systemd service which in turn runs using docker.
-megadrive-os:
+megadrive-light:
   needs: []
   stage: docker
   script:
     - docker buildx build --file megadrive/light/Dockerfile --platform linux/arm64 --tag megadrive-light --load --progress plain .
     - bash megadrive/light/build.sh
     - xz -T $(nproc) images/megadrive-light.img
-    - sudo mv images/megadrive-light.img.xz /static/megadrive
+    - sudo mv images/megadrive-light.img.xz /static/megadrive-light
   tags:
     - shell-arch
 
