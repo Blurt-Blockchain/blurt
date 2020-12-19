@@ -301,6 +301,12 @@ Restart blurtd
 systemctl restart blurtd
 ```
 
+Replay Blockchain
+```bash
+systemctl stop blurtd
+blurtd --data-dir /blurt --replay-blockchain
+```
+
 Edit config.ini
 ```bash
 nano /blurt/config.ini
