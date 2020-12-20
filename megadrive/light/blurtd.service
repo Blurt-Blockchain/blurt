@@ -4,13 +4,11 @@ After=docker.service
 Requires=docker.service
 
 [Service]
-TimeoutStartSec=0
-Restart=always
 Environment=HOME=/root
 ExecStartPre=-/usr/bin/docker kill blurt
 ExecStartPre=-/usr/bin/docker rm blurt
 ExecStartPre=/usr/bin/docker pull registry.gitlab.com/blurt/blurt/megadrive:latest
-ExecStart=/usr/bin/docker run --net=host --name blurt -v /blurt:/blurt registry.gitlab.com/blurt/blurt/megadrive:latest /usr/bin/blurt --data-dir /blurt
+ExecStart=/usr/bin/docker run --net=host --name blurt -v blurt:/blurt registry.gitlab.com/blurt/blurt/megadrive:latest /usr/bin/blurtd --data-dir /blurt
 ExecStop=/usr/bin/docker stop blurt
 
 [Install]
