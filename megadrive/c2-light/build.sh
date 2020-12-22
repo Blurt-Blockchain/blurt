@@ -75,10 +75,10 @@ sudo mkfs.ext4 -O ^metadata_csum,^64bit $(echo $LOOP)p1
 # sudo ./sd_fusing.sh $(echo $LOOP)
 # cd ../../..
 
-tar -xvf ArchLinuxARM-odroid-c2-latest.tar.gz boot
+tar xvf ArchLinuxARM-odroid-c2-latest.tar.gz ./boot
 cd boot
 sudo ./sd_fusing.sh $LOOP
-cd ../..
+cd ..
 
 # Use the toolbox to copy the rootfs into the filesystem we formatted above.
 # * mount the disk's /boot and / partitions
