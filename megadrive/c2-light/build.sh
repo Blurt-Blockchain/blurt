@@ -72,6 +72,8 @@ sudo mkfs.ext4 -O ^metadata_csum,^64bit $(echo $LOOP)p1
 
 # might neeed sd_fusing for u-boot
 cd ./.tmp/result-rootfs/boot
+pwd
+ls
 sudo ./sd_fusing.sh $(echo $LOOP)
 cd ../../..
 
