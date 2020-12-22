@@ -7,7 +7,7 @@ set -exo pipefail
 set -o xtrace
 
 # Get the 64 bit rpi rootfs for Odroid C2
-# get -N --progress=bar:force:noscroll http://os.archlinuxarm.org/os/ArchLinuxARM-odroid-c2-latest.tar.gz
+get -N --progress=bar:force:noscroll http://os.archlinuxarm.org/os/ArchLinuxARM-odroid-c2-latest.tar.gz
 
 # Build the base image
 # docker buildx build --file megadrive/c2-light/Dockerfile --tag faddat/sos-c2 --platform linux/arm64 --load --cache-from faddat/sos-c2:cache --cache-to faddat/sos-c2:cache --progress plain ..
@@ -71,13 +71,15 @@ sudo parted --script $LOOP mkpart primary ext4 8M 100%
 sudo mkfs.ext4 -O ^metadata_csum,^64bit $(echo $LOOP)p1
 
 # might neeed sd_fusing for u-boot
-cd ./.tmp/result-rootfs/boot
-sudo ./sd_fusing.sh $(echo $LOOP)
-cd ../../..
+# cd ./.tmp/result-rootfs/boot
+# sudo ./sd_fusing.sh $(echo $LOOP)
+# cd ../../..
 
-# tar -xpf ArchLinuxARM-odroid-c2-latest.tar.gz -C root
-# cd root/boot
-#sudo ./sd_fusing.sh $LOOP
+mkdir root
+tar -xpf ArchLinuxARM-odroid-c2-latest.tar.gz -C root
+cd root/boot
+sudo ./sd_fusing.sh $LOOP
+cd ../..
 
 # Use the toolbox to copy the rootfs into the filesystem we formatted above.
 # * mount the disk's /boot and / partitions
