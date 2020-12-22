@@ -7,7 +7,7 @@ set -exo pipefail
 set -o xtrace
 
 # Get the 64 bit rpi rootfs for Odroid C2
-get -N --progress=bar:force:noscroll http://os.archlinuxarm.org/os/ArchLinuxARM-odroid-c2-latest.tar.gz
+wget -N --progress=bar:force:noscroll http://os.archlinuxarm.org/os/ArchLinuxARM-odroid-c2-latest.tar.gz
 
 # Build the base image
 # docker buildx build --file megadrive/c2-light/Dockerfile --tag faddat/sos-c2 --platform linux/arm64 --load --cache-from faddat/sos-c2:cache --cache-to faddat/sos-c2:cache --progress plain ..
