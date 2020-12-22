@@ -75,9 +75,8 @@ sudo mkfs.ext4 -O ^metadata_csum,^64bit $(echo $LOOP)p1
 # sudo ./sd_fusing.sh $(echo $LOOP)
 # cd ../../..
 
-mkdir root
-tar -xpf ArchLinuxARM-odroid-c2-latest.tar.gz -C root
-cd root/boot
+tar -xvf ArchLinuxARM-odroid-c2-latest.tar.gz boot
+cd boot
 sudo ./sd_fusing.sh $LOOP
 cd ../..
 
