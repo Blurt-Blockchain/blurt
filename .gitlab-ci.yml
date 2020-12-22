@@ -60,6 +60,8 @@ megadrive-build-ubuntu:
 megadrive-os:
   needs: 
     - megadrive-build-ubuntu
+  dependencies:
+    - megadrive-build-ubuntu
   stage: images
   script:
     - docker buildx build --file megadrive/Dockerfile --platform linux/arm64 --tag megadrive --load --progress plain .
@@ -70,12 +72,13 @@ megadrive-os:
     - sudo ipfs add -Q /static/megadrive/megadrive$(echo $STAMP).img.xz > /static/megadrive/megadrive$(echo $STAMP).html
   tags:
     - shell-arch
-  dependencies:
-    - megadrive-build-ubuntu
 
 # construct the light megadrive device image.  runs blurt on sos-lite as a systemd service which in turn runs using docker.
 megadrive-light-rpi:
-  needs: []
+  needs: 
+    - megadrive-build-ubuntu
+  dependencies:
+    - megadrive-build-ubuntu
   stage: images
   script:
     - docker buildx build --file megadrive/light/Dockerfile --platform linux/arm64 --tag megadrive-light --load --progress plain .
@@ -88,7 +91,10 @@ megadrive-light-rpi:
     - shell-arch
 
 megadrive-light-oroid-c2:
-  needs: []
+  needs: 
+    - megadrive-build-ubuntu
+  dependencies:
+    - megadrive-build-ubuntu
   stage: images
   script:
     - docker buildx build --file megadrive/light/Dockerfile --platform linux/arm64 --tag megadrive-light --load --progress plain .
