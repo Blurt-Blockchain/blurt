@@ -1,6 +1,7 @@
 FROM faddat/sos-lite
 
 COPY motd /etc/motd
+COPY build/bin/cli_wallet /usr/bin
 
 RUN echo "sleep 80" >> /usr/local/bin/firstboot.sh && \
         echo "docker run --net=host --restart always --name blurt -v blurt:/blurt registry.gitlab.com/blurt/blurt/megadrive:latest /usr/bin/blurtd --data-dir /blurt" >> /usr/local/bin/firstboot.sh && \

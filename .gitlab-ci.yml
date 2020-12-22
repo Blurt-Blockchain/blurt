@@ -53,7 +53,6 @@ megadrive-build-ubuntu:
   artifacts:
     paths:
       - build/bin
-  needs: []
 
 
 # construct the megadrive device image, runs blurt on SOS as a systemd service without docker
