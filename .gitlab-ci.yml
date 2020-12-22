@@ -74,7 +74,7 @@ megadrive-os:
     - megadrive-build-ubuntu
 
 # construct the light megadrive device image.  runs blurt on sos-lite as a systemd service which in turn runs using docker.
-megadrive-light:
+megadrive-light-rpi:
   needs: []
   stage: images
   script:
@@ -86,6 +86,20 @@ megadrive-light:
     - sudo ipfs add -Q /static/megadrive-light/megadrive-light$(echo $STAMP).img.xz > /static/megadrive-light/megadrive-light$(echo $STAMP).html
   tags:
     - shell-arch
+
+megadrive-light-oroid-c2:
+  needs: []
+  stage: images
+  script:
+    - docker buildx build --file megadrive/light/Dockerfile --platform linux/arm64 --tag megadrive-light --load --progress plain .
+    - bash megadrive/c2-light/build.sh
+    - xz -T $(nproc) images/megadrive-light.img
+    - export STAMP=$(date "+%F-%T")
+    - mv images/megadrive-light.img.xz /static/megadrive-light/megadrive-light-c2$(echo $STAMP).img.xz
+    - sudo ipfs add -Q /static/megadrive-light/megadrive-light-c2$(echo $STAMP).img.xz > /static/megadrive-light/megadrive-light-c2$(echo $STAMP).html
+  tags:
+    - shell-arch
+
 
 
 # construct the megadrive arch container

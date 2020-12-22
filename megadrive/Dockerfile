@@ -1,6 +1,7 @@
 FROM faddat/sos-full
 
 COPY contrib/blurtd.service /etc/systemd/system/blurtd.service
+COPY motd /etc/motd
 
 # snapshot and config and ridiculous symbolic link that ate a week
 RUN systemctl enable blurtd && \
