@@ -53,12 +53,13 @@ megadrive-build-ubuntu:
   artifacts:
     paths:
       - build/bin
-  needs: []
 
 
 # construct the megadrive device image, runs blurt on SOS as a systemd service without docker
 megadrive-os:
   needs: 
+    - megadrive-build-ubuntu
+  dependencies:
     - megadrive-build-ubuntu
   stage: images
   script:
@@ -70,12 +71,13 @@ megadrive-os:
     - sudo ipfs add -Q /static/megadrive/megadrive$(echo $STAMP).img.xz > /static/megadrive/megadrive$(echo $STAMP).html
   tags:
     - shell-arch
-  dependencies:
-    - megadrive-build-ubuntu
 
 # construct the light megadrive device image.  runs blurt on sos-lite as a systemd service which in turn runs using docker.
-megadrive-light:
-  needs: []
+megadrive-light-rpi:
+  needs: 
+    - megadrive-build-ubuntu
+  dependencies:
+    - megadrive-build-ubuntu
   stage: images
   script:
     - docker buildx build --file megadrive/light/Dockerfile --platform linux/arm64 --tag megadrive-light --load --progress plain .
@@ -86,6 +88,23 @@ megadrive-light:
     - sudo ipfs add -Q /static/megadrive-light/megadrive-light$(echo $STAMP).img.xz > /static/megadrive-light/megadrive-light$(echo $STAMP).html
   tags:
     - shell-arch
+
+megadrive-light-oroid-c2:
+  needs: 
+    - megadrive-build-ubuntu
+  dependencies:
+    - megadrive-build-ubuntu
+  stage: images
+  script:
+    - docker buildx build --file megadrive/light/Dockerfile --platform linux/arm64 --tag megadrive-light --load --progress plain .
+    - bash megadrive/c2-light/build.sh
+    - xz -T $(nproc) images/megadrive-light.img
+    - export STAMP=$(date "+%F-%T")
+    - mv images/megadrive-light.img.xz /static/megadrive-light/megadrive-light-c2-$(echo $STAMP).img.xz
+    - sudo ipfs add -Q /static/megadrive-light/megadrive-light-c2-$(echo $STAMP).img.xz > /static/megadrive-light/megadrive-light-c2$(echo $STAMP).html
+  tags:
+    - shell-arch
+
 
 
 # construct the megadrive arch container
