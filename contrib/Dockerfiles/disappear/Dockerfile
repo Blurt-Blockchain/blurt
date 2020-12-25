@@ -9,7 +9,7 @@ COPY ./build/bin/cli_wallet /usr/bin/cli_wallet
 
 # FETCH DEPENDENCIES AND SNAPSHOT.
 # FETCH SNAPSHOT WITH IPGET, CF IPFS GATEWAY IS UNRELIABLE
-RUN pacman -Syyu --noconfirm wget ncurses && \
+RUN pacman -Syyu --noconfirm wget ncurses tar && \
         wget https://dist.ipfs.io/ipget/v0.6.0/ipget_v0.6.0_linux-amd64.tar.gz && \
         tar xvf ipget_v0.6.0_linux-amd64.tar.gz && \
         mv ipget/ipget /usr/bin && \
