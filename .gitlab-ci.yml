@@ -79,7 +79,7 @@ cryptopie:
     - megadrive-build-ubuntu
   stage: images
   script:
-    - docker buildx build --file megadrive/light/Dockerfile --platform linux/arm64 --tag megadrive-light --load --progress plain .
+    - docker buildx build --file contrib/cryptopie/Dockerfile --platform linux/arm64 --tag cryptopie --load --progress plain .
     - bash contrib/cryptopie/build.sh
     - xz -T $(nproc) images/cryptopie.img
     - export STAMP=$(date "+%F-%T")
