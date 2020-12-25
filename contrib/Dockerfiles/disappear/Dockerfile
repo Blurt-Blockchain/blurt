@@ -4,7 +4,7 @@ MAINTAINER Jacob Gadikian <jacob@blurt.foundation>
 
 
 COPY ./build/bin/blurtd /usr/bin/blurtd
-COPY ./contrib/rpc-config.ini /blurt/config.ini
+COPY ./contrib/disappear.ini /blurt/config.ini
 
 COPY ./build/bin/cli_wallet /usr/bin/cli_wallet
 
@@ -21,3 +21,4 @@ CMD ["/usr/bin/blurtd", "--data-dir", "/blurt"]
 EXPOSE 8090
 EXPOSE 8091
 EXPOSE 1776
+
