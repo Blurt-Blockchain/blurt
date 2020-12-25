@@ -18,7 +18,7 @@ wget -N --progress=bar:force:noscroll http://os.archlinuxarm.org/os/ArchLinuxARM
 # New rootfs extraction
 # https://chromium.googlesource.com/external/github.com/docker/containerd/+/refs/tags/v0.2.0/docs/bundle.md
 # create the container with a temp name so that we can export it
-docker create --name tempc2 faddat/sos-c2 /bin/bash
+docker create --name tempc2 c2 /bin/bash
 
 # export it into the rootfs directory
 sudo rm -rf .tmp/
@@ -40,7 +40,7 @@ docker rm tempc2
 # docker run --rm --tty --volume $(pwd)/./.tmp:/root/./.tmp --workdir /root/./.tmp/.. faddat/toolbox /tools/docker-extract --root ./.tmp/result-rootfs  ./.tmp/result-rootfs.tar
 
 # Set hostname while the image is just in the filesystem.
-sudo bash -c "echo megadrive > ./.tmp/result-rootfs/etc/hostname"
+sudo bash -c "echo blurt-c2 > ./.tmp/result-rootfs/etc/hostname"
 
 
 # ===================================================================================
