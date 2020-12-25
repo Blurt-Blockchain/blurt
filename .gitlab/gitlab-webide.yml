@@ -1,0 +1,6 @@
+terminal:
+  # This can be any image that has the necessary runtime environment for your project.
+  image: $CI_REGISTRY_IMAGE/md-env
+  before_script:
+    - pacman -Syyu
+

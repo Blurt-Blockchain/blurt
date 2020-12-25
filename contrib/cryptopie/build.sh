@@ -22,7 +22,7 @@ mkdir .tmp/
 # docker run --rm --tty --volume $(pwd)/./.tmp:/root/./.tmp --workdir /root/./.tmp/.. faddat/toolbox rm -rf ./.tmp/result-rootfs
 
 # save the image to result-rootfs.tar
-docker save --output ./.tmp/result-rootfs.tar megadrive-light
+docker save --output ./.tmp/result-rootfs.tar cryptopie
 
 # Extract the image using docker-extract
 docker run --rm --tty --volume $(pwd)/./.tmp:/root/./.tmp --workdir /root/./.tmp/.. faddat/toolbox /tools/docker-extract --root ./.tmp/result-rootfs  ./.tmp/result-rootfs.tar
@@ -64,10 +64,10 @@ rm -rf images || true
 mkdir -p images
 
 # Make the image file
-fallocate -l 3G "images/megadrive-light.img"
+fallocate -l 3G "images/cryptopie.img"
 
 # loop-mount the image file so it becomes a disk
-export LOOP=$(sudo losetup --find --show images/megadrive-light.img)
+export LOOP=$(sudo losetup --find --show images/cryptopie.img)
 
 # partition the loop-mounted disk
 sudo parted --script $LOOP mklabel msdos

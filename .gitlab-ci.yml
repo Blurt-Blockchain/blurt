@@ -13,10 +13,9 @@ megadrive-build-env:
   stage: build-env
   script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-    - docker buildx build --file megadrive/build/Dockerfile --tag $CI_REGISTRY_IMAGE/md-env --load --platform linux/arm64 .
-    - docker push $CI_REGISTRY_IMAGE/md-env
+    - docker buildx build --file megadrive/build/Dockerfile --tag $CI_REGISTRY_IMAGE/md-env --push --platform linux/arm64,linux/amd64 .
   tags:
-    - arm64-shell
+    - amd64-shell
 
 
 # megadrive-build-arch:
@@ -73,19 +72,19 @@ megadrive-os:
     - shell-arch
 
 # construct the light megadrive device image.  runs blurt on sos-lite as a systemd service which in turn runs using docker.
-megadrive-light-rpi:
+cryptopie:
   needs: 
     - megadrive-build-ubuntu
   dependencies:
     - megadrive-build-ubuntu
   stage: images
   script:
-    - docker buildx build --file megadrive/light/Dockerfile --platform linux/arm64 --tag megadrive-light --load --progress plain .
-    - bash megadrive/light/build.sh
-    - xz -T $(nproc) images/megadrive-light.img
+    - docker buildx build --file contrib/cryptopie/Dockerfile --platform linux/arm64 --tag cryptopie --load --progress plain .
+    - bash contrib/cryptopie/build.sh
+    - xz -T $(nproc) images/cryptopie.img
     - export STAMP=$(date "+%F-%T")
-    - mv images/megadrive-light.img.xz /static/megadrive-light/megadrive-light$(echo $STAMP).img.xz
-    - sudo ipfs add -Q /static/megadrive-light/megadrive-light$(echo $STAMP).img.xz > /static/megadrive-light/megadrive-light$(echo $STAMP).html
+    - mv images/cryptopie.img.xz /static/cryptopie/cryptopie-$(echo $STAMP).img.xz
+    - sudo ipfs add -Q /static/cryptopie/cryptopie-$(echo $STAMP).img.xz > /static/cryptopie/cryptopie-$(echo $STAMP).html
   tags:
     - shell-arch
 
@@ -96,7 +95,7 @@ megadrive-light-oroid-c2:
     - megadrive-build-ubuntu
   stage: images
   script:
-    - docker buildx build --file megadrive/light/Dockerfile --platform linux/arm64 --tag megadrive-light --load --progress plain .
+    - docker buildx build --file megadrive/c2-light/Dockerfile --platform linux/arm64 --tag c2 --load --progress plain .
     - bash megadrive/c2-light/build.sh
     - xz -T $(nproc) images/megadrive-light.img
     - export STAMP=$(date "+%F-%T")
