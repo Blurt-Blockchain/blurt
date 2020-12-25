@@ -13,8 +13,8 @@ RUN pacman -Syyu --noconfirm wget ncurses tar && \
         wget https://dist.ipfs.io/ipget/v0.6.0/ipget_v0.6.0_linux-amd64.tar.gz && \
         tar xvf ipget_v0.6.0_linux-amd64.tar.gz && \
         mv ipget/ipget /usr/bin && \
-        mkdir /blurt && \ 
-        ipget --progress -o /blurt/snapshot.json QmPrwVpwe4Ya46CN9LXNnrUdWvaDLMwFetMUdpcdpjFbyu && \
+        mkdir /blurtd && \ 
+        ipget --progress -o /blurtd/snapshot.json QmPrwVpwe4Ya46CN9LXNnrUdWvaDLMwFetMUdpcdpjFbyu && \
         rm ipget_v0.6.0_linux-amd64.tar.gz && \
         rm -rf ipget && \
         ln -s /usr/lib/libncursesw.so.6 /usr/lib/libncurses.so.6
