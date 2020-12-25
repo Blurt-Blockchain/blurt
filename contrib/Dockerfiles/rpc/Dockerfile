@@ -1,4 +1,4 @@
-FROM lopsided/archlinux
+FROM faddat/snapshot
 
 MAINTAINER Jacob Gadikian <jacob@blurt.foundation>
 
@@ -9,16 +9,8 @@ COPY ./build/bin/cli_wallet /usr/bin/cli_wallet
 
 # FETCH DEPENDENCIES AND SNAPSHOT.
 # FETCH SNAPSHOT WITH IPGET, CF IPFS GATEWAY IS UNRELIABLE
-RUN pacman -Syyu --noconfirm wget ncurses tar && \
-        wget https://dist.ipfs.io/ipget/v0.6.0/ipget_v0.6.0_linux-amd64.tar.gz && \
-        tar xvf ipget_v0.6.0_linux-amd64.tar.gz && \
-        mv ipget/ipget /usr/bin && \
-        mkdir /blurtd && \ 
-        ipget --progress -o /blurtd/snapshot.json QmPrwVpwe4Ya46CN9LXNnrUdWvaDLMwFetMUdpcdpjFbyu && \
-        rm ipget_v0.6.0_linux-amd64.tar.gz && \
-        rm -rf ipget && \
+RUN pacman -Syyu --noconfirm ncurses && \
         ln -s /usr/lib/libncursesw.so.6 /usr/lib/libncurses.so.6
-
 
 # RUN BLURT
 CMD ["/usr/bin/blurtd", "--data-dir", "/blurt"]
