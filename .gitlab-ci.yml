@@ -58,7 +58,6 @@ megadrive-build-ubuntu:
 megadrive-os:
   needs: 
     - megadrive-build-ubuntu
-    - snapshot-arm64
   dependencies:
     - megadrive-build-ubuntu
   stage: images
