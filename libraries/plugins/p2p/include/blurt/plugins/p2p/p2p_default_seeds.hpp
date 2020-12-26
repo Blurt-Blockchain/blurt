@@ -8,9 +8,11 @@ namespace blurt { namespace plugins { namespace p2p {
 const std::vector< std::string > default_seeds;
 #else
 const std::vector< std::string > default_seeds = {
-   "seed1.blurt.world:2001",
-   "seed2.blurt.world:2001",
-   "blurtseed-se.privex.io:2015"
+   "10.144.187.8:2001",     //seednode1
+   "10.144.79.46:2001",     //seednode2
+   "10.144.26.249:1776",    //ztfull
+   "10.144.240.207:1776",   //ztfull-1
+   "10.144.56.18:1776"      // ztfull-2
 };
 #endif
 
