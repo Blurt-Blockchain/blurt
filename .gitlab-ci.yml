@@ -120,7 +120,7 @@ megadrive-container:
     - megadrive-build-ubuntu
 
 
-lm no mira:
+witness:
   stage: build
   script:
     - mkdir build
@@ -137,7 +137,7 @@ lm no mira:
       - build/bin/
   needs: []
 
-low memory:
+mira:
   stage: build
   script:
     - mkdir build
@@ -168,32 +168,6 @@ rpc:
   needs: []
 
 
-
-pdfs:
-  image: debian:10
-  stage: pdfs
-  #makes sure that the document generator does not pick up the cache and do strange things.
-  cache: {}
-  before_script:
-    # Download and install pandoc and kramdown before we begin
-    # pandoc does PDF, but requires pdflatex, which can be a ~500mb download
-    # so we go for kramdown, which handles PDF, but doesn't handle DOCX
-    - apt-get update -y
-    - apt-get install -y pandoc texlive-xetex
-  script:
-    # Runs pandoc on all .md files in the repo and outputs them as PDF and DOCX
-    - pandoc doc/witnesses/README.md --pdf-engine=xelatex --o witnesses.pdf
-  artifacts:
-    # Attach all untracked files (e.g. files that were recently created and not yet committed to git) as artifacts.
-    # These are the files you then download after the job has finished.
-    untracked: true
-  only:
-    changes:
-      - doc/witnesses.md
-  tags:
-      - metal
-  needs: []
-
 kaniko low memory:
   stage: docker
   needs:
@@ -211,24 +185,26 @@ kaniko rpc:
   stage: docker
   needs:
     - rpc
+  dependencies:
+    - rpc
   image:
     name: gcr.io/kaniko-project/executor:debug
     entrypoint: [""]
   script:
     - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
     - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/contrib/Dockerfiles/rpc/Dockerfile --destination $CI_REGISTRY_IMAGE/rpc:$CI_COMMIT_BRANCH
-  dependencies:
-    - rpc
+  
 
-kaniko lm no mira:
+kaniko witness:
   stage: docker
   needs: 
-    - lm no mira
+    - witness
+  dependencies:
+    - witness
   image:
     name: gcr.io/kaniko-project/executor:debug
     entrypoint: [""]
   script:
     - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
     - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/contrib/Dockerfiles/ci/Dockerfile --destination $CI_REGISTRY_IMAGE/rpcnomira:$CI_COMMIT_BRANCH
-  dependencies:
-    - lm no mira
+  
