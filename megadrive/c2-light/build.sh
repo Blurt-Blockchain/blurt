@@ -18,6 +18,7 @@ wget -N --progress=bar:force:noscroll http://os.archlinuxarm.org/os/ArchLinuxARM
 # New rootfs extraction
 # https://chromium.googlesource.com/external/github.com/docker/containerd/+/refs/tags/v0.2.0/docs/bundle.md
 # create the container with a temp name so that we can export it
+docker rm tempc2 || true
 docker create --name tempc2 c2 /bin/bash
 
 # export it into the rootfs directory
