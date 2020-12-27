@@ -168,18 +168,19 @@ rpc:
   needs: []
 
 
-kaniko low memory:
+kaniko witness:
   stage: docker
   needs:
-    - low memory
+    - witness
+  dependencies:
+    - witess
   image:
     name: gcr.io/kaniko-project/executor:debug
     entrypoint: [""]
   script:
     - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
     - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/contrib/Dockerfiles/ci/Dockerfile --destination $CI_REGISTRY_IMAGE/low_memory:$CI_COMMIT_BRANCH
-  dependencies:
-    - low memory
+  
 
 disappear:
   stage: docker
