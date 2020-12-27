@@ -1,4 +1,4 @@
-FROM lopsided/archlinux
+FROM faddat/snapshot
 
 MAINTAINER Jacob Gadikian <jacob@blurt.foundation>
 
@@ -13,7 +13,7 @@ RUN pacman -Syyu --noconfirm ncurses && \
 
 
 # RUN BLURT
-CMD ["/usr/bin/blurtd", "--data-dir", "/blurtd"]
+CMD ["/usr/bin/blurtd", "--data-dir", "/blurt"]
 
 
 EXPOSE 8090
