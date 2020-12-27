@@ -170,7 +170,7 @@ kaniko witness:
   needs:
     - witness
   dependencies:
-    - witess
+    - witness
   image:
     name: gcr.io/kaniko-project/executor:debug
     entrypoint: [""]
