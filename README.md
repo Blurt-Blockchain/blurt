@@ -103,6 +103,7 @@ Our next milestone is [Hard Fork 3](https://gitlab.com/blurt/blurt/-/milestones/
 + [Livecoinwatch.com](https://www.livecoinwatch.com/price/Blurt-BLURT)
 + [Worldcoinindex.com](https://www.worldcoinindex.com/coin/blurt)
 + [Xangle.io](https://xangle.io/project/BLURT/key-info)
++ [Coincodex.com](https://coincodex.com/crypto/blurt/)
 
 ## Documentation
 
