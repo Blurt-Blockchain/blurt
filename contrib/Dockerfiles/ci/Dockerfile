@@ -13,7 +13,7 @@ RUN pacman -Syyu --noconfirm ncurses && \
 
 
 # RUN BLURT
-CMD ["/usr/bin/blurtd", "--data-dir", "/blurt"]
+CMD ["/usr/bin/blurtd", "--data-dir", "/blurtd"]
 
 
 EXPOSE 8090
