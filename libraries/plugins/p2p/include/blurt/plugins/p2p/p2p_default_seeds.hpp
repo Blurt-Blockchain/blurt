@@ -8,8 +8,8 @@ namespace blurt { namespace plugins { namespace p2p {
 const std::vector< std::string > default_seeds;
 #else
 const std::vector< std::string > default_seeds = {
-   "192.168.195.83:2001",     //seednode1
-   "10.144.79.46:2001",     //seednode2
+   "192.168.195.12:2001",     //seednode1
+   "192.168.195.83:2001",     //seednode2
    "192.168.195.186:1776",    //ilnegro
    "192.168.195.209:1776",   //megadrive
    "192.168.195.172:1776",     //zahid
