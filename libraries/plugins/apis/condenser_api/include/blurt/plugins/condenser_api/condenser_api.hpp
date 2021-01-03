@@ -8,7 +8,7 @@
 #include <blurt/plugins/network_broadcast_api/network_broadcast_api.hpp>
 #include <blurt/plugins/tags_api/tags_api.hpp>
 #include <blurt/plugins/follow_api/follow_api.hpp>
-#include <blurt/plugins/condenser_api/condenser_api_legacy_objects.hpp>
+//#include <blurt/plugins/condenser_api/condenser_api_legacy_objects.hpp>
 
 #include <fc/optional.hpp>
 #include <fc/variant.hpp>
