@@ -4,7 +4,7 @@ MAINTAINER Jacob Gadikian <jacob@blurt.foundation>
 
 
 COPY ./build/bin/blurtd /usr/bin/blurtd
-COPY ./contrib/rpc-config.ini /blurt/config.ini
+COPY ./contrib/rpc-config.ini /blurtd/config.ini
 COPY ./build/bin/cli_wallet /usr/bin/cli_wallet
 
 # FETCH DEPENDENCIES AND SNAPSHOT.
