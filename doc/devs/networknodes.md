@@ -22,6 +22,10 @@ https://blocktivity.blurtopian.com/api/stats
 
 Fetches virtual operations and transfers in the last hour
 
+https://blocktivity.blurtopian.com/api/stats?chain=blurt&include_details=true
+
+Verbose version showing individual operation count
+
 # Global Properties Nodes
 
 
