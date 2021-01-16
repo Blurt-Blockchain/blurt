@@ -3157,6 +3157,9 @@ void database::process_tx_fee( const signed_transaction& trx ) {
 #endif
          }
       }
+      for( const auto& auth : other ) {
+         ilog("in process_tx_fee loop for for trx ${t}, auth ${a}", ("t", trx.id())("a", auth));
+      }
    } FC_CAPTURE_AND_RETHROW( (trx) )
 }
 
