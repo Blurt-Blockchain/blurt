@@ -6,6 +6,8 @@ COPY motd /etc/motd
 
 RUN echo "sleep 80" >> /usr/local/bin/firstboot.sh && \
         pacman -Syyu --noconfirm net-tools ufw vnstat iftop zerotier-one && \
+        systemctl enable zerotier-one && \
+        systemctl enable vnstat && \
         ufw default deny && \
         ufw default deny outgoing && \
         ufw allow ssh && \
