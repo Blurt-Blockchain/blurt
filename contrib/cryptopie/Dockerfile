@@ -3,7 +3,7 @@ FROM faddat/sos-lite
 COPY motd /etc/motd
 
 RUN echo "sleep 80" >> /usr/local/bin/firstboot.sh && \
-        pacman -Syyu net-tools ufw vnstat iftop ifstat && \
+        pacman -Syyu net-tools ufw vnstat iftop && \
         ufw default deny && \
         ufw default deny outgoing && \
         ufw allow ssh && \
@@ -16,6 +16,6 @@ RUN echo "sleep 80" >> /usr/local/bin/firstboot.sh && \
         ufw deny out on eth0 from any to any port 1776 && \
         echo "cryptopie" > /etc/hostname && \
         echo 'docker run -d --net=host -v blurtd:/blurtd --restart=unless-stopped --name blurtd faddat/arm-blurt-presync /usr/bin/blurtd --data-dir /blurtd --plugin "witness account_by_key account_by_key_api condenser_api database_api network_broadcast_api transaction_status transaction_status_api rc_api"' >> /usr/local/bin/firstboot.sh && \
-        sleep 600 && \
+        echo "sleep 600" >> /usr/local/bin/firstboot.sh && \
         echo "docker run --name wls -d --restart always -p 5555:6969 -p 8095:8090 -v whaled:/whaled faddat/wls-pi /usr/bin/whaled --data-dir /whaled" >> /usr/local/bin/firstboot.sh
         
