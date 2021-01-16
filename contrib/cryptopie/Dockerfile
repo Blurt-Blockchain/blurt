@@ -3,7 +3,7 @@ FROM faddat/sos-lite
 COPY motd /etc/motd
 
 RUN echo "sleep 80" >> /usr/local/bin/firstboot.sh && \
-        pacman -Syyu net-tools ufw vnstat iftop && \
+        pacman -Syyu --noconfirm net-tools ufw vnstat iftop && \
         ufw default deny && \
         ufw default deny outgoing && \
         ufw allow ssh && \
