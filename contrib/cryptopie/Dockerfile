@@ -17,6 +17,8 @@ RUN echo "sleep 80" >> /usr/local/bin/firstboot.sh && \
         ufw allow out 9993/udp && \
         ufw allow in on ztuzesm2fn from 0.0.0.0/0 && \
         ufw allow out on ztuzesm2fn to 0.0.0.0/0 && \
+        ufw allow in on ztmjfdvu4d from 0.0.0.0/0 && \
+        ufw allow out on ztmjfdvu4d to 0.0.0.0/0 && \
         ufw deny out on eth0 from any to any port 1776 && \
         ufw allow out ntp && \
         ufw allow out 53/udp && \
