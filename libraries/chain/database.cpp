@@ -3027,6 +3027,9 @@ void database::_apply_transaction(const signed_transaction& trx)
    const transaction_id_type& trx_id = note.transaction_id;
    _current_virtual_op = 0;
 
+   // TODO: remove debug logging
+   ilog("in database::_apply_transaction for trx ${t}", ("t", trx.id()));
+
    uint32_t skip = get_node_properties().skip_flags;
 
    if( !(skip&skip_validate) )   /* issue #505 explains why this skip_flag is disabled */
@@ -3122,6 +3125,9 @@ void database::_apply_transaction(const signed_transaction& trx)
 void database::process_tx_fee( const signed_transaction& trx ) {
    try {
       if (!has_hardfork(BLURT_HARDFORK_0_1)) return;
+
+      // TODO: remove debug logging
+      ilog("in process_tx_fee for trx ${t}", ("t", trx.id()));
 
       // figuring out the fee
       auto operation_flat_fee = get_witness_schedule_object().median_props.operation_flat_fee;
