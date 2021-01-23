@@ -25,6 +25,8 @@
 #include <blurt/chain/util/nai_generator.hpp>
 #include <blurt/chain/util/sps_processor.hpp>
 
+#include <blurt/plugins/account_by_key/account_by_key_objects.hpp>
+
 #include <fc/smart_ref_impl.hpp>
 #include <fc/uint128.hpp>
 
@@ -3157,11 +3159,20 @@ void database::process_tx_fee( const signed_transaction& trx ) {
 #endif
          }
       }
+
+      const auto& key_idx = get_index< account_by_key::key_lookup_index >().indices().get< account_by_key::by_key >();
       for( const auto& auth : other ) {
          ilog("in process_tx_fee loop for for trx ${t}, auth ${a}", ("t", trx.id())("a", auth));
          const auto& keys = auth.get_keys();
          for ( const auto& key : keys ) {
              ilog("looking at key ${k}", ("k", key));
+             auto lookup_itr = key_idx.lower_bound( key );
+
+             while( lookup_itr != key_idx.end() && lookup_itr->key == key )
+             {
+                 ilog("mapped key to account ${a}", ("a", lookup_itr->account));
+                 ++lookup_itr;
+             }
          }
       }
    } FC_CAPTURE_AND_RETHROW( (trx) )
