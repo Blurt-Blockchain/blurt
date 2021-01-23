@@ -3158,7 +3158,7 @@ void database::process_tx_fee( const signed_transaction& trx ) {
          }
       }
 
-      const auto& key_idx = get_index< account_by_key::key_lookup_index >().indices().get< account_by_key::by_key >();
+      /*const auto& key_idx = get_index< account_by_key::key_lookup_index >().indices().get< account_by_key::by_key >();
       for( const auto& auth : other ) {
          ilog("in process_tx_fee loop for for trx ${t}, auth ${a}", ("t", trx.id())("a", auth));
          const auto& keys = auth.get_keys();
@@ -3172,7 +3172,7 @@ void database::process_tx_fee( const signed_transaction& trx ) {
                  ++lookup_itr;
              }
          }
-      }
+      }*/
    } FC_CAPTURE_AND_RETHROW( (trx) )
 }
 
