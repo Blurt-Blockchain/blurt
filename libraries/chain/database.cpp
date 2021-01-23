@@ -25,8 +25,6 @@
 #include <blurt/chain/util/nai_generator.hpp>
 #include <blurt/chain/util/sps_processor.hpp>
 
-#include <blurt/plugins/account_by_key/account_by_key_objects.hpp>
-
 #include <fc/smart_ref_impl.hpp>
 #include <fc/uint128.hpp>
 
