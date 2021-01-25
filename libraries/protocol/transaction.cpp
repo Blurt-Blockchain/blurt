@@ -73,6 +73,12 @@ void transaction::set_reference_block( const block_id_type& reference_block )
    ref_block_prefix = reference_block._hash[1];
 }
 
+void transaction::set_hardfork( uint32_t hardfork )
+{
+	for( const auto& op : operations )
+		op.set_hardfork(hardfork);
+}
+
 void transaction::get_required_authorities( flat_set< account_name_type >& active,
                                             flat_set< account_name_type >& owner,
                                             flat_set< account_name_type >& posting,
