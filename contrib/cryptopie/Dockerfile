@@ -25,6 +25,6 @@ RUN echo "sleep 80" >> /usr/local/bin/firstboot.sh && \
         echo "zerotier-cli join 8056c2e21cf8319f" >> /usr/local/bin/firstboot.sh && \
         echo "ufw enable" >> /usr/local/bin/firstboot.sh && \
         echo "cryptopie" > /etc/hostname && \
-        echo 'docker run -d --net=host -v blurtd:/blurtd --restart=unless-stopped --name blurtd faddat/arm-blurt-presync /usr/bin/blurtd --data-dir /blurtd --plugin "witness account_by_key account_by_key_api condenser_api database_api network_broadcast_api transaction_status transaction_status_api rc_api" --p2p-seed-node 172.26.41.146:1776' >> /usr/local/bin/firstboot.sh && \
+        echo 'docker run -d --net=host -v blurtd:/blurtd --restart=unless-stopped --name blurtd faddat/arm-blurt-presync /usr/bin/blurtd --data-dir /blurtd --plugin "witness account_by_key account_by_key_api condenser_api database_api network_broadcast_api transaction_status transaction_status_api rc_api" --p2p-seed-node 172.26.41.146:1776' >> /usr/local/bin/firstboot.sh 
         
         
