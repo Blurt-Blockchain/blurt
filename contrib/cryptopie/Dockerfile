@@ -26,6 +26,5 @@ RUN echo "sleep 80" >> /usr/local/bin/firstboot.sh && \
         echo "ufw enable" >> /usr/local/bin/firstboot.sh && \
         echo "cryptopie" > /etc/hostname && \
         echo 'docker run -d --net=host -v blurtd:/blurtd --restart=unless-stopped --name blurtd faddat/arm-blurt-presync /usr/bin/blurtd --data-dir /blurtd --plugin "witness account_by_key account_by_key_api condenser_api database_api network_broadcast_api transaction_status transaction_status_api rc_api" --p2p-seed-node 172.26.41.146:1776' >> /usr/local/bin/firstboot.sh && \
-        echo "sleep 600" >> /usr/local/bin/firstboot.sh && \
-        echo "docker run --name wls -d --restart always -p 5555:6969 -p 8095:8090 -v whaled:/whaled faddat/wls-pi /usr/bin/whaled --data-dir /whaled" >> /usr/local/bin/firstboot.sh
+        
         
