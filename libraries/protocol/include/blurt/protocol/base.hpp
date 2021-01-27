@@ -21,6 +21,7 @@ namespace blurt { namespace protocol {
       void validate()const {}
 
       void set_hardfork( uint32_t num ) { hardfork = num; }
+      bool has_hardfork( uint32_t num )const { return num <= hardfork; }
    };
 
    struct virtual_operation : public base_operation

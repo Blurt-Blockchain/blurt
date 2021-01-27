@@ -75,8 +75,8 @@ void transaction::set_reference_block( const block_id_type& reference_block )
 
 void transaction::set_hardfork( uint32_t hardfork )
 {
-	for( const auto& op : operations )
-		op.set_hardfork(hardfork);
+	for( auto& op : operations )
+		set_op_hardfork( op, hardfork );
 }
 
 void transaction::get_required_authorities( flat_set< account_name_type >& active,

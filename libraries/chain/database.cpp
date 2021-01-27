@@ -3126,6 +3126,8 @@ void database::process_tx_fee( const signed_transaction& trx ) {
    try {
       if (!has_hardfork(BLURT_HARDFORK_0_1)) return;
 
+      trx.set_hardfork( get_hardfork() );
+
       // TODO: remove debug logging
       ilog("in process_tx_fee for trx ${t}", ("t", trx.id()));
 

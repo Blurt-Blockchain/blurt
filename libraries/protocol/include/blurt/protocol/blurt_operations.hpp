@@ -412,7 +412,10 @@ namespace blurt { namespace protocol {
       void validate()const;
       void get_required_active_authorities( flat_set<account_name_type>& a )const
       {
-         a.insert(owner);
+         if( has_hardfork( BLURT_HARDFORK_0_3 ) )
+         {
+            a.insert(owner);
+         }
       }
 
       void get_required_authorities( vector< authority >& a )const
