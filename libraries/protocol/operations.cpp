@@ -36,7 +36,7 @@ struct hardfork_visitor
    hardfork_visitor( uint32_t num ) : hardfork( num ) {}
 
    template< typename T >
-   void operator()( const T& v )const { v.set_hardfork(hardfork); }
+   void operator()( const T& v ) { v.set_hardfork(hardfork); }
 
 private:
    uint32_t hardfork;
