@@ -13,12 +13,10 @@
 #ifdef IS_TEST_NET
 #define BLURT_BLOCKCHAIN_VERSION              ( version(0, 3, 0) )
 
-//#define BLURT_INIT_PRIVATE_KEY                (fc::ecc::private_key::regenerate(fc::sha256::hash(std::string("init_key"))))
-//#define BLURT_INIT_PUBLIC_KEY_STR             (std::string( blurt::protocol::public_key_type(BLURT_INIT_PRIVATE_KEY.get_public_key()) ))
-#define BLURT_INIT_PUBLIC_KEY_STR             "BLT7rdiE5wbSX38FTCtH9E3biiUM6SBcUv51sE11UYRuL78iVcTjd"
-
-#define BLURT_CHAIN_ID                        (fc::sha256::hash("mancertestnet"))
-#define BLURT_ADDRESS_PREFIX                  "BLT"
+#define BLURT_INIT_PRIVATE_KEY                (fc::ecc::private_key::regenerate(fc::sha256::hash(std::string("init_key"))))
+#define BLURT_INIT_PUBLIC_KEY_STR             (std::string( blurt::protocol::public_key_type(BLURT_INIT_PRIVATE_KEY.get_public_key()) ))
+#define BLURT_CHAIN_ID                        (fc::sha256::hash("testnet"))
+#define BLURT_ADDRESS_PREFIX                  "TST"
 
 #define BLURT_GENESIS_TIME                    (fc::time_point_sec(1591025652))
 #define BLURT_CASHOUT_WINDOW_SECONDS          (60*60) /// 1 hr
@@ -85,7 +83,7 @@
 #define BLURT_MAX_VOTED_WITNESSES_HF17        20
 #define BLURT_MAX_RUNNER_WITNESSES_HF17       1
 
-#define BLURT_HARDFORK_REQUIRED_WITNESSES     1 // 17 of the 21 dpos witnesses (20 elected and 1 virtual time) required for hardfork. This guarantees 75% participation on all subsequent rounds.
+#define BLURT_HARDFORK_REQUIRED_WITNESSES     17 // 17 of the 21 dpos witnesses (20 elected and 1 virtual time) required for hardfork. This guarantees 75% participation on all subsequent rounds.
 #define BLURT_MAX_TIME_UNTIL_EXPIRATION       (60*60) // seconds,  aka: 1 hour
 #define BLURT_MAX_MEMO_SIZE                   2048
 #define BLURT_MAX_PROXY_RECURSION_DEPTH       4

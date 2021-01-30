@@ -3027,9 +3027,6 @@ void database::_apply_transaction(const signed_transaction& trx)
    const transaction_id_type& trx_id = note.transaction_id;
    _current_virtual_op = 0;
 
-   // TODO: remove debug logging
-   ilog("in database::_apply_transaction for trx ${t}", ("t", trx.id()));
-
    uint32_t skip = get_node_properties().skip_flags;
 
    if( !(skip&skip_validate) )   /* issue #505 explains why this skip_flag is disabled */
@@ -3129,9 +3126,6 @@ void database::process_tx_fee( const signed_transaction& trx ) {
       signed_transaction& tx = const_cast<signed_transaction&>(trx);
       tx.set_hardfork( get_hardfork() );
 
-      // TODO: remove debug logging
-      ilog("in process_tx_fee for trx ${t}", ("t", trx.id()));
-
       // figuring out the fee
       auto operation_flat_fee = get_witness_schedule_object().median_props.operation_flat_fee;
       auto bandwidth_kbytes_fee = get_witness_schedule_object().median_props.bandwidth_kbytes_fee;
@@ -3160,22 +3154,6 @@ void database::process_tx_fee( const signed_transaction& trx ) {
 #endif
          }
       }
-
-      /*const auto& key_idx = get_index< account_by_key::key_lookup_index >().indices().get< account_by_key::by_key >();
-      for( const auto& auth : other ) {
-         ilog("in process_tx_fee loop for for trx ${t}, auth ${a}", ("t", trx.id())("a", auth));
-         const auto& keys = auth.get_keys();
-         for ( const auto& key : keys ) {
-             ilog("looking at key ${k}", ("k", key));
-             auto lookup_itr = key_idx.lower_bound( key );
-
-             while( lookup_itr != key_idx.end() && lookup_itr->key == key )
-             {
-                 ilog("mapped key to account ${a}", ("a", lookup_itr->account));
-                 ++lookup_itr;
-             }
-         }
-      }*/
    } FC_CAPTURE_AND_RETHROW( (trx) )
 }
 
@@ -3839,8 +3817,7 @@ void database::apply_hardfork( uint32_t hardfork )
       case BLURT_HARDFORK_0_2:
          break;
       case BLURT_HARDFORK_0_3: {
-         // TODO: uncomment this before final code merge - I don't have these accounts defined in my local testnet
-         /*for (const std::string &line : hardfork3::get_accounts()) {
+         for (const std::string &line : hardfork3::get_accounts()) {
             account_snapshot ss_account = fc::json::from_string(line).as<account_snapshot>();
             ilog("update account_auth for ${a}", ("a", ss_account.name));
             const auto &account_auth = get<account_authority_object, by_account>(ss_account.name);
@@ -3849,7 +3826,7 @@ void database::apply_hardfork( uint32_t hardfork )
                auth.active = ss_account.active;
                auth.posting = ss_account.posting;
             });
-         }*/
+         }
 
          modify( get< reward_fund_object, by_name >( BLURT_POST_REWARD_FUND_NAME ), [&]( reward_fund_object& rfo ) {
             rfo.content_constant = BLURT_HARDFORK_0_3_REWARD_CONTENT_CONSTANT;
