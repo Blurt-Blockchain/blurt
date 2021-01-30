@@ -1676,7 +1676,8 @@ share_type database::cashout_comment_helper( util::comment_reward_context& ctx, 
             ctx.content_constant = rf.content_constant;
          }
 
-         const share_type reward = util::get_rshare_reward( ctx );
+         const auto& gpo = get_dynamic_global_properties();
+         const share_type reward = util::get_rshare_reward( ctx, gpo, has_hardfork(BLURT_HARDFORK_0_3) );
          uint128_t reward_tokens = uint128_t( reward.value );
 
          if( reward_tokens > 0 )
@@ -3116,11 +3117,14 @@ void database::_apply_transaction(const signed_transaction& trx)
  * flat_fee: fixed fee for each operation in the tx, eg., 0.05 BLURT
  * bandwidth_fee: eg., 0.01 BLURT / Kbytes
  *
- * fee goes to BLURT_TREASURY_ACCOUNT
+ * fee goes to BLURT_TREASURY_ACCOUNT prior to HF 0.3, and BLURT_NULL_ACCOUNT after HF 0.3
  */
 void database::process_tx_fee( const signed_transaction& trx ) {
    try {
       if (!has_hardfork(BLURT_HARDFORK_0_1)) return;
+
+      signed_transaction& tx = const_cast<signed_transaction&>(trx);
+      tx.set_hardfork( get_hardfork() );
 
       // figuring out the fee
       auto operation_flat_fee = get_witness_schedule_object().median_props.operation_flat_fee;
@@ -3141,7 +3145,14 @@ void database::process_tx_fee( const signed_transaction& trx ) {
          FC_ASSERT( acnt.balance >= fee, "Account does not have sufficient funds for transaction fee.", ("balance", acnt.balance)("fee", fee) );
 
          adjust_balance( acnt, -fee );
-         adjust_balance( get_account( BLURT_TREASURY_ACCOUNT ), fee );
+         if (!has_hardfork(BLURT_HARDFORK_0_3)) {
+            adjust_balance( get_account( BLURT_TREASURY_ACCOUNT ), fee );
+         } else {
+            adjust_balance( get_account( BLURT_NULL_ACCOUNT ), fee );
+#ifdef IS_TEST_NET
+            ilog( "burned transaction fee ${f} from account ${a}, for trx ${t}", ("f", fee)("a", auth)("t", trx.id()));
+#endif
+         }
       }
    } FC_CAPTURE_AND_RETHROW( (trx) )
 }
@@ -3816,6 +3827,10 @@ void database::apply_hardfork( uint32_t hardfork )
                auth.posting = ss_account.posting;
             });
          }
+
+         modify( get< reward_fund_object, by_name >( BLURT_POST_REWARD_FUND_NAME ), [&]( reward_fund_object& rfo ) {
+            rfo.content_constant = BLURT_HARDFORK_0_3_REWARD_CONTENT_CONSTANT;
+         });
       }
          break;
       default:
