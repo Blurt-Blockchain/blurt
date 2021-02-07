@@ -94,27 +94,6 @@ megadrive-build-env:
     - amd64-shell
 
 
-# megadrive-build-arch:
-#  stage: build
-#  image: $CI_REGISTRY_IMAGE/md-env
-#  cache: 
-#    paths:
-#      - /root/.ccache
-#  script:
-#    - mkdir build
-#    - cd build
-#    - conan install .. -s compiler=clang -s compiler.libcxx=libstdc++11 -if=. -pr=default --build=missing
-#    - cmake -DBLURT_STATIC_BUILD=ON -DLOW_MEMORY_NODE=ON -DCLEAR_VOTES=ON -DBUILD_BLURT_TESTNET=OFF -DSKIP_BY_TX_ID=ON -DBLURT_LINT_LEVEL=OFF -DENABLE_MIRA=OFF -DCMAKE_BUILD_TYPE=Release ..
-#    - make -j$(nproc) blurtd cli_wallet
-#  tags:
-#    - arm64
-#  artifacts:
-#    paths:
-#      - build/bin
-#  needs: 
-#    - megadrive-build-env
-
-
 megadrive-build-ubuntu:
   stage: build
   script:
@@ -128,38 +107,6 @@ megadrive-build-ubuntu:
   artifacts:
     paths:
       - build/bin
-
-megadrive-build-ubuntu-highmem:
-  stage: build
-  script:
-    - mkdir build
-    - cd build
-    - conan install .. -s compiler=clang -s compiler.libcxx=libstdc++11 -if=. -pr=default --build=missing
-    - cmake -DBLURT_STATIC_BUILD=ON -DLOW_MEMORY_NODE=OFF -DCLEAR_VOTES=ON -DBUILD_BLURT_TESTNET=OFF -DSKIP_BY_TX_ID=ON -DBLURT_LINT_LEVEL=OFF -DENABLE_MIRA=OFF -DCMAKE_BUILD_TYPE=Release ..
-    - make -j$(nproc) blurtd cli_wallet
-  tags:
-    - arm64-shell
-  artifacts:
-    paths:
-      - build/bin
-
-
-# construct the megadrive device image, runs blurt on SOS as a systemd service without docker
-megadrive-os:
-  needs: 
-    - megadrive-build-ubuntu
-  dependencies:
-    - megadrive-build-ubuntu
-  stage: images
-  script:
-    - docker buildx build --file megadrive/Dockerfile --platform linux/arm64 --tag megadrive --load --progress plain .
-    - bash megadrive/build.sh
-    - xz -T $(nproc) images/megadrive.img
-    - export STAMP=$(date "+%F-%T")
-    - mv images/megadrive.img.xz /static/megadrive/megadrive$(echo $STAMP).img.xz
-    - sudo ipfs add -Q /static/megadrive/megadrive$(echo $STAMP).img.xz > /static/megadrive/megadrive$(echo $STAMP).html
-  tags:
-    - shell-arch
 
 # construct the light megadrive device image.  runs blurt on sos-lite as a systemd service which in turn runs using docker.
 cryptopie:
@@ -194,8 +141,6 @@ megadrive-light-oroid-c2:
   tags:
     - shell-arch
 
-
-
 # construct the megadrive arch container
 megadrive-container:
   needs: 
@@ -221,27 +166,6 @@ megadrive-container-highmem:
   tags:
     - shell-arch
   
-
-
-witness-highmem:
-  stage: build
-  script:
-    - mkdir build
-    - cd build
-    - conan install .. -s compiler=clang -s compiler.libcxx=libstdc++11 -if=. -pr=default --build=missing
-    # Witness Build Config: -DLOW_MEMORY_NODE=ON -DCLEAR_VOTES=ON
-    - cmake -DBLURT_STATIC_BUILD=ON -DLOW_MEMORY_NODE=OFF -DCLEAR_VOTES=ON -DBUILD_BLURT_TESTNET=OFF -DSKIP_BY_TX_ID=ON -DBLURT_LINT_LEVEL=OFF -DENABLE_MIRA=OFF -DCMAKE_BUILD_TYPE=Release ..
-    - make -j$(nproc) blurtd cli_wallet
-  # cli wallet is only used for witness, so we capture it from the witness build
-  tags:
-    - shell-arch
-  artifacts:
-    paths:
-      - build/bin/
-  needs: []
-
-
-
 
 witness:
   stage: build
@@ -289,23 +213,6 @@ rpc:
     paths:
       - build/bin/
   needs: []
-
-
-kaniko witness highmem:
-  stage: docker
-  needs:
-    - witness-highmem
-  dependencies:
-    - witness-highmem
-  image:
-    name: gcr.io/kaniko-project/executor:debug
-    entrypoint: [""]
-  script:
-    - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
-    - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/contrib/Dockerfiles/ci/Dockerfile --destination $CI_REGISTRY_IMAGE/witness-highmem:$CI_COMMIT_BRANCH
-
-
-
 
 
 kaniko witness:
