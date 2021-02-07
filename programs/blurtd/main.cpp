@@ -20,7 +20,6 @@
 #include <fc/thread/thread.hpp>
 #include <fc/interprocess/signals.hpp>
 #include <fc/git_revision.hpp>
-#include <fc/stacktrace.hpp>
 
 #include <boost/exception/diagnostic_information.hpp>
 #include <boost/program_options.hpp>
@@ -113,12 +112,6 @@ int main( int argc, char** argv )
       catch( const fc::exception& e )
       {
          wlog( "Error parsing logging config. ${e}", ("e", e.to_string()) );
-      }
-
-      if( args.at( "backtrace" ).as< string >() == "yes" )
-      {
-         fc::print_stacktrace_on_segfault();
-         ilog( "Backtrace on segfault is enabled." );
       }
 
       appbase::app().startup();

@@ -1,3 +1,0 @@
-seed1.blurt.world:2001
-seed2.blurt.world:2001
-blurtseed-se.privex.io:2015

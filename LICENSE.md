@@ -22,7 +22,7 @@ is not permitted be made closed source.
 2) When new public blockchains are created using the SocialGraph regent key and
 genesis state import system, or any feature added to this repository since
 it began to live at https://gitlab.com/blurt/blurt, you must assign 5%
-of all genesis tokens and 5% of inflation to the Blurt Foundation.
+of all genesis tokens and 5% of inflation to the Blurt Foundation (@socialgraph).
 
 5% of genesis and 5% of inflation is for cases where the Blurt Foundation is
 only providing the software framework, and not actively developing your
@@ -47,6 +47,12 @@ that were involved in starting up a competing chain to Steem, this ultimately am
 the SocialGraph software is not permitted to be used in this fashion and any governance group found to
 do so will be required to immediately cease using our software altogether and will lose any support and synergistic
 benefits from our network.
+
+4) Software contained in this repository may not be used on blockchains containing transaction ID:
+
+3bfb499cf56d4bef18b303b83fd6243387bafbac
+
+At block height: 50500348
 
 The above copyright notice and this permission notice shall be included in
 all copies or substantial portions of the Software.

@@ -2,12 +2,17 @@
 
 [![pipeline status](https://gitlab.com/blurt/blurt/badges/dev/pipeline.svg)](https://gitlab.com/blurt/blurt/-/commits/dev)
 [![coverage report](https://gitlab.com/blurt/blurt/badges/dev/coverage.svg)](https://gitlab.com/blurt/blurt/-/commits/dev)
-![Twitter URL](https://img.shields.io/twitter/url?style=social&url=https%3A%2F%2Ftwitter.com%2FBlurtOfficial)
-[![Steem](https://img.shields.io/badge/-steem-blue)](https://steemit.com/steem/@blurt)
-[![Hive](https://img.shields.io/badge/-hive-red)](https://hive.blog/@blurt)
+![Twitter](https://img.shields.io/twitter/url?style=social&url=https%3A%2F%2Ftwitter.com%2FBlurtOfficial)
+[![Blurt](https://img.shields.io/badge/-Blurt-red)](https://blurt.blog)
 
 Blurt is a public social blockchain with a diverse and vibrant community that strictly upholds [property rights](https://twitter.com/cz_binance/status/1236373815447506945?s=20).
-Blurt contains balances imported from Block 4352**6969**.  
+
+The Blurt blockchain is defined as social media and builds a living, breathing, and growing social economy and communities where users are getting rewarded by curators for sharing their origin content. Blurt provides a scalable blockchain protocol for publicly accessible and immutable content, along with a fast digital currency (BLURT) which enables people to earn by using their brain (A.K.A. “Proof-of-Brain”).
+
+## Distribution
+*  Blurt contains user balances imported from Block 4352**6969** of the STEEM public blockchain, snapshotted on the 20th May 2020. 
+*  Approx 15% or ~60 Million BLURT from the initial supply shall be allocated to the Blurt SocialGraph Foundation (See [@initblurt](https://blocks.blurtwallet.com/#/@initblurt) / [@socialgraph](https://blocks.blurtwallet.com/#/@socialgraph) blockchain accounts).
+*  SPS DAO public fund account balance was carried over to BLURT and renamed as [@blurt.dao](https://blocks.blurtwallet.com/#/@blurt.dao). Initially the SocialGraph Foundation will steward this fund and gradually had it over to community control as the platform matures.
 
 ## Features
 * No Downvotes
@@ -44,83 +49,68 @@ Blurt contains balances imported from Block 4352**6969**.
 * 10% APR inflation narrowing to 1% APR over 20 years
     * 65% of inflation to Authors/Curators.
     * 15% of inflation to Stakeholders.
-    * 10% of inflation to Blurt Producers.
+    * 10% of inflation to Blurt Producers (Witnesses).
     * 10% of inflation to Blurt DAO Fund.
 
 
 ## Status
 Blurt enjoyed a smooth launch with large participation from witnesses on July 4, 2020.  
 
-Shortly after launch, two bugs were discovered: 
-
-**~~Resource Credits~~**
-
-The resource credit bug allowed for unrestricted writes to the Blurt blockchain, and this was exploited by the account `@social` to post hundreds of thousands prepared 64kb comments whose sole contents was a GIF of a penis or jpg of two men deeply enjoying one another's company. 
-After consulting with the community, HF1, which introduced [fees controlled by witnesses](https://blurt.world/blurt/@jacobgadikian/witnesses-control-fees-on-blurt) was released. 
-Witnesses have currently stabilized fees at 0.001 BLURT per operation and 0.1 BLURT per kilobyte.    We consider the Resource credit bug to be fully mitigated, and will remove resource credits from Blurt in [Hard Fork 2](https://gitlab.com/blurt/blurt/-/milestones/2). 
-
-**Rewards**
-
-The convergent linear reward curve currently used by BLURT is malfunctioning.  Rewards will be fixed in [Hard Fork 2](https://gitlab.com/blurt/blurt/-/milestones/2), which will be released ~August 1, 2020. 
+Work currently has over 50 witnesses and a healthy user population.
 
 ## Software Development
 Work is ongoing in the `dev` branch.  
 
 The snapshot-verification code can be found in the `snapshot` branch.  
 
-Our next milestone is [Hard Fork 2](https://gitlab.com/blurt/blurt/-/milestones/2)
+Our next milestone is [Hard Fork 3](https://gitlab.com/blurt/blurt/-/milestones/2)
+
+## General Links
+
++ [Block Explorer](https://blocks.blurtwallet.com/#/)
++ [Official Wallet](https://blurtwallet.com/)
++ [WhaleVault Keychain Extension](https://chrome.google.com/webstore/detail/whalevault/hcoigoaekhfajcoingnngmfjdidhmdon?hl=en)
+
+## Social Links
+
++ [Bitcointalk](https://bitcointalk.org/index.php?topic=5284933.0)
++ [Blurt.blog](https://blurt.blog)
++ [Discord](https://discord.blurt.world)
++ [Facebook Group](https://www.facebook.com/groups/blurtofficial)
++ [Facebook Page](https://www.facebook.com/Blurt-106190134629628)
++ [Telegram](https://t.me/blurtofficialchat)
++ [Twitter](https://twitter.com/BlurtOfficial)
++ [Youtube](https://youtube.com/channel/UCuktvTIxkdejKg_xWMz2vlQ)
+
+## Exchange Listings
+
++ [Beldex.io](https://www.beldex.io/tradeAdvance?pair=BLURT_BTC)
++ [Ionomy.com](https://ionomy.com/en/markets/btc-blurt)
++ [Hive-engine.com](https://hive-engine.com/?p=market&t=BLURT)
++ [Leodex.io](https://leodex.io/market/BLURT)
++ [Probit.com](https://www.probit.com/app/exchange/BLURT-BTC)
++ [Steem-engine.com](https://steem-engine.com/?p=market&t=BLURT)
++ [Stex.com](https://app.stex.com/en/trade/pair/BTC/BLURT/1D)
++ [Swaptoken.com](https://swaptoken.com/)
+
+## Indexers
+
++ [Blockfolio.com](https://blockfolio.com/coin/BLURT)
++ [Coingecko.com](https://www.coingecko.com/en/coins/blurt)
++ [Coinmarketcap.com](https://coinmarketcap.com/currencies/blurt/)
++ [Coinpaprika.com](https://coinpaprika.com/coin/blurt-blurt/)
++ [Currency.world](https://currency.world/currencies/BLURT)
++ [Livecoinwatch.com](https://www.livecoinwatch.com/price/Blurt-BLURT)
++ [Worldcoinindex.com](https://www.worldcoinindex.com/coin/blurt)
++ [Xangle.io](https://xangle.io/project/BLURT/key-info)
++ [Coincodex.com](https://coincodex.com/crypto/blurt/)
 
 ## Documentation
 
 [Developers](doc/devs/README.md)
 
+[Public Nodes](doc/devs/networknodes.md)
+
 [Exchanges](doc/exchanges/README.md)
 
 [Witnesses](doc/witnesses/README.md)
-
-## Exchange Tracker
-
-### Centralized Exchanges That Listed Steem at Block 43,526,969 and are in posession of airdrop funds
-
-| Exchange   | Airdrop Funds  | Airdrop Funds Status  | Listed?  | Fee Requested?  | Fee Amount   | Point of Contact | Conversation   |
-|---|---|---|---|---|---|---|---|
-| Ionomy      | 42731.888 BLURT  | In Progress  |  YES | NO |  0 | E-mail, Discord | Yes |
-| Bithumb       |   | HELD  |   |   |   |   |   |
-| Upbit       |   | HELD  |   |   |   |   |   |
-| Gopax       |   | HELD  |   |   |   |   |   |
-| Bittrex     |   | HELD  |   |   |   |   |   |
-| Binance     |   | HELD  |   |   |   |   |   |
-| Huobi       |   | HELD  |   |   |   |   |   |
-| Probit      | YES  | HELD  | NO  | YES  | 1 BTC + 1 BTC of BLURT  |    |
-| Poloinex    |   | HELD  |   |   |   |   |   |
-| Bitflyer    |   | HELD  |   |   |   |   |   |
-| Daybit      |   | HELD  |   |   |   |   |   |
-| Sistemkoin  |   | HELD  |   |   |   |   |   |
-| Kraken      |   | HELD  |   |   |   |   |   |
-| Okex        |   | HELD  |   |   |   |   |   |
-
-The Blurt community is deeply grateful to Ionomy for their intention to honor the Blurt airdrop on holders of STEEM from block 43,526,969.
-
-### Centralized Exchanges that didn't list Steem at block 43,526,969 and are not in posession of airdrop funds
-| Exchange   |  Listed?  | Fee Requested?  | Fee Amount   | Requested By | Handling |
-|---|---|---|---|---|---|
-| Cointiger   | NO  | YES  | 5 BTC + BLURT for giveaway  |  empato365  | empato365 |
-| Coinbase    | NO | NO | N/A |  
-| Indodax |   |   |     |  
-| [rekenningku](https://www.rekeningku.com) |   |    | 
-
-### Decentralized Exchanges
-
-| Exchange   | Listed?  | Fee  | Fee Amount   | Responsible Party |
-|---|---|---|---|---|
-| Binance DEX  | NO  | List tx fee  | 1000 BNB   |  N/A   |
-| Uniswap     |  NO | NO  | ERC20 Token Creation + Contract Creation   | N/A |
-| Hive Engine  | YES  | YES  | 100 HIVE for BLURT ticker  | @daking | 
-| Steem Engine  | NO  | YES  | 100 STEEM for BLURT ticker  | N/A | 
-| Incognito DEX  | NO  | N/A  | tiny  | N/A |
-| Poloni DEX | NO | ? | ? | N/A |
-| NewDEX | NO | ? | ? | N/A |
-| IDEX | NO | ? | ? | N/A |
-| Kyber | NO | ? | ? | N/A |
-
-The Blurt community is deeply grateful to @daking for maintaining the @blurtlink serrvice that connects Blurt to Hive Engine.

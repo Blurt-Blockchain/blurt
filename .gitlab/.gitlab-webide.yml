@@ -1,0 +1,6 @@
+terminal:
+  # This can be any image that has the necessary runtime environment for your project.
+  image: registry.gitlab.com/blurt/blurt/build-env
+  before_script:
+    - pacman -Syyu
+

@@ -5,8 +5,6 @@
 #include <blurt/protocol/validation.hpp>
 #include <blurt/protocol/legacy_asset.hpp>
 
-#include <fc/crypto/equihash.hpp>
-
 namespace blurt { namespace protocol {
 
    void validate_auth_size( const authority& a );

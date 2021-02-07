@@ -46,6 +46,8 @@ Accurate as of **June 15, 2020**:
 ## Witness Setup Procedure
 **Valid for Mainnet, July 4, 2020:**
 
+Check out this [BLOG POST](https://blurt.blog/blurtopian/@zahidsun/how-to-setup-a-witness-node-step-by-step-video-tutorial) with instructional video!
+
 If you plan to use our automated setup, your witness node should run Debian 10.  If you're doing it manually, feel free to use any type of machine that you'd like.  
 
 ### Configure Passwordless SSH Logins: IMPORTANT!
@@ -122,12 +124,12 @@ You'll also want to `suggest_brain_key`.
 
 Copy down its entire output and keep it safely.  You'll be using this brain key to control your Witness.  
 
-**import your Steem Active key**
+**import your Blurt Active key** (_Note: Pre 20 March 2020 Steem keys will also work_)
 
 ```
 import_key 5KABCDEFGHIJKLMNOPQRSTUVXYZ
 ```
-Note: the key should start with a 5
+Note: The key should start with a 5 as per the example key above.
 
 **Add private brain key to config.ini to sign blocks as a Witness**
 
@@ -297,6 +299,12 @@ systemctl start blurtd
 Restart blurtd
 ```bash
 systemctl restart blurtd
+```
+
+Replay Blockchain
+```bash
+systemctl stop blurtd
+blurtd --data-dir /blurt --replay-blockchain
 ```
 
 Edit config.ini

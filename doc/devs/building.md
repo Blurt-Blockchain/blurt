@@ -21,6 +21,8 @@ If you fork Blurt into another GitLab repository, the build system is complete a
 
 **Please upstream changes!**
 
+_______
+
 ## Compile-Time Options (cmake)
 
 ### CMAKE_BUILD_TYPE=[Release/Debug]
@@ -52,6 +54,57 @@ huge gain if you do not need this functionality.
 ## Building under Docker
 
 We ship a [Dockerfile](https://gitlab.com/blurt/docker).  This builds both common node type binaries.
+
+_____________
+
+## Building on Linux
+
+If you are building this on VPS make sure you have enough RAM, if not you can make a 6-8 GB swapfile.
+
+```
+fallocate -l 8G /swapfile
+chmod 600 /swapfile
+mkswap /swapfile
+swapon /swapfile
+```
+
+### Install build dependencies
+
+```
+sudo apt install curl git build-essential libtool autotools-dev automake pkg-config bsdmainutils python3 software-properties-common libssl-dev libevent-dev librocksdb-dev libwebsocketpp-dev cmake doxygen 
+```
+
+### Clone the Repository
+
+```
+git clone https://gitlab.com/blurt/blurt
+cd blurt
+```
+
+### Compile
+This works on the very latest and most shiny Mac OSX 10.15.6.  
+
+```
+    git checkout dev
+    git submodule update --init --recursive
+    mkdir build && cd build
+    cmake -DBLURT_STATIC_BUILD=ON -DLOW_MEMORY_NODE=OFF -DCLEAR_VOTES=OFF -DBUILD_BLURT_TESTNET=OFF -DSKIP_BY_TX_ID=OFF -DBLURT_LINT_LEVEL=OFF -DENABLE_MIRA=OFF -DCMAKE_BUILD_TYPE=Release ..
+    make -j$(sysctl -n hw.logicalcpu)
+```  
+
+Also, some useful build targets for `make` are:
+
+    blurtd
+    chain_test
+    cli_wallet
+
+e.g.:
+
+    make -j$(sysctl -n hw.logicalcpu) blurtd
+
+This will only build `blurtd`.
+
+_________
 
 ## Building on macOS X
 
@@ -122,6 +175,8 @@ e.g.:
     make -j$(sysctl -n hw.logicalcpu) blurtd
 
 This will only build `blurtd`.
+
+______+___
 
 ## Building on Other Platforms
 
