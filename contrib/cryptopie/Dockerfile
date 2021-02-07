@@ -2,8 +2,6 @@ FROM faddat/sos-lite
 
 COPY motd /etc/motd
 
-# THIS WILL BOOT AND JOIN A KILLABLE PI NET RUN BY JACOB
-
 RUN echo "sleep 80" >> /usr/local/bin/firstboot.sh && \
         pacman -Syyu --noconfirm net-tools ufw vnstat iftop zerotier-one && \
         systemctl enable zerotier-one && \
