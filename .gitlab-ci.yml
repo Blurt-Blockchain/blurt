@@ -52,6 +52,7 @@ sonarcloud:
   script:
     # Download build-wrapper
     - curl "${SONAR_HOST_URL}/static/cpp/build-wrapper-linux-x86.zip" --output build-wrapper-linux-x86.zip
+    - apt install -y unzip
     - unzip build-wrapper-linux-x86.zip
     # workaround to the bw haswell bug
     - cp build-wrapper-linux-x86/libinterceptor-x86_64.so build-wrapper-linux-x86/libinterceptor-haswell.so
