@@ -45,14 +45,7 @@ want to collaborate with you to design models that enable your community to pros
 remove around $6 million worth of Steem blockchain stake and tokens from circa 64 accounts 
 that were involved in starting up a competing chain to Steem, this ultimately amounts to theft and
 the SocialGraph software is not permitted to be used in this fashion and any governance group found to
-do so will be required to immediately cease using our software altogether and will lose any support and synergistic
-benefits from our network.
-
-4) Software contained in this repository may not be used on blockchains containing transaction ID:
-
-3bfb499cf56d4bef18b303b83fd6243387bafbac
-
-At block height: 50500348
+do so will be required to immediately cease using our software altogether and will lose any support and synergistic benefits from our network.
 
 The above copyright notice and this permission notice shall be included in
 all copies or substantial portions of the Software.
