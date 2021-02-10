@@ -9,36 +9,29 @@ stages:
 
 
 testnet:
-    image: conanio/clang10
-    before_script:
-    - sudo apt-get update -qq
-    - sudo apt-get install -qq doxygen
-    - conan config set storage.path="${CI_PROJECT_DIR}/.cache/conan"
-    # Pull in submodules
-    - git submodule update --init --recursive
-    # ccache for acceleration
-    - mkdir -p ccache
-    - export CCACHE_BASEDIR=${PWD}
-    - export CCACHE_DIR=${PWD}/ccache
     stage: build
+    variables:
+      CC: clang
+      CXX: clang++
+    needs: []
     script:
     - mkdir build
     - cd build
     - conan install .. -s compiler=clang -s compiler.libcxx=libstdc++11 -if=. -pr=default --build=missing
     # Testnet Build Config:   # LOW_MEMORY=OFF CLEAR_VOTES=OFF TESTNET=ON ENABLE_MIRA=OFF <- thx hive
-    - cmake -DBLURT_STATIC_BUILD=ON -DLOW_MEMORY_NODE=OFF -DCLEAR_VOTES=OFF -DBUILD_BLURT_TESTNET=ON -DSKIP_BY_TX_ID=ON -DBLURT_LINT_LEVEL=OFF -DENABLE_MIRA=OFF -DCMAKE_BUILD_TYPE=Release ..
+    - cmake -DBLURT_STATIC_BUILD=ON -DLOW_MEMORY_NODE=OFF -DCLEAR_VOTES=OFF -WINT_IN_BOOL_CONTEXT=OFF -DBUILD_BLURT_TESTNET=ON -DSKIP_BY_TX_ID=ON -DBLURT_LINT_LEVEL=OFF -DENABLE_MIRA=OFF -DCMAKE_BUILD_TYPE=Release ..
     - make -j$(nproc) blurtd cli_wallet
   # cli wallet is only used for witness, so we capture it from the witness build
     tags:
-    - metal
+    - shell-arch
     artifacts:
       paths:
-        - /builds/blurt/blurt/build/bin/
+        - build/bin/
 
 # Took sonarcloud's default multi-stage thing and made it a single stage.
 sonarcloud: 
   stage: test
-  image: conanio/clang10
+  image: conanio/clang11
   needs: []
   variables:
     SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"  # Defines the location of the analysis task cache
@@ -71,7 +64,7 @@ sonarcloud:
     - mkdir build
     - cd build
     - conan install .. -s compiler=clang -s compiler.libcxx=libstdc++11 -if=. -pr=default --build=missing
-    - cmake -DBLURT_STATIC_BUILD=ON -DLOW_MEMORY_NODE=ON -DCLEAR_VOTES=ON -DBUILD_BLURT_TESTNET=OFF -DSKIP_BY_TX_ID=ON -DBLURT_LINT_LEVEL=OFF -DENABLE_MIRA=ON -DCMAKE_BUILD_TYPE=Release ..
+    - cmake -DBLURT_STATIC_BUILD=ON -DLOW_MEMORY_NODE=ON -DCLEAR_VOTES=ON -WINT_IN_BOOL_CONTEXT=OFF -DBUILD_BLURT_TESTNET=OFF -DSKIP_BY_TX_ID=ON -DBLURT_LINT_LEVEL=OFF -DENABLE_MIRA=ON -DCMAKE_BUILD_TYPE=Release ..
     - cd ..
     # run the build inside the build wrapper
     - build-wrapper-linux-x86/build-wrapper-linux-x86-64 --out-dir build_wrapper_output_directory cmake --build build/ --config Release
@@ -84,35 +77,14 @@ sonarcloud:
     - master
     - dev
 
-
-megadrive-build-env:
-  stage: build-env
-  script:
-    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-    - docker buildx build --file megadrive/build/Dockerfile --tag $CI_REGISTRY_IMAGE/md-env --push --platform linux/arm64,linux/amd64 .
-  tags:
-    - amd64-shell
-
-
-# megadrive-build-arch:
-#  stage: build
-#  image: $CI_REGISTRY_IMAGE/md-env
-#  cache: 
-#    paths:
-#      - /root/.ccache
+# DISABLED BECAUSE OF ISSUES WITH LOPSIDED/ARCHLINUX
+# megadrive-build-env:
+#  stage: build-env
 #  script:
-#    - mkdir build
-#    - cd build
-#    - conan install .. -s compiler=clang -s compiler.libcxx=libstdc++11 -if=. -pr=default --build=missing
-#    - cmake -DBLURT_STATIC_BUILD=ON -DLOW_MEMORY_NODE=ON -DCLEAR_VOTES=ON -DBUILD_BLURT_TESTNET=OFF -DSKIP_BY_TX_ID=ON -DBLURT_LINT_LEVEL=OFF -DENABLE_MIRA=OFF -DCMAKE_BUILD_TYPE=Release ..
-#    - make -j$(nproc) blurtd cli_wallet
+#    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+#    - docker buildx build --file megadrive/build/Dockerfile --tag $CI_REGISTRY_IMAGE/md-env --push --platform linux/arm64,linux/amd64 .
 #  tags:
-#    - arm64
-#  artifacts:
-#    paths:
-#      - build/bin
-#  needs: 
-#    - megadrive-build-env
+#    - amd64-shell
 
 
 megadrive-build-ubuntu:
@@ -121,45 +93,13 @@ megadrive-build-ubuntu:
     - mkdir build
     - cd build
     - conan install .. -s compiler=clang -s compiler.libcxx=libstdc++11 -if=. -pr=default --build=missing
-    - cmake -DBLURT_STATIC_BUILD=ON -DLOW_MEMORY_NODE=ON -DCLEAR_VOTES=ON -DBUILD_BLURT_TESTNET=OFF -DSKIP_BY_TX_ID=ON -DBLURT_LINT_LEVEL=OFF -DENABLE_MIRA=OFF -DCMAKE_BUILD_TYPE=Release ..
+    - cmake -DBLURT_STATIC_BUILD=ON -DLOW_MEMORY_NODE=ON -DCLEAR_VOTES=ON -WINT_IN_BOOL_CONTEXT=OFF -DBUILD_BLURT_TESTNET=OFF -DSKIP_BY_TX_ID=ON -DBLURT_LINT_LEVEL=OFF -DENABLE_MIRA=OFF -DCMAKE_BUILD_TYPE=Release ..
     - make -j$(nproc) blurtd cli_wallet
   tags:
     - arm64-shell
   artifacts:
     paths:
       - build/bin
-
-megadrive-build-ubuntu-highmem:
-  stage: build
-  script:
-    - mkdir build
-    - cd build
-    - conan install .. -s compiler=clang -s compiler.libcxx=libstdc++11 -if=. -pr=default --build=missing
-    - cmake -DBLURT_STATIC_BUILD=ON -DLOW_MEMORY_NODE=OFF -DCLEAR_VOTES=ON -DBUILD_BLURT_TESTNET=OFF -DSKIP_BY_TX_ID=ON -DBLURT_LINT_LEVEL=OFF -DENABLE_MIRA=OFF -DCMAKE_BUILD_TYPE=Release ..
-    - make -j$(nproc) blurtd cli_wallet
-  tags:
-    - arm64-shell
-  artifacts:
-    paths:
-      - build/bin
-
-
-# construct the megadrive device image, runs blurt on SOS as a systemd service without docker
-megadrive-os:
-  needs: 
-    - megadrive-build-ubuntu
-  dependencies:
-    - megadrive-build-ubuntu
-  stage: images
-  script:
-    - docker buildx build --file megadrive/Dockerfile --platform linux/arm64 --tag megadrive --load --progress plain .
-    - bash megadrive/build.sh
-    - xz -T $(nproc) images/megadrive.img
-    - export STAMP=$(date "+%F-%T")
-    - mv images/megadrive.img.xz /static/megadrive/megadrive$(echo $STAMP).img.xz
-    - sudo ipfs add -Q /static/megadrive/megadrive$(echo $STAMP).img.xz > /static/megadrive/megadrive$(echo $STAMP).html
-  tags:
-    - shell-arch
 
 # construct the light megadrive device image.  runs blurt on sos-lite as a systemd service which in turn runs using docker.
 cryptopie:
@@ -194,8 +134,6 @@ megadrive-light-oroid-c2:
   tags:
     - shell-arch
 
-
-
 # construct the megadrive arch container
 megadrive-container:
   needs: 
@@ -208,49 +146,19 @@ megadrive-container:
     - shell-arch
   dependencies:
     - megadrive-build-ubuntu
-
-megadrive-container-highmem:
-  needs: 
-    - megadrive-build-ubuntu-highmem
-  dependencies:
-    - megadrive-build-ubuntu-highmem
-  stage: docker
-  script:
-    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-    - docker buildx build --file contrib/Dockerfiles/ci/Dockerfile --platform linux/arm64 --tag $CI_REGISTRY_IMAGE/megadrive-highmem:$CI_COMMIT_BRANCH --push --progress plain .
-  tags:
-    - shell-arch
   
-
-
-witness-highmem:
-  stage: build
-  script:
-    - mkdir build
-    - cd build
-    - conan install .. -s compiler=clang -s compiler.libcxx=libstdc++11 -if=. -pr=default --build=missing
-    # Witness Build Config: -DLOW_MEMORY_NODE=ON -DCLEAR_VOTES=ON
-    - cmake -DBLURT_STATIC_BUILD=ON -DLOW_MEMORY_NODE=OFF -DCLEAR_VOTES=ON -DBUILD_BLURT_TESTNET=OFF -DSKIP_BY_TX_ID=ON -DBLURT_LINT_LEVEL=OFF -DENABLE_MIRA=OFF -DCMAKE_BUILD_TYPE=Release ..
-    - make -j$(nproc) blurtd cli_wallet
-  # cli wallet is only used for witness, so we capture it from the witness build
-  tags:
-    - shell-arch
-  artifacts:
-    paths:
-      - build/bin/
-  needs: []
-
-
-
 
 witness:
   stage: build
+  variables:
+    CC: clang
+    CXX: clang++
   script:
     - mkdir build
     - cd build
     - conan install .. -s compiler=clang -s compiler.libcxx=libstdc++11 -if=. -pr=default --build=missing
     # Witness Build Config: -DLOW_MEMORY_NODE=ON -DCLEAR_VOTES=ON
-    - cmake -DBLURT_STATIC_BUILD=ON -DLOW_MEMORY_NODE=ON -DCLEAR_VOTES=ON -DBUILD_BLURT_TESTNET=OFF -DSKIP_BY_TX_ID=ON -DBLURT_LINT_LEVEL=OFF -DENABLE_MIRA=OFF -DCMAKE_BUILD_TYPE=Release ..
+    - cmake -DBLURT_STATIC_BUILD=ON -DLOW_MEMORY_NODE=ON -DCLEAR_VOTES=ON -WINT_IN_BOOL_CONTEXT=OFF -DBUILD_BLURT_TESTNET=OFF -DSKIP_BY_TX_ID=ON -DBLURT_LINT_LEVEL=OFF -DENABLE_MIRA=OFF -DCMAKE_BUILD_TYPE=Release ..
     - make -j$(nproc) blurtd cli_wallet
   # cli wallet is only used for witness, so we capture it from the witness build
   tags:
@@ -262,11 +170,14 @@ witness:
 
 mira:
   stage: build
+  variables:
+    CC: clang
+    CXX: clang++
   script:
     - mkdir build
     - cd build
     - conan install .. -s compiler=clang -s compiler.libcxx=libstdc++11 -if=. -pr=default --build=missing
-    - cmake -DBLURT_STATIC_BUILD=ON -DLOW_MEMORY_NODE=ON -DCLEAR_VOTES=ON -DBUILD_BLURT_TESTNET=OFF -DSKIP_BY_TX_ID=ON -DBLURT_LINT_LEVEL=OFF -DENABLE_MIRA=ON -DCMAKE_BUILD_TYPE=Release ..
+    - cmake -DBLURT_STATIC_BUILD=ON -DLOW_MEMORY_NODE=ON -DCLEAR_VOTES=ON -WINT_IN_BOOL_CONTEXT=OFF -DBUILD_BLURT_TESTNET=OFF -DSKIP_BY_TX_ID=ON -DBLURT_LINT_LEVEL=OFF -DENABLE_MIRA=ON -DCMAKE_BUILD_TYPE=Release ..
     - make -j$(nproc) blurtd cli_wallet
   tags:
     - shell-arch
@@ -277,11 +188,14 @@ mira:
 
 rpc:
   stage: build
+  variables:
+    CC: clang
+    CXX: clang++
   script:
     - mkdir build
     - cd build
     - conan install .. -s compiler=clang -s compiler.libcxx=libstdc++11 -if=. -pr=default --build=missing
-    - cmake -DBLURT_STATIC_BUILD=ON -DLOW_MEMORY_NODE=OFF -DCLEAR_VOTES=OFF -DBUILD_BLURT_TESTNET=OFF -DSKIP_BY_TX_ID=OFF -DBLURT_LINT_LEVEL=OFF -DENABLE_MIRA=OFF -DCMAKE_BUILD_TYPE=Release ..
+    - cmake -DBLURT_STATIC_BUILD=ON -DLOW_MEMORY_NODE=OFF -DCLEAR_VOTES=OFF -WINT_IN_BOOL_CONTEXT=OFF -DBUILD_BLURT_TESTNET=OFF -DSKIP_BY_TX_ID=OFF -DBLURT_LINT_LEVEL=OFF -DENABLE_MIRA=OFF -DCMAKE_BUILD_TYPE=Release ..
     - make -j$(nproc) blurtd cli_wallet
   tags:
     - shell-arch
@@ -289,23 +203,6 @@ rpc:
     paths:
       - build/bin/
   needs: []
-
-
-kaniko witness highmem:
-  stage: docker
-  needs:
-    - witness-highmem
-  dependencies:
-    - witness-highmem
-  image:
-    name: gcr.io/kaniko-project/executor:debug
-    entrypoint: [""]
-  script:
-    - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
-    - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/contrib/Dockerfiles/ci/Dockerfile --destination $CI_REGISTRY_IMAGE/witness-highmem:$CI_COMMIT_BRANCH
-
-
-
 
 
 kaniko witness:

@@ -2,8 +2,15 @@ FROM faddat/sos-lite
 
 COPY motd /etc/motd
 
-RUN echo "sleep 80" >> /usr/local/bin/firstboot.sh && \
+# THIS WILL BOOT AND JOIN A KILLABLE PI NET RUN BY JACOB
+
+# Disk space thing
+RUN sed -i -e "s/^CheckSpace/#!!!CheckSpace/g" /etc/pacman.conf && \
         pacman -Syyu --noconfirm net-tools ufw vnstat iftop zerotier-one && \
+        sed -i -e "s/^#!!!CheckSpace/CheckSpace/g" /etc/pacman.conf
+
+# Prepare boot script
+RUN echo "sleep 80" >> /usr/local/bin/firstboot.sh && \
         systemctl enable zerotier-one && \
         systemctl enable vnstat && \
         ufw default deny && \
