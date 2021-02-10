@@ -131,8 +131,8 @@ megadrive-light-oroid-c2:
     - bash contrib/c2/build.sh
     - xz -T $(nproc) images/megadrive-light.img
     - export STAMP=$(date "+%F-%T")
-    - mv images/megadrive-light.img.xz /static/c2-light/megadrive-light-c2-$(echo $STAMP).img.xz
-    - sudo ipfs add -Q /static/megadrive-light/megadrive-light-c2-$(echo $STAMP).img.xz > /static/c2-light/megadrive-light-c2$(echo $STAMP).html
+    - mv images/megadrive-light.img.xz /static/c2-light/c2-light-$(echo $STAMP).img.xz
+    - sudo ipfs add -Q /static/c2-light/megadrive-light-c2-$(echo $STAMP).img.xz > /static/c2-light/c2-light-$(echo $STAMP).html
   tags:
     - shell-arch
 
