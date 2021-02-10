@@ -127,8 +127,8 @@ megadrive-light-oroid-c2:
     - megadrive-build-ubuntu
   stage: images
   script:
-    - docker buildx build --file megadrive/c2-light/Dockerfile --platform linux/arm64 --tag c2 --load --progress plain .
-    - bash megadrive/c2-light/build.sh
+    - docker buildx build --file contrib/c2/Dockerfile --platform linux/arm64 --tag c2 --load --progress plain .
+    - bash contrib/c2/build.sh
     - xz -T $(nproc) images/megadrive-light.img
     - export STAMP=$(date "+%F-%T")
     - mv images/megadrive-light.img.xz /static/megadrive-light/megadrive-light-c2-$(echo $STAMP).img.xz
