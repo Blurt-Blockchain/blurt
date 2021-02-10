@@ -35,6 +35,8 @@ sonarcloud:
     - shell-arch
   needs: []
   variables:
+    CC: clang
+    CXX: clang++
     SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"  # Defines the location of the analysis task cache
     GIT_DEPTH: "0"  # Tells git to fetch all the branches of the project, required by the analysis task
     # note that variables SONAR_HOST_URL and SONAR_TOKEN are transmitted to the environament through Gitlab CI
