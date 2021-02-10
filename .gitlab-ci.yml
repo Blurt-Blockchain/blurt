@@ -9,7 +9,7 @@ stages:
 
 
 testnet:
-    image: conanio/clang10
+    image: conanio/clang11
     before_script:
     - sudo apt-get update -qq
     - sudo apt-get install -qq doxygen
@@ -94,8 +94,8 @@ lm no mira:
     - mkdir -p ccache
     - export CCACHE_BASEDIR=${PWD}
     - export CCACHE_DIR=${PWD}/ccache
-    stage: build
-    script:
+  stage: build
+  script:
     - mkdir build
     - cd build
     - conan install .. -s compiler=clang -s compiler.libcxx=libstdc++11 -if=. -pr=default --build=missing
@@ -103,60 +103,11 @@ lm no mira:
     - cmake -DBLURT_STATIC_BUILD=ON -DLOW_MEMORY_NODE=OFF -DCLEAR_VOTES=OFF -DBUILD_BLURT_TESTNET=ON -DSKIP_BY_TX_ID=ON -DBLURT_LINT_LEVEL=OFF -DENABLE_MIRA=OFF -DCMAKE_BUILD_TYPE=Release ..
     - make -j$(nproc) blurtd cli_wallet
   # cli wallet is only used for witness, so we capture it from the witness build
-    tags:
+  tags:
     - metal
-    artifacts:
+  artifacts:
       paths:
         - /builds/blurt/blurt/build/bin/
-
-# Took sonarcloud's default multi-stage thing and made it a single stage.
-sonarcloud: 
-  stage: test
-  image: conanio/clang10
-  needs: []
-  variables:
-    SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"  # Defines the location of the analysis task cache
-    GIT_DEPTH: "0"  # Tells git to fetch all the branches of the project, required by the analysis task
-    # note that variables SONAR_HOST_URL and SONAR_TOKEN are transmitted to the environament through Gitlab CI
-
-  # this job sdownloads ans unpacks the build-wrapper and the sonar-scanner
-  # in this example it is done for every build.
-  # This can be optimized by caching the files or better, by including them, in the build docker image
-
-  script:
-    # Download build-wrapper
-    - curl "${SONAR_HOST_URL}/static/cpp/build-wrapper-linux-x86.zip" --output build-wrapper-linux-x86.zip
-    - apt install -y unzip
-    - unzip build-wrapper-linux-x86.zip
-    # workaround to the bw haswell bug
-    - cp build-wrapper-linux-x86/libinterceptor-x86_64.so build-wrapper-linux-x86/libinterceptor-haswell.so
-    # get sonar-scanner
-    - curl 'https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.2.0.1873-linux.zip' --output sonar-scanner-cli-4.2.0.1873-linux.zip
-    - unzip sonar-scanner-cli-4.2.0.1873-linux.zip
-    - mv sonar-scanner-4.2.0.1873-linux sonar-scanner
-# NO CACHE: SINGLE-STAGE
-#  cache:
-#    policy: push
-#    key: "${CI_COMMIT_SHORT_SHA}"
-#    paths:
-#      - build-wrapper-linux-x86/ # to share the build-wrapper between jobs
-#      - sonar-scanner/           # to share the sonar-scanner between jobs
-    # prepare the build tree
-    - mkdir build
-    - cd build
-    - conan install .. -s compiler=clang -s compiler.libcxx=libstdc++11 -if=. -pr=default --build=missing
-    - cmake -DBLURT_STATIC_BUILD=ON -DLOW_MEMORY_NODE=ON -DCLEAR_VOTES=ON -DBUILD_BLURT_TESTNET=OFF -DSKIP_BY_TX_ID=ON -DBLURT_LINT_LEVEL=OFF -DENABLE_MIRA=ON -DCMAKE_BUILD_TYPE=Release ..
-    - cd ..
-    # run the build inside the build wrapper
-    - build-wrapper-linux-x86/build-wrapper-linux-x86-64 --out-dir build_wrapper_output_directory cmake --build build/ --config Release
-    - sonar-scanner/bin/sonar-scanner -X -Dsonar.host.url="${SONAR_HOST_URL}" -Dsonar.token="${SONAR_TOKEN}"
-  artifacts:
-    paths:
-      - /builds/blurt/blurt/build/bin/  
-  only:
-    - merge_requests
-    - master
-    - dev
 
 
 megadrive-build-env:
@@ -199,24 +150,6 @@ megadrive-build-ubuntu-highmem:
       - build/bin
 
 
-# construct the megadrive device image, runs blurt on SOS as a systemd service without docker
-# megadrive-os:
-#  needs: 
-#    - megadrive-build-ubuntu
-#  dependencies:
-#    - megadrive-build-ubuntu
-#  stage: images
-#  script:
-#    - docker buildx build --file megadrive/Dockerfile --platform linux/arm64 --tag megadrive --load --progress plain .
-#    - bash megadrive/build.sh
-#    - xz -T $(nproc) images/megadrive.img
-#    - export STAMP=$(date "+%F-%T")
-#    - mv images/megadrive.img.xz /static/megadrive/megadrive$(echo $STAMP).img.xz
-#    - sudo ipfs add -Q /static/megadrive/megadrive$(echo $STAMP).img.xz > /static/megadrive/megadrive$(echo $STAMP).html
-#  tags:
-#    - shell-arch
-
-# construct the light megadrive device image.  runs blurt on sos-lite as a systemd service which in turn runs using docker.
 cryptopie:
   needs: 
     - megadrive-build-ubuntu
@@ -249,8 +182,6 @@ megadrive-light-oroid-c2:
   tags:
     - shell-arch
 
-
-
 # construct the megadrive arch container
 megadrive-container:
   needs: 
@@ -264,36 +195,6 @@ megadrive-container:
   dependencies:
     - megadrive-build-ubuntu
 
-megadrive-container-highmem:
-  needs: 
-    - megadrive-build-ubuntu-highmem
-  dependencies:
-    - megadrive-build-ubuntu-highmem
-  stage: docker
-  script:
-    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-    - docker buildx build --file contrib/Dockerfiles/ci/Dockerfile --platform linux/arm64 --tag $CI_REGISTRY_IMAGE/megadrive-highmem:$CI_COMMIT_BRANCH --push --progress plain .
-  tags:
-    - shell-arch
-  
-
-
-witness-highmem:
-  stage: build
-  script:
-    - mkdir build
-    - cd build
-    - conan install .. -s compiler=clang -s compiler.libcxx=libstdc++11 -if=. -pr=default --build=missing
-    # Witness Build Config: -DLOW_MEMORY_NODE=ON -DCLEAR_VOTES=ON
-    - cmake -DBLURT_STATIC_BUILD=ON -DLOW_MEMORY_NODE=OFF -DCLEAR_VOTES=ON -DBUILD_BLURT_TESTNET=OFF -DSKIP_BY_TX_ID=ON -DBLURT_LINT_LEVEL=OFF -DENABLE_MIRA=OFF -DCMAKE_BUILD_TYPE=Release ..
-    - make -j$(nproc) blurtd cli_wallet
-  # cli wallet is only used for witness, so we capture it from the witness build
-  tags:
-    - shell-arch
-  artifacts:
-    paths:
-      - build/bin/
-  needs: []
 
 
 
@@ -344,19 +245,6 @@ rpc:
       - build/bin/
   needs: []
 
-
-kaniko witness highmem:
-  stage: docker
-  needs:
-    - witness-highmem
-  dependencies:
-    - witness-highmem
-  image:
-    name: gcr.io/kaniko-project/executor:debug
-    entrypoint: [""]
-  script:
-    - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
-    - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/contrib/Dockerfiles/ci/Dockerfile --destination $CI_REGISTRY_IMAGE/witness-highmem:$CI_COMMIT_BRANCH
 
 
 
