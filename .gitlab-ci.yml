@@ -11,8 +11,8 @@ stages:
 testnet:
     stage: build
     variables:
-      CC: clang
-      CXX: clang++
+      CC: "ccache clang"
+      CXX: "ccache clang++"
     needs: []
     script:
     - mkdir build
@@ -153,8 +153,8 @@ megadrive-container:
 witness:
   stage: build
   variables:
-    CC: clang
-    CXX: clang++
+    CC: "ccache clang"
+    CXX: "ccache clang++"
   script:
     - mkdir build
     - cd build
@@ -173,8 +173,8 @@ witness:
 mira:
   stage: build
   variables:
-    CC: clang
-    CXX: clang++
+    CC: "ccache clang"
+    CXX: "ccache clang++"
   script:
     - mkdir build
     - cd build
@@ -191,8 +191,8 @@ mira:
 rpc:
   stage: build
   variables:
-    CC: clang
-    CXX: clang++
+    CC: "ccache clang"
+    CXX: "ccache clang++"
   script:
     - mkdir build
     - cd build
