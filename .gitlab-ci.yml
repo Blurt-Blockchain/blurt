@@ -153,18 +153,6 @@ megadrive-container:
     - shell-arch
   dependencies:
     - megadrive-build-ubuntu
-
-megadrive-container-highmem:
-  needs: 
-    - megadrive-build-ubuntu-highmem
-  dependencies:
-    - megadrive-build-ubuntu-highmem
-  stage: docker
-  script:
-    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-    - docker buildx build --file contrib/Dockerfiles/ci/Dockerfile --platform linux/arm64 --tag $CI_REGISTRY_IMAGE/megadrive-highmem:$CI_COMMIT_BRANCH --push --progress plain .
-  tags:
-    - shell-arch
   
 
 witness:
