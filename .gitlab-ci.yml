@@ -9,18 +9,11 @@ stages:
 
 
 testnet:
-    image: conanio/clang11
-    before_script:
-    - sudo apt-get update -qq
-    - sudo apt-get install -qq doxygen
-    - conan config set storage.path="${CI_PROJECT_DIR}/.cache/conan"
-    # Pull in submodules
-    - git submodule update --init --recursive
-    # ccache for acceleration
-    - mkdir -p ccache
-    - export CCACHE_BASEDIR=${PWD}
-    - export CCACHE_DIR=${PWD}/ccache
     stage: build
+    variables:
+      CC: clang
+      CXX: clang++
+    needs: []
     script:
     - mkdir build
     - cd build
@@ -30,10 +23,10 @@ testnet:
     - make -j$(nproc) blurtd cli_wallet
   # cli wallet is only used for witness, so we capture it from the witness build
     tags:
-    - metal
+    - shell-arch
     artifacts:
       paths:
-        - /builds/blurt/blurt/build/bin/
+        - build/bin/
 
 # Took sonarcloud's default multi-stage thing and made it a single stage.
 sonarcloud: 
