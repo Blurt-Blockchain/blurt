@@ -21,6 +21,7 @@ testnet:
     - export CCACHE_BASEDIR=${PWD}
     - export CCACHE_DIR=${PWD}/ccache
     stage: build
+    needs: []
     script:
     - mkdir build
     - cd build
