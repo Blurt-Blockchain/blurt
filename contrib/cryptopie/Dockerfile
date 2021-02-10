@@ -4,8 +4,13 @@ COPY motd /etc/motd
 
 # THIS WILL BOOT AND JOIN A KILLABLE PI NET RUN BY JACOB
 
-RUN echo "sleep 80" >> /usr/local/bin/firstboot.sh && \
+# Disk space thing
+RUN sed -i -e "s/^CheckSpace/#!!!CheckSpace/g" /etc/pacman.conf && \
         pacman -Syyu --noconfirm net-tools ufw vnstat iftop zerotier-one && \
+        sed -i -e "s/^#!!!CheckSpace/CheckSpace/g" /etc/pacman.conf
+
+# Prepare boot script
+RUN echo "sleep 80" >> /usr/local/bin/firstboot.sh && \
         systemctl enable zerotier-one && \
         systemctl enable vnstat && \
         ufw default deny && \
