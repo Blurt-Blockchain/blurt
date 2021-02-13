@@ -458,7 +458,7 @@ struct comment_options_extension_visitor
 void comment_options_evaluator::do_apply( const comment_options_operation& o )
 {
    if (!_db.has_hardfork(BLURT_HARDFORK_0_3))
-      FC_ASSERT(comment.percent_blurt == 0, "Payments in blurt are disabled");
+      FC_ASSERT(o.percent_blurt == 0, "Payments in blurt are disabled");
 
    const auto& comment = _db.get_comment( o.author, o.permlink );
    if( !o.allow_curation_rewards || !o.allow_votes || o.max_accepted_payout < comment.max_accepted_payout )
