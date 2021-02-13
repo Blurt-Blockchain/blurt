@@ -11,7 +11,7 @@
 // https://developers.steem.io/tutorials-recipes/understanding-configuration-values
 
 #ifdef IS_TEST_NET
-#define BLURT_BLOCKCHAIN_VERSION              ( version(0, 2, 0) )
+#define BLURT_BLOCKCHAIN_VERSION              ( version(0, 3, 0) )
 
 #define BLURT_INIT_PRIVATE_KEY                (fc::ecc::private_key::regenerate(fc::sha256::hash(std::string("init_key"))))
 #define BLURT_INIT_PUBLIC_KEY_STR             (std::string( blurt::protocol::public_key_type(BLURT_INIT_PRIVATE_KEY.get_public_key()) ))
