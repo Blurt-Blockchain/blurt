@@ -10,7 +10,7 @@ const object* transaction_index::create(const std::function<void (object*)>& con
    constructor(&obj);
 
    auto result = _index.insert(std::move(obj));
-   FC_ASSERT(result.second, "Could not create transaction_object! Uniqueness Constraint?.  error from: blurt/chain/transaction_object.cpp    auto result = _index.insert(std::move(obj));
+   FC_ASSERT(result.second, "Could not create transaction_object! Uniqueness Constraint?.  error from: blurt/chain/transaction_object.cpp  auto result = _index.insert(std::move(obj));
 ");
    return &*result.first;
 }
