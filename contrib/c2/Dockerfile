@@ -12,7 +12,7 @@ RUN sed -i -e "s/^CheckSpace/#!!!CheckSpace/g" /etc/pacman.conf && \
         mv starport /usr/bin && \
         chmod +x /usr/bin/starport && \
         cd .. && rm -rf starport && \
-        ystemctl enable zerotier-one && \
+        systemctl enable zerotier-one && \
         systemctl enable vnstat && \
         ufw default deny && \
         ufw default deny outgoing && \
