@@ -104,7 +104,7 @@ megadrive-build-ubuntu:
     paths:
       - build/bin
 
-# construct the light megadrive device image.  runs blurt on sos-lite as a systemd service which in turn runs using docker.
+# construct the light megadrive device image.  runs blurt on sos-lite as a container.
 cryptopie:
   needs: 
     - megadrive-build-ubuntu
