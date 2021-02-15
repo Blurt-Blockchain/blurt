@@ -118,7 +118,7 @@ cryptopie:
   tags:
     - shell-arch
 
-megadrive-light-oroid-c2:
+oroid-c2:
   needs: 
     - megadrive-build-ubuntu
   dependencies:
