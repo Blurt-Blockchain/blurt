@@ -3,7 +3,6 @@ stages:
   - build
   - docker
   - images
-  - pdfs
   - test
 
 
@@ -90,6 +89,7 @@ sonarcloud:
 #    - amd64-shell
 
 
+# Builds blurt arm64-ified
 megadrive-build-ubuntu:
   stage: build
   script:
