@@ -2,8 +2,11 @@ FROM lopsided/archlinux
 
 MAINTAINER jacobgadikian@gmail.com
 
-RUN pacman -Syyu --noconfirm python-pip wget git bison doxygen base-devel clang ccache cmake npm yarn && \
-		pip install conan
+RUN sed -i -e "s/^CheckSpace/#!!!CheckSpace/g" /etc/pacman.conf && \
+		pacman -Syyu --noconfirm python-pip wget git bison doxygen base-devel clang ccache cmake npm yarn && \
+		pip install conan && \
+		sed -i -e "s/^#!!!CheckSpace/CheckSpace/g" /etc/pacman.conf
+
 
 COPY ./megadrive/default /root/.conan/profiles/default
 
