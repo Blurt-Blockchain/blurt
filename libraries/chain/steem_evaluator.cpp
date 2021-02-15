@@ -1137,7 +1137,10 @@ void vote_evaluator::do_apply( const vote_operation& o )
 
    used_mana = ( used_mana + max_vote_denom - 1 ) / max_vote_denom;
    int64_t abs_rshares = used_mana.to_int64();
-   abs_rshares -= BLURT_VOTE_DUST_THRESHOLD;
+   if( !_db.has_hardfork(BLURT_HARDFORK_0_3) ) // dust threshold removed in HF 0.3.0
+   {
+      abs_rshares -= BLURT_VOTE_DUST_THRESHOLD;
+   }
    abs_rshares = std::max( int64_t(0), abs_rshares );
    uint32_t cashout_delta = ( comment.cashout_time - _db.head_block_time() ).to_seconds();
 
@@ -1173,7 +1176,7 @@ void vote_evaluator::do_apply( const vote_operation& o )
             c.vote_rshares += rshares;
          if( rshares > 0 )
             c.net_votes++;
-         else
+         else if( !_db.has_hardfork(BLURT_HARDFORK_0_3) || (_db.has_hardfork(BLURT_HARDFORK_0_3) && rshares < 0) )
             c.net_votes--;
       });
 
@@ -1228,8 +1231,14 @@ void vote_evaluator::do_apply( const vote_operation& o )
             // cv.weight = W(R_1) - W(R_0)
             const auto& reward_fund = _db.get_reward_fund( comment );
             auto curve = reward_fund.curation_reward_curve;
-            uint64_t old_weight = util::evaluate_reward_curve( old_vote_rshares.value, curve, reward_fund.content_constant ).to_uint64();
-            uint64_t new_weight = util::evaluate_reward_curve( comment.vote_rshares.value, curve, reward_fund.content_constant ).to_uint64();
+            auto content_constant = reward_fund.content_constant;
+            if( _db.has_hardfork(BLURT_HARDFORK_0_3) )
+            {
+               // in HF 0.3.0, this value changed but we still want old value for the curation curve
+               content_constant = BLURT_CONTENT_CONSTANT_HF21;
+            }
+            uint64_t old_weight = util::evaluate_reward_curve( old_vote_rshares.value, curve, content_constant ).to_uint64();
+            uint64_t new_weight = util::evaluate_reward_curve( comment.vote_rshares.value, curve, content_constant ).to_uint64();
 
             if( old_weight >= new_weight ) // old_weight > new_weight should never happen
             {

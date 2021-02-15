@@ -32,13 +32,14 @@
 #define BLURT_ACCOUNT_RECOVERY_REQUEST_EXPIRATION_PERIOD  fc::seconds(12)
 #define BLURT_OWNER_UPDATE_LIMIT                          fc::seconds(0)
 
-#define BLURT_VOTE_DUST_THRESHOLD             (0)
+// removed in HF 0.3.0
+#define BLURT_VOTE_DUST_THRESHOLD             (50000000)
 
 #define BLURT_INIT_MINER_NAME                 "initminer"
 
 #else // IS LIVE BLURT NETWORK
 
-#define BLURT_BLOCKCHAIN_VERSION              ( version(0, 2, 0) )
+#define BLURT_BLOCKCHAIN_VERSION              ( version(0, 3, 0) )
 
 #define BLURT_INIT_PUBLIC_KEY_STR             "BLT5QRsKZp7TFNQdTj7VbpGHWxNL3Eq4zmfER4vJPBpK5VMbrprn8"
 #define BLURT_CHAIN_ID                        (fc::sha256::hash("blurt")) /// cd8d90f29ae273abec3eaa7731e25934c63eb654d55080caff2ebb7f5df6381f
@@ -57,6 +58,7 @@
 #define BLURT_ACCOUNT_RECOVERY_REQUEST_EXPIRATION_PERIOD  fc::days(1)
 #define BLURT_OWNER_UPDATE_LIMIT                          fc::minutes(60)
 
+// removed in HF 0.3.0
 #define BLURT_VOTE_DUST_THRESHOLD             (50000000)
 
 #define BLURT_INIT_MINER_NAME                 "initblurt"
@@ -109,7 +111,7 @@
 #define BLURT_PROPOSAL_FUND_PERCENT_HF21      (10*BLURT_1_PERCENT)
 
 #define BLURT_HF21_CONVERGENT_LINEAR_RECENT_CLAIMS (fc::uint128_t(0,305178654659033363ull))
-#define BLURT_CONTENT_CONSTANT_HF21           (fc::uint128_t(0,2000000000000ull))
+#define BLURT_CONTENT_CONSTANT_HF21           (fc::uint128_t(0,2000000000000ull)) // value changed in HF 0.3.0, see libraries\protocol\hardfork.d\0_3.hf, now called REWARD_CONTENT_CONSTANT
 
 #define BLURT_BANDWIDTH_AVERAGE_WINDOW_SECONDS (60*60*24*7) ///< 1 week
 #define BLURT_BANDWIDTH_PRECISION             (uint64_t(1000000)) ///< 1 million

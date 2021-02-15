@@ -85,6 +85,8 @@ namespace blurt { namespace protocol {
 
    bool is_virtual_operation( const operation& op );
 
+   void set_op_hardfork( operation& op, uint32_t hardfork );
+
 } } // blurt::protocol
 
 /*namespace fc {
