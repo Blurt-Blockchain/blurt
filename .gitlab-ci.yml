@@ -119,10 +119,7 @@ cryptopie:
     - shell-arch
 
 oroid-c2:
-  needs: 
-    - megadrive-build-ubuntu
-  dependencies:
-    - megadrive-build-ubuntu
+  needs: []
   stage: images
   script:
     - docker buildx build --file contrib/c2/Dockerfile --platform linux/arm64 --tag c2 --load --progress plain .
