@@ -181,7 +181,6 @@ SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-strict-aliasing -DBOOST_THREAD_DONT
 SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fno-strict-aliasing -DBOOST_THREAD_DONT_PROVIDE_PROMISE_LAZY" )
 
 # external_plugins needs to be compiled first because libraries/app depends on BLURT_EXTERNAL_PLUGINS being fully populated
-add_subdirectory( external_plugins )
 add_subdirectory( libraries )
 add_subdirectory( programs )
 
