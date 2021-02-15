@@ -2,6 +2,7 @@ FROM faddat/snapshot
 
 MAINTAINER Jacob Gadikian <jacob@blurt.foundation>
 
+RUN pacman-key --populate archlinux || pacman-key --populate archlinuxarm
 
 COPY ./build/bin/blurtd /usr/bin/blurtd
 COPY ./build/bin/cli_wallet /usr/bin/cli_wallet
