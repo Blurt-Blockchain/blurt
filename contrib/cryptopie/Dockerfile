@@ -5,12 +5,22 @@ COPY motd /etc/motd
 # THIS WILL BOOT AND JOIN A KILLABLE PI NET RUN BY JACOB
 
 # Disk space thing
+# Download starport, too
 RUN sed -i -e "s/^CheckSpace/#!!!CheckSpace/g" /etc/pacman.conf && \
         pacman -Syyu --noconfirm net-tools ufw vnstat iftop zerotier-one && \
+        mkdir starport && \
+        cd starport && \
+        wget -O starport_0.14.0_linux_arm64.tar.gz https://github.com/tendermint/starport/releases/download/v0.14.0/starport_0.14.0_linux_arm64.tar.gz && \
+        tar xvf starport_0.14.0_linux_arm64.tar.gz && \
+        mv starport /usr/bin && \
+        chmod +x /usr/bin/starport && \
         sed -i -e "s/^#!!!CheckSpace/CheckSpace/g" /etc/pacman.conf
 
 # Prepare boot script
+# cryptopie is now a full-freatured Starport development enviornment!
+# translation:  It is ready to make a splash.
 RUN echo "sleep 80" >> /usr/local/bin/firstboot.sh && \
+        pacman -Syyu --noconfirm go npm yarn && \
         systemctl enable zerotier-one && \
         systemctl enable vnstat && \
         ufw default deny && \
