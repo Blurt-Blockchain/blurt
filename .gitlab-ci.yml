@@ -106,10 +106,7 @@ megadrive-build-ubuntu:
 
 # construct the light megadrive device image.  runs blurt on sos-lite as a container.
 cryptopie:
-  needs: 
-    - megadrive-build-ubuntu
-  dependencies:
-    - megadrive-build-ubuntu
+  needs: []
   stage: images
   script:
     - docker buildx build --file contrib/cryptopie/Dockerfile --platform linux/arm64 --tag cryptopie --load --progress plain .
