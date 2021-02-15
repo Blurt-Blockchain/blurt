@@ -3712,7 +3712,7 @@ void database::init_hardforks()
 #ifdef IS_TEST_NET
    FC_ASSERT( BLURT_HARDFORK_0_3 == 3, "Invalid hardfork configuration" );
    _hardfork_versions.times[ BLURT_HARDFORK_0_3 ] = fc::time_point_sec( BLURT_HARDFORK_0_3_TIME );
-   _hardfork_versions.times[ BLURT_HARDFORK_0_3 ] = BLURT_HARDFORK_0_3_VERSION;
+   _hardfork_versions.versions[ BLURT_HARDFORK_0_3 ] = BLURT_HARDFORK_0_3_VERSION;
 #endif
 
    const auto& hardforks = get_hardfork_property_object();
