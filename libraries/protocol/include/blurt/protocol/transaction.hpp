@@ -24,6 +24,8 @@ using fc::ecc::canonical_signature_type;
       void                validate() const;
       digest_type         sig_digest( const chain_id_type& chain_id )const;
 
+      void set_hardfork( uint32_t hardfork );
+
       void set_expiration( fc::time_point_sec expiration_time );
       void set_reference_block( const block_id_type& reference_block );
 

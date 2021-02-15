@@ -10,6 +10,8 @@ namespace blurt { namespace protocol {
 
    struct base_operation
    {
+      uint32_t hardfork;
+
       void get_required_authorities( vector<authority>& )const {}
       void get_required_active_authorities( flat_set<account_name_type>& )const {}
       void get_required_posting_authorities( flat_set<account_name_type>& )const {}
@@ -17,6 +19,9 @@ namespace blurt { namespace protocol {
 
       bool is_virtual()const { return false; }
       void validate()const {}
+
+      void set_hardfork( uint32_t num ) { hardfork = num; }
+      bool has_hardfork( uint32_t num )const { return num <= hardfork; }
    };
 
    struct virtual_operation : public base_operation

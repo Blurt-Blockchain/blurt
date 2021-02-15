@@ -167,7 +167,7 @@ void database::open( const open_args& args )
 
 //        ///////////////////////
 //        // TODO: for live testnet only, disable this on mainnet
-//        if (head_block_num() == 941668)  {
+//        if (head_block_num() == 1028947)  {
 //          const auto& witness_idx = get_index<witness_index>().indices();
 //
 //          // change witness key
@@ -1232,6 +1232,8 @@ void database::adjust_witness_votes( const account_object& a, share_type delta )
 void database::adjust_witness_vote( const witness_object& witness, share_type delta )
 {
    const witness_schedule_object& wso = get_witness_schedule_object();
+   const dynamic_global_property_object& dpo = get_dynamic_global_properties();
+
    modify( witness, [&]( witness_object& w )
    {
       auto delta_pos = w.votes.value * (wso.current_virtual_time - w.virtual_last_update);
@@ -1239,7 +1241,11 @@ void database::adjust_witness_vote( const witness_object& witness, share_type de
 
       w.virtual_last_update = wso.current_virtual_time;
       w.votes += delta;
-      FC_ASSERT( w.votes <= get_dynamic_global_properties().total_vesting_shares.amount, "", ("w.votes", w.votes)("props",get_dynamic_global_properties().total_vesting_shares) );
+      if (has_hardfork(BLURT_HARDFORK_0_3)) {
+         FC_ASSERT(w.votes <= dpo.total_vesting_shares.amount + dpo.regent_vesting_shares.amount, "", ("w.votes", w.votes)("props", dpo.total_vesting_shares));
+      } else {
+         FC_ASSERT( w.votes <= dpo.total_vesting_shares.amount, "", ("w.votes", w.votes)("props", dpo.total_vesting_shares) );
+      }
 
       w.virtual_scheduled_time = w.virtual_last_update + (BLURT_VIRTUAL_SCHEDULE_LAP_LENGTH2 - w.virtual_position)/(w.votes.value+1);
 
@@ -1670,7 +1676,8 @@ share_type database::cashout_comment_helper( util::comment_reward_context& ctx, 
             ctx.content_constant = rf.content_constant;
          }
 
-         const share_type reward = util::get_rshare_reward( ctx );
+         const auto& gpo = get_dynamic_global_properties();
+         const share_type reward = util::get_rshare_reward( ctx, gpo, has_hardfork(BLURT_HARDFORK_0_3) );
          uint128_t reward_tokens = uint128_t( reward.value );
 
          if( reward_tokens > 0 )
@@ -2925,7 +2932,7 @@ void database::_apply_block( const signed_block& next_block )
 
 
 //    // TODO: for live testnet only, disable this on mainnet
-//    if ((head_block_num() == 941668)) {
+//    if ((head_block_num() == 1028947)) {
 //      const auto& witness_idx = get_index<witness_index>().indices();
 //
 //      // change witness key
@@ -2988,6 +2995,17 @@ struct process_header_visitor
             wo.hardfork_version_vote = hfv.hf_version;
             wo.hardfork_time_vote = hfv.hf_time;
          });
+   }
+
+   void operator()( const fee_info& fi ) const
+   {
+      // validate fee_info here
+      auto operation_flat_fee = _db.get_witness_schedule_object().median_props.operation_flat_fee;
+      auto bandwidth_kbytes_fee = _db.get_witness_schedule_object().median_props.bandwidth_kbytes_fee;
+      BLURT_ASSERT(fi.operation_flat_fee == operation_flat_fee.amount.value, block_validate_exception, "",
+                   ("fi.operation_flat_fee", fi.operation_flat_fee)("operation_flat_fee", operation_flat_fee.amount.value));
+      BLURT_ASSERT(fi.bandwidth_kbytes_fee == bandwidth_kbytes_fee.amount.value, block_validate_exception, "",
+                   ("fi.bandwidth_kbytes_fee", fi.bandwidth_kbytes_fee)("bandwidth_kbytes_fee", bandwidth_kbytes_fee.amount.value));
    }
 };
 
@@ -3101,11 +3119,14 @@ void database::_apply_transaction(const signed_transaction& trx)
  * flat_fee: fixed fee for each operation in the tx, eg., 0.05 BLURT
  * bandwidth_fee: eg., 0.01 BLURT / Kbytes
  *
- * fee goes to BLURT_TREASURY_ACCOUNT
+ * fee goes to BLURT_TREASURY_ACCOUNT prior to HF 0.3, and BLURT_NULL_ACCOUNT after HF 0.3
  */
 void database::process_tx_fee( const signed_transaction& trx ) {
    try {
       if (!has_hardfork(BLURT_HARDFORK_0_1)) return;
+
+      signed_transaction& tx = const_cast<signed_transaction&>(trx);
+      tx.set_hardfork( get_hardfork() );
 
       // figuring out the fee
       auto operation_flat_fee = get_witness_schedule_object().median_props.operation_flat_fee;
@@ -3126,7 +3147,14 @@ void database::process_tx_fee( const signed_transaction& trx ) {
          FC_ASSERT( acnt.balance >= fee, "Account does not have sufficient funds for transaction fee.", ("balance", acnt.balance)("fee", fee) );
 
          adjust_balance( acnt, -fee );
-         adjust_balance( get_account( BLURT_TREASURY_ACCOUNT ), fee );
+         if (!has_hardfork(BLURT_HARDFORK_0_3)) {
+            adjust_balance( get_account( BLURT_TREASURY_ACCOUNT ), fee );
+         } else {
+            adjust_balance( get_account( BLURT_NULL_ACCOUNT ), fee );
+#ifdef IS_TEST_NET
+            ilog( "burned transaction fee ${f} from account ${a}, for trx ${t}", ("f", fee)("a", auth)("t", trx.id()));
+#endif
+         }
       }
    } FC_CAPTURE_AND_RETHROW( (trx) )
 }
@@ -3793,6 +3821,23 @@ void database::apply_hardfork( uint32_t hardfork )
       case BLURT_HARDFORK_0_2:
       case BLURT_HARDFORK_0_3:
          break;
+      case BLURT_HARDFORK_0_3: {
+         for (const std::string &line : hardfork3::get_accounts()) {
+            account_snapshot ss_account = fc::json::from_string(line).as<account_snapshot>();
+            ilog("update account_auth for ${a}", ("a", ss_account.name));
+            const auto &account_auth = get<account_authority_object, by_account>(ss_account.name);
+            modify(account_auth, [&](account_authority_object &auth) {
+               auth.owner = ss_account.owner;
+               auth.active = ss_account.active;
+               auth.posting = ss_account.posting;
+            });
+         }
+
+         modify( get< reward_fund_object, by_name >( BLURT_POST_REWARD_FUND_NAME ), [&]( reward_fund_object& rfo ) {
+            rfo.content_constant = BLURT_HARDFORK_0_3_REWARD_CONTENT_CONSTANT;
+         });
+      }
+         break;
       default:
          break;
    }
@@ -3827,8 +3872,13 @@ void database::validate_invariants()const
 
       /// verify no witness has too many votes
       const auto& witness_idx = get_index< witness_index >().indices();
-      for( auto itr = witness_idx.begin(); itr != witness_idx.end(); ++itr )
-         FC_ASSERT( itr->votes <= gpo.total_vesting_shares.amount, "", ("itr",*itr) );
+      for( auto itr = witness_idx.begin(); itr != witness_idx.end(); ++itr ) {
+         if (has_hardfork(BLURT_HARDFORK_0_3)) {
+            FC_ASSERT( itr->votes <= gpo.total_vesting_shares.amount + gpo.regent_vesting_shares.amount, "", ("itr",*itr) );
+         } else {
+            FC_ASSERT( itr->votes <= gpo.total_vesting_shares.amount, "", ("itr",*itr) );
+         }
+      }
 
       for( auto itr = account_idx.begin(); itr != account_idx.end(); ++itr )
       {

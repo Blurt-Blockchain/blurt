@@ -162,7 +162,6 @@ witness:
     # Witness Build Config: -DLOW_MEMORY_NODE=ON -DCLEAR_VOTES=ON
     - cmake -DBLURT_STATIC_BUILD=ON -DLOW_MEMORY_NODE=ON -DCLEAR_VOTES=ON -WINT_IN_BOOL_CONTEXT=OFF -DBUILD_BLURT_TESTNET=OFF -DSKIP_BY_TX_ID=ON -DBLURT_LINT_LEVEL=OFF -DENABLE_MIRA=OFF -DCMAKE_BUILD_TYPE=Release ..
     - make -j$(nproc) blurtd cli_wallet
-  # cli wallet is only used for witness, so we capture it from the witness build
   tags:
     - shell-arch
   artifacts:
@@ -247,4 +246,3 @@ kaniko mira:
   script:
     - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
     - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/contrib/Dockerfiles/ci/Dockerfile --destination $CI_REGISTRY_IMAGE/mira:$CI_COMMIT_BRANCH
-  
