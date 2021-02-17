@@ -28,6 +28,9 @@ RUN sed -i -e "s/^CheckSpace/#!!!CheckSpace/g" /etc/pacman.conf && \
         ufw deny out on eth0 from any to any port 1776 && \
         ufw allow out ntp && \
         ufw allow out 53/udp && \
+        mkdir /root/go && \
+        echo "export PATH=$PATH:/root/go/bin" > /root/.bash_profile && \
+        echo "export GOPATH=/root/go" >> /root/.bash_profile && \
         sed -i -e "s/^#!!!CheckSpace/CheckSpace/g" /etc/pacman.conf
 
 
