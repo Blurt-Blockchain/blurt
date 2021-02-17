@@ -93,7 +93,7 @@ sudo rsync -a ./.tmp/result-rootfs/* mnt/rootfs
 
 # chill for a moment before unmounting
 sleep 20
-sudo umount mnt/rootfs
+sudo umount $(echo $LOOP)p1
 # Drop the loop mount
 sudo losetup -d $LOOP
 
