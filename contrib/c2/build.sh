@@ -90,13 +90,19 @@ cd ..
 sudo mkdir -p mnt/rootfs
 sudo mount $(echo $LOOP)p1 mnt/rootfs
 sudo rsync -a ./.tmp/result-rootfs/* mnt/rootfs
+
+# chill for a moment before unmounting
+sleep 20
 sudo umount mnt/rootfs
+# Drop the loop mount
+sudo losetup -d $LOOP
+
+
 
 # Tell pi where its memory card is:  This is needed only with the mainline linux kernel provied by linux-aarch64
 # sed -i 's/mmcblk0/mmcblk1/g' ./.tmp/result-rootfs/etc/fstab
 
-# Drop the loop mount
-sudo losetup -d $LOOP
+
 
 # Delete .tmp and mnt
 sudo rm -rf ./.tmp
