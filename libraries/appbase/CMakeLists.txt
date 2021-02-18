@@ -18,19 +18,11 @@ LIST(APPEND BOOST_COMPONENTS thread
 FIND_PACKAGE(Boost 1.58 REQUIRED COMPONENTS ${BOOST_COMPONENTS})
 set( Boost_USE_STATIC_LIBS ON CACHE STRING "ON or OFF" )
 
-if( APPLE )
-  # Apple Specific Options Here
-  message( STATUS "Configuring AppBase on OS X" )
-  set( CMAKE_CXX_FLAGS "${CMAKE_C_FLAGS} -std=c++14 -stdlib=libc++ -Wall -Wno-conversion -Wno-deprecated-declarations" )
-else( APPLE )
-  # Linux Specific Options Here
-  message( STATUS "Configuring AppBase on Linux" )
-  set( CMAKE_CXX_FLAGS "${CMAKE_C_FLAGS} -std=c++14 -Wall" )
-  set( pthread_library pthread)
-  if ( FULL_STATIC_BUILD )
-    set( CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static-libstdc++ -static-libgcc")
-  endif ( FULL_STATIC_BUILD )
-endif( APPLE )
+
+# Linux Specific Options Here
+message( STATUS "Configuring AppBase" )
+set( CMAKE_CXX_FLAGS "${CMAKE_C_FLAGS} -std=c++14 -Wall" )
+
 
 
 if(ENABLE_COVERAGE_TESTING)
