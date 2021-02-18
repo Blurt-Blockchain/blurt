@@ -121,6 +121,9 @@ endif( NOT CLANG_TIDY_EXE )
 if(EXISTS ${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
     include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
     conan_basic_setup()
+
+    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fvisibility=hidden")
+    SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fvisibility=hidden")
 else()
     message(WARNING "The file conanbuildinfo.cmake doesn't exist, you have to run conan install first. Will try without conan...")
 
