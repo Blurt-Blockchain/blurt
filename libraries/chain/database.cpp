@@ -2418,7 +2418,6 @@ void database::init_genesis( const open_args& args )
       // Create witness scheduler
       create< witness_schedule_object >( [&]( witness_schedule_object& wso )
       {
-         FC_TODO( "Copied from witness_schedule.cpp, do we want to abstract this to a separate function?" );
          wso.current_shuffled_witnesses[0] = BLURT_INIT_MINER_NAME;
          util::rd_system_params account_subsidy_system_params;
          account_subsidy_system_params.resource_unit = BLURT_ACCOUNT_SUBSIDY_PRECISION;

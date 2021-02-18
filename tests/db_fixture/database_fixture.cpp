@@ -1,4 +1,5 @@
-#include <boost/test/unit_test.hpp>
+#include <boost/test/included/unit_test.hpp>
+
 #include <boost/program_options.hpp>
 
 #include <blurt/utilities/tempdir.hpp>

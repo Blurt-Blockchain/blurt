@@ -1,21 +1,17 @@
 # Defines Blurt library target.
 project( Blurt )
-cmake_minimum_required( VERSION 3.2 )
+cmake_minimum_required( VERSION 3.19 )
 
+
+# Configure the chain
 set( BLOCKCHAIN_NAME "Blurt" )
 set( CMAKE_CXX_STANDARD 14 )
-
 set( GUI_CLIENT_EXECUTABLE_NAME Blurt )
 set( CUSTOM_URL_SCHEME "gcs" )
 set( INSTALLER_APP_ID "68ad7005-8eee-49c9-95ce-9eed97e5b347" )
-
+set(CMAKE_EXPORT_COMPILE_COMMANDS "ON")
 
 list( APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/CMakeModules" )
-
-set(CMAKE_EXPORT_COMPILE_COMMANDS "ON")
-set(WINT_IN_BOOL_CONTEXT "OFF")
-
-
 list( APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/libraries/fc/CMakeModules" )
 list( APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/libraries/fc/GitVersionGen" )
 include( GetGitRevisionDescription )
@@ -90,39 +86,10 @@ endif()
 OPTION( BLURT_STATIC_BUILD "Build blurtd as a static library (ON or OFF)" OFF )
 MESSAGE( STATUS "BLURT_STATIC_BUILD: ${BLURT_STATIC_BUILD}" )
 
-SET( BLURT_LINT_LEVEL "OFF" CACHE STRING "Lint level during blurt build (FULL, HIGH, LOW, OFF)" )
-find_program(
-   CLANG_TIDY_EXE
-   NAMES "clang-tidy"
-   DOC "Path to clain-tidy executable"
-)
-
-if( NOT CLANG_TIDY_EXE )
-   message( STATUS "clang-tidy not found" )
-elseif( VERSION LESS 3.6 )
-   messgae( STATUS "clang-tidy found but only supported with CMake version >= 3.6" )
-else()
-   message( STATUS "clany-tidy found: ${CLANG_TIDY_EXE}" )
-   if( "${BLURT_LINT_LEVEL}" STREQUAL "FULL" )
-      message( STATUS "Linting level set to: FULL" )
-      set( DO_CLANG_TIDY "${CLANG_TIDY_EXE}" "-checks='*'" )
-   elseif( "${BLURT_LINT_LEVEL}" STREQUAL "HIGH" )
-      message( STATUS "Linting level set to: HIGH" )
-      set( DO_CLANG_TIDY "${CLANG_TIDY_EXE}" "-checks='boost-use-to-string,clang-analyzer-*,cppcoreguidelines-*,llvm-*,misc-*,performance-*,readability-*'" )
-   elseif( "${BLURT_LINT_LEVEL}" STREQUAL "LOW" )
-      message( STATUS "Linting level set to: LOW" )
-      set( DO_CLANG_TIDY "${CLANG_TIDY_EXE}" "-checks='clang-analyzer-*'" )
-   else()
-      unset( CLANG_TIDY_EXE )
-      message( STATUS "Linting level set to: OFF" )
-   endif()
-endif( NOT CLANG_TIDY_EXE )
-
 
 if(EXISTS ${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
     include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
     conan_basic_setup()
-
     SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fvisibility=hidden")
     SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fvisibility=hidden")
 else()
@@ -148,8 +115,6 @@ endif(CCACHE_FOUND)
 find_library(READLINE_LIBRARIES NAMES readline)
 find_path(READLINE_INCLUDE_DIR readline/readline.h)
 
-# Linux Specific Options Here
-message( STATUS "Configuring Blurt on Linux" )
 set( CMAKE_CXX_FLAGS "${CMAKE_C_FLAGS} -std=c++14 -Wall" )
 set( pthread_library pthread)
 
@@ -178,7 +143,6 @@ SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fno-strict-aliasing -DBOOST_THREAD_DONT_PRO
 # external_plugins needs to be compiled first because libraries/app depends on BLURT_EXTERNAL_PLUGINS being fully populated
 add_subdirectory( libraries )
 add_subdirectory( programs )
-
 add_subdirectory( tests )
 
 

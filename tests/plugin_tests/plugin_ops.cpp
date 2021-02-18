@@ -2,7 +2,8 @@
 #include <blurt/chain/generic_custom_operation_interpreter.hpp>
 #include <blurt/chain/account_object.hpp>
 
-#include <boost/test/unit_test.hpp>
+#include <boost/test/included/unit_test.hpp>
+
 
 #include "../db_fixture/database_fixture.hpp"
 

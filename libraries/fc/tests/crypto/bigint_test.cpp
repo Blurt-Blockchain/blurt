@@ -1,5 +1,4 @@
-#include <boost/test/unit_test.hpp>
-
+#include <boost/test/included/unit_test.hpp>
 #include <fc/variant.hpp>
 #include <fc/crypto/bigint.hpp>
 
