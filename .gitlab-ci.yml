@@ -6,7 +6,6 @@ stages:
   - test
 
 
-
 testnet:
     stage: build
     variables:
@@ -17,10 +16,8 @@ testnet:
     - mkdir build
     - cd build
     - conan install .. -s compiler=clang -s compiler.libcxx=libstdc++11 -if=. -pr=default --build=missing
-    # Testnet Build Config:   # LOW_MEMORY=OFF CLEAR_VOTES=OFF TESTNET=ON ENABLE_MIRA=OFF <- thx hive
     - cmake -DBLURT_STATIC_BUILD=ON -DLOW_MEMORY_NODE=OFF -DCLEAR_VOTES=OFF -WINT_IN_BOOL_CONTEXT=OFF -DBUILD_BLURT_TESTNET=ON -DSKIP_BY_TX_ID=ON -DBLURT_LINT_LEVEL=OFF -DENABLE_MIRA=OFF -DCMAKE_BUILD_TYPE=Release ..
     - make -j$(nproc) blurtd cli_wallet
-  # cli wallet is only used for witness, so we capture it from the witness build
     tags:
     - shell-arch
     artifacts:
@@ -165,41 +162,41 @@ witness:
       - build/bin/
   needs: []
 
-mira:
-  stage: build
-  variables:
-    CC: "ccache clang"
-    CXX: "ccache clang++"
-  script:
-    - mkdir build
-    - cd build
-    - conan install .. -s compiler=clang -s compiler.libcxx=libstdc++11 -if=. -pr=default --build=missing
-    - cmake -DBLURT_STATIC_BUILD=ON -DLOW_MEMORY_NODE=ON -DCLEAR_VOTES=ON -WINT_IN_BOOL_CONTEXT=OFF -DBUILD_BLURT_TESTNET=OFF -DSKIP_BY_TX_ID=ON -DBLURT_LINT_LEVEL=OFF -DENABLE_MIRA=ON -DCMAKE_BUILD_TYPE=Release ..
-    - make -j$(nproc) blurtd cli_wallet
-  tags:
-    - shell-arch
-  artifacts:
-    paths:
-      - build/bin/
-  needs: []
+#mira:
+#  stage: build
+#  variables:
+#    CC: "ccache clang"
+#    CXX: "ccache clang++"
+#  script:
+#    - mkdir build
+#    - cd build
+#    - conan install .. -s compiler=clang -s compiler.libcxx=libstdc++11 -if=. -pr=default --build=missing
+#    - cmake -DBLURT_STATIC_BUILD=ON -DLOW_MEMORY_NODE=ON -DCLEAR_VOTES=ON -WINT_IN_BOOL_CONTEXT=OFF -DBUILD_BLURT_TESTNET=OFF -DSKIP_BY_TX_ID=ON -DBLURT_LINT_LEVEL=OFF -DENABLE_MIRA=ON -DCMAKE_BUILD_TYPE=Release ..
+#    - make -j$(nproc) blurtd cli_wallet
+#  tags:
+#    - shell-arch
+#  artifacts:
+#    paths:
+#      - build/bin/
+#  needs: []
 
-rpc:
-  stage: build
-  variables:
-    CC: "ccache clang"
-    CXX: "ccache clang++"
-  script:
-    - mkdir build
-    - cd build
-    - conan install .. -s compiler=clang -s compiler.libcxx=libstdc++11 -if=. -pr=default --build=missing
-    - cmake -DBLURT_STATIC_BUILD=ON -DLOW_MEMORY_NODE=OFF -DCLEAR_VOTES=OFF -WINT_IN_BOOL_CONTEXT=OFF -DBUILD_BLURT_TESTNET=OFF -DSKIP_BY_TX_ID=OFF -DBLURT_LINT_LEVEL=OFF -DENABLE_MIRA=OFF -DCMAKE_BUILD_TYPE=Release ..
-    - make -j$(nproc) blurtd cli_wallet
-  tags:
-    - shell-arch
-  artifacts:
-    paths:
-      - build/bin/
-  needs: []
+#rpc:
+#  stage: build
+#  variables:
+#    CC: "ccache clang"
+#    CXX: "ccache clang++"
+#  script:
+#    - mkdir build
+#    - cd build
+#    - conan install .. -s compiler=clang -s compiler.libcxx=libstdc++11 -if=. -pr=default --build=missing
+#    - cmake -DBLURT_STATIC_BUILD=ON -DLOW_MEMORY_NODE=OFF -DCLEAR_VOTES=OFF -WINT_IN_BOOL_CONTEXT=OFF -DBUILD_BLURT_TESTNET=OFF -DSKIP_BY_TX_ID=OFF -DBLURT_LINT_LEVEL=OFF -DENABLE_MIRA=OFF -DCMAKE_BUILD_TYPE=Release ..
+#    - make -j$(nproc) blurtd cli_wallet
+#  tags:
+#    - shell-arch
+#  artifacts:
+#    paths:
+#      - build/bin/
+#  needs: []
 
 
 kaniko witness:
@@ -216,30 +213,30 @@ kaniko witness:
     - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/contrib/Dockerfiles/ci/Dockerfile --destination $CI_REGISTRY_IMAGE/witness:$CI_COMMIT_BRANCH
   
 
-kaniko rpc:
-  stage: docker
-  needs:
-    - rpc
-  dependencies:
-    - rpc
-  image:
-    name: gcr.io/kaniko-project/executor:debug
-    entrypoint: [""]
-  script:
-    - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
-    - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/contrib/Dockerfiles/rpc/Dockerfile --destination $CI_REGISTRY_IMAGE/rpc:$CI_COMMIT_BRANCH
+#kaniko rpc:
+#  stage: docker
+#  needs:
+#    - rpc
+#  dependencies:
+#    - rpc
+#  image:
+#    name: gcr.io/kaniko-project/executor:debug
+#    entrypoint: [""]
+#  script:
+#    - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
+#    - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/contrib/Dockerfiles/rpc/Dockerfile --destination $CI_REGISTRY_IMAGE/rpc:$CI_COMMIT_BRANCH
   
 
-kaniko mira:
-  stage: docker
-  needs: 
-    - mira
-  dependencies:
-    - mira
-  image:
-    name: gcr.io/kaniko-project/executor:debug
-    entrypoint: [""]
-  script:
-    - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
-    - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/contrib/Dockerfiles/ci/Dockerfile --destination $CI_REGISTRY_IMAGE/mira:$CI_COMMIT_BRANCH
+#kaniko mira:
+#  stage: docker
+#  needs:
+#    - mira
+#  dependencies:
+#    - mira
+#  image:
+#    name: gcr.io/kaniko-project/executor:debug
+#    entrypoint: [""]
+#  script:
+#    - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
+#    - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/contrib/Dockerfiles/ci/Dockerfile --destination $CI_REGISTRY_IMAGE/mira:$CI_COMMIT_BRANCH
   

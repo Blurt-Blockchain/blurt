@@ -227,7 +227,7 @@ file(GLOB PLUGIN_TESTS "plugin_tests/*.cpp")
 
 parse_unit_tests(TEST_CASES ${PLUGIN_TESTS})
 
-#message(STATUS "${TEST_CASES}")
+message(STATUS "${TEST_CASES}")
 
 add_boost_test( plugin_test
    SOURCES ${PLUGIN_TESTS}
@@ -243,8 +243,6 @@ add_boost_test( plugin_test
 
 target_link_libraries( plugin_test db_fixture blurt_chain blurt_protocol account_history_plugin rc_plugin witness_plugin debug_node_plugin transaction_status_plugin transaction_status_api_plugin fc ${PLATFORM_SPECIFIC_LIBS} )
 
-if(MSVC)
-  set_source_files_properties( tests/serialization_tests.cpp PROPERTIES COMPILE_FLAGS "/bigobj" )
-endif(MSVC)
+
 
 #add_subdirectory( generate_empty_blocks )
