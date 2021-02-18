@@ -21,25 +21,13 @@ How cool is that?
 
 
 ```
-6893  cmake ..
-6894  conan install ..
-6895  conan install --build-missing ..
-6896  conan install --build missing ..
-6897* nvim ~/.conan/profiles/default
-6898* ccache
-6899* w ccache -s
-6900* ccache -s
-6901* w ccache -s
-6902* ccache -s
-6903* watch -n 1 ccache -s
-6904  nvim ~/.conan/profiles/default
-6905  conan install --build missing ..
-6906  conan install --build missing -pr default ..
-6907  rm ~/.conan/data
-6908  rm -rf ~/.conan/data
-6909  conan install --build missing -pr default ..
-6910  cmake ..
-6911  make
+
+
+
+rm -rf ~/.conan/data
+conan install --build missing -pr default ..
+cmake ..
+make blurtd cli_wallet
 6912  ls
 6913  cmake ..
 6914  cat CMakeFiles/CMakeError.log

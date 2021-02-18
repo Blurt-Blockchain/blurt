@@ -17,11 +17,7 @@ LIST(APPEND BOOST_COMPONENTS thread
 
 SET( Boost_USE_STATIC_LIBS ON CACHE STRING "ON or OFF" )
 
-IF( WIN32 )
-  SET(BOOST_ROOT $ENV{BOOST_ROOT})
-  set(Boost_USE_MULTITHREADED ON)
-  set(BOOST_ALL_DYN_LINK OFF) # force dynamic linking for all libraries
-ENDIF(WIN32)
+
 
 FIND_PACKAGE(Boost 1.57 REQUIRED COMPONENTS ${BOOST_COMPONENTS})
 
@@ -33,7 +29,6 @@ else( APPLE )
   # Linux Specific Options Here
   message( STATUS "Configuring ChainBase on Linux" )
   set( CMAKE_CXX_FLAGS "${CMAKE_C_FLAGS} -std=c++11 -Wall" )
-  set( rt_library rt )
   set( pthread_library pthread)
   if ( FULL_STATIC_BUILD )
     set( CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static-libstdc++ -static-libgcc")
@@ -44,11 +39,6 @@ if( "${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" )
   set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-builtin-memcmp" )
 endif()
 
-if( "${CMAKE_GENERATOR}" STREQUAL "Ninja" )
-  if( "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang" )
-      set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fcolor-diagnostics" )
-  endif()
-endif()
 
 # based on http://www.delorie.com/gnu/docs/gdb/gdb_70.html
 # uncomment this line to tell GDB about macros (slows compile times)

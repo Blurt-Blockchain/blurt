@@ -1,7 +1,5 @@
 add_executable( cli_wallet main.cpp )
-if( UNIX AND NOT APPLE )
-  set(rt_library rt )
-endif()
+
 
 find_package( Gperftools QUIET )
 if( GPERFTOOLS_FOUND )
@@ -25,9 +23,6 @@ if( CLANG_TIDY_EXE )
    )
 endif( CLANG_TIDY_EXE )
 
-if(MSVC)
-  set_source_files_properties( main.cpp PROPERTIES COMPILE_FLAGS "/bigobj" )
-endif(MSVC)
 
 install( TARGETS
    cli_wallet

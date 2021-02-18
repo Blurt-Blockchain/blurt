@@ -17,20 +17,14 @@ LIST(APPEND BOOST_COMPONENTS thread
 FIND_PACKAGE(Boost 1.58 REQUIRED COMPONENTS ${BOOST_COMPONENTS})
 set( Boost_USE_STATIC_LIBS ON CACHE STRING "ON or OFF" )
 
-if( APPLE )
-  # Apple Specific Options Here
-  message( STATUS "Configuring MIRA on OS X" )
-  set( CMAKE_CXX_FLAGS "${CMAKE_C_FLAGS} -std=c++14 -stdlib=libc++ -Wall" )
-else( APPLE )
+
   # Linux Specific Options Here
-  message( STATUS "Configuring MIRA on Linux" )
-  set( CMAKE_CXX_FLAGS "${CMAKE_C_FLAGS} -std=c++14 -Wall" )
-  set( rt_library rt )
-  set( pthread_library pthread)
-  if ( FULL_STATIC_BUILD )
-    set( CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static-libstdc++ -static-libgcc")
-  endif ( FULL_STATIC_BUILD )
-endif( APPLE )
+message( STATUS "Configuring MIRA" )
+set( CMAKE_CXX_FLAGS "${CMAKE_C_FLAGS} -std=c++14 -Wall" )
+set( pthread_library pthread)
+if ( FULL_STATIC_BUILD )
+  set( CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static-libstdc++ -static-libgcc")
+endif ( FULL_STATIC_BUILD )
 
 if( "${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" )
   set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-builtin-memcmp" )

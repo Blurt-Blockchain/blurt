@@ -150,7 +150,6 @@ find_path(READLINE_INCLUDE_DIR readline/readline.h)
 # Linux Specific Options Here
 message( STATUS "Configuring Blurt on Linux" )
 set( CMAKE_CXX_FLAGS "${CMAKE_C_FLAGS} -std=c++11 -Wall" )
-set( rt_library rt )
 set( pthread_library pthread)
 if ( FULL_STATIC_BUILD )
   set( CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static-libstdc++ -static-libgcc")
