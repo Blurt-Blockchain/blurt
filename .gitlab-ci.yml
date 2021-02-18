@@ -51,21 +51,13 @@ sonarcloud:
     - curl 'https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.2.0.1873-linux.zip' --output sonar-scanner-cli-4.2.0.1873-linux.zip
     - unzip sonar-scanner-cli-4.2.0.1873-linux.zip
     - mv sonar-scanner-4.2.0.1873-linux sonar-scanner
-# NO CACHE: SINGLE-STAGE
-#  cache:
-#    policy: push
-#    key: "${CI_COMMIT_SHORT_SHA}"
-#    paths:
-#      - build-wrapper-linux-x86/ # to share the build-wrapper between jobs
-#      - sonar-scanner/           # to share the sonar-scanner between jobs
-    # prepare the build tree
     - mkdir build
     - cd build
     - conan install .. -s compiler=clang -s compiler.libcxx=libstdc++11 -if=. -pr=default --build=missing
-    - cmake -DBLURT_STATIC_BUILD=ON -DLOW_MEMORY_NODE=ON -DCLEAR_VOTES=ON -WINT_IN_BOOL_CONTEXT=OFF -DBUILD_BLURT_TESTNET=OFF -DSKIP_BY_TX_ID=ON -DBLURT_LINT_LEVEL=OFF -DENABLE_MIRA=ON -DCMAKE_BUILD_TYPE=Release ..
+    - cmake ..
     - cd ..
     # run the build inside the build wrapper
-    - build-wrapper-linux-x86/build-wrapper-linux-x86-64 --out-dir . cmake --build build/ --config Release --parallel
+    - build-wrapper-linux-x86/build-wrapper-linux-x86-64 --out-dir . make -j $(nproc)
     - sonar-scanner/bin/sonar-scanner -X -Dsonar.host.url="${SONAR_HOST_URL}" -Dsonar.token="${SONAR_TOKEN}"
   artifacts:
     paths:
