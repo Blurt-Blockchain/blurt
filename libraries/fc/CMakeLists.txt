@@ -27,8 +27,9 @@ SET( BUILD_SHARED_LIBS NO )
 SET( ECC_IMPL secp256k1 CACHE STRING "secp256k1 or openssl or mixed" )
 
 
-# To build on 32 bit, set to 32 bit.  W don't do that.
-set(platformBitness 64)
+# To build on 32 bit, set to 32 bit.  We don't do that.
+# set(platformBitness 64)
+# I bet it knows its Bitness
 
 SET (ORIGINAL_LIB_SUFFIXES ${CMAKE_FIND_LIBRARY_SUFFIXES})
 
