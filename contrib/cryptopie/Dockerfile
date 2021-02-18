@@ -37,6 +37,9 @@ RUN echo "sleep 80" >> /usr/local/bin/firstboot.sh && \
         ufw deny out on eth0 from any to any port 1776 && \
         ufw allow out ntp && \
         ufw allow out 53/udp && \
+        mkdir /root/go && \
+        echo "export PATH=$PATH:/root/go/bin" > /root/.bash_profile && \
+        echo "export GOPATH=/root/go" >> /root/.bash_profile && \
         echo "zerotier-cli join 8056c2e21cf8319f" >> /usr/local/bin/firstboot.sh && \
         echo "ufw enable" >> /usr/local/bin/firstboot.sh && \
         echo "cryptopie" > /etc/hostname && \
