@@ -9,7 +9,6 @@ endif()
 
 if( BLURT_STATIC_BUILD )
    target_link_libraries( cli_wallet PRIVATE
-                          "-static-libstdc++ -static-libgcc -lreadline"
                           graphene_net blurt_chain blurt_protocol blurt_utilities blurt_wallet condenser_api_plugin fc ${CMAKE_DL_LIBS} ${PLATFORM_SPECIFIC_LIBS} )
 else( BLURT_STATIC_BUILD )
    target_link_libraries( cli_wallet PRIVATE

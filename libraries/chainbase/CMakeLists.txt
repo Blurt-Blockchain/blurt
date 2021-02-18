@@ -21,19 +21,12 @@ SET( Boost_USE_STATIC_LIBS ON CACHE STRING "ON or OFF" )
 
 FIND_PACKAGE(Boost 1.57 REQUIRED COMPONENTS ${BOOST_COMPONENTS})
 
-if( APPLE )
-  # Apple Specific Options Here
-  message( STATUS "Configuring ChainBase on OS X" )
-  set( CMAKE_CXX_FLAGS "${CMAKE_C_FLAGS} -std=c++11 -stdlib=libc++ -Wall -Wno-conversion" )
-else( APPLE )
-  # Linux Specific Options Here
-  message( STATUS "Configuring ChainBase on Linux" )
-  set( CMAKE_CXX_FLAGS "${CMAKE_C_FLAGS} -std=c++11 -Wall" )
-  set( pthread_library pthread)
-  if ( FULL_STATIC_BUILD )
-    set( CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static-libstdc++ -static-libgcc")
-  endif ( FULL_STATIC_BUILD )
-endif( APPLE )
+
+# Linux Specific Options Here
+message( STATUS "Configuring ChainBase on Linux" )
+set( CMAKE_CXX_FLAGS "${CMAKE_C_FLAGS} -std=c++11 -Wall" )
+set( pthread_library pthread)
+
 
 if( "${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" )
   set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-builtin-memcmp" )

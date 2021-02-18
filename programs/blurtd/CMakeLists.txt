@@ -8,7 +8,6 @@ endif()
 
 if( BLURT_STATIC_BUILD )
    target_link_libraries( blurtd PRIVATE
-      "-static-libstdc++ -static-libgcc"
       appbase
       blurt_utilities
       blurt_plugins

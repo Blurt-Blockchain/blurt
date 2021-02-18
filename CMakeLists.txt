@@ -67,6 +67,7 @@ endif()
 
 OPTION( CHAINBASE_CHECK_LOCKING "Check locks in chainbase (ON or OFF)" ON )
 MESSAGE( STATUS "CHAINBASE_CHECK_LOCKING: ${CHAINBASE_CHECK_LOCKING}" )
+
 if( CHAINBASE_CHECK_LOCKING )
   SET( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DCHAINBASE_CHECK_LOCKING" )
   SET( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DCHAINBASE_CHECK_LOCKING" )
@@ -151,19 +152,15 @@ find_path(READLINE_INCLUDE_DIR readline/readline.h)
 message( STATUS "Configuring Blurt on Linux" )
 set( CMAKE_CXX_FLAGS "${CMAKE_C_FLAGS} -std=c++11 -Wall" )
 set( pthread_library pthread)
-if ( FULL_STATIC_BUILD )
-  set( CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static-libstdc++ -static-libgcc")
-endif ( FULL_STATIC_BUILD )
+
 
 if( "${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" )
         set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-builtin-memcmp" )
 endif()
 
-if( "${CMAKE_GENERATOR}" STREQUAL "Ninja" )
-    if( "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang" )
-         set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fcolor-diagnostics" )
-      endif()
-endif()
+
+set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fcolor-diagnostics" )
+
 
 set( CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DDEBUG")
 
