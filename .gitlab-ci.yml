@@ -6,6 +6,46 @@ stages:
   - test
 
 
+
+ui:
+    image: node
+    cache:
+      paths:
+        - node_modules/
+        - .yarn
+    stage: build
+    before_script:
+        - yarn config set cache-folder .yarn
+        - yarn
+        - mkdir tmp
+    script:
+        - CI="" yarn build
+    tags:
+        - metal
+
+condenser-docker-push:
+  stage: build
+  script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker buildx build --tag $CI_REGISTRY_IMAGE:$CI_COMMIT_BRANCH --cache-from $CI_REGISTRY_IMAGE/condenser:cache --cache-to $CI_REGISTRY_IMAGE/condenser:cache --push --platform linux/arm64,linux/amd64 .
+  tags:
+    - shell-arch
+  only:
+    - master
+
+
+condenser-docker-test:
+  stage: build
+  script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker buildx build --tag $CI_REGISTRY_IMAGE:$CI_COMMIT_BRANCH --cache-from $CI_REGISTRY_IMAGE/condenser:cache --cache-to $CI_REGISTRY_IMAGE/condenser:cache --platform linux/arm64,linux/amd64 .
+  tags:
+    - shell-arch
+  only:
+    - master
+
+
+
 testnet:
     stage: build
     variables:
@@ -232,3 +272,8 @@ kaniko witness:
 #    - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
 #    - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/contrib/Dockerfiles/ci/Dockerfile --destination $CI_REGISTRY_IMAGE/mira:$CI_COMMIT_BRANCH
   
+include:
+  - template: Security/Dependency-Scanning.gitlab-ci.yml
+  - template: Security/License-Scanning.gitlab-ci.yml
+  - template: Security/SAST.gitlab-ci.yml
+  - template: Security/Secret-Detection.gitlab-ci.yml
