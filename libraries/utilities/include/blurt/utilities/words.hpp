@@ -22,6 +22,7 @@
  * THE SOFTWARE.
  */
 #pragma once
+#include <stdint.h>
 
 namespace blurt {
 namespace words {

@@ -28,7 +28,7 @@ public:
 
   id_type id;
 
-  public_key_type key;
+  protocol::public_key_type key;
   account_name_type account;
 };
 
