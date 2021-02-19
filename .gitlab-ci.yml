@@ -6,7 +6,6 @@ stages:
   - test
 
 
-
 ui:
     image: node
     cache:
@@ -54,7 +53,7 @@ testnet:
     - mkdir build
     - cd build
     - conan install .. -s compiler=clang -s compiler.libcxx=libstdc++11 -if=. -pr=default --build=missing
-    - cmake -DBLURT_STATIC_BUILD=ON -DLOW_MEMORY_NODE=OFF -DCLEAR_VOTES=OFF -WINT_IN_BOOL_CONTEXT=OFF -DBUILD_BLURT_TESTNET=ON -DSKIP_BY_TX_ID=ON -DBLURT_LINT_LEVEL=OFF -DENABLE_MIRA=OFF -DCMAKE_BUILD_TYPE=Release ..
+    - cmake -DBLURT_STATIC_BUILD=ON -DLOW_MEMORY_NODE=OFF -DCLEAR_VOTES=OFF -WINT_IN_BOOL_CONTEXT=OFF -DBUILD_BLURT_TESTNET=ON -DSKIP_BY_TX_ID=ON -DBLURT_LINT_LEVEL=FULL -DENABLE_MIRA=OFF -DCMAKE_BUILD_TYPE=Release ..
     - make -j$(nproc) blurtd cli_wallet
     tags:
     - shell-arch
@@ -123,7 +122,7 @@ megadrive-build-ubuntu:
     - mkdir build
     - cd build
     - conan install .. -s compiler=clang -s compiler.libcxx=libstdc++11 -if=. -pr=default --build=missing
-    - cmake -DBLURT_STATIC_BUILD=ON -DLOW_MEMORY_NODE=ON -DCLEAR_VOTES=ON -WINT_IN_BOOL_CONTEXT=OFF -DBUILD_BLURT_TESTNET=OFF -DSKIP_BY_TX_ID=ON -DBLURT_LINT_LEVEL=OFF -DENABLE_MIRA=OFF -DCMAKE_BUILD_TYPE=Release ..
+    - cmake -DBLURT_STATIC_BUILD=ON -DLOW_MEMORY_NODE=ON -DCLEAR_VOTES=ON -WINT_IN_BOOL_CONTEXT=OFF -DBUILD_BLURT_TESTNET=OFF -DSKIP_BY_TX_ID=ON -DBLURT_LINT_LEVEL=FULL -DENABLE_MIRA=OFF -DCMAKE_BUILD_TYPE=Release ..
     - make -j$(nproc) blurtd cli_wallet
   tags:
     - arm64-shell
@@ -157,6 +156,14 @@ oroid-c2:
     - sudo ipfs add -Q /static/c2-light/c2-light-$(echo $STAMP).img.xz > /static/c2-light/c2-light-$(echo $STAMP).html
   tags:
     - shell-arch
+
+dblurt:
+  needs: []
+  image: node
+  stage: build
+  script:
+    - yarn install
+    - yarn test
 
 # construct the megadrive arch container
 megadrive-container:

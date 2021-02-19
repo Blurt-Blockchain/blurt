@@ -22,8 +22,7 @@
  * THE SOFTWARE.
  */
 
-#include <boost/test/included/unit_test.hpp>
-
+#include <BoostTestTargetConfig.h>
 
 #include <blurt/chain/blurt_fwd.hpp>
 

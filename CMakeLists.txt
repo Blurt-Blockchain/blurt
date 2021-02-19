@@ -145,7 +145,39 @@ add_subdirectory( libraries )
 add_subdirectory( programs )
 add_subdirectory( tests )
 
+# Use clang-tidy as a linter
+SET( BLURT_LINT_LEVEL "OFF" CACHE STRING "Lint level during steem build (FULL, HIGH, LOW, OFF)" )
+find_program(
+   CLANG_TIDY_EXE
+   NAMES "clang-tidy"
+   DOC "Path to clain-tidy executable"
+)
 
+if( NOT CLANG_TIDY_EXE )
+   message( STATUS "clang-tidy not found" )
+elseif( VERSION LESS 3.6 )
+   messgae( STATUS "clang-tidy found but only supported with CMake version >= 3.6" )
+else()
+   message( STATUS "clany-tidy found: ${CLANG_TIDY_EXE}" )
+   if( "${BLURT_LINT_LEVEL}" STREQUAL "FULL" )
+      message( STATUS "Linting level set to: FULL" )
+      set( DO_CLANG_TIDY "${CLANG_TIDY_EXE}" "-checks='*'" )
+   elseif( "${BLURT_LINT_LEVEL}" STREQUAL "HIGH" )
+      message( STATUS "Linting level set to: HIGH" )
+      set( DO_CLANG_TIDY "${CLANG_TIDY_EXE}" "-checks='boost-use-to-string,clang-analyzer-*,cppcoreguidelines-*,llvm-*,misc-*,performance-*,readability-*'" )
+   elseif( "${BLURT_LINT_LEVEL}" STREQUAL "LOW" )
+      message( STATUS "Linting level set to: LOW" )
+      set( DO_CLANG_TIDY "${CLANG_TIDY_EXE}" "-checks='clang-analyzer-*'" )
+   else()
+      unset( CLANG_TIDY_EXE )
+      message( STATUS "Linting level set to: OFF" )
+   endif()
+endif( NOT CLANG_TIDY_EXE )
+
+
+
+
+# Testnet Option
 if( BUILD_BLURT_TESTNET )
   MESSAGE( STATUS "\n\n             CONFIGURED FOR TEST NETWORK             \n\n" )
 else()
