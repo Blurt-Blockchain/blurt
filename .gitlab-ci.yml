@@ -14,11 +14,10 @@ ui:
         - node_modules/
         - .yarn
     stage: build
-    before_script:
+    script:
         - yarn config set cache-folder .yarn
         - yarn
         - mkdir tmp
-    script:
         - cd ui
         - CI="" yarn build
     tags:
