@@ -1,0 +1,64 @@
+{
+  "facebook_app_id": "SDC_FACEBOOK_APP_ID",
+  "google_analytics_id": "SDC_GOOGLE_ANALYTICS_ID",
+  "helmet": {
+    "directives": {
+      "childSrc": "SDC_HELMET_CHILDSRC",
+      "connectSrc": "SDC_HELMET_CONNECTSRC",
+      "defaultSrc": "SDC_HELMET_DEFAULTSRC",
+      "fontSrc": "SDC_HELMET_FONTSRC",
+      "frameAncestors": "SDC_HELMET_FRAMEANCESTORS",
+      "imgSrc": "SDC_HELMET_IMGSRC",
+      "objectSrc": "SDC_HELMET_OBJECTSRC",
+      "scriptSrc": "SDC_HELMET_SCRIPTSRC",
+      "styleSrc": "SDC_HELMET_STYLESRC",
+      "reportUri": "SDC_HELMET_REPORTURI"
+    }
+  },
+  "img_proxy_prefix": "SDC_IMAGE_PROXY_PREFIX",
+  "mixpanel": "SDC_MIXPANEL",
+  "notify": {
+    "gcm_key": "SDC_NOTIFY_GCM_KEY"
+  },
+  "read_only_mode": "SDC_READONLY_MODE",
+  "recaptcha": {
+    "secret_key": "SDC_RECAPTCHA_SECRET_KEY",
+    "site_key": "SDC_RECAPTCHA_SITE_KEY"
+  },
+  "sendgrid": {
+    "from": "SDC_SENDGRID_FROM",
+    "key": "SDC_SENDGRID_API_KEY",
+    "templates": {
+    }
+  },
+  "server_session_secret": "SDC_SESSION_SECRETKEY",
+  "site_domain": "SDC_SITE_DOMAIN",
+  "telesign": {
+    "customer_id": "SDC_TELESIGN_CUSTOMER_ID",
+    "rest_api_key": "SDC_TELESIGN_API_KEY"
+  },
+  "twilio": {
+    "account_sid": "SDC_TWILIO_ACCOUNT_SID",
+    "auth_token": "SDC_TWILIO_AUTH_TOKEN"
+  },
+  "upload_image": "SDC_UPLOAD_IMAGE_URL",
+  "session_cookie_key": "SDC_SESSION_COOKIE_KEY",
+  "blurtd_connection_client": "SDC_CLIENT_BLURTD_URL",
+  "blurtd_connection_server": "SDC_SERVER_BLURTD_URL",
+  "blurtd_use_appbase": "SDC_USE_APPBASE",
+  "chain_id": "SDC_CHAIN_ID",
+  "alternative_api_endpoints": "SDC_ALT_API_ENDPOINTS",
+  "address_prefix": "SDC_ADDRESS_PREFIX",
+  "conveyor_posting_wif": "CONVEYOR_POSTING_WIF",
+  "conveyor_username": "CONVEYOR_USERNAME",
+  "special_posts_url": "SPECIAL_POSTS_URL",
+  "wallet_url": "WALLET_URL",
+  "google_ad_enabled": "GOOGLE_AD_ENABLED",
+  "google_ad_test": "GOOGLE_AD_TEST",
+  "google_ad_client": "GOOGLE_AD_CLIENT",
+  "gpt_enabled": "GPT_ENABLED",
+  "steem_market_endpoint": "BLURT_MARKET_ENDPOINT",
+  "steem_market_token": "BLURT_MARKET_TOKEN",
+  "cookie_consent_enabled": "SDC_ENABLE_COOKIE_CONSENT",
+  "cookie_consent_api_key": "SDC_COOKIE_CONSENT_KEY"
+}
