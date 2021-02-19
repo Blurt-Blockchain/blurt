@@ -81,7 +81,6 @@ void witness_update_evaluator::do_apply( const witness_update_operation& o )
    {
       FC_ASSERT( o.props.account_creation_fee.symbol.is_canon() );
 
-      FC_TODO( "Move to validate() after HF20" );
       FC_ASSERT( o.props.account_creation_fee.amount <= BLURT_MAX_ACCOUNT_CREATION_FEE, "account_creation_fee greater than maximum account creation fee" );
    }
 
@@ -146,7 +145,6 @@ void witness_set_properties_evaluator::do_apply( const witness_set_properties_op
       fc::raw::unpack_from_vector( itr->second, props.account_creation_fee );
 
       {
-         FC_TODO( "Move to validate() after HF20" );
          FC_ASSERT( props.account_creation_fee.amount <= BLURT_MAX_ACCOUNT_CREATION_FEE, "account_creation_fee greater than maximum account creation fee" );
       }
    }
@@ -269,7 +267,6 @@ void initialize_account_object( account_object& acc, const account_name_type& na
    acc.voting_manabar.last_update_time = props.time.sec_since_epoch();
    acc.mined = mined;
 
-   FC_TODO( "If after HF 20, there are no temp account creations, the HF check can be removed." )
    if( recovery_account != BLURT_TEMP_ACCOUNT )
    {
       acc.recovery_account = recovery_account;
@@ -525,7 +522,6 @@ void comment_evaluator::do_apply( const comment_operation& o )
          FC_ASSERT( _db.get( parent->root_comment ).allow_replies, "The parent comment has disabled replies." );
       }
 
-      FC_TODO( "Cleanup this logic after HF 20. Old ops don't need to check pre-hf20 times." )
       {
          if( o.parent_author == BLURT_ROOT_POST_PARENT )
              FC_ASSERT( ( now - auth.last_root_post ) > BLURT_MIN_ROOT_COMMENT_INTERVAL, "You may only post once every 5 minutes.", ("now",now)("last_root_post", auth.last_root_post) );
@@ -1113,7 +1109,6 @@ void vote_evaluator::do_apply( const vote_operation& o )
    // Lazily delete vote
    if( itr != comment_vote_idx.end() && itr->num_changes == -1 )
    {
-      FC_TODO( "This looks suspicious. We might not be deleting vote objects that we should be on nodes that are configured to clear votes" );
       FC_ASSERT( false, "Cannot vote again on a comment after payout." );
 
       _db.remove( *itr );
@@ -1785,7 +1780,6 @@ void claim_reward_balance_evaluator::do_apply( const claim_reward_balance_operat
 
 void delegate_vesting_shares_evaluator::do_apply( const delegate_vesting_shares_operation& op )
 {
-#pragma message( "TODO: Update get_effective_vesting_shares when modifying this operation to support SMTs." )
 
    const auto& delegator = _db.get_account( op.delegator );
    const auto& delegatee = _db.get_account( op.delegatee );

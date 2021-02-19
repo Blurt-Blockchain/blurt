@@ -158,13 +158,11 @@ struct count_operation_visitor
 
    void operator()( const claim_reward_balance_operation& op )const
    {
-      FC_TODO( "Change RC state bytes computation to take SMT's into account" )
       execution_time_count += _e.claim_reward_balance_operation_exec_time;
    }
 
    void operator()( const withdraw_vesting_operation& op )const
    {
-      FC_TODO( "Change RC state bytes computation to take SMT's into account" )
       execution_time_count += _e.withdraw_vesting_operation_exec_time;
    }
 
