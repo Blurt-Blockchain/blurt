@@ -42,8 +42,6 @@ condenser-docker-test:
     - docker buildx build --tag $CI_REGISTRY_IMAGE:$CI_COMMIT_BRANCH --cache-from $CI_REGISTRY_IMAGE/condenser:cache --cache-to $CI_REGISTRY_IMAGE/condenser:cache --platform linux/arm64,linux/amd64 .
   tags:
     - shell-arch
-  only:
-    - master
 
 
 
