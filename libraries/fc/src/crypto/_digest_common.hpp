@@ -1,4 +1,7 @@
 #pragma once
+#include <cstddef>
+#include <iostream>
+#include <array>
 
 /* Common stuff for cryptographic hashes
  */
