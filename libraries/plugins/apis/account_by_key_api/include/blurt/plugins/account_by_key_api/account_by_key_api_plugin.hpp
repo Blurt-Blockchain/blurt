@@ -7,31 +7,37 @@
 
 #define BLURT_ACCOUNT_BY_KEY_API_PLUGIN_NAME "account_by_key_api"
 
-
-namespace blurt { namespace plugins { namespace account_by_key {
+namespace blurt {
+namespace plugins {
+namespace account_by_key {
 
 using namespace appbase;
 
-class account_by_key_api_plugin : public appbase::plugin< account_by_key_api_plugin >
-{
+class account_by_key_api_plugin
+    : public appbase::plugin<account_by_key_api_plugin> {
 public:
-   APPBASE_PLUGIN_REQUIRES(
-      (blurt::plugins::account_by_key::account_by_key_plugin)
-      (blurt::plugins::json_rpc::json_rpc_plugin)
-   )
+  APPBASE_PLUGIN_REQUIRES(
+      (blurt::plugins::account_by_key::account_by_key_plugin)(
+          blurt::plugins::json_rpc::json_rpc_plugin))
 
-   account_by_key_api_plugin();
-   virtual ~account_by_key_api_plugin();
+  account_by_key_api_plugin();
+  virtual ~account_by_key_api_plugin();
 
-   static const std::string& name() { static std::string name = BLURT_ACCOUNT_BY_KEY_API_PLUGIN_NAME; return name; }
+  static const std::string &name() {
+    static std::string name = BLURT_ACCOUNT_BY_KEY_API_PLUGIN_NAME;
+    return name;
+  }
 
-   virtual void set_program_options( options_description& cli, options_description& cfg ) override;
+  virtual void set_program_options(options_description &cli,
+                                   options_description &cfg) override;
 
-   virtual void plugin_initialize( const variables_map& options ) override;
-   virtual void plugin_startup() override;
-   virtual void plugin_shutdown() override;
+  virtual void plugin_initialize(const variables_map &options) override;
+  virtual void plugin_startup() override;
+  virtual void plugin_shutdown() override;
 
-   std::shared_ptr< class account_by_key_api > api;
+  std::shared_ptr<class account_by_key_api> api;
 };
 
-} } } // blurt::plugins::account_by_key
+} // namespace account_by_key
+} // namespace plugins
+} // namespace blurt

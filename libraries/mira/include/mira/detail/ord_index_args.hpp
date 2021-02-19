@@ -10,19 +10,21 @@
 
 #include <boost/multi_index/detail/ord_index_args.hpp>
 
-namespace mira{
+namespace mira {
 
-namespace multi_index{
+namespace multi_index {
 
-namespace detail{
+namespace detail {
 
-template<typename KeyFromValue>
-using index_args_default_compare = boost::multi_index::detail::index_args_default_compare< KeyFromValue >;
+template <typename KeyFromValue>
+using index_args_default_compare =
+    boost::multi_index::detail::index_args_default_compare<KeyFromValue>;
 
-template<typename Arg1,typename Arg2,typename Arg3>
-using ordered_index_args = boost::multi_index::detail::ordered_index_args< Arg1, Arg2, Arg3 >;
+template <typename Arg1, typename Arg2, typename Arg3>
+using ordered_index_args =
+    boost::multi_index::detail::ordered_index_args<Arg1, Arg2, Arg3>;
 
-} /* namespace multi_index::detail */
+} // namespace detail
 
 } /* namespace multi_index */
 

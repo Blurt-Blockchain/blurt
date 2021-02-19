@@ -1,66 +1,68 @@
 #pragma once
 
-#include <blurt/chain/sps_objects.hpp>
-#include <blurt/chain/notifications.hpp>
+#include <blurt/chain/account_object.hpp>
 #include <blurt/chain/database.hpp>
 #include <blurt/chain/index.hpp>
-#include <blurt/chain/account_object.hpp>
+#include <blurt/chain/notifications.hpp>
+#include <blurt/chain/sps_objects.hpp>
 
 #include <blurt/chain/util/sps_helper.hpp>
 
 #include <blurt/protocol/sps_operations.hpp>
 
-namespace blurt { namespace chain {
+namespace blurt {
+namespace chain {
 
-class sps_processor
-{
-   public:
+class sps_processor {
+public:
+  using t_proposals =
+      std::vector<std::reference_wrapper<const proposal_object>>;
 
-      using t_proposals = std::vector< std::reference_wrapper< const proposal_object > >;
+private:
+  const static std::string removing_name;
+  const static std::string calculating_name;
+  const static uint32_t total_amount_divider = 100;
 
-   private:
+  // Get number of microseconds for 1 day( daily_ms )
+  const int64_t daily_seconds = fc::days(1).to_seconds();
 
-      const static std::string removing_name;
-      const static std::string calculating_name;
-      const static uint32_t total_amount_divider = 100;
+  chain::database &db;
 
-      //Get number of microseconds for 1 day( daily_ms )
-      const int64_t daily_seconds = fc::days(1).to_seconds();
+  bool is_maintenance_period(const time_point_sec &head_time) const;
 
-      chain::database& db;
+  void remove_proposals(const time_point_sec &head_time);
 
-      bool is_maintenance_period( const time_point_sec& head_time ) const;
+  void find_active_proposals(const time_point_sec &head_time,
+                             t_proposals &proposals);
 
-      void remove_proposals( const time_point_sec& head_time );
+  uint64_t calculate_votes(const proposal_id_type &id);
+  void calculate_votes(const t_proposals &proposals);
 
-      void find_active_proposals( const time_point_sec& head_time, t_proposals& proposals );
+  void sort_by_votes(t_proposals &proposals);
 
-      uint64_t calculate_votes( const proposal_id_type& id );
-      void calculate_votes( const t_proposals& proposals );
+  asset get_treasury_fund();
 
-      void sort_by_votes( t_proposals& proposals );
+  asset calculate_maintenance_budget(const time_point_sec &head_time);
 
-      asset get_treasury_fund();
+  void transfer_payments(const time_point_sec &head_time,
+                         asset &maintenance_budget_limit,
+                         const t_proposals &proposals);
 
-      asset calculate_maintenance_budget( const time_point_sec& head_time );
+  void update_settings(const time_point_sec &head_time);
 
-      void transfer_payments( const time_point_sec& head_time, asset& maintenance_budget_limit, const t_proposals& proposals );
+  void remove_old_proposals(const block_notification &note);
+  void make_payments(const block_notification &note);
 
-      void update_settings( const time_point_sec& head_time );
+  void record_funding(const block_notification &note);
 
-      void remove_old_proposals( const block_notification& note );
-      void make_payments( const block_notification& note );
+public:
+  sps_processor(chain::database &_db) : db(_db) {}
 
-      void record_funding( const block_notification& note );
+  const static std::string &get_removing_name();
+  const static std::string &get_calculating_name();
 
-   public:
-
-      sps_processor( chain::database& _db ) : db( _db ){}
-
-      const static std::string& get_removing_name();
-      const static std::string& get_calculating_name();
-
-      void run( const block_notification& note );
+  void run(const block_notification &note);
 };
 
-} } // namespace blurt::chain
+} // namespace chain
+} // namespace blurt

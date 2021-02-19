@@ -1,117 +1,122 @@
 #pragma once
 
-#include <fc/time.hpp>
-#include <fc/variant.hpp>
-#include <fc/reflect/variant.hpp>
 #include <fc/exception/exception.hpp>
 #include <fc/io/json.hpp>
+#include <fc/reflect/variant.hpp>
+#include <fc/time.hpp>
+#include <fc/variant.hpp>
 
 #include <sys/time.h>
 
 #include <utility>
 
-namespace blurt { namespace chain { namespace util {
+namespace blurt {
+namespace chain {
+namespace util {
 
-template <typename TCntr>
-struct emplace_ret_value
-{
-   using type = decltype(std::declval<TCntr>().emplace(std::declval<typename TCntr::value_type>()));
+template <typename TCntr> struct emplace_ret_value {
+  using type = decltype(std::declval<TCntr>().emplace(
+      std::declval<typename TCntr::value_type>()));
 };
 
+class advanced_benchmark_dumper {
+public:
+  struct item {
+    std::string op_name;
+    mutable uint64_t time;
 
-class advanced_benchmark_dumper
-{                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
-   public:
+    item(std::string _op_name, uint64_t _time)
+        : op_name(_op_name), time(_time) {}
 
-      struct item
-      {
-         std::string op_name;
-         mutable uint64_t time;
+    bool operator<(const item &obj) const { return op_name < obj.op_name; }
+    void inc(uint64_t _time) const { time += _time; }
+  };
 
-         item( std::string _op_name, uint64_t _time ): op_name( _op_name ), time( _time ) {}
+  struct ritem {
+    std::string op_name;
+    uint64_t time;
 
-         bool operator<( const item& obj ) const { return op_name < obj.op_name; }
-         void inc( uint64_t _time ) const { time += _time; }
-      };
+    ritem(std::string _op_name, uint64_t _time)
+        : op_name(_op_name), time(_time) {}
 
-      struct ritem
-      {
-         std::string op_name;
-         uint64_t time;
+    bool operator<(const ritem &obj) const { return time > obj.time; }
+  };
 
-         ritem( std::string _op_name, uint64_t _time ): op_name( _op_name ), time( _time ){}
+  template <typename COLLECTION> struct total_info {
+    uint64_t total_time = 0;
 
-         bool operator<( const ritem& obj ) const { return time > obj.time; }
-      };
+    COLLECTION items;
 
-      template< typename COLLECTION >
-      struct total_info
-      {
-         uint64_t total_time = 0;
+    total_info() {}
+    total_info(uint64_t _total_time) : total_time(_total_time) {}
 
-         COLLECTION items;
-         
-         total_info(){}
-         total_info( uint64_t _total_time ): total_time( _total_time ) {}
+    void inc(uint64_t _time) { total_time += _time; }
 
-         void inc( uint64_t _time ) { total_time += _time; }
+    template <typename... TArgs>
+    typename emplace_ret_value<COLLECTION>::type emplace(TArgs &&...args) {
+      return items.emplace(std::forward<TArgs>(args)...);
+    }
+  };
 
-         template <typename... TArgs>
-         typename emplace_ret_value<COLLECTION>::type emplace(TArgs&&... args)
-            { return items.emplace(std::forward<TArgs>(args)...); }
-      };
+private:
+  static uint32_t cnt;
+  static std::string virtual_operation_name;
+  static std::string apply_context_name;
 
-   private:
+  bool enabled = false;
 
-      static uint32_t cnt;
-      static std::string virtual_operation_name;
-      static std::string apply_context_name;
+  uint32_t flush_cnt = 0;
+  uint32_t flush_max = 500000;
 
-      bool enabled = false;
+  uint64_t time_begin = 0;
 
-      uint32_t flush_cnt = 0;
-      uint32_t flush_max = 500000;
+  std::string file_name;
 
-      uint64_t time_begin = 0;
+  total_info<std::set<item>> info;
 
-      std::string file_name;
+  template <typename COLLECTION>
+  void dump_impl(const total_info<COLLECTION> &src,
+                 const std::string &src_file_name);
 
-      total_info< std::set< item > > info;
+public:
+  advanced_benchmark_dumper();
+  ~advanced_benchmark_dumper();
 
-      template< typename COLLECTION >
-      void dump_impl( const total_info< COLLECTION >& src, const std::string& src_file_name );
+  static std::string &get_virtual_operation_name() {
+    return virtual_operation_name;
+  }
 
-   public:
+  template <bool IS_PRE_OPERATION>
+  static std::string generate_desc(const std::string &desc1,
+                                   const std::string &desc2) {
+    std::stringstream s;
+    s << (IS_PRE_OPERATION ? "pre--->" : "post--->") << desc1 << "--->"
+      << desc2;
 
-      advanced_benchmark_dumper();
-      ~advanced_benchmark_dumper();
+    return s.str();
+  }
 
-      static std::string& get_virtual_operation_name(){ return virtual_operation_name; }
+  void set_enabled(bool val) { enabled = val; }
+  bool is_enabled() { return enabled; }
 
-      template< bool IS_PRE_OPERATION >
-      static std::string generate_desc( const std::string& desc1, const std::string& desc2 )
-      {
-         std::stringstream s;
-         s << ( IS_PRE_OPERATION ? "pre--->" : "post--->" ) << desc1 << "--->" << desc2;
+  void begin();
+  template <bool APPLY_CONTEXT = false> void end(const std::string &str);
 
-         return s.str();
-      }
-
-      void set_enabled( bool val ) { enabled = val; }
-      bool is_enabled() { return enabled; }
-
-      void begin();
-      template< bool APPLY_CONTEXT = false >
-      void end( const std::string& str );
-
-      void dump();
+  void dump();
 };
 
-} } } // blurt::chain::util
+} // namespace util
+} // namespace chain
+} // namespace blurt
 
-FC_REFLECT( blurt::chain::util::advanced_benchmark_dumper::item, (op_name)(time) )
-FC_REFLECT( blurt::chain::util::advanced_benchmark_dumper::ritem, (op_name)(time) )
+FC_REFLECT(blurt::chain::util::advanced_benchmark_dumper::item, (op_name)(time))
+FC_REFLECT(blurt::chain::util::advanced_benchmark_dumper::ritem,
+           (op_name)(time))
 
-FC_REFLECT( blurt::chain::util::advanced_benchmark_dumper::total_info< std::set< blurt::chain::util::advanced_benchmark_dumper::item > >, (total_time)(items) )
-FC_REFLECT( blurt::chain::util::advanced_benchmark_dumper::total_info< std::multiset< blurt::chain::util::advanced_benchmark_dumper::ritem > >, (total_time)(items) )
-
+FC_REFLECT(blurt::chain::util::advanced_benchmark_dumper::total_info<
+               std::set<blurt::chain::util::advanced_benchmark_dumper::item>>,
+           (total_time)(items))
+FC_REFLECT(
+    blurt::chain::util::advanced_benchmark_dumper::total_info<
+        std::multiset<blurt::chain::util::advanced_benchmark_dumper::ritem>>,
+    (total_time)(items))

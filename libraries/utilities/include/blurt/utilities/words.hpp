@@ -23,10 +23,12 @@
  */
 #pragma once
 
-namespace blurt { namespace words {
+namespace blurt {
+namespace words {
 
-typedef const char* const_char_ptr;
+typedef const char *const_char_ptr;
 extern const const_char_ptr word_list[];
 extern const uint32_t word_list_size;
 
-} }
+} // namespace words
+} // namespace blurt

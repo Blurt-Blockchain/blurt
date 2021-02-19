@@ -3,30 +3,27 @@
 #include <cstdint>
 #include <cstdlib>
 
-namespace chainbase
-{
+namespace chainbase {
 
 /**
-*  Object ID type that includes the type of the object it references
-*/
-template<typename T>
-class oid
-{
+ *  Object ID type that includes the type of the object it references
+ */
+template <typename T> class oid {
 public:
-   oid( int64_t i = 0 ):_id(i){}
+  oid(int64_t i = 0) : _id(i) {}
 
-   oid& operator++() { ++_id; return *this; }
+  oid &operator++() {
+    ++_id;
+    return *this;
+  }
 
-   operator size_t () const
-   {
-      return _id;
-   }
+  operator size_t() const { return _id; }
 
-   friend bool operator < ( const oid& a, const oid& b ) { return a._id < b._id; }
-   friend bool operator > ( const oid& a, const oid& b ) { return a._id > b._id; }
-   friend bool operator == ( const oid& a, const oid& b ) { return a._id == b._id; }
-   friend bool operator != ( const oid& a, const oid& b ) { return a._id != b._id; }
-   int64_t _id = 0;
+  friend bool operator<(const oid &a, const oid &b) { return a._id < b._id; }
+  friend bool operator>(const oid &a, const oid &b) { return a._id > b._id; }
+  friend bool operator==(const oid &a, const oid &b) { return a._id == b._id; }
+  friend bool operator!=(const oid &a, const oid &b) { return a._id != b._id; }
+  int64_t _id = 0;
 };
 
-} /// namespace chainbase
+} // namespace chainbase

@@ -14,52 +14,56 @@
 
 #define WITNESS_CUSTOM_OP_BLOCK_LIMIT 5
 
-namespace blurt { namespace plugins { namespace witness {
+namespace blurt {
+namespace plugins {
+namespace witness {
 
-namespace detail { class witness_plugin_impl; }
-
-namespace block_production_condition
-{
-   enum block_production_condition_enum
-   {
-      produced = 0,
-      not_synced = 1,
-      not_my_turn = 2,
-      not_time_yet = 3,
-      no_private_key = 4,
-      low_participation = 5,
-      lag = 6,
-      consecutive = 7,
-      wait_for_genesis = 8,
-      exception_producing_block = 9
-   };
+namespace detail {
+class witness_plugin_impl;
 }
 
-class witness_plugin : public appbase::plugin< witness_plugin >
-{
+namespace block_production_condition {
+enum block_production_condition_enum {
+  produced = 0,
+  not_synced = 1,
+  not_my_turn = 2,
+  not_time_yet = 3,
+  no_private_key = 4,
+  low_participation = 5,
+  lag = 6,
+  consecutive = 7,
+  wait_for_genesis = 8,
+  exception_producing_block = 9
+};
+}
+
+class witness_plugin : public appbase::plugin<witness_plugin> {
 public:
-   APPBASE_PLUGIN_REQUIRES(
-      (blurt::plugins::chain::chain_plugin)
-      (blurt::plugins::p2p::p2p_plugin)
-      (blurt::plugins::rc::rc_plugin)
-   )
+  APPBASE_PLUGIN_REQUIRES((blurt::plugins::chain::chain_plugin)(
+      blurt::plugins::p2p::p2p_plugin)(blurt::plugins::rc::rc_plugin))
 
-   witness_plugin();
-   virtual ~witness_plugin();
+  witness_plugin();
+  virtual ~witness_plugin();
 
-   static const std::string& name() { static std::string name = BLURT_WITNESS_PLUGIN_NAME; return name; }
+  static const std::string &name() {
+    static std::string name = BLURT_WITNESS_PLUGIN_NAME;
+    return name;
+  }
 
-   virtual void set_program_options(
+  virtual void set_program_options(
       boost::program_options::options_description &command_line_options,
-      boost::program_options::options_description &config_file_options
-      ) override;
+      boost::program_options::options_description &config_file_options)
+      override;
 
-   virtual void plugin_initialize(const boost::program_options::variables_map& options) override;
-   virtual void plugin_startup() override;
-   virtual void plugin_shutdown() override;
+  virtual void plugin_initialize(
+      const boost::program_options::variables_map &options) override;
+  virtual void plugin_startup() override;
+  virtual void plugin_shutdown() override;
 
 private:
-   std::unique_ptr< detail::witness_plugin_impl > my;
+  std::unique_ptr<detail::witness_plugin_impl> my;
 };
 
-} } } // blurt::plugins::witness
+} // namespace witness
+} // namespace plugins
+} // namespace blurt

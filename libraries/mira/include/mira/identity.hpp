@@ -10,22 +10,23 @@
 
 #include <boost/multi_index/identity.hpp>
 
-namespace mira{
+namespace mira {
 
-namespace multi_index{
+namespace multi_index {
 
-namespace detail{
+namespace detail {
 
-template< typename Type >
-using const_identity_base = boost::multi_index::detail::const_identity_base< Type >;
+template <typename Type>
+using const_identity_base =
+    boost::multi_index::detail::const_identity_base<Type>;
 
-template< typename Type >
-using non_const_identity_base = boost::multi_index::detail::non_const_identity_base< Type >;
+template <typename Type>
+using non_const_identity_base =
+    boost::multi_index::detail::non_const_identity_base<Type>;
 
-} /* namespace multi_index::detail */
+} // namespace detail
 
-template< class Type >
-using identity = boost::multi_index::identity< Type >;
+template <class Type> using identity = boost::multi_index::identity<Type>;
 
 } /* namespace multi_index */
 

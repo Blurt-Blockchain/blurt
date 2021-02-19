@@ -2,17 +2,18 @@
 // All Rights Reserved.
 // Author: fraser@google.com
 
+#include "diff_match_patch.h"
 #include <fstream>
 #include <iostream>
 #include <string>
-#include "diff_match_patch.h"
 
 using namespace std;
 
 wstring readFile(const char *filename) {
   wifstream file(filename);
   wstring text;
-  getline(file, text, wstring::traits_type::to_char_type(wstring::traits_type::eof()));
+  getline(file, text,
+          wstring::traits_type::to_char_type(wstring::traits_type::eof()));
   return text;
 }
 
@@ -28,6 +29,7 @@ int main(int /* argc */, char ** /* argv */) {
 
   clock_t t = clock();
   dmp.diff_main(text1, text2, false);
-  cout << "Elapsed time: " << int((clock() - t) * 1000 / CLOCKS_PER_SEC) << " ms" << endl;
+  cout << "Elapsed time: " << int((clock() - t) * 1000 / CLOCKS_PER_SEC)
+       << " ms" << endl;
   return 0;
 }

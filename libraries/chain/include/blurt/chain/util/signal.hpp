@@ -2,13 +2,16 @@
 
 #include <fc/signals.hpp>
 
-namespace blurt { namespace chain { namespace util {
+namespace blurt {
+namespace chain {
+namespace util {
 
-inline void disconnect_signal( boost::signals2::connection& signal )
-{
-   if( signal.connected() )
-      signal.disconnect();
-   FC_ASSERT( !signal.connected() );
+inline void disconnect_signal(boost::signals2::connection &signal) {
+  if (signal.connected())
+    signal.disconnect();
+  FC_ASSERT(!signal.connected());
 }
 
-} } }
+} // namespace util
+} // namespace chain
+} // namespace blurt

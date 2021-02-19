@@ -2,12 +2,12 @@
 
 #include <boost/multi_index/indexed_by.hpp>
 
-namespace mira{
+namespace mira {
 
-namespace multi_index{
+namespace multi_index {
 
-template< typename... Args >
-using indexed_by = boost::multi_index::indexed_by< Args... >;
+template <typename... Args>
+using indexed_by = boost::multi_index::indexed_by<Args...>;
 
 } /* namespace multi_index */
 

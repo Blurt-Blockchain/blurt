@@ -1,17 +1,22 @@
 #include <blurt/plugins/statsd/utility.hpp>
 
-namespace blurt { namespace plugins{ namespace statsd { namespace util {
+namespace blurt {
+namespace plugins {
+namespace statsd {
+namespace util {
 
-bool statsd_enabled()
-{
-   static bool enabled = appbase::app().find_plugin< statsd_plugin >() != nullptr;
-   return enabled;
+bool statsd_enabled() {
+  static bool enabled = appbase::app().find_plugin<statsd_plugin>() != nullptr;
+  return enabled;
 }
 
-const statsd_plugin& get_statsd()
-{
-   static const statsd_plugin& statsd = appbase::app().get_plugin< statsd_plugin >();
-   return statsd;
+const statsd_plugin &get_statsd() {
+  static const statsd_plugin &statsd =
+      appbase::app().get_plugin<statsd_plugin>();
+  return statsd;
 }
 
-} } } } // blurt::plugins::statsd::util
+} // namespace util
+} // namespace statsd
+} // namespace plugins
+} // namespace blurt

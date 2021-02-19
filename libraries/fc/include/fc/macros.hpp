@@ -10,11 +10,11 @@
 #define _fe_3(_call, x, ...) _call(x) _fe_2(_call, __VA_ARGS__)
 #define _fe_4(_call, x, ...) _call(x) _fe_3(_call, __VA_ARGS__)
 
-#define MACRO_FOR_EACH(x, ...) \
-   _GET_NTH_ARG("ignored", ##__VA_ARGS__, \
-   _fe_4, _fe_3, _fe_2, _fe_1, _fe_0)(x, ##__VA_ARGS__)
+#define MACRO_FOR_EACH(x, ...)                                                 \
+  _GET_NTH_ARG("ignored", ##__VA_ARGS__, _fe_4, _fe_3, _fe_2, _fe_1, _fe_0)    \
+  (x, ##__VA_ARGS__)
 
-#define DO_PRAGMA(x) _Pragma (#x)
+#define DO_PRAGMA(x) _Pragma(#x)
 
 #ifdef __GNUC__
 

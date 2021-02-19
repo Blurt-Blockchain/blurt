@@ -2,14 +2,16 @@
 
 namespace fc {
 
-void to_variant( const blurt::plugins::condenser_api::legacy_block_header_extensions& sv, fc::variant& v )
-{
-   old_sv_to_variant( sv, v );
+void to_variant(
+    const blurt::plugins::condenser_api::legacy_block_header_extensions &sv,
+    fc::variant &v) {
+  old_sv_to_variant(sv, v);
 }
 
-void from_variant( const fc::variant& v, blurt::plugins::condenser_api::legacy_block_header_extensions& sv )
-{
-   old_sv_from_variant( v, sv );
+void from_variant(
+    const fc::variant &v,
+    blurt::plugins::condenser_api::legacy_block_header_extensions &sv) {
+  old_sv_from_variant(v, sv);
 }
 
-}
+} // namespace fc

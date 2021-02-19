@@ -26,14 +26,15 @@
 
 #include <cstdlib>
 
-namespace blurt { namespace utilities {
+namespace blurt {
+namespace utilities {
 
-fc::path temp_directory_path()
-{
-   const char* steemit_tempdir = getenv("BLURT_TEMPDIR");
-   if( steemit_tempdir != nullptr )
-      return fc::path( steemit_tempdir );
-   return fc::temp_directory_path() / "blurt-tmp";
+fc::path temp_directory_path() {
+  const char *steemit_tempdir = getenv("BLURT_TEMPDIR");
+  if (steemit_tempdir != nullptr)
+    return fc::path(steemit_tempdir);
+  return fc::temp_directory_path() / "blurt-tmp";
 }
 
-} } // blurt::utilities
+} // namespace utilities
+} // namespace blurt

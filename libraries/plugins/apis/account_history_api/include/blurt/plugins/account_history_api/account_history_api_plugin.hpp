@@ -7,30 +7,34 @@
 
 #define BLURT_ACCOUNT_HISTORY_API_PLUGIN_NAME "account_history_api"
 
-
-namespace blurt { namespace plugins { namespace account_history {
+namespace blurt {
+namespace plugins {
+namespace account_history {
 
 using namespace appbase;
 
-class account_history_api_plugin : public plugin< account_history_api_plugin >
-{
+class account_history_api_plugin : public plugin<account_history_api_plugin> {
 public:
-   APPBASE_PLUGIN_REQUIRES(
-      (blurt::plugins::json_rpc::json_rpc_plugin)
-   )
+  APPBASE_PLUGIN_REQUIRES((blurt::plugins::json_rpc::json_rpc_plugin))
 
-   account_history_api_plugin();
-   virtual ~account_history_api_plugin();
+  account_history_api_plugin();
+  virtual ~account_history_api_plugin();
 
-   static const std::string& name() { static std::string name = BLURT_ACCOUNT_HISTORY_API_PLUGIN_NAME; return name; }
+  static const std::string &name() {
+    static std::string name = BLURT_ACCOUNT_HISTORY_API_PLUGIN_NAME;
+    return name;
+  }
 
-   virtual void set_program_options( options_description& cli, options_description& cfg ) override;
+  virtual void set_program_options(options_description &cli,
+                                   options_description &cfg) override;
 
-   virtual void plugin_initialize( const variables_map& options ) override;
-   virtual void plugin_startup() override;
-   virtual void plugin_shutdown() override;
+  virtual void plugin_initialize(const variables_map &options) override;
+  virtual void plugin_startup() override;
+  virtual void plugin_shutdown() override;
 
-   std::shared_ptr< class account_history_api > api;
+  std::shared_ptr<class account_history_api> api;
 };
 
-} } } // blurt::plugins::account_history
+} // namespace account_history
+} // namespace plugins
+} // namespace blurt

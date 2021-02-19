@@ -24,9 +24,9 @@
 #define BOOST_TEST_MODULE plugin_test
 #include <BoostTestTargetConfig.h>
 
+#include <boost/test/included/unit_test.hpp>
 #include <cstdlib>
 #include <iostream>
-#include <boost/test/included/unit_test.hpp>
 
 /*
 extern uint32_t BLURT_TESTING_GENESIS_TIMESTAMP;
@@ -34,12 +34,13 @@ extern uint32_t BLURT_TESTING_GENESIS_TIMESTAMP;
 boost::unit_test::test_suite* init_unit_test_suite(int argc, char* argv[]) {
    std::srand(time(NULL));
    std::cout << "Random number generator seeded to " << time(NULL) << std::endl;
-   const char* genesis_timestamp_str = getenv("BLURT_TESTING_GENESIS_TIMESTAMP");
-   if( genesis_timestamp_str != nullptr )
+   const char* genesis_timestamp_str =
+getenv("BLURT_TESTING_GENESIS_TIMESTAMP"); if( genesis_timestamp_str != nullptr
+)
    {
       BLURT_TESTING_GENESIS_TIMESTAMP = std::stoul( genesis_timestamp_str );
    }
-   std::cout << "BLURT_TESTING_GENESIS_TIMESTAMP is " << BLURT_TESTING_GENESIS_TIMESTAMP << std::endl;
-   return nullptr;
+   std::cout << "BLURT_TESTING_GENESIS_TIMESTAMP is " <<
+BLURT_TESTING_GENESIS_TIMESTAMP << std::endl; return nullptr;
 }
 */

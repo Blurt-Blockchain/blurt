@@ -3,6 +3,6 @@
 
 #include <fc/uint128.hpp>
 
-namespace blurt { namespace chain {
-
-} } // blurt::chain
+namespace blurt {
+namespace chain {}
+} // namespace blurt

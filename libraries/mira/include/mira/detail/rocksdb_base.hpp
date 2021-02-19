@@ -7,16 +7,18 @@
 
 #include <vector>
 
-namespace mira { namespace multi_index { namespace detail {
+namespace mira {
+namespace multi_index {
+namespace detail {
 
 using ::rocksdb::ColumnFamilyDescriptor;
 
-class rocksdb_base
-{
+class rocksdb_base {
 
-   protected:
-      std::vector< ColumnFamilyDescriptor > _column_defs;
-
+protected:
+  std::vector<ColumnFamilyDescriptor> _column_defs;
 };
 
-} } } // mira::multi_index::detail
+} // namespace detail
+} // namespace multi_index
+} // namespace mira

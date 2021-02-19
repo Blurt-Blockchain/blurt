@@ -2,15 +2,15 @@
 
 #include <boost/multi_index/detail/has_tag.hpp>
 
-namespace mira{
+namespace mira {
 
-namespace multi_index{
+namespace multi_index {
 
-namespace detail{
+namespace detail {
 
 using boost::multi_index::detail::has_tag;
 
-} /* namespace multi_index::detail */
+} // namespace detail
 
 } /* namespace multi_index */
 

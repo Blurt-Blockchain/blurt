@@ -13,11 +13,12 @@
 
 #include <mira/detail/ord_index_args.hpp>
 
-namespace mira{
+namespace mira {
 
-namespace multi_index{
+namespace multi_index {
 
-template<typename Arg1,typename Arg2=boost::mpl::na,typename Arg3=boost::mpl::na>
+template <typename Arg1, typename Arg2 = boost::mpl::na,
+          typename Arg3 = boost::mpl::na>
 struct ordered_unique;
 
 } /* namespace multi_index */

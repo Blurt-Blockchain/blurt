@@ -2,21 +2,23 @@
 #include <fc/crypto/sha256.hpp>
 #include <fc/vector.hpp>
 
-namespace fc { namespace equihash {
+namespace fc {
+namespace equihash {
 
-   struct proof
-   {
-      uint32_t n;
-      uint32_t k;
-      sha256   seed;
-      std::vector< uint32_t > inputs;
+struct proof {
+  uint32_t n;
+  uint32_t k;
+  sha256 seed;
+  std::vector<uint32_t> inputs;
 
-      bool is_valid( bool test_canonical_order = false, bool test_intermediate_zeros = false ) const;
-      void canonize_indexes();
+  bool is_valid(bool test_canonical_order = false,
+                bool test_intermediate_zeros = false) const;
+  void canonize_indexes();
 
-      static proof hash( uint32_t n, uint32_t k, sha256 seed );
-   };
+  static proof hash(uint32_t n, uint32_t k, sha256 seed);
+};
 
-} } // fc
+} // namespace equihash
+} // namespace fc
 
-FC_REFLECT( fc::equihash::proof, (n)(k)(seed)(inputs) )
+FC_REFLECT(fc::equihash::proof, (n)(k)(seed)(inputs))

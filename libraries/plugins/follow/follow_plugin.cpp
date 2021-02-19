@@ -1,349 +1,342 @@
 
 #include <blurt/chain/blurt_fwd.hpp>
 
-#include <blurt/plugins/follow/follow_plugin.hpp>
 #include <blurt/plugins/follow/follow_objects.hpp>
 #include <blurt/plugins/follow/follow_operations.hpp>
+#include <blurt/plugins/follow/follow_plugin.hpp>
 #include <blurt/plugins/follow/inc_performance.hpp>
 
 #include <blurt/chain/util/impacted.hpp>
 
 #include <blurt/protocol/config.hpp>
 
-#include <blurt/chain/database.hpp>
-#include <blurt/chain/index.hpp>
 #include <blurt/chain/account_object.hpp>
 #include <blurt/chain/comment_object.hpp>
+#include <blurt/chain/database.hpp>
+#include <blurt/chain/index.hpp>
 
 #include <fc/smart_ref_impl.hpp>
 #include <fc/thread/thread.hpp>
 
 #include <memory>
 
-namespace blurt { namespace plugins { namespace follow {
+namespace blurt {
+namespace plugins {
+namespace follow {
 
 using namespace blurt::protocol;
 
 namespace detail {
 
-class follow_plugin_impl
-{
-   public:
-      follow_plugin_impl( follow_plugin& _plugin ) :
-         _db( appbase::app().get_plugin< blurt::plugins::chain::chain_plugin >().db() ),
-         _self( _plugin ) {}
-      ~follow_plugin_impl() {}
+class follow_plugin_impl {
+public:
+  follow_plugin_impl(follow_plugin &_plugin)
+      : _db(appbase::app()
+                .get_plugin<blurt::plugins::chain::chain_plugin>()
+                .db()),
+        _self(_plugin) {}
+  ~follow_plugin_impl() {}
 
-      void pre_operation( const operation_notification& op_obj );
-      void post_operation( const operation_notification& op_obj );
+  void pre_operation(const operation_notification &op_obj);
+  void post_operation(const operation_notification &op_obj);
 
-      chain::database&              _db;
-      follow_plugin&                _self;
-      boost::signals2::connection   _pre_apply_operation_conn;
-      boost::signals2::connection   _post_apply_operation_conn;
+  chain::database &_db;
+  follow_plugin &_self;
+  boost::signals2::connection _pre_apply_operation_conn;
+  boost::signals2::connection _post_apply_operation_conn;
 };
 
-struct pre_operation_visitor
-{
-   follow_plugin_impl& _plugin;
+struct pre_operation_visitor {
+  follow_plugin_impl &_plugin;
 
-   pre_operation_visitor( follow_plugin_impl& plugin )
-      : _plugin( plugin ) {}
+  pre_operation_visitor(follow_plugin_impl &plugin) : _plugin(plugin) {}
 
-   typedef void result_type;
+  typedef void result_type;
 
-   template< typename T >
-   void operator()( const T& )const {}
+  template <typename T> void operator()(const T &) const {}
 
-   void operator()( const vote_operation& op )const
-   {
-      try
-      {
-         auto& db = _plugin._db;
-         const auto& c = db.get_comment( op.author, op.permlink );
+  void operator()(const vote_operation &op) const {
+    try {
+      auto &db = _plugin._db;
+      const auto &c = db.get_comment(op.author, op.permlink);
 
-         if( db.calculate_discussion_payout_time( c ) == fc::time_point_sec::maximum() ) return;
+      if (db.calculate_discussion_payout_time(c) ==
+          fc::time_point_sec::maximum())
+        return;
+    } catch (const fc::exception &e) {
+    }
+  }
+
+  void operator()(const delete_comment_operation &op) const {
+    try {
+      auto &db = _plugin._db;
+      const auto *comment = db.find_comment(op.author, op.permlink);
+
+      if (comment == nullptr)
+        return;
+      if (comment->parent_author.size())
+        return;
+
+      const auto &feed_idx =
+          db.get_index<feed_index>().indices().get<by_comment>();
+      auto itr = feed_idx.lower_bound(comment->id);
+
+      while (itr != feed_idx.end() && itr->comment == comment->id) {
+        const auto &old_feed = *itr;
+        ++itr;
+        db.remove(old_feed);
       }
-      catch( const fc::exception& e ) {}
-   }
 
-   void operator()( const delete_comment_operation& op )const
-   {
-      try
-      {
-         auto& db = _plugin._db;
-         const auto* comment = db.find_comment( op.author, op.permlink );
+      const auto &blog_idx =
+          db.get_index<blog_index>().indices().get<by_comment>();
+      auto blog_itr = blog_idx.lower_bound(comment->id);
 
-         if( comment == nullptr ) return;
-         if( comment->parent_author.size() ) return;
-
-         const auto& feed_idx = db.get_index< feed_index >().indices().get< by_comment >();
-         auto itr = feed_idx.lower_bound( comment->id );
-
-         while( itr != feed_idx.end() && itr->comment == comment->id )
-         {
-            const auto& old_feed = *itr;
-            ++itr;
-            db.remove( old_feed );
-         }
-
-         const auto& blog_idx = db.get_index< blog_index >().indices().get< by_comment >();
-         auto blog_itr = blog_idx.lower_bound( comment->id );
-
-         while( blog_itr != blog_idx.end() && blog_itr->comment == comment->id )
-         {
-            const auto& old_blog = *blog_itr;
-            ++blog_itr;
-            db.remove( old_blog );
-         }
+      while (blog_itr != blog_idx.end() && blog_itr->comment == comment->id) {
+        const auto &old_blog = *blog_itr;
+        ++blog_itr;
+        db.remove(old_blog);
       }
-      FC_CAPTURE_AND_RETHROW()
-   }
+    }
+    FC_CAPTURE_AND_RETHROW()
+  }
 };
 
-struct post_operation_visitor
-{
-   follow_plugin_impl& _plugin;
+struct post_operation_visitor {
+  follow_plugin_impl &_plugin;
 
-   performance perf;
+  performance perf;
 
-   post_operation_visitor( follow_plugin_impl& plugin )
-      : _plugin( plugin ), perf( plugin._db ) {}
+  post_operation_visitor(follow_plugin_impl &plugin)
+      : _plugin(plugin), perf(plugin._db) {}
 
-   typedef void result_type;
+  typedef void result_type;
 
-   template< typename T >
-   void operator()( const T& )const {}
+  template <typename T> void operator()(const T &) const {}
 
-   void operator()( const custom_json_operation& op )const
-   {
-      try
-      {
-         if( op.id == BLURT_FOLLOW_PLUGIN_NAME )
-         {
-            custom_json_operation new_cop;
+  void operator()(const custom_json_operation &op) const {
+    try {
+      if (op.id == BLURT_FOLLOW_PLUGIN_NAME) {
+        custom_json_operation new_cop;
 
-            new_cop.required_auths = op.required_auths;
-            new_cop.required_posting_auths = op.required_posting_auths;
-            new_cop.id = _plugin._self.name();
-            follow_operation fop;
+        new_cop.required_auths = op.required_auths;
+        new_cop.required_posting_auths = op.required_posting_auths;
+        new_cop.id = _plugin._self.name();
+        follow_operation fop;
 
-            try
-            {
-               fop = fc::json::from_string( op.json ).as< follow_operation >();
-            }
-            catch( const fc::exception& )
-            {
-               return;
-            }
+        try {
+          fop = fc::json::from_string(op.json).as<follow_operation>();
+        } catch (const fc::exception &) {
+          return;
+        }
 
-            auto new_fop = follow_plugin_operation( fop );
-            new_cop.json = fc::json::to_string( new_fop );
-            std::shared_ptr< custom_operation_interpreter > eval = _plugin._db.get_custom_json_evaluator( op.id );
-            eval->apply( new_cop );
-         }
+        auto new_fop = follow_plugin_operation(fop);
+        new_cop.json = fc::json::to_string(new_fop);
+        std::shared_ptr<custom_operation_interpreter> eval =
+            _plugin._db.get_custom_json_evaluator(op.id);
+        eval->apply(new_cop);
       }
-      FC_CAPTURE_AND_RETHROW()
-   }
+    }
+    FC_CAPTURE_AND_RETHROW()
+  }
 
-   void operator()( const comment_operation& op )const
-   {
-      try
-      {
-         if( op.parent_author.size() > 0 ) return;
-         auto& db = _plugin._db;
+  void operator()(const comment_operation &op) const {
+    try {
+      if (op.parent_author.size() > 0)
+        return;
+      auto &db = _plugin._db;
 
+      //////////////////////////
+      // spam filter
+      const auto &filtered_list = db.get_spam_accounts();
+      if (filtered_list.find(op.author) != filtered_list.end()) {
+        // ilog("spam follow filter: ${a}", ("a", op.author));
+        return;
+      }
+      // end spam filter
 
-         //////////////////////////
-         // spam filter
-         const auto &filtered_list = db.get_spam_accounts();
-         if (filtered_list.find(op.author) != filtered_list.end()) {
-            // ilog("spam follow filter: ${a}", ("a", op.author));
-            return;
-         }
-         // end spam filter
+      const auto &c = db.get_comment(op.author, op.permlink);
 
+      if (c.created != db.head_block_time())
+        return;
 
-
-         const auto& c = db.get_comment( op.author, op.permlink );
-
-         if( c.created != db.head_block_time() ) return;
-
-         const auto& idx = db.get_index< follow_index >().indices().get< by_following_follower >();
-         const auto& comment_idx = db.get_index< feed_index >().indices().get< by_comment >();
-         auto itr = idx.find( op.author );
+      const auto &idx =
+          db.get_index<follow_index>().indices().get<by_following_follower>();
+      const auto &comment_idx =
+          db.get_index<feed_index>().indices().get<by_comment>();
+      auto itr = idx.find(op.author);
 
 #ifndef ENABLE_MIRA
-         const auto& old_feed_idx = db.get_index< feed_index >().indices().get< by_feed >();
+      const auto &old_feed_idx =
+          db.get_index<feed_index>().indices().get<by_feed>();
 #endif
 
+      performance_data pd;
 
-         performance_data pd;
+      if (db.head_block_time() >= _plugin._self.start_feeds) {
+        while (itr != idx.end() && itr->following == op.author) {
+          if (itr->what & (1 << blog)) {
+            auto feed_itr =
+                comment_idx.find(boost::make_tuple(c.id, itr->follower));
+            bool is_empty = feed_itr == comment_idx.end();
 
-         if( db.head_block_time() >= _plugin._self.start_feeds )
-         {
-            while( itr != idx.end() && itr->following == op.author )
-            {
-               if( itr->what & ( 1 << blog ) )
-               {
-                  auto feed_itr = comment_idx.find( boost::make_tuple( c.id, itr->follower ) );
-                  bool is_empty = feed_itr == comment_idx.end();
-
-                  pd.init( c.id, is_empty );
-                  uint32_t next_id = 0;
+            pd.init(c.id, is_empty);
+            uint32_t next_id = 0;
 #ifndef ENABLE_MIRA
-                  next_id = perf.delete_old_objects< performance_data::t_creation_type::part_feed >( old_feed_idx, itr->follower, _plugin._self.max_feed_size, pd );
+            next_id = perf.delete_old_objects<
+                performance_data::t_creation_type::part_feed>(
+                old_feed_idx, itr->follower, _plugin._self.max_feed_size, pd);
 #endif
 
-                  if( pd.s.creation && is_empty )
-                  {
-                     db.create< feed_object >( [&]( feed_object& f )
-                     {
-                        f.account = itr->follower;
-                        f.comment = c.id;
-                        f.account_feed_id = next_id;
-                     });
-                  }
-
-               }
-               ++itr;
+            if (pd.s.creation && is_empty) {
+              db.create<feed_object>([&](feed_object &f) {
+                f.account = itr->follower;
+                f.comment = c.id;
+                f.account_feed_id = next_id;
+              });
             }
-         }
+          }
+          ++itr;
+        }
+      }
 
-         const auto& comment_blog_idx = db.get_index< blog_index >().indices().get< by_comment >();
-         auto blog_itr = comment_blog_idx.find( boost::make_tuple( c.id, op.author ) );
-         bool is_empty = blog_itr == comment_blog_idx.end();
+      const auto &comment_blog_idx =
+          db.get_index<blog_index>().indices().get<by_comment>();
+      auto blog_itr = comment_blog_idx.find(boost::make_tuple(c.id, op.author));
+      bool is_empty = blog_itr == comment_blog_idx.end();
 
 #ifndef ENABLE_MIRA
-         const auto& old_blog_idx = db.get_index< blog_index >().indices().get< by_blog >();
+      const auto &old_blog_idx =
+          db.get_index<blog_index>().indices().get<by_blog>();
 #endif
 
-         pd.init( c.id, is_empty );
-         uint32_t next_id = 0;
+      pd.init(c.id, is_empty);
+      uint32_t next_id = 0;
 #ifndef ENABLE_MIRA
-         next_id = perf.delete_old_objects< performance_data::t_creation_type::full_blog >( old_blog_idx, op.author, _plugin._self.max_feed_size, pd );
+      next_id =
+          perf.delete_old_objects<performance_data::t_creation_type::full_blog>(
+              old_blog_idx, op.author, _plugin._self.max_feed_size, pd);
 #endif
 
-         if( pd.s.creation && is_empty )
-         {
-            db.create< blog_object >( [&]( blog_object& b)
-            {
-               b.account = op.author;
-               b.comment = c.id;
-               b.blog_feed_id = next_id;
-            });
-         }
+      if (pd.s.creation && is_empty) {
+        db.create<blog_object>([&](blog_object &b) {
+          b.account = op.author;
+          b.comment = c.id;
+          b.blog_feed_id = next_id;
+        });
       }
-      FC_LOG_AND_RETHROW()
-   }
+    }
+    FC_LOG_AND_RETHROW()
+  }
 
-   void operator()( const vote_operation& op )const
-   {
-      try
-      {
-         auto& db = _plugin._db;
-         const auto& comment = db.get_comment( op.author, op.permlink );
+  void operator()(const vote_operation &op) const {
+    try {
+      auto &db = _plugin._db;
+      const auto &comment = db.get_comment(op.author, op.permlink);
 
-         if( db.calculate_discussion_payout_time( comment ) == fc::time_point_sec::maximum() )
-            return;
-      }
-      FC_CAPTURE_AND_RETHROW()
-   }
+      if (db.calculate_discussion_payout_time(comment) ==
+          fc::time_point_sec::maximum())
+        return;
+    }
+    FC_CAPTURE_AND_RETHROW()
+  }
 };
 
-void follow_plugin_impl::pre_operation( const operation_notification& note )
-{
-   try
-   {
-      note.op.visit( pre_operation_visitor( *this ) );
-   }
-   catch( const fc::assert_exception& )
-   {
-      if( _db.is_producing() ) throw;
-   }
+void follow_plugin_impl::pre_operation(const operation_notification &note) {
+  try {
+    note.op.visit(pre_operation_visitor(*this));
+  } catch (const fc::assert_exception &) {
+    if (_db.is_producing())
+      throw;
+  }
 }
 
-void follow_plugin_impl::post_operation( const operation_notification& note )
-{
-   try
-   {
-      note.op.visit( post_operation_visitor( *this ) );
-   }
-   catch( const fc::assert_exception& )
-   {
-      if( _db.is_producing() ) throw;
-   }
+void follow_plugin_impl::post_operation(const operation_notification &note) {
+  try {
+    note.op.visit(post_operation_visitor(*this));
+  } catch (const fc::assert_exception &) {
+    if (_db.is_producing())
+      throw;
+  }
 }
 
-} // detail
+} // namespace detail
 
 follow_plugin::follow_plugin() {}
 
 follow_plugin::~follow_plugin() {}
 
 void follow_plugin::set_program_options(
-   boost::program_options::options_description& cli,
-   boost::program_options::options_description& cfg
-   )
-{
-   cfg.add_options()
-      ("follow-max-feed-size", boost::program_options::value< uint32_t >()->default_value( 500 ), "Set the maximum size of cached feed for an account" )
-      ("follow-start-feeds", boost::program_options::value< uint32_t >()->default_value( 0 ), "Block time (in epoch seconds) when to start calculating feeds" )
-      ;
+    boost::program_options::options_description &cli,
+    boost::program_options::options_description &cfg) {
+  cfg.add_options()(
+      "follow-max-feed-size",
+      boost::program_options::value<uint32_t>()->default_value(500),
+      "Set the maximum size of cached feed for an account")(
+      "follow-start-feeds",
+      boost::program_options::value<uint32_t>()->default_value(0),
+      "Block time (in epoch seconds) when to start calculating feeds");
 }
 
-void follow_plugin::plugin_initialize( const boost::program_options::variables_map& options )
-{
-   try
-   {
-      ilog("Intializing follow plugin" );
+void follow_plugin::plugin_initialize(
+    const boost::program_options::variables_map &options) {
+  try {
+    ilog("Intializing follow plugin");
 
-      my = std::make_unique< detail::follow_plugin_impl >( *this );
+    my = std::make_unique<detail::follow_plugin_impl>(*this);
 
-      // Each plugin needs its own evaluator registry.
-      _custom_operation_interpreter = std::make_shared< generic_custom_operation_interpreter< blurt::plugins::follow::follow_plugin_operation > >( my->_db, name() );
+    // Each plugin needs its own evaluator registry.
+    _custom_operation_interpreter =
+        std::make_shared<generic_custom_operation_interpreter<
+            blurt::plugins::follow::follow_plugin_operation>>(my->_db, name());
 
-      // Add each operation evaluator to the registry
-      _custom_operation_interpreter->register_evaluator< follow_evaluator >( this );
-      _custom_operation_interpreter->register_evaluator< reblog_evaluator >( this );
+    // Add each operation evaluator to the registry
+    _custom_operation_interpreter->register_evaluator<follow_evaluator>(this);
+    _custom_operation_interpreter->register_evaluator<reblog_evaluator>(this);
 
-      // Add the registry to the database so the database can delegate custom ops to the plugin
-      my->_db.register_custom_operation_interpreter( _custom_operation_interpreter );
+    // Add the registry to the database so the database can delegate custom ops
+    // to the plugin
+    my->_db.register_custom_operation_interpreter(
+        _custom_operation_interpreter);
 
-      my->_pre_apply_operation_conn = my->_db.add_pre_apply_operation_handler( [&]( const operation_notification& note ){ my->pre_operation( note ); }, *this, 0 );
-      my->_post_apply_operation_conn = my->_db.add_post_apply_operation_handler( [&]( const operation_notification& note ){ my->post_operation( note ); }, *this, 0 );
-      BLURT_ADD_PLUGIN_INDEX(my->_db, follow_index);
-      BLURT_ADD_PLUGIN_INDEX(my->_db, feed_index);
-      BLURT_ADD_PLUGIN_INDEX(my->_db, blog_index);
-      BLURT_ADD_PLUGIN_INDEX(my->_db, follow_count_index);
-      BLURT_ADD_PLUGIN_INDEX(my->_db, blog_author_stats_index);
+    my->_pre_apply_operation_conn = my->_db.add_pre_apply_operation_handler(
+        [&](const operation_notification &note) { my->pre_operation(note); },
+        *this, 0);
+    my->_post_apply_operation_conn = my->_db.add_post_apply_operation_handler(
+        [&](const operation_notification &note) { my->post_operation(note); },
+        *this, 0);
+    BLURT_ADD_PLUGIN_INDEX(my->_db, follow_index);
+    BLURT_ADD_PLUGIN_INDEX(my->_db, feed_index);
+    BLURT_ADD_PLUGIN_INDEX(my->_db, blog_index);
+    BLURT_ADD_PLUGIN_INDEX(my->_db, follow_count_index);
+    BLURT_ADD_PLUGIN_INDEX(my->_db, blog_author_stats_index);
 
-      fc::mutable_variant_object state_opts;
+    fc::mutable_variant_object state_opts;
 
-      if( options.count( "follow-max-feed-size" ) )
-      {
-         uint32_t feed_size = options[ "follow-max-feed-size" ].as< uint32_t >();
-         max_feed_size = feed_size;
-         state_opts[ "follow-max-feed-size" ] = feed_size;
-      }
+    if (options.count("follow-max-feed-size")) {
+      uint32_t feed_size = options["follow-max-feed-size"].as<uint32_t>();
+      max_feed_size = feed_size;
+      state_opts["follow-max-feed-size"] = feed_size;
+    }
 
-      if( options.count( "follow-start-feeds" ) )
-      {
-         start_feeds = fc::time_point_sec( options[ "follow-start-feeds" ].as< uint32_t >() );
-         state_opts[ "follow-start-feeds" ] = start_feeds;
-      }
+    if (options.count("follow-start-feeds")) {
+      start_feeds =
+          fc::time_point_sec(options["follow-start-feeds"].as<uint32_t>());
+      state_opts["follow-start-feeds"] = start_feeds;
+    }
 
-      appbase::app().get_plugin< chain::chain_plugin >().report_state_options( name(), state_opts );
-   }
-   FC_CAPTURE_AND_RETHROW()
+    appbase::app().get_plugin<chain::chain_plugin>().report_state_options(
+        name(), state_opts);
+  }
+  FC_CAPTURE_AND_RETHROW()
 }
 
 void follow_plugin::plugin_startup() {}
 
-void follow_plugin::plugin_shutdown()
-{
-   chain::util::disconnect_signal( my->_pre_apply_operation_conn );
-   chain::util::disconnect_signal( my->_post_apply_operation_conn );
+void follow_plugin::plugin_shutdown() {
+  chain::util::disconnect_signal(my->_pre_apply_operation_conn);
+  chain::util::disconnect_signal(my->_post_apply_operation_conn);
 }
 
-} } } // blurt::plugins::follow
+} // namespace follow
+} // namespace plugins
+} // namespace blurt

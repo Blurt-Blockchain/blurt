@@ -1,40 +1,43 @@
 #pragma once
 
+#include <fc/io/json.hpp>
 #include <fc/log/console_appender.hpp>
 #include <fc/log/file_appender.hpp>
 #include <fc/log/logger.hpp>
 #include <fc/log/logger_config.hpp>
 #include <fc/reflect/reflect.hpp>
 #include <fc/reflect/variant.hpp>
-#include <fc/io/json.hpp>
 
 #include <boost/program_options.hpp>
 
-namespace blurt { namespace utilities {
+namespace blurt {
+namespace utilities {
 
-struct appender_args
-{
-   std::string appender;
-   std::string file;
-   std::string stream;
+struct appender_args {
+  std::string appender;
+  std::string file;
+  std::string stream;
 
-   void validate();
+  void validate();
 };
 
-struct logger_args
-{
-   std::string name;
-   std::string level;
-   std::string appender;
+struct logger_args {
+  std::string name;
+  std::string level;
+  std::string appender;
 
-   void validate();
+  void validate();
 };
 
-void set_logging_program_options( boost::program_options::options_description& options );
+void set_logging_program_options(
+    boost::program_options::options_description &options);
 
-fc::optional<fc::logging_config> load_logging_config( const boost::program_options::variables_map& args, const boost::filesystem::path& pwd );
+fc::optional<fc::logging_config>
+load_logging_config(const boost::program_options::variables_map &args,
+                    const boost::filesystem::path &pwd);
 
-} } // blurt::utilities
+} // namespace utilities
+} // namespace blurt
 
-FC_REFLECT( blurt::utilities::appender_args, (appender)(file)(stream) )
-FC_REFLECT( blurt::utilities::logger_args, (name)(level)(appender) )
+FC_REFLECT(blurt::utilities::appender_args, (appender)(file)(stream))
+FC_REFLECT(blurt::utilities::logger_args, (name)(level)(appender))

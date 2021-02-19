@@ -5,8 +5,10 @@
 #include <string>
 #include <vector>
 
-namespace blurt { namespace plugins {
+namespace blurt {
+namespace plugins {
 
 void register_plugins();
 
-} }
+}
+} // namespace blurt

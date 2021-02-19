@@ -17,6 +17,12 @@ list( APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/libraries/fc/GitVers
 include( GetGitRevisionDescription )
 get_git_head_revision( GIT_REFSPEC GIT_SHA2 )
 
+find_program(iwyu_path NAMES include-what-you-use iwyu)
+if(NOT iwyu_path)
+    message(FATAL_ERROR "Could not find the program include-what-you-use")
+endif()
+
+
 SET(BOOST_COMPONENTS)
 LIST(APPEND BOOST_COMPONENTS thread
                              date_time
@@ -164,4 +170,34 @@ else()
   MESSAGE( STATUS "\n\n             CONFIGURED FOR FULL NODE                \n\n" )
 endif()
 
+# Get all project files
+file(GLOB_RECURSE
+        ALL_CXX_SOURCE_FILES
+        *.[chi]pp *.[chi]xx *.cc *.hh *.ii *.[CHI]
+        )
 
+# Adding clang-format target if executable is found
+find_program(CLANG_FORMAT "clang-format")
+if(CLANG_FORMAT)
+    add_custom_target(
+            clang-format
+            COMMAND clang-format
+            -i
+            -style=file
+            ${ALL_CXX_SOURCE_FILES}
+    )
+endif()
+
+# Adding clang-tidy target if executable is found
+find_program(CLANG_TIDY "clang-tidy")
+if(CLANG_TIDY)
+    add_custom_target(
+            clang-tidy
+            COMMAND clang-tidy
+            ${ALL_CXX_SOURCE_FILES}
+            -config=''
+            --
+            -std=c++11
+            ${INCLUDE_DIRECTORIES}
+    )
+endif()

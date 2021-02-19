@@ -10,9 +10,9 @@
 
 #include <boost/multi_index/mem_fun.hpp>
 
-namespace mira{
+namespace mira {
 
-namespace multi_index{
+namespace multi_index {
 
 /* mem_fun implements a read-only key extractor based on a given non-const
  * member function of a class.
@@ -25,8 +25,10 @@ namespace multi_index{
  * arbitrary combinations of these (vg. T** or unique_ptr<T*>.)
  */
 
-template<class Class,typename Type,Type (Class::*PtrToMemberFunction)()const>
-using const_mem_fun = boost::multi_index::const_mem_fun< Class, Type, PtrToMemberFunction >;
+template <class Class, typename Type,
+          Type (Class::*PtrToMemberFunction)() const>
+using const_mem_fun =
+    boost::multi_index::const_mem_fun<Class, Type, PtrToMemberFunction>;
 
 } /* namespace multi_index */
 

@@ -5,48 +5,46 @@
 
 #include <fc/optional.hpp>
 
-namespace blurt { namespace plugins { namespace chain {
+namespace blurt {
+namespace plugins {
+namespace chain {
 
-namespace detail { class chain_api_impl; }
+namespace detail {
+class chain_api_impl;
+}
 
-struct push_block_args
-{
-   blurt::chain::signed_block block;
-   bool                         currently_syncing = false;
+struct push_block_args {
+  blurt::chain::signed_block block;
+  bool currently_syncing = false;
 };
 
-
-struct push_block_return
-{
-   bool              success;
-   optional<string>  error;
+struct push_block_return {
+  bool success;
+  optional<string> error;
 };
 
 typedef blurt::chain::signed_transaction push_transaction_args;
 
-struct push_transaction_return
-{
-   bool              success;
-   optional<string>  error;
+struct push_transaction_return {
+  bool success;
+  optional<string> error;
 };
 
+class chain_api {
+public:
+  chain_api();
+  ~chain_api();
 
-class chain_api
-{
-   public:
-      chain_api();
-      ~chain_api();
+  DECLARE_API((push_block)(push_transaction))
 
-      DECLARE_API(
-         (push_block)
-         (push_transaction) )
-      
-   private:
-      std::unique_ptr< detail::chain_api_impl > my;
+private:
+  std::unique_ptr<detail::chain_api_impl> my;
 };
 
-} } } // blurt::plugins::chain
+} // namespace chain
+} // namespace plugins
+} // namespace blurt
 
-FC_REFLECT( blurt::plugins::chain::push_block_args, (block)(currently_syncing) )
-FC_REFLECT( blurt::plugins::chain::push_block_return, (success)(error) )
-FC_REFLECT( blurt::plugins::chain::push_transaction_return, (success)(error) )
+FC_REFLECT(blurt::plugins::chain::push_block_args, (block)(currently_syncing))
+FC_REFLECT(blurt::plugins::chain::push_block_return, (success)(error))
+FC_REFLECT(blurt::plugins::chain::push_transaction_return, (success)(error))

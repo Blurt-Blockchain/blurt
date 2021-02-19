@@ -5,38 +5,41 @@
 #include <fc/io/datastream.hpp>
 #include <fc/io/raw.hpp>
 
-namespace blurt { namespace chain {
+namespace blurt {
+namespace chain {
 
-typedef chainbase::t_vector< char > buffer_type;
+typedef chainbase::t_vector<char> buffer_type;
 
-} } // blurt::chain
+}
+} // namespace blurt
 
-namespace fc { namespace raw {
+namespace fc {
+namespace raw {
 
-template< typename T, typename B > inline void pack_to_buffer( B& raw, const T& v )
-{
-   auto size = pack_size( v );
-   raw.resize( size );
-   datastream< char* > ds( raw.data(), size );
-   pack( ds, v );
+template <typename T, typename B>
+inline void pack_to_buffer(B &raw, const T &v) {
+  auto size = pack_size(v);
+  raw.resize(size);
+  datastream<char *> ds(raw.data(), size);
+  pack(ds, v);
 }
 
-template< typename T, typename B > inline void unpack_from_buffer( const B& raw, T& v )
-{
-   datastream< const char* > ds( raw.data(), raw.size() );
-   unpack( ds, v );
+template <typename T, typename B>
+inline void unpack_from_buffer(const B &raw, T &v) {
+  datastream<const char *> ds(raw.data(), raw.size());
+  unpack(ds, v);
 }
 
-template< typename T, typename B > inline T unpack_from_buffer( const B& raw )
-{
-   T v;
-   datastream< const char* > ds( raw.data(), raw.size() );
-   unpack( ds, v );
-   return v;
+template <typename T, typename B> inline T unpack_from_buffer(const B &raw) {
+  T v;
+  datastream<const char *> ds(raw.data(), raw.size());
+  unpack(ds, v);
+  return v;
 }
 
-} } // fc::raw
+} // namespace raw
+} // namespace fc
 
 #ifndef ENABLE_MIRA
-FC_REFLECT_TYPENAME( blurt::chain::buffer_type )
+FC_REFLECT_TYPENAME(blurt::chain::buffer_type)
 #endif

@@ -27,8 +27,10 @@
 
 #include <fc/filesystem.hpp>
 
-namespace blurt { namespace utilities {
+namespace blurt {
+namespace utilities {
 
 fc::path temp_directory_path();
 
-} } // blurt::utilities
+}
+} // namespace blurt

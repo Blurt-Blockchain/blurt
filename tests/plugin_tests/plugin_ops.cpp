@@ -1,9 +1,8 @@
 #ifdef IS_TEST_NET
-#include <blurt/chain/generic_custom_operation_interpreter.hpp>
 #include <blurt/chain/account_object.hpp>
+#include <blurt/chain/generic_custom_operation_interpreter.hpp>
 
 #include <boost/test/included/unit_test.hpp>
-
 
 #include "../db_fixture/database_fixture.hpp"
 
@@ -40,7 +39,8 @@ class test_plugin : public plugin
 
       std::string plugin_name()const override { return "TEST"; }
 
-      std::shared_ptr< generic_custom_operation_interpreter< test_op > > _evaluator_registry;
+      std::shared_ptr< generic_custom_operation_interpreter< test_op > >
+_evaluator_registry;
 };
 
 BLURT_DEFINE_PLUGIN_EVALUATOR( test_plugin, test_a_operation, test_a );
@@ -68,12 +68,14 @@ void test_b_evaluator::do_apply( const test_b_operation& o )
 
 test_plugin::test_plugin( application* app ) : plugin( app )
 {
-   _evaluator_registry = std::make_shared< generic_custom_operation_interpreter< test_op > >( database() );
+   _evaluator_registry = std::make_shared< generic_custom_operation_interpreter<
+test_op > >( database() );
 
    _evaluator_registry->register_evaluator< test_a_evaluator >( *this );
    _evaluator_registry->register_evaluator< test_b_evaluator >( *this );
 
-   database().set_custom_operation_interpreter( plugin_name(), _evaluator_registry );
+   database().set_custom_operation_interpreter( plugin_name(),
+_evaluator_registry );
 }
 
 } } // blurt::plugin_tests
@@ -87,6 +89,5 @@ BLURT_DECLARE_OPERATION_TYPE( blurt::plugin_tests::test_op );
 FC_REFLECT_TYPENAME( blurt::plugin_tests::test_op );
 BLURT_DEFINE_OPERATION_TYPE( blurt::plugin_tests::test_op );
 */
-
 
 #endif

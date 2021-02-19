@@ -24,10 +24,12 @@
 #pragma once
 #include <stdint.h>
 
-namespace blurt { namespace utilities {
+namespace blurt {
+namespace utilities {
 
-extern const char* const git_revision_sha;
+extern const char *const git_revision_sha;
 extern const uint32_t git_revision_unix_timestamp;
-extern const char* const git_revision_description;
+extern const char *const git_revision_description;
 
-} } // end namespace blurt::utilities
+} // namespace utilities
+} // namespace blurt

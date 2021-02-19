@@ -7,39 +7,38 @@
 #include <fc/variant.hpp>
 #include <fc/vector.hpp>
 
-namespace blurt { namespace plugins { namespace account_by_key {
+namespace blurt {
+namespace plugins {
+namespace account_by_key {
 
-namespace detail
-{
-   class account_by_key_api_impl;
+namespace detail {
+class account_by_key_api_impl;
 }
 
-struct get_key_references_args
-{
-   std::vector< blurt::protocol::public_key_type > keys;
+struct get_key_references_args {
+  std::vector<blurt::protocol::public_key_type> keys;
 };
 
-struct get_key_references_return
-{
-   std::vector< std::vector< blurt::protocol::account_name_type > > accounts;
+struct get_key_references_return {
+  std::vector<std::vector<blurt::protocol::account_name_type>> accounts;
 };
 
-class account_by_key_api
-{
-   public:
-      account_by_key_api();
-      ~account_by_key_api();
+class account_by_key_api {
+public:
+  account_by_key_api();
+  ~account_by_key_api();
 
-      DECLARE_API( (get_key_references) )
+  DECLARE_API((get_key_references))
 
-   private:
-      std::unique_ptr< detail::account_by_key_api_impl > my;
+private:
+  std::unique_ptr<detail::account_by_key_api_impl> my;
 };
 
-} } } // blurt::plugins::account_by_key
+} // namespace account_by_key
+} // namespace plugins
+} // namespace blurt
 
-FC_REFLECT( blurt::plugins::account_by_key::get_key_references_args,
-   (keys) )
+FC_REFLECT(blurt::plugins::account_by_key::get_key_references_args, (keys))
 
-FC_REFLECT( blurt::plugins::account_by_key::get_key_references_return,
-   (accounts) )
+FC_REFLECT(blurt::plugins::account_by_key::get_key_references_return,
+           (accounts))
