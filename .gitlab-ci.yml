@@ -19,6 +19,7 @@ ui:
         - yarn
         - mkdir tmp
     script:
+        - cd ui
         - CI="" yarn build
     tags:
         - metal

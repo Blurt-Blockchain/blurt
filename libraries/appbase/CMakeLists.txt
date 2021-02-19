@@ -1,6 +1,6 @@
 # Defines AppBase library target.
 project( AppBase )
-cmake_minimum_required( VERSION 2.8.12 )
+cmake_minimum_required( VERSION 3.16.3 )
 
 file(GLOB HEADERS "include/appbase/*.hpp")
 

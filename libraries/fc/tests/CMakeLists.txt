@@ -1,5 +1,5 @@
 project( fc )
-cmake_minimum_required( VERSION 3.17 )
+cmake_minimum_required( VERSION 3.16.3 )
 include_directories( ../include )
 
 add_executable( bip_lock bip_lock.cpp )

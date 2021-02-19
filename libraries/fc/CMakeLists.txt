@@ -2,7 +2,7 @@
 # Defines fc library target.
 
 PROJECT( fc )
-CMAKE_MINIMUM_REQUIRED( VERSION 3.18 )
+CMAKE_MINIMUM_REQUIRED( VERSION 3.16.3 )
 
 MESSAGE(STATUS "Configuring project fc located in: ${CMAKE_CURRENT_SOURCE_DIR}")
 SET( CMAKE_AUTOMOC OFF )
