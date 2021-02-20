@@ -3,7 +3,7 @@ FROM faddat/sos-c2
 COPY motd /etc/motd
 
 RUN sed -i -e "s/^CheckSpace/#!!!CheckSpace/g" /etc/pacman.conf && \
-        pacman -Syyu --noconfirm net-tools ufw vnstat iftop zerotier-one wget go npm yarn && \
+        pacman -Syyu --noconfirm net-tools ufw vnstat iftop zerotier-one wget go npm yarn protobuf git && \
         systemctl enable docker && \
         mkdir starport && \
         cd starport && \
