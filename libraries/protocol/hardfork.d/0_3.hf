@@ -4,4 +4,9 @@
 #define BLURT_HARDFORK_0_3_TIME (1613174400)  // Saturday, February 13, 2021 12:00:00 AM
 #define BLURT_HARDFORK_0_3_VERSION hardfork_version(0, 3)
 
+
+#define BLURT_MAX_WITNESSES                   21
+#define BLURT_MAX_VOTED_WITNESSES_HF17        20
+#define BLURT_MAX_RUNNER_WITNESSES_HF17       1
+
 #endif

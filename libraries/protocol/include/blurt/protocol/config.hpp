@@ -38,7 +38,7 @@
 
 #else // IS LIVE BLURT NETWORK
 
-#define BLURT_BLOCKCHAIN_VERSION              ( version(0, 2, 0) )
+#define BLURT_BLOCKCHAIN_VERSION              ( version(0, 3, 0) )
 
 #define BLURT_INIT_PUBLIC_KEY_STR             "BLT5QRsKZp7TFNQdTj7VbpGHWxNL3Eq4zmfER4vJPBpK5VMbrprn8"
 #define BLURT_CHAIN_ID                        (fc::sha256::hash("blurt")) /// cd8d90f29ae273abec3eaa7731e25934c63eb654d55080caff2ebb7f5df6381f

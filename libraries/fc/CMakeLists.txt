@@ -272,7 +272,7 @@ target_include_directories(fc
 #target_link_libraries( fc PUBLIC ${Boost_LIBRARIES} ${OPENSSL_LIBRARIES} ${ZLIB_LIBRARIES} ${BZIP2_LIBRARIES} ${PLATFORM_SPECIFIC_LIBS} ${RPCRT4} ${CMAKE_DL_LIBS} ${rt_library} ${ECC_LIB} )
 set(LINK_USR_LOCAL_LIB -L/usr/local/lib)
 set(LINK_USR_LOCAL_INCLUDE -L/usr/local/include)
-target_link_libraries(fc PUBLIC ${LINK_USR_LOCAL_LIB} ${LINK_USR_LOCAL_INCLUDE} ${OPENSSL_LIBRARIES} ${ZLIB_LIBRARIES} ${BZIP2_LIBRARIES} ${Boost_LIBRARIES} ${PLATFORM_SPECIFIC_LIBS} ${RPCRT4} ${CMAKE_DL_LIBS} ${rt_library} ${readline_libraries} ${ECC_LIB})
+target_link_libraries( fc PUBLIC ${LINK_USR_LOCAL_LIB} ${LINK_USR_LOCAL_INCLUDE} ${OPENSSL_LIBRARIES} ${ZLIB_LIBRARIES} ${BZIP2_LIBRARIES} ${Boost_LIBRARIES} ${PLATFORM_SPECIFIC_LIBS} ${RPCRT4} ${CMAKE_DL_LIBS} ${rt_library} ${readline_libraries} ${ECC_LIB})
 
 
 
