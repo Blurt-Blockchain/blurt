@@ -2,8 +2,8 @@ stages:
   - build-env
   - build
   - docker
-  - devices
   - test
+  - devices
 
 
 
