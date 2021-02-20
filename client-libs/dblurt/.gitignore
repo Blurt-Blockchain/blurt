@@ -1,7 +1,0 @@
-node_modules/
-lib/
-coverage/
-.nyc_output/
-.testnetrc
-.idea
-.vscode
