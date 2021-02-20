@@ -95,6 +95,7 @@ sudo mkdir mnt/rootfs/boot
 # chill for a moment before unmounting
 sleep 20
 sudo umount mnt/boot mnt/rootfs
+sleep 20
 sudo losetup -d $LOOP # drop the loop mount
 
 
@@ -104,5 +105,5 @@ sudo losetup -d $LOOP # drop the loop mount
 
 
 # Delete .tmp and mnt
-sudo rm -rf ./.tmp
+sudo rm -rf .tmp
 sudo rm -rf mnt

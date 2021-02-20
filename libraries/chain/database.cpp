@@ -1689,21 +1689,21 @@ share_type database::cashout_comment_helper( util::comment_reward_context& ctx, 
             for( auto& b : comment.beneficiaries )
             {
                auto benefactor_tokens = ( author_tokens * b.weight ) / BLURT_100_PERCENT;
-               auto benefactor_vesting_steem = benefactor_tokens;
+               auto benefactor_vesting_blurt = benefactor_tokens;
                auto vop = comment_benefactor_reward_operation( b.account, comment.author, to_string( comment.permlink ), asset( 0, BLURT_SYMBOL ), asset( 0, VESTS_SYMBOL ) );
 
                if( b.account == BLURT_TREASURY_ACCOUNT )
                {
-                  benefactor_vesting_steem = 0;
+                  benefactor_vesting_blurt = 0;
                   vop.blurt_payout = asset( benefactor_tokens, BLURT_SYMBOL );
                   adjust_balance( get_account( BLURT_TREASURY_ACCOUNT ), vop.blurt_payout );
                }
                else
                {
-                  benefactor_vesting_steem  = benefactor_tokens;
+                  benefactor_vesting_blurt  = benefactor_tokens;
                }
 
-               create_vesting2( *this, get_account( b.account ), asset( benefactor_vesting_steem, BLURT_SYMBOL ), true,
+               create_vesting2( *this, get_account( b.account ), asset( benefactor_vesting_blurt, BLURT_SYMBOL ), true,
                [&]( const asset& reward )
                {
                   vop.vesting_payout = reward;
@@ -1715,18 +1715,20 @@ share_type database::cashout_comment_helper( util::comment_reward_context& ctx, 
             }
 
             author_tokens -= total_beneficiary;
-            auto vesting_steem = author_tokens;
+            auto author_blurt_tokens = (author_tokens * comment.percent_blurt) / (4 * BLURT_100_PERCENT);
+            auto vesting_blurt = author_tokens - author_blurt_tokens;
             const auto& author = get_account( comment.author );
-            operation vop = author_reward_operation( comment.author, to_string( comment.permlink ), asset( 0, BLURT_SYMBOL ), asset( 0, VESTS_SYMBOL ) );
+            auto blurt_payout = asset(author_blurt_tokens, BLURT_SYMBOL);
+            operation vop = author_reward_operation( comment.author, to_string( comment.permlink ), blurt_payout, asset( 0, VESTS_SYMBOL ) );
 
-            create_vesting2( *this, author, asset( vesting_steem, BLURT_SYMBOL ), true,
+            create_vesting2( *this, author, asset( vesting_blurt, BLURT_SYMBOL ), true,
                [&]( const asset& vesting_payout )
                {
                   vop.get< author_reward_operation >().vesting_payout = vesting_payout;
                   pre_push_virtual_operation( vop );
                } );
 
-            adjust_total_payout( comment, asset( vesting_steem, BLURT_SYMBOL ), asset( curation_tokens, BLURT_SYMBOL ), asset( total_beneficiary, BLURT_SYMBOL ) );
+            adjust_total_payout( comment, blurt_payout + asset( vesting_blurt, BLURT_SYMBOL ), asset( curation_tokens, BLURT_SYMBOL ), asset( total_beneficiary, BLURT_SYMBOL ) );
             post_push_virtual_operation( vop );
             vop = comment_reward_operation( comment.author, to_string( comment.permlink ), asset( claimed_reward, BLURT_SYMBOL ) );
             pre_push_virtual_operation( vop );
@@ -2416,7 +2418,6 @@ void database::init_genesis( const open_args& args )
       // Create witness scheduler
       create< witness_schedule_object >( [&]( witness_schedule_object& wso )
       {
-         FC_TODO( "Copied from witness_schedule.cpp, do we want to abstract this to a separate function?" );
          wso.current_shuffled_witnesses[0] = BLURT_INIT_MINER_NAME;
          util::rd_system_params account_subsidy_system_params;
          account_subsidy_system_params.resource_unit = BLURT_ACCOUNT_SUBSIDY_PRECISION;
@@ -3707,6 +3708,12 @@ void database::init_hardforks()
    _hardfork_versions.times[ BLURT_HARDFORK_0_2 ] = fc::time_point_sec( BLURT_HARDFORK_0_2_TIME );
    _hardfork_versions.versions[ BLURT_HARDFORK_0_2 ] = BLURT_HARDFORK_0_2_VERSION;
 
+#ifdef IS_TEST_NET
+   FC_ASSERT( BLURT_HARDFORK_0_3 == 3, "Invalid hardfork configuration" );
+   _hardfork_versions.times[ BLURT_HARDFORK_0_3 ] = fc::time_point_sec( BLURT_HARDFORK_0_3_TIME );
+   _hardfork_versions.versions[ BLURT_HARDFORK_0_3 ] = BLURT_HARDFORK_0_3_VERSION;
+#endif
+
    const auto& hardforks = get_hardfork_property_object();
    FC_ASSERT( hardforks.last_hardfork <= BLURT_NUM_HARDFORKS, "Chain knows of more hardforks than configuration", ("hardforks.last_hardfork",hardforks.last_hardfork)("BLURT_NUM_HARDFORKS",BLURT_NUM_HARDFORKS) );
    FC_ASSERT( _hardfork_versions.versions[ hardforks.last_hardfork ] <= BLURT_BLOCKCHAIN_VERSION, "Blockchain version is older than last applied hardfork" );
@@ -3783,6 +3790,7 @@ void database::apply_hardfork( uint32_t hardfork )
          }
          break;
       case BLURT_HARDFORK_0_2:
+      case BLURT_HARDFORK_0_3:
          break;
       default:
          break;

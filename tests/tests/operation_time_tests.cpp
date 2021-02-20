@@ -1,5 +1,6 @@
 #ifdef IS_TEST_NET
-#include <boost/test/unit_test.hpp>
+#include <boost/test/included/unit_test.hpp>
+
 
 #include <blurt/chain/blurt_fwd.hpp>
 

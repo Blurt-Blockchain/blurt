@@ -1,8 +1,6 @@
 #pragma once
 #include <blurt/chain/blurt_fwd.hpp>
-
 #include <blurt/protocol/version.hpp>
-
 #include <blurt/chain/blurt_object_types.hpp>
 
 namespace blurt { namespace chain {

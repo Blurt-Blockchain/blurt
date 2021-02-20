@@ -9,6 +9,12 @@ Blurt is a public social blockchain with a diverse and vibrant community that st
 
 The Blurt blockchain is defined as social media and builds a living, breathing, and growing social economy and communities where users are getting rewarded by curators for sharing their origin content. Blurt provides a scalable blockchain protocol for publicly accessible and immutable content, along with a fast digital currency (BLURT) which enables people to earn by using their brain (A.K.A. “Proof-of-Brain”).
 
+## Development
+Blurt is being converted to a monorepo, with the goal of distributing Blurt as a Mac, Windows, and Linux [electron](http://electronjs.org/) app (think like Slack, which is actually just chrome running a webapp).  At that time, blurt will be entirely freed from the cloud, and even the tyranny of the current DNS system.  Anyone with sufficient access to the internet, will be able to use blurt.
+
+## 569
+As discussed previously, the graphene codebase Blurt is based on shows its age.  569 is a network of chains that share a common code base, and many of them will have their genesis state seeded based on staked Blurt.  The first of these 569 projects is called `splash` and it will launch ASAP (tm).  The first snapshot of accounts will be taken February 28, 2021.  Accounts are migrated at the sole discretion of the Blurt foundation.
+
 ## Distribution
 *  Blurt contains user balances imported from Block 4352**6969** of the STEEM public blockchain, snapshotted on the 20th May 2020. 
 *  Approx 15% or ~60 Million BLURT from the initial supply shall be allocated to the Blurt SocialGraph Foundation (See [@initblurt](https://blocks.blurtwallet.com/#/@initblurt) / [@socialgraph](https://blocks.blurtwallet.com/#/@socialgraph) blockchain accounts).

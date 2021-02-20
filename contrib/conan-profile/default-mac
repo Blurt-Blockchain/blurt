@@ -1,0 +1,32 @@
+# MAC!  IT BUILDS ON MAC!
+# You'll need some things:
+# * Make sure that you did not install Boost using homebrew.  That'll override conan's built version of Boost, and Blurt will not build.
+# * IPFS:  Install it and do like `mkdir ~/.blurtd && ipfs get -o ~/.blurtd/snapshot.json QmPrwVpwe4Ya46CN9LXNnrUdWvaDLMwFetMUdpcdpjFbyu`
+# * Blurt source code: `git clone https://gitlab.com/blurt/blurt`
+# * Xcode:  `xcode-select --install`
+# * Rosary: Three hail marys, please
+# Exact guide is in doc/devs/development-environment.md
+
+
+
+[settings]
+os=Macos
+os_build=Macos
+arch=x86_64
+arch_build=x86_64
+compiler=apple-clang
+compiler.version=12.0
+compiler.libcxx=libc++
+build_type=Release
+build=missing
+
+[options]
+
+[build_requires]
+
+
+[env]
+CC="ccache clang"
+CXX="ccache clang++"
+WIMPLICIT_FUNCTION_DECLARATION=OFF
+WINT_IN_BOOL_CONTEXT=OFF

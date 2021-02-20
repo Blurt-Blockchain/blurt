@@ -102,6 +102,7 @@ namespace blurt { namespace protocol {
       string            permlink;
 
       asset             max_accepted_payout    = asset( 1000000000, BLURT_SYMBOL );       /// BLURT_SYMBOL value of the maximum payout this post will receive
+      uint16_t          percent_blurt          = 0;
       bool              allow_votes            = true;      /// allows a post to receive votes;
       bool              allow_curation_rewards = true; /// allows voters to recieve curation rewards. Rewards return to reward fund.
       comment_options_extensions_type extensions;

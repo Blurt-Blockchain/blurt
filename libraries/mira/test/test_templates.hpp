@@ -3,7 +3,8 @@
 #include <chainbase/chainbase.hpp>
 #include <vector>
 #include <functional>
-#include <boost/test/unit_test.hpp>
+#include <boost/test/included/unit_test.hpp>
+
 
 template < typename IndexType, typename Object, typename Order >
 void basic_test( const std::vector< uint64_t >& v,

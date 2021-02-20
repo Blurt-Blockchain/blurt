@@ -2,8 +2,31 @@ stages:
   - build-env
   - build
   - docker
-  - images
   - test
+  - devices
+
+
+
+condenser-docker-push:
+  needs: []
+  when: manual
+  stage: build
+  script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker buildx build --tag $CI_REGISTRY_IMAGE:$CI_COMMIT_BRANCH --cache-from $CI_REGISTRY_IMAGE/condenser:cache --cache-to $CI_REGISTRY_IMAGE/condenser:cache --push --platform linux/arm64,linux/amd64 ./ui
+  tags:
+    - shell-arch
+
+
+
+condenser-docker-test:
+  needs: []
+  stage: build
+  script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker buildx build --tag $CI_REGISTRY_IMAGE:$CI_COMMIT_BRANCH --cache-from $CI_REGISTRY_IMAGE/condenser:cache --cache-to $CI_REGISTRY_IMAGE/condenser:cache --platform linux/arm64,linux/amd64 ./ui
+  tags:
+    - shell-arch
 
 
 
@@ -17,10 +40,8 @@ testnet:
     - mkdir build
     - cd build
     - conan install .. -s compiler=clang -s compiler.libcxx=libstdc++11 -if=. -pr=default --build=missing
-    # Testnet Build Config:   # LOW_MEMORY=OFF CLEAR_VOTES=OFF TESTNET=ON ENABLE_MIRA=OFF <- thx hive
-    - cmake -DBLURT_STATIC_BUILD=ON -DLOW_MEMORY_NODE=OFF -DCLEAR_VOTES=OFF -WINT_IN_BOOL_CONTEXT=OFF -DBUILD_BLURT_TESTNET=ON -DSKIP_BY_TX_ID=ON -DBLURT_LINT_LEVEL=OFF -DENABLE_MIRA=OFF -DCMAKE_BUILD_TYPE=Release ..
+    - cmake -DBLURT_STATIC_BUILD=ON -DLOW_MEMORY_NODE=OFF -DCLEAR_VOTES=OFF -WINT_IN_BOOL_CONTEXT=OFF -DBUILD_BLURT_TESTNET=ON -DSKIP_BY_TX_ID=ON -DBLURT_LINT_LEVEL=FULL -DENABLE_MIRA=OFF -DCMAKE_BUILD_TYPE=Release ..
     - make -j$(nproc) blurtd cli_wallet
-  # cli wallet is only used for witness, so we capture it from the witness build
     tags:
     - shell-arch
     artifacts:
@@ -54,21 +75,13 @@ sonarcloud:
     - curl 'https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.2.0.1873-linux.zip' --output sonar-scanner-cli-4.2.0.1873-linux.zip
     - unzip sonar-scanner-cli-4.2.0.1873-linux.zip
     - mv sonar-scanner-4.2.0.1873-linux sonar-scanner
-# NO CACHE: SINGLE-STAGE
-#  cache:
-#    policy: push
-#    key: "${CI_COMMIT_SHORT_SHA}"
-#    paths:
-#      - build-wrapper-linux-x86/ # to share the build-wrapper between jobs
-#      - sonar-scanner/           # to share the sonar-scanner between jobs
-    # prepare the build tree
     - mkdir build
     - cd build
     - conan install .. -s compiler=clang -s compiler.libcxx=libstdc++11 -if=. -pr=default --build=missing
-    - cmake -DBLURT_STATIC_BUILD=ON -DLOW_MEMORY_NODE=ON -DCLEAR_VOTES=ON -WINT_IN_BOOL_CONTEXT=OFF -DBUILD_BLURT_TESTNET=OFF -DSKIP_BY_TX_ID=ON -DBLURT_LINT_LEVEL=OFF -DENABLE_MIRA=ON -DCMAKE_BUILD_TYPE=Release ..
+    - cmake ..
     - cd ..
     # run the build inside the build wrapper
-    - build-wrapper-linux-x86/build-wrapper-linux-x86-64 --out-dir . cmake --build build/ --config Release --parallel
+    - build-wrapper-linux-x86/build-wrapper-linux-x86-64 --out-dir . make -j $(nproc)
     - sonar-scanner/bin/sonar-scanner -X -Dsonar.host.url="${SONAR_HOST_URL}" -Dsonar.token="${SONAR_TOKEN}"
   artifacts:
     paths:
@@ -96,7 +109,7 @@ megadrive-build-ubuntu:
     - mkdir build
     - cd build
     - conan install .. -s compiler=clang -s compiler.libcxx=libstdc++11 -if=. -pr=default --build=missing
-    - cmake -DBLURT_STATIC_BUILD=ON -DLOW_MEMORY_NODE=ON -DCLEAR_VOTES=ON -WINT_IN_BOOL_CONTEXT=OFF -DBUILD_BLURT_TESTNET=OFF -DSKIP_BY_TX_ID=ON -DBLURT_LINT_LEVEL=OFF -DENABLE_MIRA=OFF -DCMAKE_BUILD_TYPE=Release ..
+    - cmake -DBLURT_STATIC_BUILD=ON -DLOW_MEMORY_NODE=ON -DCLEAR_VOTES=ON -WINT_IN_BOOL_CONTEXT=OFF -DBUILD_BLURT_TESTNET=OFF -DSKIP_BY_TX_ID=ON -DBLURT_LINT_LEVEL=FULL -DENABLE_MIRA=OFF -DCMAKE_BUILD_TYPE=Release ..
     - make -j$(nproc) blurtd cli_wallet
   tags:
     - arm64-shell
@@ -104,10 +117,11 @@ megadrive-build-ubuntu:
     paths:
       - build/bin
 
-# construct the light megadrive device image.  runs blurt on sos-lite as a container.
-cryptopie:
+# construct the light cryptopie device image.  runs blurt on sos-lite as a container.
+raspberrypi4:
+  when: manual
   needs: []
-  stage: images
+  stage: devices
   script:
     - docker buildx build --file contrib/cryptopie/Dockerfile --platform linux/arm64 --tag cryptopie --load --progress plain .
     - bash contrib/cryptopie/build.sh
@@ -118,9 +132,11 @@ cryptopie:
   tags:
     - shell-arch
 
+# construct the light odroid-c2 device image.  runs blurt on sos-lite as a container.
 oroid-c2:
+  when: manual
   needs: []
-  stage: images
+  stage: devices
   script:
     - docker buildx build --file contrib/c2/Dockerfile --platform linux/arm64 --tag c2 --load --progress plain .
     - bash contrib/c2/build.sh
@@ -130,6 +146,16 @@ oroid-c2:
     - sudo ipfs add -Q /static/c2-light/c2-light-$(echo $STAMP).img.xz > /static/c2-light/c2-light-$(echo $STAMP).html
   tags:
     - shell-arch
+
+# tests the dblurt client library
+dblurt:
+  needs: []
+  image: node
+  stage: build
+  script:
+    - cd client-libs/dblurt
+    - yarn install
+    - make all
 
 # construct the megadrive arch container
 megadrive-container:
@@ -165,41 +191,41 @@ witness:
       - build/bin/
   needs: []
 
-mira:
-  stage: build
-  variables:
-    CC: "ccache clang"
-    CXX: "ccache clang++"
-  script:
-    - mkdir build
-    - cd build
-    - conan install .. -s compiler=clang -s compiler.libcxx=libstdc++11 -if=. -pr=default --build=missing
-    - cmake -DBLURT_STATIC_BUILD=ON -DLOW_MEMORY_NODE=ON -DCLEAR_VOTES=ON -WINT_IN_BOOL_CONTEXT=OFF -DBUILD_BLURT_TESTNET=OFF -DSKIP_BY_TX_ID=ON -DBLURT_LINT_LEVEL=OFF -DENABLE_MIRA=ON -DCMAKE_BUILD_TYPE=Release ..
-    - make -j$(nproc) blurtd cli_wallet
-  tags:
-    - shell-arch
-  artifacts:
-    paths:
-      - build/bin/
-  needs: []
+#mira:
+#  stage: build
+#  variables:
+#    CC: "ccache clang"
+#    CXX: "ccache clang++"
+#  script:
+#    - mkdir build
+#    - cd build
+#    - conan install .. -s compiler=clang -s compiler.libcxx=libstdc++11 -if=. -pr=default --build=missing
+#    - cmake -DBLURT_STATIC_BUILD=ON -DLOW_MEMORY_NODE=ON -DCLEAR_VOTES=ON -WINT_IN_BOOL_CONTEXT=OFF -DBUILD_BLURT_TESTNET=OFF -DSKIP_BY_TX_ID=ON -DBLURT_LINT_LEVEL=OFF -DENABLE_MIRA=ON -DCMAKE_BUILD_TYPE=Release ..
+#    - make -j$(nproc) blurtd cli_wallet
+#  tags:
+#    - shell-arch
+#  artifacts:
+#    paths:
+#      - build/bin/
+#  needs: []
 
-rpc:
-  stage: build
-  variables:
-    CC: "ccache clang"
-    CXX: "ccache clang++"
-  script:
-    - mkdir build
-    - cd build
-    - conan install .. -s compiler=clang -s compiler.libcxx=libstdc++11 -if=. -pr=default --build=missing
-    - cmake -DBLURT_STATIC_BUILD=ON -DLOW_MEMORY_NODE=OFF -DCLEAR_VOTES=OFF -WINT_IN_BOOL_CONTEXT=OFF -DBUILD_BLURT_TESTNET=OFF -DSKIP_BY_TX_ID=OFF -DBLURT_LINT_LEVEL=OFF -DENABLE_MIRA=OFF -DCMAKE_BUILD_TYPE=Release ..
-    - make -j$(nproc) blurtd cli_wallet
-  tags:
-    - shell-arch
-  artifacts:
-    paths:
-      - build/bin/
-  needs: []
+#rpc:
+#  stage: build
+#  variables:
+#    CC: "ccache clang"
+#    CXX: "ccache clang++"
+#  script:
+#    - mkdir build
+#    - cd build
+#    - conan install .. -s compiler=clang -s compiler.libcxx=libstdc++11 -if=. -pr=default --build=missing
+#    - cmake -DBLURT_STATIC_BUILD=ON -DLOW_MEMORY_NODE=OFF -DCLEAR_VOTES=OFF -WINT_IN_BOOL_CONTEXT=OFF -DBUILD_BLURT_TESTNET=OFF -DSKIP_BY_TX_ID=OFF -DBLURT_LINT_LEVEL=OFF -DENABLE_MIRA=OFF -DCMAKE_BUILD_TYPE=Release ..
+#    - make -j$(nproc) blurtd cli_wallet
+#  tags:
+#    - shell-arch
+#  artifacts:
+#    paths:
+#      - build/bin/
+#  needs: []
 
 
 kaniko witness:
@@ -216,30 +242,35 @@ kaniko witness:
     - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/contrib/Dockerfiles/ci/Dockerfile --destination $CI_REGISTRY_IMAGE/witness:$CI_COMMIT_BRANCH
   
 
-kaniko rpc:
-  stage: docker
-  needs:
-    - rpc
-  dependencies:
-    - rpc
-  image:
-    name: gcr.io/kaniko-project/executor:debug
-    entrypoint: [""]
-  script:
-    - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
-    - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/contrib/Dockerfiles/rpc/Dockerfile --destination $CI_REGISTRY_IMAGE/rpc:$CI_COMMIT_BRANCH
+#kaniko rpc:
+#  stage: docker
+#  needs:
+#    - rpc
+#  dependencies:
+#    - rpc
+#  image:
+#    name: gcr.io/kaniko-project/executor:debug
+#    entrypoint: [""]
+#  script:
+#    - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
+#    - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/contrib/Dockerfiles/rpc/Dockerfile --destination $CI_REGISTRY_IMAGE/rpc:$CI_COMMIT_BRANCH
   
 
-kaniko mira:
-  stage: docker
-  needs: 
-    - mira
-  dependencies:
-    - mira
-  image:
-    name: gcr.io/kaniko-project/executor:debug
-    entrypoint: [""]
-  script:
-    - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
-    - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/contrib/Dockerfiles/ci/Dockerfile --destination $CI_REGISTRY_IMAGE/mira:$CI_COMMIT_BRANCH
+#kaniko mira:
+#  stage: docker
+#  needs:
+#    - mira
+#  dependencies:
+#    - mira
+#  image:
+#    name: gcr.io/kaniko-project/executor:debug
+#    entrypoint: [""]
+#  script:
+#    - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
+#    - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/contrib/Dockerfiles/ci/Dockerfile --destination $CI_REGISTRY_IMAGE/mira:$CI_COMMIT_BRANCH
   
+include:
+  - template: Security/Dependency-Scanning.gitlab-ci.yml
+  - template: Security/License-Scanning.gitlab-ci.yml
+  - template: Security/SAST.gitlab-ci.yml
+  - template: Security/Secret-Detection.gitlab-ci.yml
