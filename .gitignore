@@ -107,3 +107,16 @@ tests/performance_test
 build/
 build.*/
 build-*/
+
+# Condenser things
+ui/.DS_Store
+ui/.coverage
+ui/node_modules
+ui/*.log
+ui/yarn.lock
+ui/dist
+ui/.idea/*
+ui/vendor/*
+ui/tmp/*
+ui/.vagrant
+ui/lib
