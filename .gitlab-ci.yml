@@ -81,7 +81,7 @@ sonarcloud:
     - cmake ..
     - cd ..
     # run the build inside the build wrapper
-    - build-wrapper-linux-x86/build-wrapper-linux-x86-64 --out-dir . make -j $(nproc) blurtd cli_wallet
+    - build-wrapper-linux-x86/build-wrapper-linux-x86-64 --out-dir . cmake --build build/ --config Release --parallel
     - sonar-scanner/bin/sonar-scanner -X -Dsonar.host.url="${SONAR_HOST_URL}" -Dsonar.token="${SONAR_TOKEN}"
   artifacts:
     paths:
