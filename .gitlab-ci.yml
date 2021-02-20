@@ -145,6 +145,7 @@ oroid-c2:
   tags:
     - shell-arch
 
+# tests the dblurt client library
 dblurt:
   needs: []
   image: node
