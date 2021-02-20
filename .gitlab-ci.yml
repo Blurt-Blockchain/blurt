@@ -6,27 +6,12 @@ stages:
   - test
 
 
-ui:
-    image: node
-    cache:
-      paths:
-        - node_modules/
-        - .yarn
-    stage: build
-    script:
-        - yarn config set cache-folder .yarn
-        - yarn
-        - mkdir tmp
-        - cd ui
-        - CI="" yarn build
-    tags:
-        - metal
 
 condenser-docker-push:
   stage: build
   script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-    - docker buildx build --tag $CI_REGISTRY_IMAGE:$CI_COMMIT_BRANCH --cache-from $CI_REGISTRY_IMAGE/condenser:cache --cache-to $CI_REGISTRY_IMAGE/condenser:cache --push --platform linux/arm64,linux/amd64 .
+    - docker buildx build --tag $CI_REGISTRY_IMAGE:$CI_COMMIT_BRANCH --cache-from $CI_REGISTRY_IMAGE/condenser:cache --cache-to $CI_REGISTRY_IMAGE/condenser:cache --push --platform linux/arm64,linux/amd64 ./ui
   tags:
     - shell-arch
   only:
@@ -37,7 +22,7 @@ condenser-docker-test:
   stage: build
   script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-    - docker buildx build --tag $CI_REGISTRY_IMAGE:$CI_COMMIT_BRANCH --cache-from $CI_REGISTRY_IMAGE/condenser:cache --cache-to $CI_REGISTRY_IMAGE/condenser:cache --platform linux/arm64,linux/amd64 .
+    - docker buildx build --tag $CI_REGISTRY_IMAGE:$CI_COMMIT_BRANCH --cache-from $CI_REGISTRY_IMAGE/condenser:cache --cache-to $CI_REGISTRY_IMAGE/condenser:cache --platform linux/arm64,linux/amd64 ./ui
   tags:
     - shell-arch
 
@@ -130,7 +115,7 @@ megadrive-build-ubuntu:
     paths:
       - build/bin
 
-# construct the light megadrive device image.  runs blurt on sos-lite as a container.
+# construct the light cryptopie device image.  runs blurt on sos-lite as a container.
 cryptopie:
   needs: []
   stage: images
@@ -144,6 +129,7 @@ cryptopie:
   tags:
     - shell-arch
 
+# construct the light odroid-c2 device image.  runs blurt on sos-lite as a container.
 oroid-c2:
   needs: []
   stage: images
