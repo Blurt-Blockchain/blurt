@@ -2,7 +2,7 @@ stages:
   - build-env
   - build
   - docker
-  - images
+  - devices
   - test
 
 
@@ -118,10 +118,10 @@ megadrive-build-ubuntu:
       - build/bin
 
 # construct the light cryptopie device image.  runs blurt on sos-lite as a container.
-cryptopie:
+raspberrypi4:
   when: manual
   needs: []
-  stage: images
+  stage: devices
   script:
     - docker buildx build --file contrib/cryptopie/Dockerfile --platform linux/arm64 --tag cryptopie --load --progress plain .
     - bash contrib/cryptopie/build.sh
@@ -136,7 +136,7 @@ cryptopie:
 oroid-c2:
   when: manual
   needs: []
-  stage: images
+  stage: devices
   script:
     - docker buildx build --file contrib/c2/Dockerfile --platform linux/arm64 --tag c2 --load --progress plain .
     - bash contrib/c2/build.sh
