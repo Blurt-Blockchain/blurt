@@ -117,6 +117,7 @@ megadrive-build-ubuntu:
 
 # construct the light cryptopie device image.  runs blurt on sos-lite as a container.
 cryptopie:
+  when: manual
   needs: []
   stage: images
   script:
@@ -131,6 +132,7 @@ cryptopie:
 
 # construct the light odroid-c2 device image.  runs blurt on sos-lite as a container.
 oroid-c2:
+  when: manual
   needs: []
   stage: images
   script:
@@ -148,6 +150,7 @@ dblurt:
   image: node
   stage: build
   script:
+    - cd client-libs/dblurt
     - yarn install
     - yarn test
 
