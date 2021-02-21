@@ -75,7 +75,7 @@ sonarcloud:
     - cmake -DBLURT_STATIC_BUILD=ON -DLOW_MEMORY_NODE=ON -DCLEAR_VOTES=ON -WINT_IN_BOOL_CONTEXT=OFF -DBUILD_BLURT_TESTNET=OFF -DSKIP_BY_TX_ID=ON -DBLURT_LINT_LEVEL=OFF -DENABLE_MIRA=ON -DCMAKE_BUILD_TYPE=Release ..
     - cd ..
     # run the build inside the build wrapper
-    - build-wrapper-linux-x86/build-wrapper-linux-x86-64 --out-dir . cmake --build build/ --config Release --parallel --targets blurtd cli_wallet
+    - build-wrapper-linux-x86/build-wrapper-linux-x86-64 --out-dir . cmake --build build/ --config Release --parallel --target blurtd cli_wallet
     - sonar-scanner/bin/sonar-scanner -X -Dsonar.host.url="${SONAR_HOST_URL}" -Dsonar.token="${SONAR_TOKEN}"
   artifacts:
     paths:
