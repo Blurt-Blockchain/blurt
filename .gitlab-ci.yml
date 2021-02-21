@@ -48,23 +48,16 @@ testnet:
       paths:
         - build/bin/
 
-# Took sonarcloud's default multi-stage thing and made it a single stage.
 sonarcloud: 
   stage: test
   tags: 
     - shell-arch
   needs: []
   variables:
-    CC: clang
-    CXX: clang++
+    CC: "ccache clang"
+    CXX: "ccache clang++"
     SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"  # Defines the location of the analysis task cache
     GIT_DEPTH: "0"  # Tells git to fetch all the branches of the project, required by the analysis task
-    # note that variables SONAR_HOST_URL and SONAR_TOKEN are transmitted to the environament through Gitlab CI
-
-  # this job sdownloads ans unpacks the build-wrapper and the sonar-scanner
-  # in this example it is done for every build.
-  # This can be optimized by caching the files or better, by including them, in the build docker image
-
   script:
     # Download build-wrapper
     - curl "${SONAR_HOST_URL}/static/cpp/build-wrapper-linux-x86.zip" --output build-wrapper-linux-x86.zip
@@ -75,10 +68,11 @@ sonarcloud:
     - curl 'https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.2.0.1873-linux.zip' --output sonar-scanner-cli-4.2.0.1873-linux.zip
     - unzip sonar-scanner-cli-4.2.0.1873-linux.zip
     - mv sonar-scanner-4.2.0.1873-linux sonar-scanner
+    # Configure and compile blurt
     - mkdir build
     - cd build
     - conan install .. -s compiler=clang -s compiler.libcxx=libstdc++11 -if=. -pr=default --build=missing
-    - cmake ..
+    - cmake -DBLURT_STATIC_BUILD=ON -DLOW_MEMORY_NODE=ON -DCLEAR_VOTES=ON -WINT_IN_BOOL_CONTEXT=OFF -DBUILD_BLURT_TESTNET=OFF -DSKIP_BY_TX_ID=ON -DBLURT_LINT_LEVEL=OFF -DENABLE_MIRA=ON -DCMAKE_BUILD_TYPE=Release ..
     - cd ..
     # run the build inside the build wrapper
     - build-wrapper-linux-x86/build-wrapper-linux-x86-64 --out-dir . cmake --build build/ --config Release --parallel
@@ -90,6 +84,7 @@ sonarcloud:
     - merge_requests
     - master
     - dev
+
 
 # DISABLED BECAUSE OF ISSUES WITH LOPSIDED/ARCHLINUX
 # Specifically, an archlinux-keyring issue
