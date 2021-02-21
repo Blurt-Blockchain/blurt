@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Blurt.js Stream</title>
+</head>
+<body>
+
+<script src="https://cdn.jsdelivr.net/npm/@blurtfoundation/blurtjs/dist/blurt.min.js"></script>
+<script>
+let wifMemoKey = 'memo key of sender or receiver';
+blurt.api.setOptions({ url: 'https://rpc.blurt.world', useAppbaseApi: true });
+blurt.api.getBlock(2864675, function (err, result) {
+  let transfer_tx = result.transactions[1];
+
+  let operations = transfer_tx.operations[0];
+  const txType = operations[0];
+  const txData = operations[1];
+  
+  const { amount, from, memo, to } = txData;
+  let decoded_memo = blurt.memo.decode(wifMemoKey, memo);
+  /*
+   * Due to a bug in the BLURT wallet, sometimes a memo is encoded twice.
+   * If memo retrieved from block doesn't start with a `#G`, memo may have been encoded more than once.
+   * Try calling decode a again until the memo starts with a `#G`.
+   * A call to `decode` with the memo starting with a `#G` will retrieve the original memo.
+   */
+  console.log('decoded_memo', decoded_memo);
+
+});
+</script>
+
+</body>
+</html>

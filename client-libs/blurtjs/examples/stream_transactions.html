@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Blurt.js Stream</title>
+</head>
+<body>
+
+<script src="https://cdn.jsdelivr.net/npm/@blurtfoundation/blurtjs/dist/blurt.min.js"></script>
+<script>
+blurt.api.setOptions({ url: 'https://rpc.blurt.buzz', useAppbaseApi: true });
+blurt.api.streamTransactions("head", function (err, result) {
+  let operations = result.operations[0];
+  if (typeof operations === "object") {
+    const txType = operations[0];
+    const txData = operations[1];
+
+    if (txType === "transfer") {
+      const { amount, from, memo, to } = txData;
+      console.log(txData);
+    }
+
+  } else {
+    console.log('operations', operations)
+  }
+});
+</script>
+
+</body>
+</html>
