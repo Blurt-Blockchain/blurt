@@ -2,10 +2,7 @@
 import React from 'react';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
-import { browserHistory } from 'react-router';
 import classnames from 'classnames';
-import * as globalActions from 'app/redux/GlobalReducer';
-import * as transactionActions from 'app/redux/TransactionReducer';
 import * as userActions from 'app/redux/UserReducer';
 import { actions as fetchDataSagaActions } from 'app/redux/FetchDataSaga';
 import Icon from 'app/components/elements/Icon';
@@ -16,11 +13,9 @@ import Follow from 'app/components/elements/Follow';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import PostsList from 'app/components/cards/PostsList';
 import { isFetchingOrRecentlyUpdated } from 'app/utils/StateFunctions';
-import { repLog10 } from 'app/utils/ParsersAndFormatters.js';
 import Tooltip from 'app/components/elements/Tooltip';
 import DateJoinWrapper from 'app/components/elements/DateJoinWrapper';
 import tt from 'counterpart';
-import { List } from 'immutable';
 import Userpic from 'app/components/elements/Userpic';
 import Callout from 'app/components/elements/Callout';
 import normalizeProfile from 'app/utils/NormalizeProfile';
@@ -31,7 +26,7 @@ import ArticleLayoutSelector from 'app/components/modules/ArticleLayoutSelector'
 import SanitizedLink from 'app/components/elements/SanitizedLink';
 import DropdownMenu from 'app/components/elements/DropdownMenu';
 import NotificationsList from '../cards/NotificationsList';
-import Blacklist from '../elements/Blacklist';
+
 export default class UserProfile extends React.Component {
     constructor() {
         super();
@@ -167,7 +162,7 @@ export default class UserProfile extends React.Component {
         const fetching = (status && status.fetching) || this.props.loading;
 
         let account;
-        let accountImm = this.props.account;
+        const accountImm = this.props.account;
         if (accountImm) {
             account = accountImm.toJS();
         } else if (fetching) {
@@ -598,7 +593,6 @@ export default class UserProfile extends React.Component {
                                     ({rep})
                                 </span> */}
                             </Tooltip>
-                            <Blacklist author={accountname} />
                             {AffiliationMap[accountname] ? (
                                 <span className="affiliation">
                                     {tt(

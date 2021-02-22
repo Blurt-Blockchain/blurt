@@ -1,19 +1,17 @@
 /* eslint react/prop-types: 0 */
-import React from 'react';
-import PropTypes from 'prop-types';
-import ReactDOM from 'react-dom';
-import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
-import Icon from 'app/components/elements/Icon';
-import { Link } from 'react-router';
-import { authorNameAndRep } from 'app/utils/ComponentFormatters';
-import AuthorDropdown from '../AuthorDropdown';
-// import Reputation from 'app/components/elements/Reputation';
 import normalizeProfile from 'app/utils/NormalizeProfile';
 import AffiliationMap from 'app/utils/AffiliationMap';
 import tt from 'counterpart';
 import Overlay from 'react-overlays/lib/Overlay';
+import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
+import Icon from 'app/components/elements/Icon';
 import { findDOMNode } from 'react-dom';
-import Blacklist from '../Blacklist';
+import React from 'react';
+import PropTypes from 'prop-types';
+import ReactDOM from 'react-dom';
+import { Link } from 'react-router';
+import AuthorDropdown from '../AuthorDropdown';
+// import Reputation from 'app/components/elements/Reputation';
 
 const { string, bool, number } = PropTypes;
 
@@ -116,7 +114,6 @@ class Author extends React.Component {
                         <Link to={'/@' + author}>{author}</Link>
                     </strong>{' '}
                     {/* <Reputation value={authorRepLog10} /> */}
-                    <Blacklist author={author} />
                     {showAffiliation && AffiliationMap[author] ? (
                         <span className="affiliation">
                             {tt('g.affiliation_' + AffiliationMap[author])}

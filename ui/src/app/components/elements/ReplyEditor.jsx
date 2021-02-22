@@ -12,11 +12,11 @@ import Tooltip from 'app/components/elements/Tooltip';
 import sanitizeConfig, { allowedTags } from 'app/utils/SanitizeConfig';
 import sanitize from 'sanitize-html';
 import HtmlReady from 'shared/HtmlReady';
-import * as globalActions from 'app/redux/GlobalReducer';
 import { fromJS, Set } from 'immutable';
 import Remarkable from 'remarkable';
 import Dropzone from 'react-dropzone';
 import tt from 'counterpart';
+
 const MAX_FILE_TO_UPLOAD = 10;
 let imagesToUpload = [];
 
@@ -364,22 +364,19 @@ class ReplyEditor extends React.Component {
                 const { url } = progress;
                 const imageMd = `![${image.file.name}](${url})`;
                 const { body } = this.state;
-                const { selectionStart, selectionEnd } = this.refs.postRef;
                 body.props.onChange(
                     body.value.replace(image.temporaryTag, imageMd)
                 );
                 this.uploadNextImage();
+            } else if (progress.hasOwnProperty('error')) {
+                this.displayErrorMessage(progress.error);
+                const imageMd = `![${image.file.name}](UPLOAD FAILED)`;
+                // Remove temporary image MD tag
+                body.props.onChange(
+                    body.value.replace(image.temporaryTag, imageMd)
+                );
             } else {
-                if (progress.hasOwnProperty('error')) {
-                    this.displayErrorMessage(progress.error);
-                    const imageMd = `![${image.file.name}](UPLOAD FAILED)`;
-                    // Remove temporary image MD tag
-                    body.props.onChange(
-                        body.value.replace(image.temporaryTag, imageMd)
-                    );
-                } else {
-                    this.setState({ progress });
-                }
+                this.setState({ progress });
             }
         });
     };
@@ -855,7 +852,6 @@ export default formId =>
         // mapStateToProps
         (state, ownProps) => {
             const username = state.user.getIn(['current', 'username']);
-            const tags = state.global.get('recommended_tags');
             const fields = ['body'];
             const { type, parent_author, jsonMetadata } = ownProps;
             const isEdit = type === 'edit';
