@@ -22,7 +22,7 @@ instablurt-amd64:
   stage: docker
   script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-    - docker run -d --name instablurt-amd64 $CI_REGISTRY/witness:dev
+    - docker run -d --name instablurt-amd64 $CI_REGISTRY_IMAGE/witness:dev
     - sleep 9000
     - docker commit instablurt-amd64
     - tocker tag instablurt-amd64 $CI_REGISTRY/instablurt-amd64
@@ -36,9 +36,10 @@ instablurt-arm64:
   stage: docker
   script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-    - docker run -d --net=host --restart=unless-stopped --name blurtd faddat/arm-blurt-presync /usr/bin/blurtd --data-dir /blurtd --plugin "witness account_by_key account_by_key_api condenser_api database_api network_broadcast_api transaction_status transaction_status_api rc_api" --p2p-seed-node 172.26.41.78:1776 --p2p-seed-node 172.26.179.68:1776 --p2p-seed-node 172.26.116.111:1776 --p2p-seed-node 172.26.71.157:1776 --p2p-seed-node 172.26.215.48:1776 --p2p-seed-node 172.26.210.82:1776 --p2p-seed-node 172.26.84.164:1776 --p2p-seed-node 172.26.106.151:1776
+    - docker run -d --net=host --restart=unless-stopped --name instablurt-arm64 faddat/arm-blurt-presync /usr/bin/blurtd --data-dir /blurtd --plugin "witness account_by_key account_by_key_api condenser_api database_api network_broadcast_api transaction_status transaction_status_api rc_api" --p2p-seed-node 172.26.41.78:1776 --p2p-seed-node 172.26.179.68:1776 --p2p-seed-node 172.26.116.111:1776 --p2p-seed-node 172.26.71.157:1776 --p2p-seed-node 172.26.215.48:1776 --p2p-seed-node 172.26.210.82:1776 --p2p-seed-node 172.26.84.164:1776 --p2p-seed-node 172.26.106.151:1776
     - sleep 3000
-    - docker commit instablurt arm64
+    - docker commit instablurt-arm64
+    - tocker tag instablurt-amd64 $CI_REGISTRY_IMAGE/instablurt-arm64
   tags: 
     - arm64-shell
 
@@ -112,13 +113,13 @@ sonarcloud:
 
 # DISABLED BECAUSE OF ISSUES WITH LOPSIDED/ARCHLINUX
 # Specifically, an archlinux-keyring issue
-# megadrive-build-env:
-#  stage: build-env
-#  script:
-#    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-#    - docker buildx build --file megadrive/build/Dockerfile --tag $CI_REGISTRY_IMAGE/md-env --push --platform linux/arm64,linux/amd64 .
-#  tags:
-#    - amd64-shell
+megadrive-build-env:
+  stage: build-env
+  script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker buildx build --file megadrive/build/Dockerfile --tag $CI_REGISTRY_IMAGE/md-env --push --platform linux/arm64,linux/amd64 .
+  tags:
+    - amd64-shell
 
 
 # Builds blurt arm64-ified
@@ -188,11 +189,11 @@ oroid-c2:
 dblurt:
   needs: []
   image: node
-  stage: build
+  stage: test
   script:
     - cd client-libs/dblurt
-    - yarn install
-    - make all
+    - npm install
+    - npm test
 
 # construct the megadrive arch container
 megadrive-container:
@@ -316,7 +317,7 @@ kaniko testnet:
     entrypoint: [""]
   script:
     - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
-    - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/contrib/Dockerfiles/rpc/Dockerfile --destination $CI_REGISTRY_IMAGE/rpc:$CI_COMMIT_BRANCH
+    - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/contrib/Dockerfiles/rpc/Dockerfile --destination $CI_REGISTRY_IMAGE/testnet:$CI_COMMIT_BRANCH
   
 
 #kaniko mira:
