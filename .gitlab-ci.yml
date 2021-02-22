@@ -40,7 +40,7 @@ instablurt-arm64:
     - sleep 3000
     - docker commit instablurt arm64
   tags: 
-    - shell-arch
+    - arm64-shell
 
 
 
