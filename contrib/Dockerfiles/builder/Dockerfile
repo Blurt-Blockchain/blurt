@@ -8,7 +8,7 @@ RUN sed -i -e "s/^CheckSpace/#!!!CheckSpace/g" /etc/pacman.conf && \
 		sed -i -e "s/^#!!!CheckSpace/CheckSpace/g" /etc/pacman.conf
 
 
-COPY ./megadrive/default /root/.conan/profiles/default
+COPY ./contrib/conan-profile/default /root/.conan/profiles/default
 
 ENV CC=clang
 ENV CXX=clang++
