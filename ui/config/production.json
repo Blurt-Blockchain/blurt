@@ -4,7 +4,7 @@
   "helmet": {
     "directives": {
       "childSrc": "'self' 3speak.online emb.d.tube player.twitch.tv www.youtube.com staticxx.facebook.com w.soundcloud.com player.vimeo.com",
-      "connectSrc": "https://rpc.blurt.world https://blurturl.herokuapp.com blurt.world rpc.blurt.world 'self' https://www.google-analytics.com/ https://stats.g.doubleclick.net/ https://images.blurt.blog https://api.blurt.blog https://blurtd.privex.io *.blurt.buzz wss://notifications.blurt.world",
+      "connectSrc": "https://rpc.blurt.world https://blurturl.herokuapp.com blurt.world rpc.blurt.world 'self' https://www.google-analytics.com/ https://stats.g.doubleclick.net/ https://images.blurt.blog https://api.blurt.blog https://blurtd.privex.io *.blurt.buzz wss://notifications.blurt.world data:",
       "defaultSrc": "tpc.googlesyndication.com 'self' emb.d.tube www.youtube.com staticxx.facebook.com player.vimeo.com *.streamrail.com img.3speakcontent.online lbry.tv *.wistia.com",
       "fontSrc": "data: fonts.gstatic.com",
       "frameAncestors": "'none'",
@@ -12,7 +12,7 @@
       "imgSrc": "* data:",
       "objectSrc": "'none'",
       "pluginTypes": "application/pdf",
-      "scriptSrc": "'unsafe-inline' 'unsafe-eval' data: https: 'self' www.google-analytics.com connect.facebook.net",
+      "scriptSrc": "'unsafe-inline' http://www.googletagmanager.com 'unsafe-eval' data: https: 'self' www.google-analytics.com connect.facebook.net",
       "styleSrc": "'self' 'unsafe-inline' fonts.googleapis.com platform.twitter.com",
       "reportUri": "/api/v1/csp_violation"
     },
@@ -36,7 +36,7 @@
     "templates": {
     }
   },
-  "server_session_secret": false,
+  "server_session_secret": true,
   "session_cookie_key": "blurt-dev",
   "session_key": "blurt_session_key",
   "site_domain": "rpc.blurt.world",
