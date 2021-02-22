@@ -189,11 +189,11 @@ oroid-c2:
 dblurt:
   needs: []
   image: node
-  stage: build
+  stage: test
   script:
     - cd client-libs/dblurt
-    - yarn install
-    - make lib
+    - npm install
+    - npm test
 
 # construct the megadrive arch container
 megadrive-container:
