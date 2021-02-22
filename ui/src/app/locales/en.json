@@ -348,9 +348,7 @@
         "use_only_allowed_characters":
             "Use only lowercase letters, digits and one dash",
         "must_start_with_a_letter": "Must start with a letter",
-        "must_end_with_a_letter_or_number": "Must end with a letter or number",
-        "recommended_tags":
-            "Recommended Tags(Only use tags specific to your content)"
+        "must_end_with_a_letter_or_number": "Must end with a letter or number"
     },
     "post_advanced_settings_jsx": {
         "payout_option_header": "Author rewards",

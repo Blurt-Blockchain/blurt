@@ -14,7 +14,6 @@ import Callout from 'app/components/elements/Callout';
 import SidebarLinks from 'app/components/elements/SidebarLinks';
 import SidebarNewUsers from 'app/components/elements/SidebarNewUsers';
 import SidebarStats from 'app/components/elements/SidebarStats';
-import SidebarPrice from 'app/components/elements/SidebarPrice';
 import Notices from 'app/components/elements/Notices';
 import SteemMarket from 'app/components/elements/SteemMarket';
 import { GptUtils } from 'app/utils/GptUtils';
@@ -23,6 +22,7 @@ import ArticleLayoutSelector from 'app/components/modules/ArticleLayoutSelector'
 import Topics from './Topics';
 import SortOrder from 'app/components/elements/SortOrder';
 import { RECOMMENDED_FOLLOW_ACCOUNT } from 'app/client_config';
+
 class PostsIndex extends React.Component {
     static propTypes = {
         discussions: PropTypes.object,
@@ -289,9 +289,6 @@ class PostsIndex extends React.Component {
                             </div>
                         )
                     )}
-                    {this.props.price_info && (
-                        <SidebarPrice price_info={this.props.price_info} />
-                    )}
                     <Notices notices={this.props.notices} />
                     {this.props.gptEnabled && allowAdsOnContent ? (
                         <div className="sidebar-ad">
@@ -401,8 +398,7 @@ module.exports = {
                 operationFlatFee: state.global.getIn([
                     'props',
                     'operation_flat_fee'
-                ]),
-                price_info: state.global.get('price_info')
+                ])
             };
         },
         dispatch => {

@@ -855,7 +855,6 @@ export default formId =>
         // mapStateToProps
         (state, ownProps) => {
             const username = state.user.getIn(['current', 'username']);
-            const tags = state.global.get('recommended_tags');
             const fields = ['body'];
             const { type, parent_author, jsonMetadata } = ownProps;
             const isEdit = type === 'edit';

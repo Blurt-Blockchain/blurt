@@ -36,40 +36,6 @@ export async function getStateAsync(url) {
     if (rewardFund) {
         raw.reward_fund = rewardFund;
     }
-    await axios
-        .get('https://api.blurt.buzz/tags', { timeout: 3000 })
-        .then(response => {
-            if (response.status === 200) {
-                raw.recommended_tags = response.data;
-            }
-        })
-        .catch(error => {
-            console.error(error);
-        });
-    await axios
-        .get('https://api.blurt.buzz/blacklist', { timeout: 3000 })
-        .then(response => {
-            let map = new Map();
-            if (response.status === 200) {
-                for (let data of response.data) {
-                    map.set(data.name, data);
-                }
-                raw.blacklist = map;
-            }
-        })
-        .catch(error => {
-            console.error(error);
-        });
-    await axios
-        .get('https://api.blurt.buzz/price_info', { timeout: 3000 })
-        .then(response => {
-            if (response.status === 200) {
-                raw.price_info = response.data;
-            }
-        })
-        .catch(error => {
-            console.error(error);
-        });
 
     const cleansed = stateCleaner(raw);
     return cleansed;

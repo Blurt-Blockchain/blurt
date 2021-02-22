@@ -673,16 +673,7 @@ class Voting extends React.Component {
         }
         return (
             <span className="Voting">
-                <span className="Voting__inner">
-                    {blacklist.get(author) === undefined && (
-                        <span className={classUp}>
-                            {voteChevron}
-                            {dropdown}
-                        </span>
-                    )}
-
-                    {payoutEl}
-                </span>
+                <span className="Voting__inner">{payoutEl}</span>
                 {voters_list}
             </span>
         );

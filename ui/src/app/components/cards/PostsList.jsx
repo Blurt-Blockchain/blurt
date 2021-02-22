@@ -265,7 +265,6 @@ class PostsList extends React.Component {
             items.map((item, i) => {
                 const every = this.props.adSlots.in_feed_1.every;
                 let author = content.get(item.item).get('author');
-                let blacklisted = blacklist.get(author);
                 if (this.props.shouldSeeAds && i >= every && i % every === 0) {
                     return (
                         <div key={item.item}>
@@ -276,7 +275,6 @@ class PostsList extends React.Component {
                                     thumbSize={thumbSize}
                                     ignore={item.ignore}
                                     nsfwPref={nsfwPref}
-                                    blacklisted={blacklisted}
                                 />
                             </li>
 
@@ -298,7 +296,6 @@ class PostsList extends React.Component {
                             thumbSize={thumbSize}
                             ignore={item.ignore}
                             nsfwPref={nsfwPref}
-                            blacklisted={blacklisted}
                         />
                     </li>
                 );

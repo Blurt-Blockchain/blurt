@@ -13,7 +13,6 @@ import AffiliationMap from 'app/utils/AffiliationMap';
 import tt from 'counterpart';
 import Overlay from 'react-overlays/lib/Overlay';
 import { findDOMNode } from 'react-dom';
-import Blacklist from '../Blacklist';
 
 const { string, bool, number } = PropTypes;
 
@@ -116,7 +115,6 @@ class Author extends React.Component {
                         <Link to={'/@' + author}>{author}</Link>
                     </strong>{' '}
                     {/* <Reputation value={authorRepLog10} /> */}
-                    <Blacklist author={author} />
                     {showAffiliation && AffiliationMap[author] ? (
                         <span className="affiliation">
                             {tt('g.affiliation_' + AffiliationMap[author])}

@@ -31,7 +31,7 @@ import ArticleLayoutSelector from 'app/components/modules/ArticleLayoutSelector'
 import SanitizedLink from 'app/components/elements/SanitizedLink';
 import DropdownMenu from 'app/components/elements/DropdownMenu';
 import NotificationsList from '../cards/NotificationsList';
-import Blacklist from '../elements/Blacklist';
+
 export default class UserProfile extends React.Component {
     constructor() {
         super();
@@ -598,7 +598,6 @@ export default class UserProfile extends React.Component {
                                     ({rep})
                                 </span> */}
                             </Tooltip>
-                            <Blacklist author={accountname} />
                             {AffiliationMap[accountname] ? (
                                 <span className="affiliation">
                                     {tt(

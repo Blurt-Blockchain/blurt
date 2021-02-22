@@ -76,7 +76,6 @@ class CategorySelector extends React.Component {
                     autoCapitalize="none"
                 />
                 <br />
-                {tt('category_selector_jsx.recommended_tags')}:
                 <br />
                 {categories.map((c, idx) => {
                     return (
