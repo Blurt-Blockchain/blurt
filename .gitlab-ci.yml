@@ -193,7 +193,6 @@ dblurt:
   script:
     - cd client-libs/dblurt
     - npm install
-    - npm test
 
 # construct the megadrive arch container
 megadrive-container:
