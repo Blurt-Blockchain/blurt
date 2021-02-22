@@ -192,7 +192,7 @@ dblurt:
   script:
     - cd client-libs/dblurt
     - yarn install
-    - make all
+    - make lib
 
 # construct the megadrive arch container
 megadrive-container:
