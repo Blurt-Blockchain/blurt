@@ -29,6 +29,7 @@ import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import { GoogleAd } from 'app/components/elements/GoogleAd';
 import ContentEditedWrapper from '../elements/ContentEditedWrapper';
 import { allowDelete } from 'app/utils/StateFunctions';
+import Blacklist from '../elements/Blacklist';
 function TimeAuthorCategory({ content, authorRepLog10, showTags }) {
     return (
         <span className="PostFull__time_author_category vcard">
@@ -40,6 +41,7 @@ function TimeAuthorCategory({ content, authorRepLog10, showTags }) {
                 authorRepLog10={authorRepLog10}
                 showAffiliation
             />
+            <Blacklist author={content.author} />
             {showTags && (
                 <span>
                     {' '}
@@ -60,6 +62,7 @@ function TimeAuthorCategoryLarge({ content, authorRepLog10 }) {
                     authorRepLog10={authorRepLog10}
                     showAffiliation
                 />
+                <Blacklist author={content.author} />
                 <span>
                     {' '}
                     {tt('g.in')} <TagList post={content} single />
