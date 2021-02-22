@@ -28,8 +28,7 @@ condenser-docker-test:
   tags:
     - shell-arch
 
-
-
+# Hard Fork 3
 testnet:
     stage: build
     variables:
@@ -112,6 +111,24 @@ megadrive-build-ubuntu:
     paths:
       - build/bin
 
+
+# Builds blurt arm64 testnet
+megadrive-testnet-ubuntu:
+  stage: build
+  script:
+    - mkdir build
+    - cd build
+    - conan install .. -s compiler=clang -s compiler.libcxx=libstdc++11 -if=. -pr=default --build=missing
+    - cmake -DBLURT_STATIC_BUILD=ON -DLOW_MEMORY_NODE=ON -DCLEAR_VOTES=ON -WINT_IN_BOOL_CONTEXT=OFF -DBUILD_BLURT_TESTNET=ON -DSKIP_BY_TX_ID=ON -DBLURT_LINT_LEVEL=FULL -DENABLE_MIRA=OFF -DCMAKE_BUILD_TYPE=Release ..
+    - make -j$(nproc) blurtd cli_wallet
+  tags:
+    - arm64-shell
+  artifacts:
+    paths:
+      - build/bin
+
+
+
 # construct the light cryptopie device image.  runs blurt on sos-lite as a container.
 raspberrypi4:
   when: manual
@@ -165,6 +182,18 @@ megadrive-container:
   dependencies:
     - megadrive-build-ubuntu
   
+# construct the megadrive arch container
+megadrive-testnet-container:
+  needs: 
+    - megadrive-testnet-ubuntu
+  stage: docker
+  script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker buildx build --file contrib/Dockerfiles/ci/Dockerfile --platform linux/arm64 --tag $CI_REGISTRY_IMAGE/megadrive:$CI_COMMIT_BRANCH --push --progress plain .
+  tags:
+    - shell-arch
+  dependencies:
+    - megadrive-testnet-ubuntu
 
 witness:
   stage: build
@@ -204,23 +233,23 @@ witness:
 #      - build/bin/
 #  needs: []
 
-#rpc:
-#  stage: build
-#  variables:
-#    CC: "ccache clang"
-#    CXX: "ccache clang++"
-#  script:
-#    - mkdir build
-#    - cd build
-#    - conan install .. -s compiler=clang -s compiler.libcxx=libstdc++11 -if=. -pr=default --build=missing
-#    - cmake -DBLURT_STATIC_BUILD=ON -DLOW_MEMORY_NODE=OFF -DCLEAR_VOTES=OFF -WINT_IN_BOOL_CONTEXT=OFF -DBUILD_BLURT_TESTNET=OFF -DSKIP_BY_TX_ID=OFF -DBLURT_LINT_LEVEL=OFF -DENABLE_MIRA=OFF -DCMAKE_BUILD_TYPE=Release ..
-#    - make -j$(nproc) blurtd cli_wallet
-#  tags:
-#    - shell-arch
-#  artifacts:
-#    paths:
-#      - build/bin/
-#  needs: []
+rpc:
+  stage: build
+  variables:
+    CC: "ccache clang"
+    CXX: "ccache clang++"
+  script:
+    - mkdir build
+    - cd build
+    - conan install .. -s compiler=clang -s compiler.libcxx=libstdc++11 -if=. -pr=default --build=missing
+    - cmake -DBLURT_STATIC_BUILD=ON -DLOW_MEMORY_NODE=OFF -DCLEAR_VOTES=OFF -WINT_IN_BOOL_CONTEXT=OFF -DBUILD_BLURT_TESTNET=OFF -DSKIP_BY_TX_ID=OFF -DBLURT_LINT_LEVEL=OFF -DENABLE_MIRA=OFF -DCMAKE_BUILD_TYPE=Release ..
+    - make -j$(nproc) blurtd cli_wallet
+  tags:
+    - shell-arch
+  artifacts:
+    paths:
+      - build/bin/
+  needs: []
 
 
 kaniko witness:
@@ -237,18 +266,32 @@ kaniko witness:
     - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/contrib/Dockerfiles/ci/Dockerfile --destination $CI_REGISTRY_IMAGE/witness:$CI_COMMIT_BRANCH
   
 
-#kaniko rpc:
-#  stage: docker
-#  needs:
-#    - rpc
-#  dependencies:
-#    - rpc
-#  image:
-#    name: gcr.io/kaniko-project/executor:debug
-#    entrypoint: [""]
-#  script:
-#    - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
-#    - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/contrib/Dockerfiles/rpc/Dockerfile --destination $CI_REGISTRY_IMAGE/rpc:$CI_COMMIT_BRANCH
+kaniko rpc:
+  stage: docker
+  needs:
+    - rpc
+  dependencies:
+    - rpc
+  image:
+    name: gcr.io/kaniko-project/executor:debug
+    entrypoint: [""]
+  script:
+    - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
+    - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/contrib/Dockerfiles/rpc/Dockerfile --destination $CI_REGISTRY_IMAGE/rpc:$CI_COMMIT_BRANCH
+
+
+kaniko testnet:
+  stage: docker
+  needs:
+    - testnet
+  dependencies:
+    - testnet
+  image:
+    name: gcr.io/kaniko-project/executor:debug
+    entrypoint: [""]
+  script:
+    - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
+    - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/contrib/Dockerfiles/rpc/Dockerfile --destination $CI_REGISTRY_IMAGE/rpc:$CI_COMMIT_BRANCH
   
 
 #kaniko mira:
