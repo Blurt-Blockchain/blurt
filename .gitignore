@@ -95,7 +95,6 @@ programs/build_helpers/cat-parts
 programs/size_checker/size_checker
 programs/util/get_dev_key
 programs/util/inflation_model
-
 tests/app_test
 tests/chain_bench
 tests/chain_test
@@ -105,18 +104,19 @@ tests/performance_test
 
 # Build directories
 build/
-build.*/
-build-*/
+
 
 # Condenser things
-ui/.DS_Store
-ui/.coverage
-ui/node_modules
-ui/*.log
-ui/yarn.lock
-ui/dist
-ui/.idea/*
-ui/vendor/*
-ui/tmp/*
-ui/.vagrant
-ui/lib
+ui/condenser/.DS_Store
+ui/condenser/.coverage
+ui/condenser/node_modules
+ui/condenser/*.log
+ui/condenser/yarn.lock
+ui/condenser/dist
+ui/condenser/.idea/*
+ui/condenser/vendor/*
+ui/condenser/tmp/*
+ui/condenser/.vagrant
+ui/condenser/lib
+
+
