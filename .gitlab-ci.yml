@@ -113,6 +113,7 @@ sonarcloud:
     - dev
 
 
+
 # DISABLED BECAUSE OF ISSUES WITH LOPSIDED/ARCHLINUX
 # Specifically, an archlinux-keyring issue
 megadrive-build-env:
@@ -195,7 +196,7 @@ dblurt:
   stage: test
   script:
     - cd client-libs/dblurt
-    - npm install
+    - yarn install
 
 # construct the megadrive arch container
 megadrive-container:
