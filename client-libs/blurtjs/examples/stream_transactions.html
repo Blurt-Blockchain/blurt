@@ -8,7 +8,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@blurtfoundation/blurtjs/dist/blurt.min.js"></script>
 <script>
-blurt.api.setOptions({ url: 'https://rpc.blurt.buzz', useAppbaseApi: true });
+blurt.api.setOptions({ url: 'https://rpc.blurt.world', useAppbaseApi: true });
 blurt.api.streamTransactions("head", function (err, result) {
   let operations = result.operations[0];
   if (typeof operations === "object") {

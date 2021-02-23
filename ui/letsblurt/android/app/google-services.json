@@ -1,0 +1,63 @@
+{
+  "project_info": {
+    "project_number": "808143161985",
+    "firebase_url": "https://letsblurt-dbd72.firebaseio.com",
+    "project_id": "letsblurt-dbd72",
+    "storage_bucket": "letsblurt-dbd72.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:808143161985:android:8c90fee1f84190972c9b80",
+        "android_client_info": {
+          "package_name": "club.etain.letsblurt"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "808143161985-965lj27o3ihvgkq2mhse1gv6h33uh6b9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "club.etain.letsblurt",
+            "certificate_hash": "72ab2fcead5348507df376e14c8494d5fd2b5a00"
+          }
+        },
+        {
+          "client_id": "808143161985-rfp0k7p2qgi3vs7tho0kpecodjh4mpif.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "club.etain.letsblurt",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "808143161985-befno4amublmfk0u8rlli8b440qnsda4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBgUpLuie_Q7lDgnxkJOqRDcWOM6vpN2MQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "808143161985-befno4amublmfk0u8rlli8b440qnsda4.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "808143161985-2fbtevnatb6nhiosd1u4ssptsfs0l90u.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "club.etain.letsblurt"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

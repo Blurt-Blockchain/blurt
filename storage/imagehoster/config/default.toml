@@ -13,7 +13,7 @@ name = 'imagehoster'
 num_workers = 1
 
 # url to steemd node used for verifying signatures
-rpc_node = 'https://rpc.blurt.buzz'
+rpc_node = 'https://rpc.blurt.world'
 
 # url where service is running
 service_url = 'http://localhost:8800'

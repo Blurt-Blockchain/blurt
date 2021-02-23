@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">LetsBlurt</string>
+    <string moduleConfig="true" name="CodePushDeploymentKey">ALesVMTkjJux18tJeiTLzQmTxXmA2SvV4Pqy-</string>
+</resources>
