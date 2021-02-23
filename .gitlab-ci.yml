@@ -21,6 +21,7 @@ instablurt-amd64:
   when: manual
   stage: docker
   script:
+    - docker rm instablurt-amd64
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - docker run -d --name instablurt-amd64 $CI_REGISTRY_IMAGE/witness:dev
     - sleep 9000
@@ -35,6 +36,7 @@ instablurt-arm64:
   when: manual
   stage: docker
   script:
+    - docker rm instablurt-arm64
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - docker run -d --net=host --restart=unless-stopped --name instablurt-arm64 faddat/arm-blurt-presync /usr/bin/blurtd --data-dir /blurtd --plugin "witness account_by_key account_by_key_api condenser_api database_api network_broadcast_api transaction_status transaction_status_api rc_api" --p2p-seed-node 172.26.41.78:1776 --p2p-seed-node 172.26.179.68:1776 --p2p-seed-node 172.26.116.111:1776 --p2p-seed-node 172.26.71.157:1776 --p2p-seed-node 172.26.215.48:1776 --p2p-seed-node 172.26.210.82:1776 --p2p-seed-node 172.26.84.164:1776 --p2p-seed-node 172.26.106.151:1776
     - sleep 3000
