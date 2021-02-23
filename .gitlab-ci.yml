@@ -11,7 +11,7 @@ condenser-docker-push:
   stage: build
   script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-    - docker buildx build --tag $CI_REGISTRY_IMAGE:$CI_COMMIT_BRANCH --cache-from $CI_REGISTRY_IMAGE/condenser:cache --cache-to $CI_REGISTRY_IMAGE/condenser:cache --push --platform linux/arm64,linux/amd64 ./ui
+    - docker buildx build --file ui/condenser/Dockerfile --tag $CI_REGISTRY_IMAGE/condenser:$CI_COMMIT_BRANCH --cache-from $CI_REGISTRY_IMAGE/condenser:cache --cache-to $CI_REGISTRY_IMAGE/condenser:cache --push --platform linux/arm64,linux/amd64 ./ui/condenser
   tags:
     - shell-arch
 
@@ -52,7 +52,7 @@ condenser-docker-test:
   stage: build
   script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-    - docker buildx build --tag $CI_REGISTRY_IMAGE:$CI_COMMIT_BRANCH --cache-from $CI_REGISTRY_IMAGE/condenser:cache --cache-to $CI_REGISTRY_IMAGE/condenser:cache --platform linux/arm64,linux/amd64 ./ui
+    - docker buildx build --file ui/condenser/Dockerfile --cache-from $CI_REGISTRY_IMAGE/condenser:cache --cache-to $CI_REGISTRY_IMAGE/condenser:cache --platform linux/arm64,linux/amd64 ./ui/condenser
   tags:
     - shell-arch
 
@@ -113,6 +113,7 @@ sonarcloud:
     - dev
 
 
+
 # DISABLED BECAUSE OF ISSUES WITH LOPSIDED/ARCHLINUX
 # Specifically, an archlinux-keyring issue
 megadrive-build-env:
@@ -171,7 +172,7 @@ raspberrypi4:
     - mv images/cryptopie.img.xz /static/cryptopie/cryptopie-$(echo $STAMP).img.xz
     - sudo ipfs add -Q /static/cryptopie/cryptopie-$(echo $STAMP).img.xz > /static/cryptopie/cryptopie-$(echo $STAMP).html
   tags:
-    - shell-arch
+    - amd64-shell
 
 # construct the light odroid-c2 device image.  runs blurt on sos-lite as a container.
 oroid-c2:
@@ -186,7 +187,7 @@ oroid-c2:
     - mv images/megadrive-light.img.xz /static/c2-light/c2-light-$(echo $STAMP).img.xz
     - sudo ipfs add -Q /static/c2-light/c2-light-$(echo $STAMP).img.xz > /static/c2-light/c2-light-$(echo $STAMP).html
   tags:
-    - shell-arch
+    - amd64-shell
 
 # tests the dblurt client library
 dblurt:
@@ -195,7 +196,10 @@ dblurt:
   stage: test
   script:
     - cd client-libs/dblurt
-    - npm install
+    - npm i -g yarn
+    - yarn install
+  tags:
+    - amd64-shell
 
 # construct the megadrive arch container
 megadrive-container:
@@ -206,7 +210,7 @@ megadrive-container:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - docker buildx build --file contrib/Dockerfiles/ci/Dockerfile --platform linux/arm64 --tag $CI_REGISTRY_IMAGE/megadrive:$CI_COMMIT_BRANCH --push --progress plain .
   tags:
-    - shell-arch
+    - amd64-shell
   dependencies:
     - megadrive-build-ubuntu
   
@@ -219,7 +223,7 @@ megadrive-testnet-container:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - docker buildx build --file contrib/Dockerfiles/ci/Dockerfile --platform linux/arm64 --tag $CI_REGISTRY_IMAGE/megadrive:$CI_COMMIT_BRANCH --push --progress plain .
   tags:
-    - shell-arch
+    - amd64-shell
   dependencies:
     - megadrive-testnet-ubuntu
 
@@ -243,23 +247,23 @@ witness:
       - build/bin/
   needs: []
 
-#mira:
-#  stage: build
-#  variables:
-#    CC: "ccache clang"
-#    CXX: "ccache clang++"
-#  script:
-#    - mkdir build
-#    - cd build
-#    - conan install .. -s compiler=clang -s compiler.libcxx=libstdc++11 -if=. -pr=default --build=missing
-#    - cmake -DBLURT_STATIC_BUILD=ON -DLOW_MEMORY_NODE=ON -DCLEAR_VOTES=ON -WINT_IN_BOOL_CONTEXT=OFF -DBUILD_BLURT_TESTNET=OFF -DSKIP_BY_TX_ID=ON -DBLURT_LINT_LEVEL=OFF -DENABLE_MIRA=ON -DCMAKE_BUILD_TYPE=Release ..
-#    - make -j$(nproc) blurtd cli_wallet
-#  tags:
-#    - shell-arch
-#  artifacts:
-#    paths:
-#      - build/bin/
-#  needs: []
+mira:
+  stage: build
+  variables:
+    CC: "ccache clang"
+    CXX: "ccache clang++"
+  script:
+    - mkdir build
+    - cd build
+    - conan install .. -s compiler=clang -s compiler.libcxx=libstdc++11 -if=. -pr=default --build=missing
+    - cmake -DBLURT_STATIC_BUILD=ON -DLOW_MEMORY_NODE=ON -DCLEAR_VOTES=ON -WINT_IN_BOOL_CONTEXT=OFF -DBUILD_BLURT_TESTNET=OFF -DSKIP_BY_TX_ID=ON -DBLURT_LINT_LEVEL=OFF -DENABLE_MIRA=ON -DCMAKE_BUILD_TYPE=Release ..
+    - make -j$(nproc) blurtd cli_wallet
+  tags:
+    - shell-arch
+  artifacts:
+    paths:
+      - build/bin/
+  needs: []
 
 rpc:
   stage: build
@@ -292,7 +296,8 @@ kaniko witness:
   script:
     - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
     - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/contrib/Dockerfiles/ci/Dockerfile --destination $CI_REGISTRY_IMAGE/witness:$CI_COMMIT_BRANCH
-  
+  tags:
+    - metal
 
 kaniko rpc:
   stage: docker
@@ -306,7 +311,8 @@ kaniko rpc:
   script:
     - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
     - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/contrib/Dockerfiles/rpc/Dockerfile --destination $CI_REGISTRY_IMAGE/rpc:$CI_COMMIT_BRANCH
-
+  tags:
+    - metal
 
 kaniko testnet:
   stage: docker
@@ -320,7 +326,8 @@ kaniko testnet:
   script:
     - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
     - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/contrib/Dockerfiles/rpc/Dockerfile --destination $CI_REGISTRY_IMAGE/testnet:$CI_COMMIT_BRANCH
-  
+  tags:
+    - metal
 
 #kaniko mira:
 #  stage: docker
