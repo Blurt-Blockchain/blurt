@@ -11,7 +11,7 @@ condenser-docker-push:
   stage: build
   script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-    - docker buildx build --tag $CI_REGISTRY_IMAGE:$CI_COMMIT_BRANCH --cache-from $CI_REGISTRY_IMAGE/condenser:cache --cache-to $CI_REGISTRY_IMAGE/condenser:cache --push --platform linux/arm64,linux/amd64 ./ui
+    - docker buildx build --tag $CI_REGISTRY_IMAGE:$CI_COMMIT_BRANCH --cache-from $CI_REGISTRY_IMAGE/condenser:cache --cache-to $CI_REGISTRY_IMAGE/ui/condenser:cache --push --platform linux/arm64,linux/amd64 ./ui
   tags:
     - shell-arch
 
