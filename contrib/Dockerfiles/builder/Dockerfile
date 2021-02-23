@@ -2,16 +2,11 @@ FROM lopsided/archlinux
 
 MAINTAINER jacobgadikian@gmail.com
 
-RUN sed -i -e "s/^CheckSpace/#!!!CheckSpace/g" /etc/pacman.conf && \
-		pacman -Syyu --noconfirm python-pip wget git bison doxygen base-devel clang ccache cmake npm yarn neovim && \
-		pip install conan && \
-		sed -i -e "s/^#!!!CheckSpace/CheckSpace/g" /etc/pacman.conf
-
+RUN pacman -Syyu --noconfirm python-pip wget git bison doxygen base-devel clang ccache cmake npm yarn neovim && \
+		pip install conan 
 
 COPY ./contrib/conan-profile/default /root/.conan/profiles/default
 
-ENV CC=clang
-ENV CXX=clang++
 
 # Prepare to build
 # RUN mkdir -p /root/.conan/profiles/ && \
