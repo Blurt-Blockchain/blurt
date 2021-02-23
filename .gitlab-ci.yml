@@ -171,7 +171,7 @@ raspberrypi4:
     - mv images/cryptopie.img.xz /static/cryptopie/cryptopie-$(echo $STAMP).img.xz
     - sudo ipfs add -Q /static/cryptopie/cryptopie-$(echo $STAMP).img.xz > /static/cryptopie/cryptopie-$(echo $STAMP).html
   tags:
-    - shell-arch
+    - amd64-shell
 
 # construct the light odroid-c2 device image.  runs blurt on sos-lite as a container.
 oroid-c2:
@@ -186,7 +186,7 @@ oroid-c2:
     - mv images/megadrive-light.img.xz /static/c2-light/c2-light-$(echo $STAMP).img.xz
     - sudo ipfs add -Q /static/c2-light/c2-light-$(echo $STAMP).img.xz > /static/c2-light/c2-light-$(echo $STAMP).html
   tags:
-    - shell-arch
+    - amd64-shell
 
 # tests the dblurt client library
 dblurt:
@@ -206,7 +206,7 @@ megadrive-container:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - docker buildx build --file contrib/Dockerfiles/ci/Dockerfile --platform linux/arm64 --tag $CI_REGISTRY_IMAGE/megadrive:$CI_COMMIT_BRANCH --push --progress plain .
   tags:
-    - shell-arch
+    - amd64-shell
   dependencies:
     - megadrive-build-ubuntu
   
@@ -219,7 +219,7 @@ megadrive-testnet-container:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - docker buildx build --file contrib/Dockerfiles/ci/Dockerfile --platform linux/arm64 --tag $CI_REGISTRY_IMAGE/megadrive:$CI_COMMIT_BRANCH --push --progress plain .
   tags:
-    - shell-arch
+    - amd64-shell
   dependencies:
     - megadrive-testnet-ubuntu
 
@@ -237,7 +237,7 @@ witness:
     - make -j$(nproc) blurtd cli_wallet
   # cli wallet is only used for witness, so we capture it from the witness build
   tags:
-    - shell-arch
+    - amd64-shell
   artifacts:
     paths:
       - build/bin/
@@ -292,7 +292,8 @@ kaniko witness:
   script:
     - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
     - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/contrib/Dockerfiles/ci/Dockerfile --destination $CI_REGISTRY_IMAGE/witness:$CI_COMMIT_BRANCH
-  
+  tags:
+    - metal
 
 kaniko rpc:
   stage: docker
@@ -306,7 +307,8 @@ kaniko rpc:
   script:
     - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
     - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/contrib/Dockerfiles/rpc/Dockerfile --destination $CI_REGISTRY_IMAGE/rpc:$CI_COMMIT_BRANCH
-
+  tags:
+    - metal
 
 kaniko testnet:
   stage: docker
@@ -320,7 +322,8 @@ kaniko testnet:
   script:
     - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
     - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/contrib/Dockerfiles/rpc/Dockerfile --destination $CI_REGISTRY_IMAGE/testnet:$CI_COMMIT_BRANCH
-  
+  tags:
+    - metal
 
 #kaniko mira:
 #  stage: docker
