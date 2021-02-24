@@ -673,12 +673,21 @@ class Voting extends React.Component {
         }
         return (
             <span className="Voting">
-                <span className="Voting__inner">{payoutEl}</span>
+                <span className="Voting__inner">
+
+                        <span className={classUp}>
+                            {voteChevron}
+                            {dropdown}
+                        </span>
+
+                    {payoutEl}
+                </span>
                 {voters_list}
             </span>
         );
     }
 }
+
 
 export default connect(
     // mapStateToProps
