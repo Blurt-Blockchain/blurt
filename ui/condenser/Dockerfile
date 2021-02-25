@@ -6,10 +6,7 @@ COPY . /condenser
 
 WORKDIR /condenser
 
-RUN apk update && \
-        apk add --no-cache trigger && \
-        apk add --no-cache --virtual .build-deps-full \
-        binutils-gold \
+RUN apk add -U binutils-gold \
         g++ \
         gcc \
         gnupg \
