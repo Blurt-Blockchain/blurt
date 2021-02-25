@@ -7,6 +7,31 @@ stages:
   - staging
   - production
 
+
+
+
+condenser-docker-test:
+  needs: []
+  stage: build
+  script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker buildx build --file ui/condenser/Dockerfile --cache-from $CI_REGISTRY_IMAGE/condenser:cache --cache-to $CI_REGISTRY_IMAGE/condenser:cache --platform linux/amd64 ./ui/condenser
+  tags:
+    - shell-arch
+  except:
+    - dev
+
+condenser-docker-test-arm:
+  needs: []
+  stage: build
+  script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker buildx build --file ui/condenser/Dockerfile --cache-from $CI_REGISTRY_IMAGE/condenser-arm64:cache --cache-to $CI_REGISTRY_IMAGE/condenser-arm64:cache --platform linux/arm64 ./ui/condenser
+  tags:
+    - shell-arch
+  except:
+    - dev
+
 condenser-docker-push:
   needs: []
   stage: build
@@ -19,15 +44,15 @@ condenser-docker-push:
     - dev
 
 
-condenser-docker-test:
+condenser-docker-push-arm:
   needs: []
   stage: build
   script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-    - docker buildx build --file ui/condenser/Dockerfile --cache-from $CI_REGISTRY_IMAGE/condenser:cache --cache-to $CI_REGISTRY_IMAGE/condenser:cache --platform linux/arm64,linux/amd64 ./ui/condenser
+    - docker buildx build --file ui/condenser/Dockerfile --tag $CI_REGISTRY_IMAGE/condenser-arm64:$CI_COMMIT_BRANCH --cache-from $CI_REGISTRY_IMAGE/condenser-arm64:cache --cache-to $CI_REGISTRY_IMAGE/condenser-arm64:cache --push --platform linux/arm64 ./ui/condenser
   tags:
     - shell-arch
-  except:
+  only:
     - dev
 
 # This happens at each commit to "dev", so we don't need to pull when going to production, though we may want to consider a tagging system or something. 
