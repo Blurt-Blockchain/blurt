@@ -7,7 +7,8 @@ COPY . /condenser
 WORKDIR /condenser
 
 
-RUN apk add --no-cache --virtual .build-deps-full \
+RUN apk update && \
+        apk add --no-cache --virtual .build-deps-full \
         binutils-gold \
         g++ \
         gcc \
@@ -26,9 +27,9 @@ RUN mkdir tmp && \
     yarn install && \
     yarn build
 
-ENV PORT 80
+ENV PORT 8080
 ENV NODE_ENV production
 
-EXPOSE 80
+EXPOSE 8080
 
 CMD [ "yarn", "run", "production" ]
