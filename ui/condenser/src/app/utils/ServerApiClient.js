@@ -71,22 +71,23 @@ export function acceptTos() {
     return fetch('/api/v1/acceptTos', request);
 }
 
-export function recordPageView(page) {
-    if (!process.env.BROWSER || window.$STM_ServerBusy)
-        return Promise.resolve(null);
-    const request = Object.assign({}, request_base, {
-        body: JSON.stringify({ csrf: $STM_csrf, page })
-    });
-    console.log('-- recordPageView -->', request);
-    return fetch(`https://blurturl.herokuapp.com/api/v1/countview/` + page, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ url: page })
-    })
-        .then(r => r.json())
-        .then(res => {
-            return res.url;
-        });
-}
+// No more counter, it cannot be decentralized, so it should not exist.
+// export function recordPageView(page) {
+//    if (!process.env.BROWSER || window.$STM_ServerBusy)
+//        return Promise.resolve(null);
+//    const request = Object.assign({}, request_base, {
+//        body: JSON.stringify({ csrf: $STM_csrf, page })
+//    });
+//    console.log('-- recordPageView -->', request);
+//    return fetch(`https://blurturl.herokuapp.com/api/v1/countview/` + page, {
+//        method: 'POST',
+//        headers: {
+//            'Content-Type': 'application/json'
+//        },
+//        body: JSON.stringify({ url: page })
+//    })
+//        .then(r => r.json())
+//        .then(res => {
+//            return res.url;
+//        });
+//}
