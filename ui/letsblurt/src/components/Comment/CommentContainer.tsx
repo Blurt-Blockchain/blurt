@@ -40,7 +40,6 @@ interface Props {
 }
 const CommentContainer = (props: Props): JSX.Element => {
   //// props
-  const {comment} = props;
   //// language
   const intl = useIntl();
   //// contexts
@@ -49,17 +48,16 @@ const CommentContainer = (props: Props): JSX.Element => {
   const {postsState, submitPost, flagPost} = useContext(PostsContext);
   const {settingsState} = useContext(SettingsContext);
   //// stats
-  const [originalPost, setOriginalPost] = useState(null);
   const [submitting, setSubmitting] = useState(false);
   const [showReply, setShowReply] = useState(false);
   const [editMode, setEditMode] = useState(false);
   // reply text
   const [replyText, setReplyText] = useState('');
-  const [newHeight, setNewHeight] = useState(40);
   // comment body
-  const [body, setBody] = useState(comment.body);
+  const [comment, setComment] = useState(props.comment);
+  const [body, setBody] = useState(props.comment.body);
   const [showOriginal, setShowOriginal] = useState(true);
-  const [originalBody, setOriginalBody] = useState(comment.body);
+  const [originalBody, setOriginalBody] = useState(props.comment.body);
   const [translatedBody, setTranslatedBody] = useState(null);
   // const [showChildComments, setShowChildComments] = useState(
   //   props.showChildComments || false,
@@ -67,9 +65,10 @@ const CommentContainer = (props: Props): JSX.Element => {
   const [showChildComments, setShowChildComments] = useState(false);
   // tts
   const [speaking, setSpeaking] = useState(false);
-  const reputation = comment.state.reputation.toFixed(0);
+  const reputation = props.comment.state.reputation.toFixed(0);
 
-  const formatedTime = comment && getTimeFromNow(comment.state.createdAt);
+  const formatedTime =
+    props.comment && getTimeFromNow(props.comment.state.createdAt);
 
   const _handleSubmitComment = async (_text: string) => {
     // check sanity
@@ -164,30 +163,29 @@ const CommentContainer = (props: Props): JSX.Element => {
         .functions()
         .httpsCallable('translationRequest')(bodyOptions);
 
-      const translatedBody =
-        bodyTranslation.data.data.translations[0].translatedText;
+      let translatedBody = body;
+      if (bodyTranslation.data) {
+        translatedBody =
+          bodyTranslation.data.data.translations[0].translatedText;
+      }
 
       // set translation
       setBody(translatedBody);
       // store the translation
       setTranslatedBody(translatedBody);
+
+      // update comment state
+      const newComment = {
+        ...comment,
+        body: translatedBody,
+      };
+      setComment(newComment);
     } catch (error) {
       console.log('failed to translate', error);
       setToastMessage(
         intl.formatMessage({id: 'PostDetails.translation_error'}),
       );
     }
-  };
-
-  //// handle press speaker
-  const _handlePressSpeak = () => {
-    if (speaking) {
-      speakBody(comment.markdownBody, true);
-    } else {
-      speakBody(comment.markdownBody, false);
-    }
-    // toggle the state
-    setSpeaking(!speaking);
   };
 
   //// fetch children comments
@@ -219,7 +217,6 @@ const CommentContainer = (props: Props): JSX.Element => {
           handlePressReply={_handlePressReply}
           handlePressEditComment={_handlePressEditComment}
           handlePressTranslation={_handlePressTranslation}
-          handlePressSpeak={_handlePressSpeak}
           handleSubmitComment={_handleSubmitComment}
           handlePressChildren={_handlePressChildren}
           flagPost={_flagPost}

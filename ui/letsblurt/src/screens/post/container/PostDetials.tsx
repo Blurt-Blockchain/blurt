@@ -276,22 +276,25 @@ const PostDetails = (props: Props): JSX.Element => {
       const titleTranslation = await firebase
         .functions()
         .httpsCallable('translationRequest')(titleOptions);
+      let translatedTitle = title;
+      if (titleTranslation.data) {
+        translatedTitle =
+          titleTranslation.data.data.translations[0].translatedText;
+      }
+
       const bodyTranslation = await firebase
         .functions()
         .httpsCallable('translationRequest')(bodyOptions);
-
-      const translatedTitle =
-        titleTranslation.data.data.translations[0].translatedText;
-      console.log('_translateLanguage. translatedTitle', translatedTitle);
-
-      const translatedBody =
-        bodyTranslation.data.data.translations[0].translatedText;
+      let translatedBody = body;
+      if (bodyTranslation.data) {
+        translatedBody =
+          bodyTranslation.data.data.translations[0].translatedText;
+      }
       const newPostDetails = {
         ...postDetails,
         state: {...postDetails.state, title: translatedTitle},
         body: translatedBody,
       };
-      // TODO: save the translation for re-translate
 
       // set translation
       setPostDetails(newPostDetails);

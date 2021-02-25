@@ -17,8 +17,6 @@ import {CommentData, PostRef} from '~/contexts/types';
 import {CommentsView} from './CommentsView';
 //// constants
 
-import {View, Text} from 'react-native';
-
 //// props
 interface Props {
   postRef: PostRef;
@@ -32,10 +30,10 @@ const CommentsContainer = (props: Props): JSX.Element => {
   const [postRef, setPostRef] = useState<PostRef>(props.postRef);
   const [comments, setComments] = useState<CommentData[]>([]);
   //// effects
-  // // effect: mount
-  // useEffect(() => {
-  //   _fetchComments();
-  // }, []);
+  // effect: mount
+  useEffect(() => {
+    _fetchComments();
+  }, []);
   // event: comments prop
   useEffect(() => {
     // fetch comments if no comments are given

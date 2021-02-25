@@ -227,7 +227,7 @@ export interface PostingContent {
 }
 
 // default filter list
-export const INIT_FILTER_LIST = ['trending', 'created', 'hot'];
+export const INIT_FILTER_LIST = ['created', 'hot', 'trending'];
 // initial tag item for friends posts of feed posts
 export const INIT_FRIENDS_TAG = ['Friends', '', ''];
 // initial tag item for my posts of feed posts

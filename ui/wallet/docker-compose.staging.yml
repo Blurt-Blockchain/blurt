@@ -1,0 +1,58 @@
+version: "3"
+services:
+    wallet:
+        image: blurtio/wallet:development
+        deploy:
+            mode: replicated
+            replicas: 2
+            resources:
+                limits:
+                    cpus: "0.85"
+                    memory: 2024M
+            restart_policy:
+                condition: any
+                delay: 5s
+            update_config:
+                parallelism: 1
+                delay: 10s
+                failure_action: rollback
+                order: start-first
+            rollback_config:
+                parallelism: 1
+                delay: 5s
+        environment:
+            VIRTUAL_HOST: staging-wallet.blurt.io
+            VIRTUAL_PORT: 8080
+            SDC_DATABASE_URL: mysql://root:mysecret@blurt_mysql/blurt_wallet
+            SDC_CLIENT_BLURTD_URL: https://api.blurt.blog
+            SDC_SERVER_BLURTD_URL: https://api.blurt.blog
+            SDC_DISABLE_SIGNUPS: 1
+            SDC_SITE_DOMAIN: staging-wallet.blurt.io
+            SDC_IMAGE_PROXY_PREFIX: https://imgp.blurt.world/
+            SDC_UPLOAD_IMAGE_URL: https://imgp.blurt.world
+            SDC_HELMET_CONNECTSRC: "'self' https://api.blurt.blog https://rpc.blurt.world https://blurtd.privex.io https://imgp.blurt.world"
+            WALLET_URL: https://staging-wallet.blurt.io
+        networks:
+            - reverse-proxy
+            - database
+
+    mysql:
+        image: mysql:5.7
+        container_name: blurt_mysql
+        volumes:
+            - db_mysql:/var/lib/mysql
+        environment:
+            MYSQL_ROOT_PASSWORD: mysecret
+            MYSQL_DATABASE: blurt_wallet
+            MYSQL_USER: root
+            MYSQL_PASSWORD: mysecret
+        networks:
+            - database
+
+volumes:
+    db_mysql:
+
+networks:
+    database:
+    reverse-proxy:
+        external: true

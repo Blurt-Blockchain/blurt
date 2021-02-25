@@ -220,7 +220,7 @@ const BeneficiaryContainer = (props: Props): JSX.Element => {
           showModal={showAuthorsModal}
           authors={props.sourceList}
           handlePressAuthor={_handlePressAuthor}
-          cancelModal={() => setShowAuthorsModal(false)}
+          cancelModal={_displayBeneficiaryModal}
         />
       )}
     </View>

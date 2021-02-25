@@ -1,0 +1,163 @@
+.ProposalsList {
+    flex-direction: column;
+    display: flex;
+    padding-top: 20px;
+
+    @media only screen and (min-width: 768px) {
+        width: 80%;
+    }
+    @media only screen and (max-width: 768px) {
+        width: 98%;
+    }
+
+    margin-left: auto;
+    margin-right: auto;
+
+    .proposals__header {
+        flex-direction: row;
+        justify-content: center;
+        display: flex;
+
+        @media only screen and (max-width: 768px) {
+            padding-left: 1em;
+        }
+
+        .proposals__votes {
+            display: flex;
+            align-items: center;
+            max-width: 200px;
+            width: 15%;
+            @media only screen and (max-width: 768px) {
+                justify-content: center;
+                width: 20%;
+            }
+        }
+        .proposals__amount {
+            display: flex;
+            align-items: center;
+            max-width: 200px;
+            width: 20%;
+
+            flex-direction: row;
+            justify-content: flex-start;
+        }
+        .proposals__description {
+            display: flex;
+            align-items: center;
+            max-width: 800px;
+            width: 60%;
+        }
+        .proposals__avatar {
+            width: 65px;
+        }
+    }
+    .proposals__row {
+        @include themify($themes) {
+            border-radius: themed('roundedCorners');
+            border: themed('border');
+            background-color: themed('moduleBackgroundColor');
+        }
+        padding: 10px;
+        margin-bottom: 15px;
+        flex-direction: row;
+        justify-content: center;
+        display: flex;
+
+        @media only screen and (max-width: 768px) {
+            padding-top: 0.7em;
+            padding-bottom: 0.7em;
+        }
+
+        small {
+            @media only screen and (max-width: 768px) {
+                font-size: 0.7em;
+            }
+            @include themify($themes) {
+                color: themed('textColorSecondary');
+            }
+        }
+
+        .proposals__avatar {
+            overflow: hidden;
+            width: 65px;
+            height: 65px;
+            padding-left: 15px;
+
+            @media only screen and (max-width: 768px) {
+                width: 90px;
+            }
+        }
+
+        .proposals__votes {
+            display: flex;
+            align-items: center;
+            max-width: 200px;
+            @include themify($themes) {
+                border-right: themed('border');
+            }
+
+            @media only screen and (min-width: 768px) {
+                font-size: 1.5em;
+                flex-direction: column;
+                justify-content: flex-start;
+                width: 15%;
+            }
+            @media only screen and (max-width: 768px) {
+                font-size: 0.8em;
+                flex-direction: row-reverse;
+                justify-content: center;
+                align-items: flex-start;
+                padding-top: 0.1em;
+                width: 20%;
+            }
+
+            a {
+                padding-right: 10px;
+            }
+        }
+        .proposals__amount {
+            display: flex;
+            max-width: 200px;
+            width: 20%;
+            flex-direction: column;
+            align-items: flex-start;
+            padding-left: 15px;
+            @media only screen and (max-width: 768px) {
+                padding-left: 7px;
+            }
+        }
+
+        .proposals__description {
+            max-width: 800px;
+            width: 60%;
+            padding-left: 15px;
+            @media only screen and (max-width: 768px) {
+                padding-left: 7px;
+            }
+            @include themify($themes) {
+                border-right: themed('border');
+            }
+            .date {
+                @include themify($themes) {
+                    color: themed('textColorSecondary');
+                }
+                @media only screen and (max-width: 768px) {
+                    font-size: 0.7em;
+                }
+            }
+        }
+    }
+    .proposals__statusTag {
+        font-weight: 400;
+        display: inline;
+        padding: 0.1rem 0.2rem;
+        margin: 0 1rem 0 0.5rem;
+        border-radius: 0.3rem;
+        font-size: 0.7rem;
+        vertical-align: 15%;
+        @include themify($themes) {
+            background-color: themed('colorAccent');
+            color: themed('buttonText');
+        }
+    }
+}

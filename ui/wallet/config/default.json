@@ -1,0 +1,84 @@
+{
+  "database_url": "mysql://root:password@127.0.0.1/steemit_dev",
+  "disable_signups": false,
+  "facebook_app_id": false,
+  "google_analytics_id": false,
+  "helmet": {
+      "directives": {
+          "childSrc": "'self'",
+          "connectSrc":
+              "'self' blurt.blog https://api.blurt.blog https://api.blurt.buzz https://blurt.world https://images.blurt.blog https://blurtd.privex.io https://rpc.blurt.world https://imgp.blurt.world",
+          "defaultSrc": "'self'",
+          "fontSrc": "data: fonts.gstatic.com",
+          "frameAncestors": "'none'",
+          "imgSrc": "* data:",
+          "objectSrc": "'none'",
+          "pluginTypes": "application/pdf",
+          "scriptSrc": "'self' www.google-analytics.com",
+          "styleSrc": "'self' 'unsafe-inline' fonts.googleapis.com",
+          "reportUri": "/api/v1/csp_violation"
+      },
+      "reportOnly": false,
+      "setAllHeaders": true
+  },
+  "img_proxy_prefix": "https://images.blurt.blog/",
+  "ipfs_prefix": false,
+  "mixpanel": false,
+  "newrelic": false,
+  "notify": {
+      "gcm_key": "google secret key"
+  },
+  "read_only_mode": false,
+  "recaptcha": {
+      "secret_key": false,
+      "site_key": false
+  },
+  "registrar": {
+      "account": "-",
+      "fee": "0.5 BLURT",
+      "delegation": "150250.000000 VESTS",
+      "signing_key": "5J..."
+  },
+  "requestAccountRecovery": {
+      "recovery_account": "steem",
+      "signing_key": "5J..."
+  },
+  "sendgrid": {
+      "from": "noreply@example.com",
+      "key": "SG.xxx_yyyy",
+      "templates": {
+          "confirm_email": false,
+          "waiting_list_invite": false
+      }
+  },
+  "server_session_secret": "exiKdyF+IwRIXJDmtGIl4vWUz4i3eVSISpfZoeYc0s4=",
+  "session_cookie_key": "stm-dev",
+  "session_key": "steemses",
+  "site_domain": "steemitdev.com",
+  "tarantool": {
+      "host": "localhost",
+      "password": "",
+      "port": "3301",
+      "username": "guest"
+  },
+  "telesign": {
+      "customer_id": false,
+      "rest_api_key": false
+  },
+  "twilio": {
+      "account_sid": false,
+      "auth_token": false
+  },
+  "upload_image":  "https://images.blurt.blog",
+  "blurtd_connection_client": "https://rpc.blurt.world",
+  "blurtd_connection_server": "https://rpc.blurt.world",
+  "blurtd_use_appbase": true,
+  "chain_id":
+      "cd8d90f29ae273abec3eaa7731e25934c63eb654d55080caff2ebb7f5df6381f",
+      "alternative_api_endpoints": "https://api.blurt.blog https://rpc.blurt.world https://blurtd.privex.io https://blurt-rpc.steem.buzz",
+      "failover_threshold": 3,
+  "address_prefix": "BLT",
+  "conveyor_posting_wif": false,
+  "conveyor_username": false,
+  "social_url": "https://blurt.world"
+}
