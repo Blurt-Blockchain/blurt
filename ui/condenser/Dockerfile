@@ -6,8 +6,7 @@ COPY . /condenser
 
 WORKDIR /condenser
 
-RUN apk add -U .build-deps-full \
-        binutils-gold \
+RUN apk add -U binutils-gold \
         g++ \
         gcc \
         gnupg \
