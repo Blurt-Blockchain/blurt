@@ -46,6 +46,7 @@ condenser-staging:
 condenser-production-world:
   needs: 
     - condenser-docker-push
+  when: manual
   stage: production
   script: 
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
@@ -58,6 +59,7 @@ condenser-production-world:
 condenser-production-blog:
   needs: 
     - condenser-docker-push
+  when: manual
   stage: production
   script: 
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
