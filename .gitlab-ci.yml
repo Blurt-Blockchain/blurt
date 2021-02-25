@@ -201,7 +201,6 @@ dblurt:
   stage: test
   script:
     - cd client-libs/dblurt
-    - npm i -g yarn
     - yarn install
   tags:
     - metal
