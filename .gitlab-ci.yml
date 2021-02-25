@@ -82,7 +82,18 @@ condenser-production-world:
     - docker run -d --name world --env NODE_ENV=production -p 69:69 --env PORT=69 --env SDC_SITE_DOMAIN=staging.blurt.world --env SDC_SESSION_SECRETKEY="$SDC_SESSION_SECRETKEY" $CI_REGISTRY_IMAGE/condenser:$CI_COMMIT_BRANCH
   tags:
     - shell-arch
-
+condenser-production-latam
+  needs: 
+    - condenser-docker-push
+  when: manual
+  stage: production
+  script: 
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker stop world  true
+    - docker rm world  true
+    - docker run -d --name world --env NODE_ENV=production -p 69:69 --env PORT=69 --env SDC_SITE_DOMAIN=staging.blurtlatam.com --env SDC_SESSION_SECRETKEY="$SDC_SESSION_SECRETKEY" $CI_REGISTRY_IMAGE/condenser:$CI_COMMIT_BRANCH
+  tags:
+    - shell-arch
 condenser-production-blog:
   needs: 
     - condenser-docker-push
