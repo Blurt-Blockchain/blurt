@@ -5,6 +5,7 @@ stages:
   - test
   - devices
   - staging
+  - production
 
 condenser-docker-push:
   needs: []
