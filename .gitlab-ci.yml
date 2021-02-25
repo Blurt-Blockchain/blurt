@@ -36,6 +36,7 @@ condenser-staging:
   stage: staging
   script: 
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker pull $CI_REGISTRY_IMAGE/condenser:$CI_COMMIT_BRANCH
     - docker stop staging || true
     - docker rm staging || true
     - docker run -d --name staging --env NODE_ENV=production -p 80:8080 --env SDC_SESSION_SECRETKEY="$SDC_SESSION_SECRETKEY" $CI_REGISTRY_IMAGE/condenser:$CI_COMMIT_BRANCH
