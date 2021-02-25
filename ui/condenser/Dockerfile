@@ -6,7 +6,6 @@ COPY . /condenser
 
 WORKDIR /condenser
 
-
 RUN apk update && \
         apk add --no-cache --virtual .build-deps-full \
         binutils-gold \
@@ -29,7 +28,5 @@ RUN mkdir tmp && \
 
 ENV PORT 8080
 ENV NODE_ENV production
-
-EXPOSE 8080
 
 CMD [ "yarn", "run", "production" ]
