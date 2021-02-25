@@ -60,7 +60,7 @@ const SidePanel = ({
             {
                 value: 'faq',
                 label: tt('navigation.faq'),
-                link: `https://blurtfaq.org/wiki/FAQ_%E2%80%93_The_Bloggers_Almanac`
+                link: `https://blurtfaq.org`
             },
             {
                 value: 'tags',
