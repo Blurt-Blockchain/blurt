@@ -26,9 +26,9 @@ RUN mkdir tmp && \
     yarn install && \
     yarn build
 
-ENV PORT 8080
+ENV PORT 80
 ENV NODE_ENV production
 
-EXPOSE 8080
+EXPOSE 80
 
-CMD [ "yarn", "run", "start" ]
+CMD [ "yarn", "run", "production" ]
