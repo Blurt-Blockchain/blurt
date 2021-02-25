@@ -28,7 +28,7 @@ condenser-docker-test-arm:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - docker buildx build --file ui/condenser/Dockerfile --cache-from $CI_REGISTRY_IMAGE/condenser-arm64:cache --cache-to $CI_REGISTRY_IMAGE/condenser-arm64:cache --platform linux/arm64 ./ui/condenser
   tags:
-    - arm64
+    - arm64-shell
   except:
     - dev
 
@@ -51,7 +51,7 @@ condenser-docker-push-arm:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - docker buildx build --file ui/condenser/Dockerfile --tag $CI_REGISTRY_IMAGE/condenser-arm64:$CI_COMMIT_BRANCH --cache-from $CI_REGISTRY_IMAGE/condenser-arm64:cache --cache-to $CI_REGISTRY_IMAGE/condenser-arm64:cache --push --platform linux/arm64 ./ui/condenser
   tags:
-    - arm64
+    - arm64-shell
   only:
     - dev
 
