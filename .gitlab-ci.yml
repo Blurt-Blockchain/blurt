@@ -353,7 +353,7 @@ kaniko rpc:
     - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
     - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/contrib/Dockerfiles/rpc/Dockerfile --destination $CI_REGISTRY_IMAGE/rpc:$CI_COMMIT_BRANCH
   tags:
-    - amd64-shell
+    - metal
 
 kaniko testnet:
   stage: docker
@@ -368,7 +368,7 @@ kaniko testnet:
     - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
     - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/contrib/Dockerfiles/rpc/Dockerfile --destination $CI_REGISTRY_IMAGE/testnet:$CI_COMMIT_BRANCH
   tags:
-    - amd64-shell
+    - metal
 
 kaniko mira:
   stage: docker
@@ -383,7 +383,7 @@ kaniko mira:
     - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
     - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/contrib/Dockerfiles/ci/Dockerfile --destination $CI_REGISTRY_IMAGE/mira:$CI_COMMIT_BRANCH
   tags:
-    - amd64-shell
+    - metal
   
 include:
   - template: Security/Dependency-Scanning.gitlab-ci.yml
