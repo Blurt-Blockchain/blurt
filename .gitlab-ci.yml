@@ -30,6 +30,8 @@ condenser-docker-test:
   except:
     - dev
 
+# This happens at each commit to "dev", so we don't need to pull when going to production, though we may want to consider a tagging system or something. 
+# For now, let the build ruh, check staging.blurt.world and then if it looks OK, use the others. 
 condenser-staging:
   needs: 
     - condenser-docker-push
@@ -39,7 +41,7 @@ condenser-staging:
     - docker pull $CI_REGISTRY_IMAGE/condenser:$CI_COMMIT_BRANCH
     - docker stop staging || true
     - docker rm staging || true
-    - docker run -d --name staging --env NODE_ENV=production -p 6969:8080 --env SDC_SITE_DOMAIN=staging.blurt.world --env SDC_SESSION_SECRETKEY="$SDC_SESSION_SECRETKEY" $CI_REGISTRY_IMAGE/condenser:$CI_COMMIT_BRANCH
+    - docker run -d --name staging --env NODE_ENV=production -p 6969:6969 --env PORT=6969 --env SDC_SITE_DOMAIN=staging.blurt.world --env SDC_SESSION_SECRETKEY="$SDC_SESSION_SECRETKEY" $CI_REGISTRY_IMAGE/condenser:$CI_COMMIT_BRANCH
   tags:
     - shell-arch
 
@@ -52,7 +54,7 @@ condenser-production-world:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - docker stop world || true
     - docker rm world || true
-    - docker run -d --name world --env NODE_ENV=production -p 69:8080 --env SDC_SITE_DOMAIN=staging.blurt.world --env SDC_SESSION_SECRETKEY="$SDC_SESSION_SECRETKEY" $CI_REGISTRY_IMAGE/condenser:$CI_COMMIT_BRANCH
+    - docker run -d --name world --env NODE_ENV=production -p 69:69 --env PORT=69 --env SDC_SITE_DOMAIN=staging.blurt.world --env SDC_SESSION_SECRETKEY="$SDC_SESSION_SECRETKEY" $CI_REGISTRY_IMAGE/condenser:$CI_COMMIT_BRANCH
   tags:
     - shell-arch
 
@@ -65,7 +67,7 @@ condenser-production-blog:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - docker stop blog || true
     - docker rm blog || true
-    - docker run -d --name blog --env NODE_ENV=production -p 569:8080 --env SDC_SITE_DOMAIN=blurt.world --env SDC_SESSION_SECRETKEY="$SDC_SESSION_SECRETKEY" $CI_REGISTRY_IMAGE/condenser:$CI_COMMIT_BRANCH
+    - docker run -d --name blog --env NODE_ENV=production -p 569:569 --env PORT=569 --env SDC_SITE_DOMAIN=blurt.world --env SDC_SESSION_SECRETKEY="$SDC_SESSION_SECRETKEY" $CI_REGISTRY_IMAGE/condenser:$CI_COMMIT_BRANCH
   tags:
     - shell-arch
 
