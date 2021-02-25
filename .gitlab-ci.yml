@@ -39,7 +39,7 @@ condenser-staging:
     - docker pull $CI_REGISTRY_IMAGE/condenser:$CI_COMMIT_BRANCH
     - docker stop staging || true
     - docker rm staging || true
-    - docker run -d --name staging --env NODE_ENV=production -p 80:8080 --env SDC_SESSION_SECRETKEY="$SDC_SESSION_SECRETKEY" $CI_REGISTRY_IMAGE/condenser:$CI_COMMIT_BRANCH
+    - docker run -d --name staging --env NODE_ENV=production -p 6969:8080 --env SDC_SITE_DOMAIN=staging.blurt.world --env SDC_SESSION_SECRETKEY="$SDC_SESSION_SECRETKEY" $CI_REGISTRY_IMAGE/condenser:$CI_COMMIT_BRANCH
   tags:
     - shell-arch
 
