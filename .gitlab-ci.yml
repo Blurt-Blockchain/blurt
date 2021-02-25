@@ -41,8 +41,17 @@ condenser-staging:
   tags:
     - shell-arch
 
-
-
+condenser-production-world:
+  needs: 
+    - condenser-docker-push
+  stage: production
+  script: 
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker stop staging || true
+    - docker rm staging || true
+    - docker run --name staging --env NODE_ENV=production -p 80:8080 --env SDC_SESSION_SECRETKEY="$SDC_SESSION_SECRETKEY" $CI_REGISTRY_IMAGE/condenser:$CI_COMMIT_BRANCH
+  tags:
+    - shell-arch
 
 
 instablurt-amd64:
@@ -330,7 +339,7 @@ kaniko rpc:
     - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
     - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/contrib/Dockerfiles/rpc/Dockerfile --destination $CI_REGISTRY_IMAGE/rpc:$CI_COMMIT_BRANCH
   tags:
-    - metal
+    - amd64-shell
 
 kaniko testnet:
   stage: docker
@@ -345,7 +354,7 @@ kaniko testnet:
     - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
     - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/contrib/Dockerfiles/rpc/Dockerfile --destination $CI_REGISTRY_IMAGE/testnet:$CI_COMMIT_BRANCH
   tags:
-    - metal
+    - amd64-shell
 
 kaniko mira:
   stage: docker
@@ -359,6 +368,8 @@ kaniko mira:
   script:
     - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
     - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/contrib/Dockerfiles/ci/Dockerfile --destination $CI_REGISTRY_IMAGE/mira:$CI_COMMIT_BRANCH
+  tags:
+    - amd64-shell
   
 include:
   - template: Security/Dependency-Scanning.gitlab-ci.yml
