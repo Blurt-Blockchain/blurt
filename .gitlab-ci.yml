@@ -199,7 +199,7 @@ dblurt:
     - npm i -g yarn
     - yarn install
   tags:
-    - amd64-shell
+    - metal
 
 # construct the megadrive arch container
 megadrive-container:
@@ -329,18 +329,18 @@ kaniko testnet:
   tags:
     - metal
 
-#kaniko mira:
-#  stage: docker
-#  needs:
-#    - mira
-#  dependencies:
-#    - mira
-#  image:
-#    name: gcr.io/kaniko-project/executor:debug
-#    entrypoint: [""]
-#  script:
-#    - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
-#    - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/contrib/Dockerfiles/ci/Dockerfile --destination $CI_REGISTRY_IMAGE/mira:$CI_COMMIT_BRANCH
+kaniko mira:
+  stage: docker
+  needs:
+    - mira
+  dependencies:
+    - mira
+  image:
+    name: gcr.io/kaniko-project/executor:debug
+    entrypoint: [""]
+  script:
+    - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
+    - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/contrib/Dockerfiles/ci/Dockerfile --destination $CI_REGISTRY_IMAGE/mira:$CI_COMMIT_BRANCH
   
 include:
   - template: Security/Dependency-Scanning.gitlab-ci.yml
