@@ -82,18 +82,40 @@ condenser-production-world:
     - docker run -d --name world --env NODE_ENV=production -p 69:69 --env PORT=69 --env SDC_SITE_DOMAIN=staging.blurt.world --env SDC_SESSION_SECRETKEY="$SDC_SESSION_SECRETKEY" $CI_REGISTRY_IMAGE/condenser:$CI_COMMIT_BRANCH
   tags:
     - shell-arch
-condenser-staging-latam
+
+condenser-staging-latam:
+  needs: 
+    - condenser-docker-push
+  stage: staging
+  script: 
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker stop world || true
+    - docker rm world || true
+    - docker run -d --name world --env NODE_ENV=production -p 69:69 --env PORT=69 --env SDC_SITE_DOMAIN=staging.blurtlatam.com --env SDC_SESSION_SECRETKEY="$SDC_SESSION_SECRETKEY" $CI_REGISTRY_IMAGE/condenser:$CI_COMMIT_BRANCH
+  tags:
+    - blurtlatam
+
+condenser-production-latam:
   needs: 
     - condenser-docker-push
   when: manual
   stage: production
   script: 
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-    - docker stop world  true
-    - docker rm world  true
-    - docker run -d --name world --env NODE_ENV=production -p 69:69 --env PORT=69 --env SDC_SITE_DOMAIN=blurtlatam.com --env SDC_SESSION_SECRETKEY="$SDC_SESSION_SECRETKEY" $CI_REGISTRY_IMAGE/condenser:$CI_COMMIT_BRANCH
+    - docker stop world || true
+    - docker rm world || true
+    - docker run -d --name world --env NODE_ENV=production -p 69:6969 --env PORT=6969 --env SDC_SITE_DOMAIN=blurtlatam.com --env SDC_SESSION_SECRETKEY="$SDC_SESSION_SECRETKEY" $CI_REGISTRY_IMAGE/condenser:$CI_COMMIT_BRANCH
   tags:
-    - shell-arch
+    - blurtlatam
+
+# Caddy can be automated so that people who buy servers will only need to click to deploy.
+#caddy-latam:
+#  when: manual
+#  stage: production
+#  script:
+#    - docker run -d --name caddy caddy caddy reverse-proxy --from :2016 --to 127.0.0.1:9000    
+
+
 condenser-production-blog:
   needs: 
     - condenser-docker-push
