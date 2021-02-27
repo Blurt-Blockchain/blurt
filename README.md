@@ -9,6 +9,57 @@ Blurt is a public social blockchain with a diverse and vibrant community that st
 
 The Blurt blockchain is defined as social media and builds a living, breathing, and growing social economy and communities where users are getting rewarded by curators for sharing their origin content. Blurt provides a scalable blockchain protocol for publicly accessible and immutable content, along with a fast digital currency (BLURT) which enables people to earn by using their brain (A.K.A. “Proof-of-Brain”).
 
+## Compile without CI
+
+We've dramatically reduced the dependencies to compile blurt.
+
+#### Linux: 
+
+* Clang 11 or higher
+* Conan.io
+* ccache
+
+....that's it.
+
+Here's how you do it, assuming a totally fresh system:
+
+```bash
+git clone https://gitlab.com/blurt/blurt
+cd blurt
+cp contrib/conan-profile/default ~/.conan/profiles/default
+cat ~/.conan/profiles/default #Do this and check that the architecture is right for how you want to build it.  amd64 and arm64 officially supported.  armv5,6,7 should work.
+mkdir build
+cd build
+conan install ..
+cmake ..
+make -j$(nproc) blurtd cli_wallet
+```
+
+We use Arch Linux to compile blurt, but that does not mean that you must also use Arch.  This should work well on Ubuntu and Debian, as well as others.  It should also work on multiple CPU architectures. 
+
+#### Mac:
+
+* Clang 12 via xcode-install (don't use brew to get clang you'd have a bad time)
+* conan.io, `brew install conan`
+* ccache
+
+```bash
+git clone https://gitlab.com/blurt/blurt
+cd blurt
+cp contrib/conan-profile/default ~/.conan/profiles/default
+cat ~/.conan/profiles/default #Do this and check that the architecture is right for how you want to build it.  amd64 and arm64 officially supported.  armv5,6,7 should work.
+mkdir build
+cd build
+conan install ..
+cmake ..
+make -j$(nproc) blurtd cli_wallet
+```
+
+
+#### Windows
+
+100,000 Blurt Bouty for the creation of a guide like the one above for windows.  Our devs generally don't touch it. 
+
 ## Development
 Blurt is being converted to a monorepo, with the goal of distributing Blurt as a Mac, Windows, and Linux [electron](http://electronjs.org/) app (think like Slack, which is actually just chrome running a webapp).  At that time, blurt will be entirely freed from the cloud, and even the tyranny of the current DNS system.  Anyone with sufficient access to the internet, will be able to use blurt.
 
