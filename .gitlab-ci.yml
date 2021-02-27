@@ -69,6 +69,8 @@ condenser-staging:
     - docker run -d --name staging --env NODE_ENV=production -p 6969:6969 --env PORT=6969 --env SDC_SITE_DOMAIN=staging.blurt.world --env SDC_SESSION_SECRETKEY="$SDC_SESSION_SECRETKEY" $CI_REGISTRY_IMAGE/condenser:$CI_COMMIT_BRANCH
   tags:
     - shell-arch
+  only:
+    - dev
 
 condenser-production-world:
   needs: 
@@ -82,6 +84,8 @@ condenser-production-world:
     - docker run -d --name world --env NODE_ENV=production -p 69:69 --env PORT=69 --env SDC_SITE_DOMAIN=staging.blurt.world --env SDC_SESSION_SECRETKEY="$SDC_SESSION_SECRETKEY" $CI_REGISTRY_IMAGE/condenser:$CI_COMMIT_BRANCH
   tags:
     - shell-arch
+  only:
+    - dev
 
 condenser-staging-latam:
   needs: 
@@ -94,6 +98,8 @@ condenser-staging-latam:
     - docker run -d --name world --env NODE_ENV=production -p 69:69 --env PORT=69 --env SDC_SITE_DOMAIN=staging.blurtlatam.com --env SDC_SESSION_SECRETKEY="$SDC_SESSION_SECRETKEY" $CI_REGISTRY_IMAGE/condenser:$CI_COMMIT_BRANCH
   tags:
     - blurtlatam
+  only:
+    - dev
 
 condenser-production-latam:
   needs: 
@@ -107,6 +113,8 @@ condenser-production-latam:
     - docker run -d --name world --env NODE_ENV=production -p 69:6969 --env PORT=6969 --env SDC_SITE_DOMAIN=blurtlatam.com --env SDC_SESSION_SECRETKEY="$SDC_SESSION_SECRETKEY" $CI_REGISTRY_IMAGE/condenser:$CI_COMMIT_BRANCH
   tags:
     - blurtlatam
+  only:
+    - dev
 
 # Caddy can be automated so that people who buy servers will only need to click to deploy.
 #caddy-latam:
@@ -128,6 +136,8 @@ condenser-production-blog:
     - docker run -d --name blog --env NODE_ENV=production -p 569:569 --env PORT=569 --env SDC_SITE_DOMAIN=blurt.world --env SDC_SESSION_SECRETKEY="$SDC_SESSION_SECRETKEY" $CI_REGISTRY_IMAGE/condenser:$CI_COMMIT_BRANCH
   tags:
     - shell-arch
+  only:
+    - dev
 
 
 instablurt-amd64:
