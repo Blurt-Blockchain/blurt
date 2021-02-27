@@ -15,5 +15,5 @@
 #ifdef IS_TEST_NET
 #define BLURT_NUM_HARDFORKS 3
 #else
-#define BLURT_NUM_HARDFORKS 3
+#define BLURT_NUM_HARDFORKS 2
 #endif
