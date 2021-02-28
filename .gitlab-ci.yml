@@ -304,27 +304,45 @@ oroid-c2:
   tags:
     - amd64-shell
 
+# Release new versions of blurtjs
 blurtjs:
   image: node:latest
   stage: deploy
+  when: manual
+  variables:
+    NPM_TOKEN: ${CI_JOB_TOKEN}
   script:
+    - npm ci --cache .npm --prefer-offline
+    - |
+      {
+        echo "@${CI_PROJECT_ROOT_NAMESPACE}:registry=${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/npm/"
+        echo "${CI_API_V4_URL#https?}/projects/${CI_PROJECT_ID}/packages/npm/:_authToken=\${CI_JOB_TOKEN}"
+      } | tee --append .npmrc
     - cd client-libs/blurtjs
     - yarn install
     - yarn build
-    - echo "//gitlab.example.com/api/v4/projects/${CI_PROJECT_ID}/packages/npm/:_authToken=${CI_JOB_TOKEN}">.npmrc
     - npm adduser
-    - npm publish
+    - npm run semantic-release
 
-# tests the dblurt client library
+
+# Release changes to dblurt
 dblurt:
   image: node:latest
   stage: deploy
+  when: manual
+  variables:
+    NPM_TOKEN: ${CI_JOB_TOKEN}
   script:
+    - npm ci --cache .npm --prefer-offline
+    - |
+      {
+        echo "@${CI_PROJECT_ROOT_NAMESPACE}:registry=${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/npm/"
+        echo "${CI_API_V4_URL#https?}/projects/${CI_PROJECT_ID}/packages/npm/:_authToken=\${CI_JOB_TOKEN}"
+      } | tee --append .npmrc
     - cd client-libs/dblurt
     - yarn install
-    - echo "//gitlab.example.com/api/v4/projects/${CI_PROJECT_ID}/packages/npm/:_authToken=${CI_JOB_TOKEN}">.npmrc
     - npm adduser
-    - npm publish
+    - npm run semantic-release
 
 # construct the megadrive arch container
 megadrive-container:
