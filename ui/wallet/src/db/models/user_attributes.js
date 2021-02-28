@@ -20,7 +20,7 @@ module.exports = function (sequelize, DataTypes) {
             timestamps: true,
             underscored: true,
             classMethods: {
-                associate (models) {
+                associate(models) {
                     UserAttribute.belongsTo(models.User, {
                         onDelete: 'CASCADE',
                         foreignKey: {

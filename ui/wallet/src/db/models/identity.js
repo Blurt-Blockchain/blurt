@@ -26,7 +26,7 @@ module.exports = function (sequelize, DataTypes) {
             timestamps: true,
             underscored: true,
             classMethods: {
-                associate (models) {
+                associate(models) {
                     Identity.belongsTo(models.User, {
                         onDelete: 'CASCADE',
                         foreignKey: {

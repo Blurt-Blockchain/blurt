@@ -1,5 +1,5 @@
 module.exports = {
-    up (queryInterface, Sequelize) {
+    up(queryInterface, Sequelize) {
         return queryInterface
             .createTable('identities', {
                 id: {
@@ -56,7 +56,7 @@ module.exports = {
                 queryInterface.addIndex('identities', ['confirmation_code']);
             });
     },
-    down (queryInterface, Sequelize) {
+    down(queryInterface, Sequelize) {
         return queryInterface.dropTable('identities');
     },
 };

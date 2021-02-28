@@ -34,7 +34,7 @@ module.exports = function (sequelize, DataTypes) {
             timestamps: true,
             underscored: true,
             classMethods: {
-                associate (models) {
+                associate(models) {
                     AccountRecoveryRequest.belongsTo(models.User, {
                         onDelete: 'SET NULL',
                         foreignKey: {

@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = {
-    up (queryInterface, Sequelize) {
+    up(queryInterface, Sequelize) {
         queryInterface.addColumn('users', 'account_status', {
             type: Sequelize.STRING,
             defaultValue: 'waiting',
@@ -15,5 +15,5 @@ module.exports = {
         });
     },
 
-    down (queryInterface, Sequelize) {},
+    down(queryInterface, Sequelize) {},
 };
