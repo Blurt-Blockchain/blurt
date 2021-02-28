@@ -1,9 +1,9 @@
-import React from 'react'
+import React from 'react';
 
 export default ({ children, className, t }) => {
-  return (
-    <span title={t} className={className}>
-      {children}
-    </span>
-  )
-}
+    return (
+        <span title={t} className={className}>
+            {children}
+        </span>
+    );
+};

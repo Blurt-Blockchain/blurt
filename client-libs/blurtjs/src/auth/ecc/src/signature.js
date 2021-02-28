@@ -1,55 +1,55 @@
-const ecdsa = require('./ecdsa')
-const hash = require('./hash')
-const curve = require('ecurve').getCurveByName('secp256k1')
-const assert = require('assert')
-const BigInteger = require('bigi')
-const PublicKey = require('./key_public')
-const PrivateKey = require('./key_private')
+const ecdsa = require("./ecdsa");
+const hash = require("./hash");
+const curve = require("ecurve").getCurveByName("secp256k1");
+const assert = require("assert");
+const BigInteger = require("bigi");
+const PublicKey = require("./key_public");
+const PrivateKey = require("./key_private");
 
 class Signature {
-  constructor (r1, s1, i1) {
-    this.r = r1
-    this.s = s1
-    this.i = i1
-    assert.equal(this.r != null, true, 'Missing parameter')
-    assert.equal(this.s != null, true, 'Missing parameter')
-    assert.equal(this.i != null, true, 'Missing parameter')
+  constructor(r1, s1, i1) {
+    this.r = r1;
+    this.s = s1;
+    this.i = i1;
+    assert.equal(this.r != null, true, "Missing parameter");
+    assert.equal(this.s != null, true, "Missing parameter");
+    assert.equal(this.i != null, true, "Missing parameter");
   }
 
-  static fromBuffer (buf) {
-    let i, r, s
-    assert.equal(buf.length, 65, 'Invalid signature length')
-    i = buf.readUInt8(0)
-    assert.equal(i - 27, (i - 27) & 7, 'Invalid signature parameter')
-    r = BigInteger.fromBuffer(buf.slice(1, 33))
-    s = BigInteger.fromBuffer(buf.slice(33))
-    return new Signature(r, s, i)
+  static fromBuffer(buf) {
+    let i, r, s;
+    assert.equal(buf.length, 65, "Invalid signature length");
+    i = buf.readUInt8(0);
+    assert.equal(i - 27, (i - 27) & 7, "Invalid signature parameter");
+    r = BigInteger.fromBuffer(buf.slice(1, 33));
+    s = BigInteger.fromBuffer(buf.slice(33));
+    return new Signature(r, s, i);
   }
 
-  toBuffer () {
-    let buf
-    buf = new Buffer(65)
-    buf.writeUInt8(this.i, 0)
-    this.r.toBuffer(32).copy(buf, 1)
-    this.s.toBuffer(32).copy(buf, 33)
-    return buf
+  toBuffer() {
+    let buf;
+    buf = new Buffer(65);
+    buf.writeUInt8(this.i, 0);
+    this.r.toBuffer(32).copy(buf, 1);
+    this.s.toBuffer(32).copy(buf, 33);
+    return buf;
   }
 
-  recoverPublicKeyFromBuffer (buffer) {
-    return this.recoverPublicKey(hash.sha256(buffer))
+  recoverPublicKeyFromBuffer(buffer) {
+    return this.recoverPublicKey(hash.sha256(buffer));
   }
 
   /**
         @return {PublicKey}
     */
-  recoverPublicKey (sha256_buffer) {
-    let Q, e, i
-    e = BigInteger.fromBuffer(sha256_buffer)
-    i = this.i
-    i -= 27
-    i = i & 3
-    Q = ecdsa.recoverPubKey(curve, e, this, i)
-    return PublicKey.fromPoint(Q)
+  recoverPublicKey(sha256_buffer) {
+    let Q, e, i;
+    e = BigInteger.fromBuffer(sha256_buffer);
+    i = this.i;
+    i -= 27;
+    i = i & 3;
+    Q = ecdsa.recoverPubKey(curve, e, this, i);
+    return PublicKey.fromPoint(Q);
   }
 
   /**
@@ -57,9 +57,9 @@ class Signature {
         @param {PrivateKey} private_key
         @return {Signature}
     */
-  static signBuffer (buf, private_key) {
-    const _hash = hash.sha256(buf)
-    return Signature.signBufferSha256(_hash, private_key)
+  static signBuffer(buf, private_key) {
+    const _hash = hash.sha256(buf);
+    return Signature.signBufferSha256(_hash, private_key);
   }
 
   /** Sign a buffer of exactally 32 bytes in size (sha256(text))
@@ -67,42 +67,42 @@ class Signature {
         @param {PrivateKey} private_key
         @return {Signature}
     */
-  static signBufferSha256 (buf_sha256, private_key) {
+  static signBufferSha256(buf_sha256, private_key) {
     if (buf_sha256.length !== 32 || !Buffer.isBuffer(buf_sha256)) {
-      throw new Error('buf_sha256: 32 byte buffer requred')
+      throw new Error("buf_sha256: 32 byte buffer requred");
     }
-    private_key = toPrivateObj(private_key)
-    assert(private_key, 'private_key required')
+    private_key = toPrivateObj(private_key);
+    assert(private_key, "private_key required");
 
-    let der, e, ecsignature, i, lenR, lenS, nonce
-    i = null
-    nonce = 0
-    e = BigInteger.fromBuffer(buf_sha256)
+    let der, e, ecsignature, i, lenR, lenS, nonce;
+    i = null;
+    nonce = 0;
+    e = BigInteger.fromBuffer(buf_sha256);
     while (true) {
-      ecsignature = ecdsa.sign(curve, buf_sha256, private_key.d, nonce++)
-      der = ecsignature.toDER()
-      lenR = der[3]
-      lenS = der[5 + lenR]
+      ecsignature = ecdsa.sign(curve, buf_sha256, private_key.d, nonce++);
+      der = ecsignature.toDER();
+      lenR = der[3];
+      lenS = der[5 + lenR];
       if (lenR === 32 && lenS === 32) {
         i = ecdsa.calcPubKeyRecoveryParam(
           curve,
           e,
           ecsignature,
           private_key.toPublicKey().Q
-        )
-        i += 4 // compressed
-        i += 27 // compact  //  24 or 27 :( forcing odd-y 2nd key candidate)
-        break
+        );
+        i += 4; // compressed
+        i += 27; // compact  //  24 or 27 :( forcing odd-y 2nd key candidate)
+        break;
       }
       if (nonce % 10 === 0) {
-        console.log('WARN: ' + nonce + ' attempts to find canonical signature')
+        console.log("WARN: " + nonce + " attempts to find canonical signature");
       }
     }
-    return new Signature(ecsignature.r, ecsignature.s, i)
+    return new Signature(ecsignature.r, ecsignature.s, i);
   }
 
-  static sign (string, private_key) {
-    return Signature.signBuffer(new Buffer(string), private_key)
+  static sign(string, private_key) {
+    return Signature.signBuffer(new Buffer(string), private_key);
   }
 
   /**
@@ -110,26 +110,26 @@ class Signature {
         @param {./PublicKey}
         @return {boolean}
     */
-  verifyBuffer (buf, public_key) {
-    const _hash = hash.sha256(buf)
-    return this.verifyHash(_hash, public_key)
+  verifyBuffer(buf, public_key) {
+    const _hash = hash.sha256(buf);
+    return this.verifyHash(_hash, public_key);
   }
 
-  verifyHash (hash, public_key) {
+  verifyHash(hash, public_key) {
     assert.equal(
       hash.length,
       32,
-      'A SHA 256 should be 32 bytes long, instead got ' + hash.length
-    )
+      "A SHA 256 should be 32 bytes long, instead got " + hash.length
+    );
     return ecdsa.verify(
       curve,
       hash,
       {
         r: this.r,
-        s: this.s
+        s: this.s,
       },
       public_key.Q
-    )
+    );
   }
 
   // toByteBuffer() {
@@ -139,26 +139,26 @@ class Signature {
   //     return b.copy(0, b.offset);
   // };
 
-  static fromHex (hex) {
-    return Signature.fromBuffer(new Buffer(hex, 'hex'))
+  static fromHex(hex) {
+    return Signature.fromBuffer(new Buffer(hex, "hex"));
   }
 
-  toHex () {
-    return this.toBuffer().toString('hex')
+  toHex() {
+    return this.toBuffer().toString("hex");
   }
 
-  static signHex (hex, private_key) {
-    let buf
-    buf = new Buffer(hex, 'hex')
-    return Signature.signBuffer(buf, private_key)
+  static signHex(hex, private_key) {
+    let buf;
+    buf = new Buffer(hex, "hex");
+    return Signature.signBuffer(buf, private_key);
   }
 
-  verifyHex (hex, public_key) {
-    let buf
-    buf = new Buffer(hex, 'hex')
-    return this.verifyBuffer(buf, public_key)
+  verifyHex(hex, public_key) {
+    let buf;
+    buf = new Buffer(hex, "hex");
+    return this.verifyBuffer(buf, public_key);
   }
 }
 const toPrivateObj = (o) =>
-  o ? (o.d ? o : PrivateKey.fromWif(o)) : o /* null or undefined */
-module.exports = Signature
+  o ? (o.d ? o : PrivateKey.fromWif(o)) : o; /* null or undefined */
+module.exports = Signature;

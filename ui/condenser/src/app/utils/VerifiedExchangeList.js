@@ -9,7 +9,7 @@ hitbtc-exchange
 poloniex
 upbit-exchange
 `
-  .trim()
-  .split('\n')
+    .trim()
+    .split('\n');
 
-export default list
+export default list;

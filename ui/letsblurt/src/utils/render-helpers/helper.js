@@ -1,25 +1,25 @@
-import xmldom from 'xmldom'
+import xmldom from 'xmldom';
 
 export const createDoc = (html) => {
   if (html.trim() === '') {
-    return null
+    return null;
   }
 
-  const noop = () => {}
+  const noop = () => {};
 
   const parser = new xmldom.DOMParser({
-    errorHandler: { warning: noop, error: noop }
-  })
+    errorHandler: {warning: noop, error: noop},
+  });
 
-  const doc = parser.parseFromString(html, 'text/html')
+  const doc = parser.parseFromString(html, 'text/html');
 
-  return doc
-}
+  return doc;
+};
 
-export const domSerializer = () => new xmldom.XMLSerializer()
+export const domSerializer = () => new xmldom.XMLSerializer();
 
 export const makeEntryCacheKey = (entry) =>
-  `${entry.author}-${entry.permlink}-${entry.last_update}`
+  `${entry.author}-${entry.permlink}-${entry.last_update}`;
 
 export const whiteList = [
   'blurt.world',
@@ -39,5 +39,5 @@ export const whiteList = [
   'travelfeed.io',
   'ulogs.org',
   'hede.io',
-  'weedcash.network'
-]
+  'weedcash.network',
+];

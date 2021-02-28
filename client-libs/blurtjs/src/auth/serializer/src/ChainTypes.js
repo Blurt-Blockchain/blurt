@@ -1,12 +1,12 @@
-let ChainTypes
+let ChainTypes;
 
-module.exports = ChainTypes = {}
+module.exports = ChainTypes = {};
 
 ChainTypes.reserved_spaces = {
   relative_protocol_ids: 0,
   protocol_ids: 1,
-  implementation_ids: 2
-}
+  implementation_ids: 2,
+};
 
 ChainTypes.operations = {
   vote: 0,
@@ -55,11 +55,11 @@ ChainTypes.operations = {
   hardfork: 43,
   comment_payout_update: 44,
   return_vesting_delegation: 45,
-  comment_benefactor_reward: 46
-}
+  comment_benefactor_reward: 46,
+};
 
 // types.hpp
 ChainTypes.object_type = {
   null: 0,
-  base: 1
-}
+  base: 1,
+};

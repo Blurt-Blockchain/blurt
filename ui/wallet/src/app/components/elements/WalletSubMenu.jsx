@@ -1,48 +1,48 @@
-import React from 'react'
-import { Link } from 'react-router'
-import tt from 'counterpart'
+import React from 'react';
+import { Link } from 'react-router';
+import tt from 'counterpart';
 
 export default ({ accountname, isMyAccount }) => {
-  return (
-    <ul className='WalletSubMenu menu'>
-      <li>
-        <Link
-          to={`/@${accountname}/transfers`}
-          activeClassName='active'
-        >
-          {tt('g.balances')}
-        </Link>
-      </li>
-      <li>
-        <Link
-          to={`/@${accountname}/delegations`}
-          activeClassName='active'
-        >
-          {tt('g.delegations')}
-        </Link>
-      </li>
+    return (
+        <ul className="WalletSubMenu menu">
+            <li>
+                <Link
+                    to={`/@${accountname}/transfers`}
+                    activeClassName="active"
+                >
+                    {tt('g.balances')}
+                </Link>
+            </li>
+            <li>
+                <Link
+                    to={`/@${accountname}/delegations`}
+                    activeClassName="active"
+                >
+                    {tt('g.delegations')}
+                </Link>
+            </li>
 
-      {isMyAccount ? (
-        <li>
-          <Link
-            to={`/@${accountname}/permissions`}
-            activeClassName='active'
-          >
-            {tt('g.permissions')}
-          </Link>
-        </li>
-      ) : null}
-      {isMyAccount ? (
-        <li>
-          <Link
-            to={`/@${accountname}/password`}
-            activeClassName='active'
-          >
-            {tt('g.change_password')}
-          </Link>
-        </li>
-      ) : null}
-      {/* {isMyAccount ? (
+            {isMyAccount ? (
+                <li>
+                    <Link
+                        to={`/@${accountname}/permissions`}
+                        activeClassName="active"
+                    >
+                        {tt('g.permissions')}
+                    </Link>
+                </li>
+            ) : null}
+            {isMyAccount ? (
+                <li>
+                    <Link
+                        to={`/@${accountname}/password`}
+                        activeClassName="active"
+                    >
+                        {tt('g.change_password')}
+                    </Link>
+                </li>
+            ) : null}
+            {/* {isMyAccount ? (
                 <li>
                     <Link
                         to={`/@${accountname}/communities`}
@@ -52,6 +52,6 @@ export default ({ accountname, isMyAccount }) => {
                     </Link>
                 </li>
             ) : null} */}
-    </ul>
-  )
-}
+        </ul>
+    );
+};

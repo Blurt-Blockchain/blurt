@@ -1,4 +1,4 @@
 export default `
 `
-  .trim()
-  .split('\n')
+    .trim()
+    .split('\n');

@@ -1,201 +1,201 @@
-import React, { Component } from 'react'
-import { PrivateKey } from '@blurtfoundation/blurtjs/lib/auth/ecc'
-import QRious from 'qrious'
+import React, { Component } from 'react';
+import { PrivateKey } from '@blurtfoundation/blurtjs/lib/auth/ecc';
+import QRious from 'qrious';
 
-function image2canvas (image, bgcolor) {
-  const canvas = document.createElement('canvas')
-  canvas.width = image.width * 32
-  canvas.height = image.height * 32
+function image2canvas(image, bgcolor) {
+    const canvas = document.createElement('canvas');
+    canvas.width = image.width * 32;
+    canvas.height = image.height * 32;
 
-  const ctx = canvas.getContext('2d')
-  ctx.fillStyle = bgcolor
-  ctx.fillRect(0.0, 0.0, canvas.width, canvas.height)
-  ctx.drawImage(image, 0, 0, canvas.width, canvas.height)
+    const ctx = canvas.getContext('2d');
+    ctx.fillStyle = bgcolor;
+    ctx.fillRect(0.0, 0.0, canvas.width, canvas.height);
+    ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
 
-  return canvas
+    return canvas;
 }
 
 export default class PdfDownload extends Component {
-  constructor (props) {
-    super(props)
-    this.downloadPdf = this.downloadPdf.bind(this)
-    this.state = { loaded: false }
-  }
+    constructor(props) {
+        super(props);
+        this.downloadPdf = this.downloadPdf.bind(this);
+        this.state = { loaded: false };
+    }
 
-  // Generate a list of public and private keys from a master password
-  generateKeys (name, password) {
-    return ['active', 'owner', 'posting', 'memo'].reduce(
-      (accum, kind, i) => {
-        const rawKey = PrivateKey.fromSeed(`${name}${kind}${password}`)
-        accum[`${kind}Private`] = rawKey.toString()
-        accum[`${kind}Public`] = rawKey.toPublicKey().toString()
-        return accum
-      },
-      { master: password }
-    )
-  }
+    // Generate a list of public and private keys from a master password
+    generateKeys(name, password) {
+        return ['active', 'owner', 'posting', 'memo'].reduce(
+            (accum, kind, i) => {
+                const rawKey = PrivateKey.fromSeed(`${name}${kind}${password}`);
+                accum[`${kind}Private`] = rawKey.toString();
+                accum[`${kind}Public`] = rawKey.toPublicKey().toString();
+                return accum;
+            },
+            { master: password }
+        );
+    }
 
-  downloadPdf () {
-    const keys = this.generateKeys(this.props.name, this.props.password)
-    const filename = this.props.name + '_steem_keys.pdf'
-    this.renderPdf(keys, filename).save(filename)
-  }
+    downloadPdf() {
+        const keys = this.generateKeys(this.props.name, this.props.password);
+        const filename = this.props.name + '_steem_keys.pdf';
+        this.renderPdf(keys, filename).save(filename);
+    }
 
-  // Generate the canvas, which will be generated into a PDF
-  async componentDidMount () {
-    // Load jsPDF. It does not work with webpack, so it must be loaded here.
-    // On the plus side, it is only loaded when the warning page is shown.
-    this.setState({ loaded: false })
-    await new Promise((res, rej) => {
-      const s = document.createElement('script')
-      s.type = 'text/javascript'
-      s.src = 'https://static.blurt.world/jspdf.min.js'
-      document.body.appendChild(s)
-      s.addEventListener('load', res)
-    })
+    // Generate the canvas, which will be generated into a PDF
+    async componentDidMount() {
+        // Load jsPDF. It does not work with webpack, so it must be loaded here.
+        // On the plus side, it is only loaded when the warning page is shown.
+        this.setState({ loaded: false });
+        await new Promise((res, rej) => {
+            const s = document.createElement('script');
+            s.type = 'text/javascript';
+            s.src = 'https://static.blurt.world/jspdf.min.js';
+            document.body.appendChild(s);
+            s.addEventListener('load', res);
+        });
 
-    await new Promise((res, rej) => {
-      const s = document.createElement('script')
-      s.type = 'text/javascript'
-      s.src = 'https://static.blurt.world/Roboto-Regular-normal.js'
-      document.body.appendChild(s)
-      s.addEventListener('load', res)
-    })
+        await new Promise((res, rej) => {
+            const s = document.createElement('script');
+            s.type = 'text/javascript';
+            s.src = 'https://static.blurt.world/Roboto-Regular-normal.js';
+            document.body.appendChild(s);
+            s.addEventListener('load', res);
+        });
 
-    await new Promise((res, rej) => {
-      const s = document.createElement('script')
-      s.type = 'text/javascript'
-      s.src = 'https://static.blurt.world/Roboto-Bold-normal.js'
-      document.body.appendChild(s)
-      s.addEventListener('load', res)
-    })
+        await new Promise((res, rej) => {
+            const s = document.createElement('script');
+            s.type = 'text/javascript';
+            s.src = 'https://static.blurt.world/Roboto-Bold-normal.js';
+            document.body.appendChild(s);
+            s.addEventListener('load', res);
+        });
 
-    await new Promise((res, rej) => {
-      const s = document.createElement('script')
-      s.type = 'text/javascript'
-      s.src = 'https://static.blurt.world/RobotoMono-Regular-normal.js'
-      document.body.appendChild(s)
-      s.addEventListener('load', res)
-    })
-    this.setState({ loaded: true })
-  }
+        await new Promise((res, rej) => {
+            const s = document.createElement('script');
+            s.type = 'text/javascript';
+            s.src = 'https://static.blurt.world/RobotoMono-Regular-normal.js';
+            document.body.appendChild(s);
+            s.addEventListener('load', res);
+        });
+        this.setState({ loaded: true });
+    }
 
-  render () {
-    return (
-      <div className='pdf-download'>
-        <img
-          src='/images/pdf-logo.svg'
-          style={{ display: 'none' }}
-          className='pdf-logo'
-        />
-        {this.state.loaded && (
-          <button
-            style={{ display: 'block' }}
-            onClick={(e) => {
-              this.downloadPdf()
-              e.preventDefault()
-            }}
-          >
-            {this.props.label}
-          </button>
-        )}
-      </div>
-    )
-  }
+    render() {
+        return (
+            <div className="pdf-download">
+                <img
+                    src="/images/pdf-logo.svg"
+                    style={{ display: 'none' }}
+                    className="pdf-logo"
+                />
+                {this.state.loaded && (
+                    <button
+                        style={{ display: 'block' }}
+                        onClick={(e) => {
+                            this.downloadPdf();
+                            e.preventDefault();
+                        }}
+                    >
+                        {this.props.label}
+                    </button>
+                )}
+            </div>
+        );
+    }
 
-  renderText (
-    ctx,
-    text,
-    { scale, x, y, lineHeight, maxWidth, color, fontSize, font }
-  ) {
-    const textLines = ctx
-      .setFont(font)
-      .setFontSize(fontSize * scale)
-      .setTextColor(color)
-      .splitTextToSize(text, maxWidth)
-    ctx.text(textLines, x, y + fontSize)
-    return textLines.length * fontSize * lineHeight
-  }
+    renderText(
+        ctx,
+        text,
+        { scale, x, y, lineHeight, maxWidth, color, fontSize, font }
+    ) {
+        const textLines = ctx
+            .setFont(font)
+            .setFontSize(fontSize * scale)
+            .setTextColor(color)
+            .splitTextToSize(text, maxWidth);
+        ctx.text(textLines, x, y + fontSize);
+        return textLines.length * fontSize * lineHeight;
+    }
 
-  drawFilledRect (ctx, x, y, w, h, { color }) {
-    ctx.setDrawColor(0)
-    ctx.setFillColor(color)
-    ctx.rect(x, y, w, h, 'F')
-  }
+    drawFilledRect(ctx, x, y, w, h, { color }) {
+        ctx.setDrawColor(0);
+        ctx.setFillColor(color);
+        ctx.rect(x, y, w, h, 'F');
+    }
 
-  drawStrokedRect (ctx, x, y, w, h, { color, lineWidth }) {
-    ctx.setLineWidth(lineWidth)
-    ctx.setDrawColor(color)
-    ctx.rect(x, y, w, h)
-  }
+    drawStrokedRect(ctx, x, y, w, h, { color, lineWidth }) {
+        ctx.setLineWidth(lineWidth);
+        ctx.setDrawColor(color);
+        ctx.rect(x, y, w, h);
+    }
 
-  drawImageFromCanvas (ctx, selector, x, y, w, h, bgcolor) {
-    const canvas = image2canvas(document.querySelector(selector), bgcolor) // svg -> jpg
-    ctx.addImage(canvas, 'JPEG', x, y, w, h)
-  }
+    drawImageFromCanvas(ctx, selector, x, y, w, h, bgcolor) {
+        const canvas = image2canvas(document.querySelector(selector), bgcolor); // svg -> jpg
+        ctx.addImage(canvas, 'JPEG', x, y, w, h);
+    }
 
-  drawQr (ctx, data, x, y, size, bgcolor) {
-    const canvas = document.createElement('canvas')
-    const qr = new QRious({
-      element: canvas,
-      size: 250,
-      value: data,
-      background: bgcolor
-    })
-    ctx.addImage(canvas, 'PNG', x, y, size, size)
-  }
+    drawQr(ctx, data, x, y, size, bgcolor) {
+        const canvas = document.createElement('canvas');
+        const qr = new QRious({
+            element: canvas,
+            size: 250,
+            value: data,
+            background: bgcolor,
+        });
+        ctx.addImage(canvas, 'PNG', x, y, size, size);
+    }
 
-  renderPdf (keys, filename) {
-    const widthInches = this.props.widthInches // 8.5,
-    const lineHeight = 1.2
-    const margin = 0.3
-    const maxLineWidth = widthInches - margin * 2.0
-    const fontSize = 24
-    const scale = 72 // ptsPerInch
-    const oneLineHeight = (fontSize * lineHeight) / scale
-    const qrSize = 1.1
+    renderPdf(keys, filename) {
+        const widthInches = this.props.widthInches; // 8.5,
+        const lineHeight = 1.2;
+        const margin = 0.3;
+        const maxLineWidth = widthInches - margin * 2.0;
+        const fontSize = 24;
+        const scale = 72; // ptsPerInch
+        const oneLineHeight = (fontSize * lineHeight) / scale;
+        const qrSize = 1.1;
 
-    const ctx = new jsPDF({
-      orientation: 'portrait',
-      unit: 'in',
-      lineHeight: lineHeight,
-      format: 'letter'
-    }).setProperties({ title: filename })
+        const ctx = new jsPDF({
+            orientation: 'portrait',
+            unit: 'in',
+            lineHeight: lineHeight,
+            format: 'letter',
+        }).setProperties({ title: filename });
 
-    let offset = 0.0
-    let sectionStart = 0
-    let sectionHeight = 0
+        let offset = 0.0;
+        let sectionStart = 0;
+        let sectionHeight = 0;
 
-    // HEADER
+        // HEADER
 
-    sectionHeight = 1.29
-    this.drawFilledRect(ctx, 0.0, 0.0, widthInches, sectionHeight, {
-      color: '#1f0fd1'
-    })
+        sectionHeight = 1.29;
+        this.drawFilledRect(ctx, 0.0, 0.0, widthInches, sectionHeight, {
+            color: '#1f0fd1',
+        });
 
-    this.drawImageFromCanvas(
-      ctx,
-      '.pdf-logo',
-      widthInches - margin - 1.9,
-      0.36,
-      0.98 * 1.8,
-      0.3 * 1.8,
-      '#1F0FD1'
-    )
+        this.drawImageFromCanvas(
+            ctx,
+            '.pdf-logo',
+            widthInches - margin - 1.9,
+            0.36,
+            0.98 * 1.8,
+            0.3 * 1.8,
+            '#1F0FD1'
+        );
 
-    offset += 0.265
-    offset += this.renderText(ctx, `Blurt keys for @${this.props.name}`, {
-      scale,
-      x: margin,
-      y: offset,
-      lineHeight: 1.0,
-      maxWidth: maxLineWidth,
-      color: 'white',
-      fontSize: 0.36,
-      font: 'Roboto-Bold'
-    })
+        offset += 0.265;
+        offset += this.renderText(ctx, `Blurt keys for @${this.props.name}`, {
+            scale,
+            x: margin,
+            y: offset,
+            lineHeight: 1.0,
+            maxWidth: maxLineWidth,
+            color: 'white',
+            fontSize: 0.36,
+            font: 'Roboto-Bold',
+        });
 
-    /*
+        /*
         offset += 0.1;
         offset += this.renderText(
             ctx,
@@ -213,28 +213,28 @@ export default class PdfDownload extends Component {
         );
         */
 
-    offset += 0.15
-    offset += this.renderText(
-      ctx,
-      'Generated at ' +
+        offset += 0.15;
+        offset += this.renderText(
+            ctx,
+            'Generated at ' +
                 new Date().toISOString().replace(/\.\d{3}/, '') +
                 ' by blurt.blog',
-      {
-        scale,
-        x: margin,
-        y: offset,
-        lineHeight: 1.0,
-        maxWidth: maxLineWidth,
-        color: 'white',
-        fontSize: 0.14,
-        font: 'Roboto-Bold'
-      }
-    )
+            {
+                scale,
+                x: margin,
+                y: offset,
+                lineHeight: 1.0,
+                maxWidth: maxLineWidth,
+                color: 'white',
+                fontSize: 0.14,
+                font: 'Roboto-Bold',
+            }
+        );
 
-    offset = sectionStart + sectionHeight
+        offset = sectionStart + sectionHeight;
 
-    // BODY
-    /*
+        // BODY
+        /*
         offset += 0.2;
         offset += this.renderText(
             ctx,
@@ -257,484 +257,484 @@ export default class PdfDownload extends Component {
             }
         );
 */
-    // PRIVATE KEYS INTRO
+        // PRIVATE KEYS INTRO
 
-    offset += 0.2
-    offset += this.renderText(ctx, 'Your Private Keys', {
-      scale,
-      x: margin,
-      y: offset,
-      lineHeight: lineHeight,
-      maxWidth: maxLineWidth,
-      color: 'black',
-      fontSize: 0.18,
-      font: 'Roboto-Bold'
-    })
+        offset += 0.2;
+        offset += this.renderText(ctx, 'Your Private Keys', {
+            scale,
+            x: margin,
+            y: offset,
+            lineHeight: lineHeight,
+            maxWidth: maxLineWidth,
+            color: 'black',
+            fontSize: 0.18,
+            font: 'Roboto-Bold',
+        });
 
-    offset += 0.1
-    offset += this.renderText(
-      ctx,
-      'Instead of password based authentication, blockchain accounts ' +
+        offset += 0.1;
+        offset += this.renderText(
+            ctx,
+            'Instead of password based authentication, blockchain accounts ' +
                 'have a set of public and private key pairs that are used for ' +
                 'authentication as well as the encryption and decryption of ' +
                 'data. Do not share this file with anyone.',
-      {
-        scale,
-        x: margin,
-        y: offset,
-        lineHeight: lineHeight,
-        maxWidth: maxLineWidth,
-        color: 'black',
-        fontSize: 0.14,
-        font: 'Roboto-Regular'
-      }
-    )
-    offset += 0.2
+            {
+                scale,
+                x: margin,
+                y: offset,
+                lineHeight: lineHeight,
+                maxWidth: maxLineWidth,
+                color: 'black',
+                fontSize: 0.14,
+                font: 'Roboto-Regular',
+            }
+        );
+        offset += 0.2;
 
-    // POSTING KEY
+        // POSTING KEY
 
-    sectionStart = offset
-    sectionHeight = qrSize + 0.15 * 2
-    this.drawFilledRect(ctx, 0.0, offset, widthInches, sectionHeight, {
-      color: 'f4f4f4'
-    })
+        sectionStart = offset;
+        sectionHeight = qrSize + 0.15 * 2;
+        this.drawFilledRect(ctx, 0.0, offset, widthInches, sectionHeight, {
+            color: 'f4f4f4',
+        });
 
-    offset += 0.15
-    this.drawQr(
-      ctx,
-      'blurt://import/wif/' +
+        offset += 0.15;
+        this.drawQr(
+            ctx,
+            'blurt://import/wif/' +
                 keys.postingPrivate +
                 '/account/' +
                 this.props.name,
-      margin,
-      offset,
-      qrSize,
-      '#f4f4f4'
-    )
+            margin,
+            offset,
+            qrSize,
+            '#f4f4f4'
+        );
 
-    offset += 0.1
-    offset += this.renderText(ctx, 'Private Posting Key', {
-      scale,
-      x: margin + qrSize + 0.1,
-      y: offset,
-      lineHeight: lineHeight,
-      maxWidth: maxLineWidth,
-      color: 'black',
-      fontSize: 0.14,
-      font: 'Roboto-Bold'
-    })
+        offset += 0.1;
+        offset += this.renderText(ctx, 'Private Posting Key', {
+            scale,
+            x: margin + qrSize + 0.1,
+            y: offset,
+            lineHeight: lineHeight,
+            maxWidth: maxLineWidth,
+            color: 'black',
+            fontSize: 0.14,
+            font: 'Roboto-Bold',
+        });
 
-    offset += this.renderText(
-      ctx,
-      'Used to log in to apps such as blurt.world and perform social ' +
+        offset += this.renderText(
+            ctx,
+            'Used to log in to apps such as blurt.world and perform social ' +
                 'actions such as posting, commenting, and voting.',
-      {
-        scale,
-        x: margin + qrSize + 0.1,
-        y: offset,
-        lineHeight: lineHeight,
-        maxWidth: maxLineWidth - (qrSize + 0.1),
-        color: 'black',
-        fontSize: 0.14,
-        font: 'Roboto-Regular'
-      }
-    )
+            {
+                scale,
+                x: margin + qrSize + 0.1,
+                y: offset,
+                lineHeight: lineHeight,
+                maxWidth: maxLineWidth - (qrSize + 0.1),
+                color: 'black',
+                fontSize: 0.14,
+                font: 'Roboto-Regular',
+            }
+        );
 
-    offset += 0.075
-    offset += this.renderText(ctx, keys.postingPrivate, {
-      scale,
-      x: margin + qrSize + 0.1,
-      y: sectionStart + sectionHeight - 0.6,
-      lineHeight: lineHeight,
-      maxWidth: maxLineWidth,
-      color: 'black',
-      fontSize: 0.14,
-      font: 'RobotoMono-Regular'
-    })
-    offset += 0.2
-    offset = sectionStart + sectionHeight
+        offset += 0.075;
+        offset += this.renderText(ctx, keys.postingPrivate, {
+            scale,
+            x: margin + qrSize + 0.1,
+            y: sectionStart + sectionHeight - 0.6,
+            lineHeight: lineHeight,
+            maxWidth: maxLineWidth,
+            color: 'black',
+            fontSize: 0.14,
+            font: 'RobotoMono-Regular',
+        });
+        offset += 0.2;
+        offset = sectionStart + sectionHeight;
 
-    // MEMO KEY
+        // MEMO KEY
 
-    sectionStart = offset
-    sectionHeight = qrSize + 0.15 * 2
-    // this.drawFilledRect(ctx, 0.0, offset, widthInches, sectionHeight, {color: '#f4f4f4'});
+        sectionStart = offset;
+        sectionHeight = qrSize + 0.15 * 2;
+        // this.drawFilledRect(ctx, 0.0, offset, widthInches, sectionHeight, {color: '#f4f4f4'});
 
-    offset += 0.15
-    this.drawQr(
-      ctx,
-      'blurt://import/wif/' +
+        offset += 0.15;
+        this.drawQr(
+            ctx,
+            'blurt://import/wif/' +
                 keys.memoPrivate +
                 '/account/' +
                 this.props.name,
-      margin,
-      offset,
-      qrSize,
-      '#ffffff'
-    )
+            margin,
+            offset,
+            qrSize,
+            '#ffffff'
+        );
 
-    offset += 0.1
+        offset += 0.1;
 
-    offset += this.renderText(ctx, 'Private Memo Key', {
-      scale,
-      x: margin + qrSize + 0.1,
-      y: offset,
-      lineHeight: lineHeight,
-      maxWidth: maxLineWidth,
-      color: 'black',
-      fontSize: 0.14,
-      font: 'Roboto-Bold'
-    })
+        offset += this.renderText(ctx, 'Private Memo Key', {
+            scale,
+            x: margin + qrSize + 0.1,
+            y: offset,
+            lineHeight: lineHeight,
+            maxWidth: maxLineWidth,
+            color: 'black',
+            fontSize: 0.14,
+            font: 'Roboto-Bold',
+        });
 
-    offset += this.renderText(
-      ctx,
-      'Used to decrypt private transfer memos.',
-      {
-        scale,
-        x: margin + qrSize + 0.1,
-        y: offset,
-        lineHeight: lineHeight,
-        maxWidth: maxLineWidth - (qrSize + 0.1),
-        color: 'black',
-        fontSize: 0.14,
-        font: 'Roboto-Regular'
-      }
-    )
+        offset += this.renderText(
+            ctx,
+            'Used to decrypt private transfer memos.',
+            {
+                scale,
+                x: margin + qrSize + 0.1,
+                y: offset,
+                lineHeight: lineHeight,
+                maxWidth: maxLineWidth - (qrSize + 0.1),
+                color: 'black',
+                fontSize: 0.14,
+                font: 'Roboto-Regular',
+            }
+        );
 
-    offset += 0.075
-    offset += this.renderText(ctx, keys.memoPrivate, {
-      scale,
-      x: margin + qrSize + 0.1,
-      y: sectionStart + sectionHeight - 0.6,
-      lineHeight: lineHeight,
-      maxWidth: maxLineWidth,
-      color: 'black',
-      fontSize: 0.14,
-      font: 'RobotoMono-Regular'
-    })
+        offset += 0.075;
+        offset += this.renderText(ctx, keys.memoPrivate, {
+            scale,
+            x: margin + qrSize + 0.1,
+            y: sectionStart + sectionHeight - 0.6,
+            lineHeight: lineHeight,
+            maxWidth: maxLineWidth,
+            color: 'black',
+            fontSize: 0.14,
+            font: 'RobotoMono-Regular',
+        });
 
-    offset += 0.1
-    offset = sectionStart + sectionHeight
+        offset += 0.1;
+        offset = sectionStart + sectionHeight;
 
-    // ACTIVE KEY
+        // ACTIVE KEY
 
-    sectionStart = offset
-    sectionHeight = qrSize + 0.15 * 2
-    this.drawFilledRect(ctx, 0.0, offset, widthInches, sectionHeight, {
-      color: '#f4f4f4'
-    })
+        sectionStart = offset;
+        sectionHeight = qrSize + 0.15 * 2;
+        this.drawFilledRect(ctx, 0.0, offset, widthInches, sectionHeight, {
+            color: '#f4f4f4',
+        });
 
-    offset += 0.15
-    this.drawQr(
-      ctx,
-      'blurt://import/wif/' +
+        offset += 0.15;
+        this.drawQr(
+            ctx,
+            'blurt://import/wif/' +
                 keys.activePrivate +
                 '/account/' +
                 this.props.name,
-      margin,
-      offset,
-      qrSize,
-      '#f4f4f4'
-    )
+            margin,
+            offset,
+            qrSize,
+            '#f4f4f4'
+        );
 
-    offset += 0.1
+        offset += 0.1;
 
-    offset += this.renderText(ctx, 'Private Active Key', {
-      scale,
-      x: margin + qrSize + 0.1,
-      y: offset,
-      lineHeight: lineHeight,
-      maxWidth: maxLineWidth,
-      color: 'black',
-      fontSize: 0.14,
-      font: 'Roboto-Bold'
-    })
+        offset += this.renderText(ctx, 'Private Active Key', {
+            scale,
+            x: margin + qrSize + 0.1,
+            y: offset,
+            lineHeight: lineHeight,
+            maxWidth: maxLineWidth,
+            color: 'black',
+            fontSize: 0.14,
+            font: 'Roboto-Bold',
+        });
 
-    offset += this.renderText(
-      ctx,
-      'Used for monetary and wallet related actions, such as ' +
+        offset += this.renderText(
+            ctx,
+            'Used for monetary and wallet related actions, such as ' +
                 'transferring tokens or powering BLURT up and down.',
-      {
-        scale,
-        x: margin + qrSize + 0.1,
-        y: offset,
-        lineHeight: lineHeight,
-        maxWidth: maxLineWidth - (qrSize + 0.1),
-        color: 'black',
-        fontSize: 0.14,
-        font: 'Roboto-Regular'
-      }
-    )
+            {
+                scale,
+                x: margin + qrSize + 0.1,
+                y: offset,
+                lineHeight: lineHeight,
+                maxWidth: maxLineWidth - (qrSize + 0.1),
+                color: 'black',
+                fontSize: 0.14,
+                font: 'Roboto-Regular',
+            }
+        );
 
-    offset += 0.075
-    offset += this.renderText(ctx, keys.activePrivate, {
-      scale,
-      x: margin + qrSize + 0.1,
-      y: sectionStart + sectionHeight - 0.6,
-      lineHeight: lineHeight,
-      maxWidth: maxLineWidth,
-      color: 'black',
-      fontSize: 0.14,
-      font: 'RobotoMono-Regular'
-    })
-    offset += 0.2
+        offset += 0.075;
+        offset += this.renderText(ctx, keys.activePrivate, {
+            scale,
+            x: margin + qrSize + 0.1,
+            y: sectionStart + sectionHeight - 0.6,
+            lineHeight: lineHeight,
+            maxWidth: maxLineWidth,
+            color: 'black',
+            fontSize: 0.14,
+            font: 'RobotoMono-Regular',
+        });
+        offset += 0.2;
 
-    offset = sectionStart + sectionHeight
+        offset = sectionStart + sectionHeight;
 
-    // OWNER KEY
+        // OWNER KEY
 
-    sectionStart = offset
-    sectionHeight = qrSize + 0.15 * 2
-    // this.drawFilledRect(ctx, 0.0, offset, widthInches, sectionHeight, {color: '#f4f4f4'});
+        sectionStart = offset;
+        sectionHeight = qrSize + 0.15 * 2;
+        // this.drawFilledRect(ctx, 0.0, offset, widthInches, sectionHeight, {color: '#f4f4f4'});
 
-    offset += 0.15
-    this.drawQr(
-      ctx,
-      'blurt://import/wif/' +
+        offset += 0.15;
+        this.drawQr(
+            ctx,
+            'blurt://import/wif/' +
                 keys.ownerPrivate +
                 '/account/' +
                 this.props.name,
-      margin,
-      offset,
-      qrSize,
-      '#ffffff'
-    )
+            margin,
+            offset,
+            qrSize,
+            '#ffffff'
+        );
 
-    offset += 0.1
+        offset += 0.1;
 
-    offset += this.renderText(ctx, 'Private Owner Key', {
-      scale,
-      x: margin + qrSize + 0.1,
-      y: offset,
-      lineHeight: lineHeight,
-      maxWidth: maxLineWidth - qrSize - 0.1,
-      color: 'black',
-      fontSize: 0.14,
-      font: 'Roboto-Bold'
-    })
+        offset += this.renderText(ctx, 'Private Owner Key', {
+            scale,
+            x: margin + qrSize + 0.1,
+            y: offset,
+            lineHeight: lineHeight,
+            maxWidth: maxLineWidth - qrSize - 0.1,
+            color: 'black',
+            fontSize: 0.14,
+            font: 'Roboto-Bold',
+        });
 
-    offset += this.renderText(
-      ctx,
-      'This key is used to reset all your other keys. It is ' +
+        offset += this.renderText(
+            ctx,
+            'This key is used to reset all your other keys. It is ' +
                 'recommended to keep it offline at all times. If your ' +
                 'account is compromised, use this key to recover it ' +
                 'within 30 days at https://blurtwallet.com.',
-      {
-        scale,
-        x: margin + qrSize + 0.1,
-        y: offset,
-        lineHeight: lineHeight,
-        maxWidth: maxLineWidth - (qrSize + 0.1),
-        color: 'black',
-        fontSize: 0.14,
-        font: 'Roboto-Regular'
-      }
-    )
+            {
+                scale,
+                x: margin + qrSize + 0.1,
+                y: offset,
+                lineHeight: lineHeight,
+                maxWidth: maxLineWidth - (qrSize + 0.1),
+                color: 'black',
+                fontSize: 0.14,
+                font: 'Roboto-Regular',
+            }
+        );
 
-    offset += 0.075
-    offset += this.renderText(ctx, keys.ownerPrivate, {
-      scale,
-      x: margin + qrSize + 0.1,
-      y: sectionStart + sectionHeight - 0.6,
-      lineHeight: lineHeight,
-      maxWidth: maxLineWidth - qrSize - 0.1,
-      color: 'black',
-      fontSize: 0.14,
-      font: 'RobotoMono-Regular'
-    })
+        offset += 0.075;
+        offset += this.renderText(ctx, keys.ownerPrivate, {
+            scale,
+            x: margin + qrSize + 0.1,
+            y: sectionStart + sectionHeight - 0.6,
+            lineHeight: lineHeight,
+            maxWidth: maxLineWidth - qrSize - 0.1,
+            color: 'black',
+            fontSize: 0.14,
+            font: 'RobotoMono-Regular',
+        });
 
-    offset = sectionStart + sectionHeight
+        offset = sectionStart + sectionHeight;
 
-    // MASTER PASSWORD
+        // MASTER PASSWORD
 
-    sectionHeight = 1
-    sectionStart = offset
-    this.drawFilledRect(ctx, 0.0, offset, widthInches, sectionHeight, {
-      color: '#f4f4f4'
-    })
+        sectionHeight = 1;
+        sectionStart = offset;
+        this.drawFilledRect(ctx, 0.0, offset, widthInches, sectionHeight, {
+            color: '#f4f4f4',
+        });
 
-    offset += 0.2
-    offset += this.renderText(ctx, ['Master Password'].join(''), {
-      scale,
-      x: margin,
-      y: offset,
-      lineHeight: lineHeight,
-      maxWidth: maxLineWidth,
-      color: 'black',
-      fontSize: 0.14,
-      font: 'Roboto-Bold'
-    })
+        offset += 0.2;
+        offset += this.renderText(ctx, ['Master Password'].join(''), {
+            scale,
+            x: margin,
+            y: offset,
+            lineHeight: lineHeight,
+            maxWidth: maxLineWidth,
+            color: 'black',
+            fontSize: 0.14,
+            font: 'Roboto-Bold',
+        });
 
-    offset += this.renderText(
-      ctx,
-      'The seed password used to generate this document. ' +
+        offset += this.renderText(
+            ctx,
+            'The seed password used to generate this document. ' +
                 'Do not share this key.',
-      {
-        scale,
-        x: margin,
-        y: offset,
-        lineHeight: lineHeight,
-        maxWidth: maxLineWidth,
-        color: 'black',
-        fontSize: 0.14,
-        font: 'Roboto-Regular'
-      }
-    )
+            {
+                scale,
+                x: margin,
+                y: offset,
+                lineHeight: lineHeight,
+                maxWidth: maxLineWidth,
+                color: 'black',
+                fontSize: 0.14,
+                font: 'Roboto-Regular',
+            }
+        );
 
-    offset += 0.075
-    offset += this.renderText(ctx, keys.master, {
-      scale,
-      x: margin,
-      y: offset,
-      lineHeight: lineHeight,
-      maxWidth: maxLineWidth,
-      color: 'black',
-      fontSize: 0.14,
-      font: 'RobotoMono-Regular'
-    })
+        offset += 0.075;
+        offset += this.renderText(ctx, keys.master, {
+            scale,
+            x: margin,
+            y: offset,
+            lineHeight: lineHeight,
+            maxWidth: maxLineWidth,
+            color: 'black',
+            fontSize: 0.14,
+            font: 'RobotoMono-Regular',
+        });
 
-    offset = sectionStart + sectionHeight
+        offset = sectionStart + sectionHeight;
 
-    // PUBLIC KEYS INTRO
+        // PUBLIC KEYS INTRO
 
-    sectionStart = offset
-    sectionHeight = 1.0
-    // this.drawFilledRect(ctx, 0.0, offset, widthInches, sectionHeight, {color: '#f4f4f4'});
+        sectionStart = offset;
+        sectionHeight = 1.0;
+        // this.drawFilledRect(ctx, 0.0, offset, widthInches, sectionHeight, {color: '#f4f4f4'});
 
-    offset += 0.1
-    offset += this.renderText(ctx, 'Your Public Keys', {
-      scale,
-      x: margin,
-      y: offset,
-      lineHeight: lineHeight,
-      maxWidth: maxLineWidth,
-      color: 'black',
-      fontSize: 0.18,
-      font: 'Roboto-Bold'
-    })
+        offset += 0.1;
+        offset += this.renderText(ctx, 'Your Public Keys', {
+            scale,
+            x: margin,
+            y: offset,
+            lineHeight: lineHeight,
+            maxWidth: maxLineWidth,
+            color: 'black',
+            fontSize: 0.18,
+            font: 'Roboto-Bold',
+        });
 
-    offset += 0.1
-    offset += this.renderText(
-      ctx,
-      'Public keys are associated with usernames and are used to ' +
+        offset += 0.1;
+        offset += this.renderText(
+            ctx,
+            'Public keys are associated with usernames and are used to ' +
                 'encrypt and verify messages. Your public keys are not required ' +
                 'for login. You can view these anytime at: https://steemd.com/@' +
                 this.props.name,
-      {
-        scale,
-        x: margin,
-        y: offset,
-        lineHeight: lineHeight,
-        maxWidth: maxLineWidth,
-        color: 'black',
-        fontSize: 0.15,
-        font: 'Roboto-Regular'
-      }
-    )
+            {
+                scale,
+                x: margin,
+                y: offset,
+                lineHeight: lineHeight,
+                maxWidth: maxLineWidth,
+                color: 'black',
+                fontSize: 0.15,
+                font: 'Roboto-Regular',
+            }
+        );
 
-    offset = sectionStart + sectionHeight
+        offset = sectionStart + sectionHeight;
 
-    // PUBLIC KEYS
+        // PUBLIC KEYS
 
-    this.renderText(ctx, 'Posting Public', {
-      scale,
-      x: margin,
-      y: offset,
-      lineHeight: lineHeight,
-      maxWidth: maxLineWidth,
-      color: 'black',
-      fontSize: 0.14,
-      font: 'Roboto-Bold'
-    })
+        this.renderText(ctx, 'Posting Public', {
+            scale,
+            x: margin,
+            y: offset,
+            lineHeight: lineHeight,
+            maxWidth: maxLineWidth,
+            color: 'black',
+            fontSize: 0.14,
+            font: 'Roboto-Bold',
+        });
 
-    offset += this.renderText(ctx, keys.postingPublic, {
-      scale,
-      x: 1.25,
-      y: offset,
-      lineHeight: lineHeight,
-      maxWidth: maxLineWidth,
-      color: 'black',
-      fontSize: 0.14,
-      font: 'RobotoMono-Regular'
-    })
+        offset += this.renderText(ctx, keys.postingPublic, {
+            scale,
+            x: 1.25,
+            y: offset,
+            lineHeight: lineHeight,
+            maxWidth: maxLineWidth,
+            color: 'black',
+            fontSize: 0.14,
+            font: 'RobotoMono-Regular',
+        });
 
-    this.renderText(ctx, 'Memo Public', {
-      scale,
-      x: margin,
-      y: offset,
-      lineHeight: lineHeight,
-      maxWidth: maxLineWidth,
-      color: 'black',
-      fontSize: 0.14,
-      font: 'Roboto-Bold'
-    })
+        this.renderText(ctx, 'Memo Public', {
+            scale,
+            x: margin,
+            y: offset,
+            lineHeight: lineHeight,
+            maxWidth: maxLineWidth,
+            color: 'black',
+            fontSize: 0.14,
+            font: 'Roboto-Bold',
+        });
 
-    offset += this.renderText(ctx, keys.memoPublic, {
-      scale,
-      x: 1.25,
-      y: offset,
-      lineHeight: lineHeight,
-      maxWidth: maxLineWidth,
-      color: 'black',
-      fontSize: 0.14,
-      font: 'RobotoMono-Regular'
-    })
+        offset += this.renderText(ctx, keys.memoPublic, {
+            scale,
+            x: 1.25,
+            y: offset,
+            lineHeight: lineHeight,
+            maxWidth: maxLineWidth,
+            color: 'black',
+            fontSize: 0.14,
+            font: 'RobotoMono-Regular',
+        });
 
-    this.renderText(ctx, 'Active Public', {
-      scale,
-      x: margin,
-      y: offset,
-      lineHeight: lineHeight,
-      maxWidth: maxLineWidth,
-      color: 'black',
-      fontSize: 0.14,
-      font: 'Roboto-Bold'
-    })
+        this.renderText(ctx, 'Active Public', {
+            scale,
+            x: margin,
+            y: offset,
+            lineHeight: lineHeight,
+            maxWidth: maxLineWidth,
+            color: 'black',
+            fontSize: 0.14,
+            font: 'Roboto-Bold',
+        });
 
-    offset += this.renderText(ctx, keys.activePublic, {
-      scale,
-      x: 1.25,
-      y: offset,
-      lineHeight: lineHeight,
-      maxWidth: maxLineWidth,
-      color: 'black',
-      fontSize: 0.14,
-      font: 'RobotoMono-Regular'
-    })
+        offset += this.renderText(ctx, keys.activePublic, {
+            scale,
+            x: 1.25,
+            y: offset,
+            lineHeight: lineHeight,
+            maxWidth: maxLineWidth,
+            color: 'black',
+            fontSize: 0.14,
+            font: 'RobotoMono-Regular',
+        });
 
-    this.renderText(ctx, 'Owner Public', {
-      scale,
-      x: margin,
-      y: offset,
-      lineHeight: lineHeight,
-      maxWidth: maxLineWidth,
-      color: 'black',
-      fontSize: 0.14,
-      font: 'Roboto-Bold'
-    })
+        this.renderText(ctx, 'Owner Public', {
+            scale,
+            x: margin,
+            y: offset,
+            lineHeight: lineHeight,
+            maxWidth: maxLineWidth,
+            color: 'black',
+            fontSize: 0.14,
+            font: 'Roboto-Bold',
+        });
 
-    offset += this.renderText(ctx, keys.ownerPublic, {
-      scale,
-      x: 1.25,
-      y: offset,
-      lineHeight: lineHeight,
-      maxWidth: maxLineWidth,
-      color: 'black',
-      fontSize: 0.14,
-      font: 'RobotoMono-Regular'
-    })
+        offset += this.renderText(ctx, keys.ownerPublic, {
+            scale,
+            x: 1.25,
+            y: offset,
+            lineHeight: lineHeight,
+            maxWidth: maxLineWidth,
+            color: 'black',
+            fontSize: 0.14,
+            font: 'RobotoMono-Regular',
+        });
 
-    this.renderText(ctx, 'v0.1', {
-      scale,
-      x: maxLineWidth - 0.2,
-      y: offset - 0.2,
-      lineHeight: lineHeight,
-      maxWidth: maxLineWidth,
-      color: '#bbbbbb',
-      fontSize: 0.14,
-      font: 'Roboto-Regular'
-    })
+        this.renderText(ctx, 'v0.1', {
+            scale,
+            x: maxLineWidth - 0.2,
+            y: offset - 0.2,
+            lineHeight: lineHeight,
+            maxWidth: maxLineWidth,
+            color: '#bbbbbb',
+            fontSize: 0.14,
+            font: 'Roboto-Regular',
+        });
 
-    return ctx
-  }
+        return ctx;
+    }
 }

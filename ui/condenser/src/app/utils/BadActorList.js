@@ -1,6 +1,6 @@
 const list = `
 `
-  .trim()
-  .split('\n')
+    .trim()
+    .split('\n');
 
-export default list
+export default list;

@@ -1,39 +1,39 @@
-import { Map, Set, List, fromJS, Iterable } from 'immutable'
-import { emptyContent } from 'app/redux/EmptyState'
-import { contentStats } from 'app/utils/StateFunctions'
-import constants from './constants'
+import { Map, Set, List, fromJS, Iterable } from 'immutable';
+import { emptyContent } from 'app/redux/EmptyState';
+import { contentStats } from 'app/utils/StateFunctions';
+import constants from './constants';
 
-export const emptyContentMap = Map(emptyContent)
+export const emptyContentMap = Map(emptyContent);
 
 export const defaultState = Map({
-  status: {}
-})
+    status: {},
+});
 
 // Action constants
-const RECEIVE_STATE = 'global/RECEIVE_STATE'
-const RECEIVE_ACCOUNT = 'global/RECEIVE_ACCOUNT'
-const RECEIVE_ACCOUNTS = 'global/RECEIVE_ACCOUNTS'
-const UPDATE_ACCOUNT_WITNESS_VOTE = 'global/UPDATE_ACCOUNT_WITNESS_VOTE'
-const UPDATE_ACCOUNT_WITNESS_PROXY = 'global/UPDATE_ACCOUNT_WITNESS_PROXY'
-const FETCHING_DATA = 'global/FETCHING_DATA'
-const RECEIVE_DATA = 'global/RECEIVE_DATA'
-const RECEIVE_RECENT_POSTS = 'global/RECEIVE_RECENT_POSTS'
-const REQUEST_META = 'global/REQUEST_META'
-const RECEIVE_META = 'global/RECEIVE_META'
-const SET = 'global/SET'
-const REMOVE = 'global/REMOVE'
-const UPDATE = 'global/UPDATE'
-const SET_META_DATA = 'global/SET_META_DATA'
-const CLEAR_META = 'global/CLEAR_META'
-const CLEAR_META_ELEMENT = 'global/CLEAR_META_ELEMENT'
-const FETCH_JSON = 'global/FETCH_JSON'
-const FETCH_JSON_RESULT = 'global/FETCH_JSON_RESULT'
-const SHOW_DIALOG = 'global/SHOW_DIALOG'
-const HIDE_DIALOG = 'global/HIDE_DIALOG'
-const ADD_ACTIVE_WITNESS_VOTE = 'global/ADD_ACTIVE_WITNESS_VOTE'
-const REMOVE_ACTIVE_WITNESS_VOTE = 'global/REMOVE_ACTIVE_WITNESS_VOTE'
+const RECEIVE_STATE = 'global/RECEIVE_STATE';
+const RECEIVE_ACCOUNT = 'global/RECEIVE_ACCOUNT';
+const RECEIVE_ACCOUNTS = 'global/RECEIVE_ACCOUNTS';
+const UPDATE_ACCOUNT_WITNESS_VOTE = 'global/UPDATE_ACCOUNT_WITNESS_VOTE';
+const UPDATE_ACCOUNT_WITNESS_PROXY = 'global/UPDATE_ACCOUNT_WITNESS_PROXY';
+const FETCHING_DATA = 'global/FETCHING_DATA';
+const RECEIVE_DATA = 'global/RECEIVE_DATA';
+const RECEIVE_RECENT_POSTS = 'global/RECEIVE_RECENT_POSTS';
+const REQUEST_META = 'global/REQUEST_META';
+const RECEIVE_META = 'global/RECEIVE_META';
+const SET = 'global/SET';
+const REMOVE = 'global/REMOVE';
+const UPDATE = 'global/UPDATE';
+const SET_META_DATA = 'global/SET_META_DATA';
+const CLEAR_META = 'global/CLEAR_META';
+const CLEAR_META_ELEMENT = 'global/CLEAR_META_ELEMENT';
+const FETCH_JSON = 'global/FETCH_JSON';
+const FETCH_JSON_RESULT = 'global/FETCH_JSON_RESULT';
+const SHOW_DIALOG = 'global/SHOW_DIALOG';
+const HIDE_DIALOG = 'global/HIDE_DIALOG';
+const ADD_ACTIVE_WITNESS_VOTE = 'global/ADD_ACTIVE_WITNESS_VOTE';
+const REMOVE_ACTIVE_WITNESS_VOTE = 'global/REMOVE_ACTIVE_WITNESS_VOTE';
 // Saga-related:
-export const GET_STATE = 'global/GET_STATE'
+export const GET_STATE = 'global/GET_STATE';
 
 /**
  * Transfrom nested JS object to appropriate immutable collection.
@@ -42,11 +42,11 @@ export const GET_STATE = 'global/GET_STATE'
  */
 
 const transformAccount = (account) =>
-  fromJS(account, (key, value) => {
-    if (key === 'witness_votes') return value.toSet()
-    const isIndexed = Iterable.isIndexed(value)
-    return isIndexed ? value.toList() : value.toOrderedMap()
-  })
+    fromJS(account, (key, value) => {
+        if (key === 'witness_votes') return value.toSet();
+        const isIndexed = Iterable.isIndexed(value);
+        return isIndexed ? value.toList() : value.toOrderedMap();
+    });
 
 /**
  * Merging accounts: A get_state will provide a very full account but a get_accounts will provide a smaller version this makes sure we don't overwrite
@@ -57,383 +57,383 @@ const transformAccount = (account) =>
  */
 
 const mergeAccounts = (state, account) => {
-  return state.updateIn(['accounts', account.get('name')], Map(), (a) =>
-    a.mergeDeep(account)
-  )
-}
+    return state.updateIn(['accounts', account.get('name')], Map(), (a) =>
+        a.mergeDeep(account)
+    );
+};
 
-export default function reducer (state = defaultState, action = {}) {
-  const payload = action.payload
+export default function reducer(state = defaultState, action = {}) {
+    const payload = action.payload;
 
-  switch (action.type) {
-    case RECEIVE_STATE: {
-      let new_state = fromJS(payload)
-      if (new_state.has('content')) {
-        const content = new_state.get('content').withMutations((c) => {
-          c.forEach((cc, key) => {
-            cc = emptyContentMap.mergeDeep(cc)
-            const stats = fromJS(contentStats(cc))
-            c.setIn([key, 'stats'], stats)
-          })
-        })
-        new_state = new_state.set('content', content)
-      }
-      // let transfer_history from new state override completely, otherwise
-      // deep merge may not work as intended.
-      const mergedState = state.mergeDeep(new_state)
-      return mergedState.update('accounts', (accountMap) =>
-        accountMap
-          ? accountMap.map((v, k) =>
-              new_state.hasIn(['accounts', k, 'transfer_history'])
-                ? v.set(
-                    'transfer_history',
-                    new_state.getIn([
-                      'accounts',
-                      k,
-                      'transfer_history'
-                    ])
-                  )
-                : v
-            )
-          : accountMap
-      )
-    }
-
-    case RECEIVE_ACCOUNT: {
-      const account = transformAccount(payload.account)
-      return mergeAccounts(state, account)
-    }
-
-    case RECEIVE_ACCOUNTS: {
-      return payload.accounts.reduce((acc, curr) => {
-        const transformed = transformAccount(curr)
-        return mergeAccounts(acc, transformed)
-      }, state)
-    }
-
-    case UPDATE_ACCOUNT_WITNESS_VOTE: {
-      const { account, witness, approve } = payload
-      return state.updateIn(
-        ['accounts', account, 'witness_votes'],
-        Set(),
-        (votes) =>
-          approve
-            ? Set(votes).add(witness)
-            : Set(votes).remove(witness)
-      )
-    }
-
-    case UPDATE_ACCOUNT_WITNESS_PROXY: {
-      const { account, proxy } = payload
-      return state.setIn(['accounts', account, 'proxy'], proxy)
-    }
-
-    case FETCHING_DATA: {
-      const { order, category } = payload
-      const new_state = state.updateIn(
-        ['status', category || '', order],
-        () => {
-          return { fetching: true }
+    switch (action.type) {
+        case RECEIVE_STATE: {
+            let new_state = fromJS(payload);
+            if (new_state.has('content')) {
+                const content = new_state.get('content').withMutations((c) => {
+                    c.forEach((cc, key) => {
+                        cc = emptyContentMap.mergeDeep(cc);
+                        const stats = fromJS(contentStats(cc));
+                        c.setIn([key, 'stats'], stats);
+                    });
+                });
+                new_state = new_state.set('content', content);
+            }
+            // let transfer_history from new state override completely, otherwise
+            // deep merge may not work as intended.
+            const mergedState = state.mergeDeep(new_state);
+            return mergedState.update('accounts', (accountMap) =>
+                accountMap
+                    ? accountMap.map((v, k) =>
+                          new_state.hasIn(['accounts', k, 'transfer_history'])
+                              ? v.set(
+                                    'transfer_history',
+                                    new_state.getIn([
+                                        'accounts',
+                                        k,
+                                        'transfer_history',
+                                    ])
+                                )
+                              : v
+                      )
+                    : accountMap
+            );
         }
-      )
-      return new_state
-    }
 
-    case RECEIVE_DATA: {
-      const {
-        data,
-        order,
-        category,
-        accountname,
-        fetching,
-        endOfData
-      } = payload
-      let new_state
-      if (
-        order === 'by_author' ||
+        case RECEIVE_ACCOUNT: {
+            const account = transformAccount(payload.account);
+            return mergeAccounts(state, account);
+        }
+
+        case RECEIVE_ACCOUNTS: {
+            return payload.accounts.reduce((acc, curr) => {
+                const transformed = transformAccount(curr);
+                return mergeAccounts(acc, transformed);
+            }, state);
+        }
+
+        case UPDATE_ACCOUNT_WITNESS_VOTE: {
+            const { account, witness, approve } = payload;
+            return state.updateIn(
+                ['accounts', account, 'witness_votes'],
+                Set(),
+                (votes) =>
+                    approve
+                        ? Set(votes).add(witness)
+                        : Set(votes).remove(witness)
+            );
+        }
+
+        case UPDATE_ACCOUNT_WITNESS_PROXY: {
+            const { account, proxy } = payload;
+            return state.setIn(['accounts', account, 'proxy'], proxy);
+        }
+
+        case FETCHING_DATA: {
+            const { order, category } = payload;
+            const new_state = state.updateIn(
+                ['status', category || '', order],
+                () => {
+                    return { fetching: true };
+                }
+            );
+            return new_state;
+        }
+
+        case RECEIVE_DATA: {
+            const {
+                data,
+                order,
+                category,
+                accountname,
+                fetching,
+                endOfData,
+            } = payload;
+            let new_state;
+            if (
+                order === 'by_author' ||
                 order === 'by_feed' ||
                 order === 'by_comments' ||
                 order === 'by_replies'
-      ) {
-        // category is either "blog", "feed", "comments", or "recent_replies" (respectively) -- and all posts are keyed under current profile
-        const key = ['accounts', accountname, category]
-        new_state = state.updateIn(key, List(), (list) => {
-          return list.withMutations((posts) => {
-            data.forEach((value) => {
-              const key2 = `${value.author}/${value.permlink}`
-              if (!posts.includes(key2)) posts.push(key2)
-            })
-          })
-        })
-      } else {
-        new_state = state.updateIn(
-          ['discussion_idx', category || '', order],
-          (list) => {
-            return list.withMutations((posts) => {
-              data.forEach((value) => {
-                const entry = `${value.author}/${value.permlink}`
-                if (!posts.includes(entry)) posts.push(entry)
-              })
-            })
-          }
-        )
-      }
-      new_state = new_state.updateIn(['content'], (content) => {
-        return content.withMutations((map) => {
-          data.forEach((value) => {
-            const key = `${value.author}/${value.permlink}`
-            value = fromJS(value)
-            value = value.set('stats', fromJS(contentStats(value)))
-            map.set(key, value)
-          })
-        })
-      })
-      new_state = new_state.updateIn(
-        ['status', category || '', order],
-        () => {
-          if (endOfData) {
-            return { fetching, last_fetch: new Date() }
-          }
-          return { fetching }
-        }
-      )
-      return new_state
-    }
-    case RECEIVE_RECENT_POSTS: {
-      const { data } = payload
-      let new_state = state.updateIn(
-        ['discussion_idx', '', 'created'],
-        (list) => {
-          if (!list) list = List()
-          return list.withMutations((posts) => {
-            data.forEach((value) => {
-              const entry = `${value.author}/${value.permlink}`
-              if (!posts.includes(entry)) posts.unshift(entry)
-            })
-          })
-        }
-      )
-      new_state = new_state.updateIn(['content'], (content) => {
-        return content.withMutations((map) => {
-          data.forEach((value) => {
-            const key = `${value.author}/${value.permlink}`
-            if (!map.has(key)) {
-              value = fromJS(value)
-              value = value.set(
-                'stats',
-                fromJS(contentStats(value))
-              )
-
-              map.set(key, value)
+            ) {
+                // category is either "blog", "feed", "comments", or "recent_replies" (respectively) -- and all posts are keyed under current profile
+                const key = ['accounts', accountname, category];
+                new_state = state.updateIn(key, List(), (list) => {
+                    return list.withMutations((posts) => {
+                        data.forEach((value) => {
+                            const key2 = `${value.author}/${value.permlink}`;
+                            if (!posts.includes(key2)) posts.push(key2);
+                        });
+                    });
+                });
+            } else {
+                new_state = state.updateIn(
+                    ['discussion_idx', category || '', order],
+                    (list) => {
+                        return list.withMutations((posts) => {
+                            data.forEach((value) => {
+                                const entry = `${value.author}/${value.permlink}`;
+                                if (!posts.includes(entry)) posts.push(entry);
+                            });
+                        });
+                    }
+                );
             }
-          })
-        })
-      })
-      return new_state
-    }
+            new_state = new_state.updateIn(['content'], (content) => {
+                return content.withMutations((map) => {
+                    data.forEach((value) => {
+                        const key = `${value.author}/${value.permlink}`;
+                        value = fromJS(value);
+                        value = value.set('stats', fromJS(contentStats(value)));
+                        map.set(key, value);
+                    });
+                });
+            });
+            new_state = new_state.updateIn(
+                ['status', category || '', order],
+                () => {
+                    if (endOfData) {
+                        return { fetching, last_fetch: new Date() };
+                    }
+                    return { fetching };
+                }
+            );
+            return new_state;
+        }
+        case RECEIVE_RECENT_POSTS: {
+            const { data } = payload;
+            let new_state = state.updateIn(
+                ['discussion_idx', '', 'created'],
+                (list) => {
+                    if (!list) list = List();
+                    return list.withMutations((posts) => {
+                        data.forEach((value) => {
+                            const entry = `${value.author}/${value.permlink}`;
+                            if (!posts.includes(entry)) posts.unshift(entry);
+                        });
+                    });
+                }
+            );
+            new_state = new_state.updateIn(['content'], (content) => {
+                return content.withMutations((map) => {
+                    data.forEach((value) => {
+                        const key = `${value.author}/${value.permlink}`;
+                        if (!map.has(key)) {
+                            value = fromJS(value);
+                            value = value.set(
+                                'stats',
+                                fromJS(contentStats(value))
+                            );
 
-    case REQUEST_META: {
-      const { id, link } = payload
-      return state.setIn(['metaLinkData', id], Map({ link }))
-    }
+                            map.set(key, value);
+                        }
+                    });
+                });
+            });
+            return new_state;
+        }
 
-    case RECEIVE_META: {
-      const { id, meta } = payload
-      return state.updateIn(['metaLinkData', id], (data) =>
-        data.merge(meta)
-      )
-    }
+        case REQUEST_META: {
+            const { id, link } = payload;
+            return state.setIn(['metaLinkData', id], Map({ link }));
+        }
 
-    case SET: {
-      const { key, value } = payload
-      const key_array = Array.isArray(key) ? key : [key]
-      return state.setIn(key_array, fromJS(value))
-    }
+        case RECEIVE_META: {
+            const { id, meta } = payload;
+            return state.updateIn(['metaLinkData', id], (data) =>
+                data.merge(meta)
+            );
+        }
 
-    case REMOVE: {
-      const key = Array.isArray(payload.key)
-        ? payload.key
-        : [payload.key]
-      return state.removeIn(key)
-    }
+        case SET: {
+            const { key, value } = payload;
+            const key_array = Array.isArray(key) ? key : [key];
+            return state.setIn(key_array, fromJS(value));
+        }
 
-    case UPDATE: {
-      const { key, notSet = Map(), updater } = payload
-      return state.updateIn(key, notSet, updater)
-    }
+        case REMOVE: {
+            const key = Array.isArray(payload.key)
+                ? payload.key
+                : [payload.key];
+            return state.removeIn(key);
+        }
 
-    case SET_META_DATA: {
-      const { id, meta } = payload
-      return state.setIn(['metaLinkData', id], fromJS(meta))
-    }
+        case UPDATE: {
+            const { key, notSet = Map(), updater } = payload;
+            return state.updateIn(key, notSet, updater);
+        }
 
-    case CLEAR_META: {
-      return state.deleteIn(['metaLinkData', payload.id])
-    }
+        case SET_META_DATA: {
+            const { id, meta } = payload;
+            return state.setIn(['metaLinkData', id], fromJS(meta));
+        }
 
-    case CLEAR_META_ELEMENT: {
-      const { formId, element } = payload
-      return state.updateIn(['metaLinkData', formId], (data) =>
-        data.remove(element)
-      )
-    }
+        case CLEAR_META: {
+            return state.deleteIn(['metaLinkData', payload.id]);
+        }
 
-    case FETCH_JSON: {
-      return state
-    }
+        case CLEAR_META_ELEMENT: {
+            const { formId, element } = payload;
+            return state.updateIn(['metaLinkData', formId], (data) =>
+                data.remove(element)
+            );
+        }
 
-    case FETCH_JSON_RESULT: {
-      const { id, result, error } = payload
-      return state.set(id, fromJS({ result, error }))
-    }
+        case FETCH_JSON: {
+            return state;
+        }
 
-    case SHOW_DIALOG: {
-      const { name, params = {} } = payload
-      return state.update('active_dialogs', Map(), (d) =>
-        d.set(name, fromJS({ params }))
-      )
-    }
+        case FETCH_JSON_RESULT: {
+            const { id, result, error } = payload;
+            return state.set(id, fromJS({ result, error }));
+        }
 
-    case HIDE_DIALOG: {
-      return state.update('active_dialogs', (d) =>
-        d.delete(payload.name)
-      )
-    }
+        case SHOW_DIALOG: {
+            const { name, params = {} } = payload;
+            return state.update('active_dialogs', Map(), (d) =>
+                d.set(name, fromJS({ params }))
+            );
+        }
 
-    case ADD_ACTIVE_WITNESS_VOTE: {
-      return state.update(
+        case HIDE_DIALOG: {
+            return state.update('active_dialogs', (d) =>
+                d.delete(payload.name)
+            );
+        }
+
+        case ADD_ACTIVE_WITNESS_VOTE: {
+            return state.update(
                 `transaction_witness_vote_active_${payload.account}`,
                 Set(),
                 (s) => s.add(payload.witness)
-      )
-    }
+            );
+        }
 
-    case REMOVE_ACTIVE_WITNESS_VOTE: {
-      return state.update(
+        case REMOVE_ACTIVE_WITNESS_VOTE: {
+            return state.update(
                 `transaction_witness_vote_active_${payload.account}`,
                 (s) => s.delete(payload.witness)
-      )
-    }
+            );
+        }
 
-    default:
-      return state
-  }
+        default:
+            return state;
+    }
 }
 
 // Action creators
 
 export const receiveState = (payload) => ({
-  type: RECEIVE_STATE,
-  payload
-})
+    type: RECEIVE_STATE,
+    payload,
+});
 
 export const receiveAccount = (payload) => ({
-  type: RECEIVE_ACCOUNT,
-  payload
-})
+    type: RECEIVE_ACCOUNT,
+    payload,
+});
 
 export const receiveAccounts = (payload) => ({
-  type: RECEIVE_ACCOUNTS,
-  payload
-})
+    type: RECEIVE_ACCOUNTS,
+    payload,
+});
 
 export const updateAccountWitnessVote = (payload) => ({
-  type: UPDATE_ACCOUNT_WITNESS_VOTE,
-  payload
-})
+    type: UPDATE_ACCOUNT_WITNESS_VOTE,
+    payload,
+});
 
 export const updateAccountWitnessProxy = (payload) => ({
-  type: UPDATE_ACCOUNT_WITNESS_PROXY,
-  payload
-})
+    type: UPDATE_ACCOUNT_WITNESS_PROXY,
+    payload,
+});
 
 export const fetchingData = (payload) => ({
-  type: FETCHING_DATA,
-  payload
-})
+    type: FETCHING_DATA,
+    payload,
+});
 
 export const receiveData = (payload) => ({
-  type: RECEIVE_DATA,
-  payload
-})
+    type: RECEIVE_DATA,
+    payload,
+});
 
 export const receiveRecentPosts = (payload) => ({
-  type: RECEIVE_RECENT_POSTS,
-  payload
-})
+    type: RECEIVE_RECENT_POSTS,
+    payload,
+});
 
 export const requestMeta = (payload) => ({
-  type: REQUEST_META,
-  payload
-})
+    type: REQUEST_META,
+    payload,
+});
 
 export const receiveMeta = (payload) => ({
-  type: RECEIVE_META,
-  payload
-})
+    type: RECEIVE_META,
+    payload,
+});
 
 // TODO: Find a better name for this
 export const set = (payload) => ({
-  type: SET,
-  payload
-})
+    type: SET,
+    payload,
+});
 
 export const remove = (payload) => ({
-  type: REMOVE,
-  payload
-})
+    type: REMOVE,
+    payload,
+});
 
 export const update = (payload) => ({
-  type: UPDATE,
-  payload
-})
+    type: UPDATE,
+    payload,
+});
 
 export const setMetaData = (payload) => ({
-  type: SET_META_DATA,
-  payload
-})
+    type: SET_META_DATA,
+    payload,
+});
 
 export const clearMeta = (payload) => ({
-  type: CLEAR_META,
-  payload
-})
+    type: CLEAR_META,
+    payload,
+});
 
 export const clearMetaElement = (payload) => ({
-  type: CLEAR_META_ELEMENT,
-  payload
-})
+    type: CLEAR_META_ELEMENT,
+    payload,
+});
 
 export const fetchJson = (payload) => ({
-  type: FETCH_JSON,
-  payload
-})
+    type: FETCH_JSON,
+    payload,
+});
 
 export const fetchJsonResult = (payload) => ({
-  type: FETCH_JSON_RESULT,
-  payload
-})
+    type: FETCH_JSON_RESULT,
+    payload,
+});
 
 export const showDialog = (payload) => ({
-  type: SHOW_DIALOG,
-  payload
-})
+    type: SHOW_DIALOG,
+    payload,
+});
 
 export const hideDialog = (payload) => ({
-  type: HIDE_DIALOG,
-  payload
-})
+    type: HIDE_DIALOG,
+    payload,
+});
 
 export const addActiveWitnessVote = (payload) => ({
-  type: ADD_ACTIVE_WITNESS_VOTE,
-  payload
-})
+    type: ADD_ACTIVE_WITNESS_VOTE,
+    payload,
+});
 
 export const removeActiveWitnessVote = (payload) => ({
-  type: REMOVE_ACTIVE_WITNESS_VOTE,
-  payload
-})
+    type: REMOVE_ACTIVE_WITNESS_VOTE,
+    payload,
+});
 
 export const getState = (payload) => ({
-  type: GET_STATE,
-  payload
-})
+    type: GET_STATE,
+    payload,
+});

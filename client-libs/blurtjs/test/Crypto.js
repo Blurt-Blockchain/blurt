@@ -1,70 +1,70 @@
-import config from '../src/config'
-import { Aes, PrivateKey, PublicKey, Signature } from '../src/auth/ecc'
-import assert from 'assert'
+import config from "../src/config";
+import { Aes, PrivateKey, PublicKey, Signature } from "../src/auth/ecc";
+import assert from "assert";
 
-const secureRandom = require('secure-random')
-const hash = require('../src/auth/ecc/src/hash')
-const key = require('../src/auth/ecc/src/key_utils')
+const secureRandom = require("secure-random");
+const hash = require("../src/auth/ecc/src/hash");
+const key = require("../src/auth/ecc/src/key_utils");
 
-describe('steem.auth: Crypto', function () {
+describe("steem.auth: Crypto", function () {
   /* it "Computes public key", ->
         private_key = PrivateKey.fromHex decrypted_key.substring 0, 64
         public_key = private_key.toPublicKey()
         console.log public_key.toHex()); */
 
-  it('sign', function () {
-    this.timeout(10000)
-    const private_key = PrivateKey.fromSeed('1')
+  it("sign", function () {
+    this.timeout(10000);
+    const private_key = PrivateKey.fromSeed("1");
     return (() => {
-      const result = []
+      const result = [];
       for (let i = 0; i < 10; i++) {
-        result.push(Signature.signBuffer(new Buffer(i), private_key))
+        result.push(Signature.signBuffer(new Buffer(i), private_key));
       }
-      return result
-    })()
-  })
-})
+      return result;
+    })();
+  });
+});
 
-describe('steem.auth: derives', () => {
-  const prefix = config.get('address_prefix')
+describe("steem.auth: derives", () => {
+  const prefix = config.get("address_prefix");
   const one_time_private = PrivateKey.fromHex(
-    '8fdfdde486f696fd7c6313325e14d3ff0c34b6e2c390d1944cbfe150f4457168'
-  )
+    "8fdfdde486f696fd7c6313325e14d3ff0c34b6e2c390d1944cbfe150f4457168"
+  );
   const to_public = PublicKey.fromStringOrThrow(
-    prefix + '7vbxtK1WaZqXsiCHPcjVFBewVj8HFRd5Z5XZDpN6Pvb2dZcMqK'
-  )
-  const secret = one_time_private.get_shared_secret(to_public)
-  const child = hash.sha256(secret)
+    prefix + "7vbxtK1WaZqXsiCHPcjVFBewVj8HFRd5Z5XZDpN6Pvb2dZcMqK"
+  );
+  const secret = one_time_private.get_shared_secret(to_public);
+  const child = hash.sha256(secret);
 
   // Check everything above with `wdump((child));` from the witness_node:
   assert.equal(
-    child.toString('hex'),
-    '1f296fa48172d9af63ef3fb6da8e369e6cc33c1fb7c164207a3549b39e8ef698'
-  )
+    child.toString("hex"),
+    "1f296fa48172d9af63ef3fb6da8e369e6cc33c1fb7c164207a3549b39e8ef698"
+  );
 
-  const nonce = hash.sha256(one_time_private.toBuffer())
+  const nonce = hash.sha256(one_time_private.toBuffer());
   assert.equal(
-    nonce.toString('hex'),
-    '462f6c19ece033b5a3dba09f1e1d7935a5302e4d1eac0a84489cdc8339233fbf'
-  )
+    nonce.toString("hex"),
+    "462f6c19ece033b5a3dba09f1e1d7935a5302e4d1eac0a84489cdc8339233fbf"
+  );
 
-  it('child from public', () =>
+  it("child from public", () =>
     assert.equal(
       to_public.child(child).toString(),
-      'BLT6XA72XARQCain961PCJnXiKYdEMrndNGago2PV5bcUiVyzJ6iL',
-      'derive child public key'
-    ))
+      "BLT6XA72XARQCain961PCJnXiKYdEMrndNGago2PV5bcUiVyzJ6iL",
+      "derive child public key"
+    ));
 
   // child = hash.sha256( one_time_private.get_secret( to_public ))
-  it('child from private', () =>
+  it("child from private", () =>
     assert.equal(
-      PrivateKey.fromSeed('alice-brain-key')
+      PrivateKey.fromSeed("alice-brain-key")
         .child(child)
         .toPublicKey()
         .toString(),
-      'BLT6XA72XARQCain961PCJnXiKYdEMrndNGago2PV5bcUiVyzJ6iL',
-      'derive child from private key'
-    ))
+      "BLT6XA72XARQCain961PCJnXiKYdEMrndNGago2PV5bcUiVyzJ6iL",
+      "derive child from private key"
+    ));
 
   // "many keys" works, not really needed
   // it("many keys", function() {
@@ -95,12 +95,12 @@ describe('steem.auth: derives', () => {
   //     }
   //
   // })
-})
+});
 
 const min_time_elapsed = function (f) {
-  const start_t = Date.now()
-  const ret = f()
-  const elapsed = Date.now() - start_t
+  const start_t = Date.now();
+  const ret = f();
+  const elapsed = Date.now() - start_t;
   assert.equal(
     // repeat operations may take less time
     elapsed >= 250 * 0.8,
@@ -108,6 +108,6 @@ const min_time_elapsed = function (f) {
     `minimum time requirement was not met, instead only ${
       elapsed / 1000.0
     } elapsed`
-  )
-  return ret
-}
+  );
+  return ret;
+};

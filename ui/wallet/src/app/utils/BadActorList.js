@@ -908,7 +908,7 @@ youbit
 yunbi
 zenieix
 `
-  .trim()
-  .split('\n')
+    .trim()
+    .split('\n');
 
-export default list
+export default list;

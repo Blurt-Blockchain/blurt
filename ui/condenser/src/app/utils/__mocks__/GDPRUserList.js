@@ -1,1 +1,1 @@
-export default ['gdpr']
+export default ['gdpr'];

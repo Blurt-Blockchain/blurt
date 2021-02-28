@@ -9,7 +9,7 @@ poloniex
 upbit-exchange
 onepagex
 `
-  .trim()
-  .split('\n')
+    .trim()
+    .split('\n');
 
-export default list
+export default list;
