@@ -1,7 +1,7 @@
 const bigi = require("bigi");
 const bs58 = require("bs58");
 const ecurve = require("ecurve");
-const Point = ecurve.Point;
+const {Point} = ecurve;
 const secp256k1 = ecurve.getCurveByName("secp256k1");
 const config = require("../config");
 const operations = require("./serializer/src/operations");
@@ -11,8 +11,8 @@ const PublicKey = require("./ecc/src/key_public");
 const hash = require("./ecc/src/hash");
 
 const Auth = {};
-const transaction = operations.transaction;
-const signed_transaction = operations.signed_transaction;
+const {transaction} = operations;
+const {signed_transaction} = operations;
 
 Auth.verify = function (name, password, auths) {
   let hasKey = false;
