@@ -124,7 +124,8 @@ Our next milestone is [Hard Fork 3](https://gitlab.com/blurt/blurt/-/milestones/
 
 ## General Links
 
-+ [Block Explorer](https://blocks.blurtwallet.com/#/)
++ [Official Block Explorer](https://blocks.blurtwallet.com/#/)
++ [Community Block Explorer](https://ecosynthesizer.com/blurt)
 + [Official Wallet](https://blurtwallet.com/)
 + [WhaleVault Keychain Extension](https://chrome.google.com/webstore/detail/whalevault/hcoigoaekhfajcoingnngmfjdidhmdon?hl=en)
 
