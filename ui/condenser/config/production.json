@@ -19,8 +19,8 @@
     "reportOnly": false,
     "setAllHeaders": true
   },
-  "img_proxy_prefix": "https://images.blurt.blog/",
-  "ipfs_prefix": false,
+  "img_proxy_prefix": "https://images.blurt.world/imgp/",
+  "ipfs_prefix": "https://ipfs.blurt.world/ipfs/",
   "mixpanel": false,
   "notify": {
     "gcm_key": "google secret key"
@@ -48,7 +48,7 @@
     "account_sid": false,
     "auth_token": false
   },
-  "upload_image": "https://images.blurt.blog/",
+  "upload_image": "https://images.blurt.world/upload",
   "blurtd_connection_client": "https://rpc.blurt.world",
   "blurtd_connection_server": "https://rpc.blurt.world",
   "blurtd_use_appbase": true,
