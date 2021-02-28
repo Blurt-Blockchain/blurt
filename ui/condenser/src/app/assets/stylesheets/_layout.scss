@@ -1,8 +1,8 @@
 // breakpoints
-   
-$S: 20em;  // 320px / 16
+
+$S: 20em; // 320px / 16
 $FM: 40em; // Conform to foundation 'medium' css breakpoint
-$M: 47.5em;  // 760px / 16
+$M: 47.5em; // 760px / 16
 $FL: 64em; // Conform to foundation 'large' css breakpoint
 $L: 75em; // 1200px / 16
 
@@ -11,24 +11,32 @@ $XL: 100em; //  1600px / 16
 // media queries
 
 @mixin MQ($canvas) {
-  @if $canvas == S {
-   @media only screen and (min-width: $S) { @content; } 
-  }
-  @if $canvas == FM {
-    @media only screen and (min-width: $FM) { @content; } 
-  }
-  @else if $canvas == M {
-   @media only screen and (min-width: $M) { @content; } 
-  }
-  @else if $canvas == FL {
-    @media only screen and (min-width: $FL) { @content; } 
-  }
-  @else if $canvas == L {
-   @media only screen and (min-width: $L) { @content; } 
-  }
-  @else if $canvas == XL {
-    @media only screen and (min-width: $XL) { @content; } 
-  }
+    @if $canvas == S {
+        @media only screen and (min-width: $S) {
+            @content;
+        }
+    }
+    @if $canvas == FM {
+        @media only screen and (min-width: $FM) {
+            @content;
+        }
+    } @else if $canvas == M {
+        @media only screen and (min-width: $M) {
+            @content;
+        }
+    } @else if $canvas == FL {
+        @media only screen and (min-width: $FL) {
+            @content;
+        }
+    } @else if $canvas == L {
+        @media only screen and (min-width: $L) {
+            @content;
+        }
+    } @else if $canvas == XL {
+        @media only screen and (min-width: $XL) {
+            @content;
+        }
+    }
 }
 
 // Foundation-like Classes
@@ -42,7 +50,7 @@ $XL: 100em; //  1600px / 16
 .hide-for-mq-large {
     display: inline;
     @include MQ(L) {
-      display: none;
+        display: none;
     }
 }
 

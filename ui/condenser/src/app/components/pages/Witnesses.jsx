@@ -20,5 +20,5 @@ class Witnesses extends React.Component {
 
 module.exports = {
     path: '/~witnesses(/:witness)',
-    component: Witnesses
+    component: Witnesses,
 };

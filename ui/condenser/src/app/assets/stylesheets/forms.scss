@@ -1,24 +1,29 @@
 form {
-  .error {
-    input, input:active, input:focus {
-      border-color: $alert-color;
+    .error {
+        input,
+        input:active,
+        input:focus {
+            border-color: $alert-color;
+        }
+        label,
+        .help-text {
+            color: $alert-color;
+        }
+        .help-text {
+            margin-top: 0.4rem;
+        }
     }
-    label, .help-text {
-      color: $alert-color;
+    .success {
+        color: $success-color;
+        transition: 0.3s all ease-in-out;
     }
-    .help-text {
-      margin-top: 0.4rem;
-    }
-  }
-  .success {
-    color: $success-color;
-    transition: 0.3s all ease-in-out;
-  }
 }
 button {
     margin-right: 15px !important;
 }
-input, textarea, select {
+input,
+textarea,
+select {
     // Overwrite 16px margin-bottom, it was pushing error messages down away from the form element
     margin-bottom: 0px !important;
 }
@@ -28,8 +33,8 @@ input, textarea, select {
     transition: 0.3s all ease-in-out;
 }
 p.error {
-  padding-top: 6px;
-  line-height: 1.1;
+    padding-top: 6px;
+    line-height: 1.1;
 }
 .warning {
     color: darkgoldenrod;
@@ -48,7 +53,7 @@ p.error {
     background-color: antiquewhite;
 }
 .de-emphasize {
-  color: $dark-gray;
+    color: $dark-gray;
 }
 .overflow-ellipsis {
     overflow: hidden;
@@ -69,10 +74,11 @@ p.error {
 // }
 
 label {
-  @include themify($themes) {
-    color: themed('textColorPrimary');  
-  }    
+    @include themify($themes) {
+        color: themed('textColorPrimary');
+    }
 }
 
-$input-font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, sans-serif;
+$input-font-family: 'Source Sans Pro', 'Helvetica Neue', Helvetica, Arial,
+    sans-serif;
 $input-font-size: 16px;

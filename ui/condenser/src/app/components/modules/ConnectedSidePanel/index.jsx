@@ -7,16 +7,17 @@ const mapStateToProps = (state, ownProps) => {
         visible: state.user.get('show_side_panel'),
         current: state.user.get('current'),
         username: state.user.getIn(['current', 'username']),
-        ...ownProps
+        ...ownProps,
     };
 };
 
-const mapDispatchToProps = dispatch => ({
-    hideSidePanel: () => dispatch(userActions.hideSidePanel())
+const mapDispatchToProps = (dispatch) => ({
+    hideSidePanel: () => dispatch(userActions.hideSidePanel()),
 });
 
-const ConnectedSideBar = connect(mapStateToProps, mapDispatchToProps)(
-    SidePanel
-);
+const ConnectedSideBar = connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(SidePanel);
 
 export default ConnectedSideBar;

@@ -1,5 +1,5 @@
-jest.mock('./utils/GDPRUserList');
 import resolveRoute, { routeRegex } from './ResolveRoute';
+jest.mock('./utils/GDPRUserList');
 
 describe('routeRegex', () => {
     it('should produce the desired regex patterns', () => {
@@ -8,24 +8,24 @@ describe('routeRegex', () => {
             ['UserProfile1', /^\/(@[\w\.\d-]+)\/?$/],
             [
                 'UserProfile2',
-                /^\/(@[\w\.\d-]+)\/(blog|posts|comments|transfers|curation-rewards|author-rewards|permissions|created|recent-replies|notifications|feed|password|followed|followers|settings)\/?$/
+                /^\/(@[\w\.\d-]+)\/(blog|posts|comments|transfers|curation-rewards|author-rewards|permissions|created|recent-replies|notifications|feed|password|followed|followers|settings)\/?$/,
             ],
             ['UserProfile3', /^\/(@[\w\.\d-]+)\/[\w\.\d-]+/],
             [
                 'CategoryFilters',
-                /^\/(hot|trending|promoted|payout|payout_comments|created)\/?$/gi
+                /^\/(hot|trending|promoted|payout|payout_comments|created)\/?$/gi,
             ],
             ['PostNoCategory', /^\/(@[\w\.\d-]+)\/([\w\d-]+)/],
             ['Post', /^\/([\w\d\-\/]+)\/(\@[\w\d\.-]+)\/([\w\d-]+)\/?($|\?)/],
             [
                 'PostJson',
-                /^\/([\w\d\-\/]+)\/(\@[\w\d\.-]+)\/([\w\d-]+)(\.json)$/
+                /^\/([\w\d\-\/]+)\/(\@[\w\d\.-]+)\/([\w\d-]+)(\.json)$/,
             ],
             ['UserJson', /^\/(@[\w\.\d-]+)(\.json)$/],
-            ['UserNameJson', /^.*(?=(\.json))/]
+            ['UserNameJson', /^.*(?=(\.json))/],
         ];
 
-        test_cases.forEach(r => {
+        test_cases.forEach((r) => {
             expect(routeRegex[r[0]]).toEqual(r[1]);
         });
     });
@@ -43,26 +43,26 @@ describe('resolveRoute', () => {
         ['/submit.html', { page: 'SubmitPost' }],
         [
             '/@maitland/feed',
-            { page: 'PostsIndex', params: ['home', '@maitland'] }
+            { page: 'PostsIndex', params: ['home', '@maitland'] },
         ],
         ['/@gdpr/feed', { page: 'NotFound' }],
         [
             '/@maitland/blog',
-            { page: 'UserProfile', params: ['@maitland', 'blog'] }
+            { page: 'UserProfile', params: ['@maitland', 'blog'] },
         ],
         ['/@gdpr/blog', { page: 'NotFound' }],
         [
             '/@cool/nice345',
-            { page: 'PostNoCategory', params: ['@cool', 'nice345'] }
+            { page: 'PostNoCategory', params: ['@cool', 'nice345'] },
         ],
         ['/@gdpr/nice345', { page: 'NotFound' }],
         [
             '/ceasar/@salad/circa90',
-            { page: 'Post', params: ['ceasar', '@salad', 'circa90', ''] }
+            { page: 'Post', params: ['ceasar', '@salad', 'circa90', ''] },
         ],
-        ['/taggy/@gdpr/nice345', { page: 'NotFound' }]
+        ['/taggy/@gdpr/nice345', { page: 'NotFound' }],
     ];
-    test_cases.forEach(r => {
+    test_cases.forEach((r) => {
         it(`should resolve the route for the ${r[1].page} page`, () => {
             expect(resolveRoute(r[0])).toEqual(r[1]);
         });

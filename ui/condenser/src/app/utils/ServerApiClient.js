@@ -6,14 +6,14 @@ const request_base = {
     credentials: 'same-origin',
     headers: {
         Accept: 'application/json',
-        'Content-type': 'application/json'
-    }
+        'Content-type': 'application/json',
+    },
 };
 
 export function serverApiLogin(account, signatures) {
     if (!process.env.BROWSER || window.$STM_ServerBusy) return;
     const request = Object.assign({}, request_base, {
-        body: JSON.stringify({ account, signatures, csrf: $STM_csrf })
+        body: JSON.stringify({ account, signatures, csrf: $STM_csrf }),
     });
     return fetch('/api/v1/login_account', request);
 }
@@ -21,7 +21,7 @@ export function serverApiLogin(account, signatures) {
 export function serverApiLogout() {
     if (!process.env.BROWSER || window.$STM_ServerBusy) return;
     const request = Object.assign({}, request_base, {
-        body: JSON.stringify({ csrf: $STM_csrf })
+        body: JSON.stringify({ csrf: $STM_csrf }),
     });
     return fetch('/api/v1/logout_account', request);
 }
@@ -43,30 +43,31 @@ export function serverApiRecordEvent(type, val, rate_limit_ms = 5000) {
 
 export function saveCords(x, y) {
     const request = Object.assign({}, request_base, {
-        body: JSON.stringify({ csrf: $STM_csrf, x: x, y: y })
+        body: JSON.stringify({ csrf: $STM_csrf, x: x, y: y }),
     });
     fetch('/api/v1/save_cords', request);
 }
 
 export function setUserPreferences(payload) {
-    if (!process.env.BROWSER || window.$STM_ServerBusy)
+    if (!process.env.BROWSER || window.$STM_ServerBusy) {
         return Promise.resolve();
+    }
     const request = Object.assign({}, request_base, {
-        body: JSON.stringify({ csrf: window.$STM_csrf, payload })
+        body: JSON.stringify({ csrf: window.$STM_csrf, payload }),
     });
     return fetch('/api/v1/setUserPreferences', request);
 }
 
 export function isTosAccepted() {
     const request = Object.assign({}, request_base, {
-        body: JSON.stringify({ csrf: window.$STM_csrf })
+        body: JSON.stringify({ csrf: window.$STM_csrf }),
     });
-    return fetch('/api/v1/isTosAccepted', request).then(res => res.json());
+    return fetch('/api/v1/isTosAccepted', request).then((res) => res.json());
 }
 
 export function acceptTos() {
     const request = Object.assign({}, request_base, {
-        body: JSON.stringify({ csrf: window.$STM_csrf })
+        body: JSON.stringify({ csrf: window.$STM_csrf }),
     });
     return fetch('/api/v1/acceptTos', request);
 }
@@ -90,4 +91,4 @@ export function acceptTos() {
 //        .then(res => {
 //            return res.url;
 //        });
-//}
+// }

@@ -8,7 +8,6 @@ export const setCacheSize = (size) => {
 
 export const cacheGet = (key) => cache.get(key);
 
-
 export const cacheSet = (key, val) => {
   cache.set(key, val);
 };

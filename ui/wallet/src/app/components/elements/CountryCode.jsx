@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default props => {
+export default (props) => {
     return (
         <select {...props}>
             {/* Top countries (duplicated from below) */}

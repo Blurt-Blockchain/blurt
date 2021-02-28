@@ -8,17 +8,17 @@ import * as globalActions from 'app/redux/GlobalReducer';
     This loadFollows both 'blog' and 'ignore'
 */
 
-//fetch for follow/following count
+// fetch for follow/following count
 export function* fetchFollowCount(account) {
     const counts = yield call([api, api.getFollowCountAsync], account);
     yield put(
         globalActions.update({
             key: ['follow_count', account],
-            updater: m =>
+            updater: (m) =>
                 m.mergeDeep({
                     follower_count: counts.follower_count,
-                    following_count: counts.following_count
-                })
+                    following_count: counts.following_count,
+                }),
         })
     );
 }
@@ -26,7 +26,7 @@ export function* fetchFollowCount(account) {
 // Test limit with 2 (not 1, infinate looping)
 export function* loadFollows(method, account, type, force = false) {
     if (
-        yield select(state =>
+        yield select((state) =>
             state.global.getIn(['follow', method, account, type + '_loading'])
         )
     ) {
@@ -35,7 +35,7 @@ export function* loadFollows(method, account, type, force = false) {
     }
 
     if (!force) {
-        const hasResult = yield select(state =>
+        const hasResult = yield select((state) =>
             state.global.hasIn(['follow', method, account, type + '_result'])
         );
         if (hasResult) {
@@ -48,7 +48,7 @@ export function* loadFollows(method, account, type, force = false) {
         globalActions.update({
             key: ['follow', method, account],
             notSet: Map(),
-            updater: m => m.set(type + '_loading', true)
+            updater: (m) => m.set(type + '_loading', true),
         })
     );
 
@@ -66,9 +66,9 @@ function* loadFollowsLoop(method, account, type, start = '', limit = 1000) {
         globalActions.update({
             key: ['follow_inprogress', method, account],
             notSet: Map(),
-            updater: m => {
+            updater: (m) => {
                 m = m.asMutable();
-                res.forEach(value => {
+                res.forEach((value) => {
                     cnt += 1;
 
                     const whatList = value.get('what');
@@ -79,13 +79,13 @@ function* loadFollowsLoop(method, account, type, start = '', limit = 1000) {
                     const accountName = (lastAccountName = value.get(
                         accountNameKey
                     ));
-                    whatList.forEach(what => {
-                        //currently this is always true: what === type
-                        m.update(what, OrderedSet(), s => s.add(accountName));
+                    whatList.forEach((what) => {
+                        // currently this is always true: what === type
+                        m.update(what, OrderedSet(), (s) => s.add(accountName));
                     });
                 });
                 return m.asImmutable();
-            }
+            },
         })
     );
 
@@ -98,7 +98,7 @@ function* loadFollowsLoop(method, account, type, start = '', limit = 1000) {
         yield put(
             globalActions.update({
                 key: [],
-                updater: m => {
+                updater: (m) => {
                     m = m.asMutable();
 
                     const result = m.getIn(
@@ -106,16 +106,16 @@ function* loadFollowsLoop(method, account, type, start = '', limit = 1000) {
                         OrderedSet()
                     );
                     m.deleteIn(['follow_inprogress', method, account, type]);
-                    m.updateIn(['follow', method, account], Map(), mm =>
+                    m.updateIn(['follow', method, account], Map(), (mm) =>
                         mm.merge({
                             // Count may be set separately without loading the full xxx_result set
                             [type + '_count']: result.size,
                             [type + '_result']: result.reverse(),
-                            [type + '_loading']: false
+                            [type + '_loading']: false,
                         })
                     );
                     return m.asImmutable();
-                }
+                },
             })
         );
     }

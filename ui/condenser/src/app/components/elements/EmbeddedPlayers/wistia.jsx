@@ -3,13 +3,13 @@ import React from 'react';
 const regex = {
     sanitize: /^(https?:)?\/\/fast.wistia.com\/embed\/iframe\/([a-z0-9]*)/i,
     main: /(?:https?:\/\/([a-z0-9\-.\/]*).wistia.com\/medias\/)([a-z0-9]+)/,
-    contentId: /(?:([a-z0-9\-.\/]*).wistia.com\/medias\/)([a-z0-9]+)/
+    contentId: /(?:([a-z0-9\-.\/]*).wistia.com\/medias\/)([a-z0-9]+)/,
 };
 
 export default regex;
 export const sandboxConfig = {
     useSandbox: true,
-    sandboxAttributes: ['allow-scripts', 'allow-same-origin', 'allow-popups']
+    sandboxAttributes: ['allow-scripts', 'allow-same-origin', 'allow-popups'],
 };
 
 export function validateIframeUrl(url) {
@@ -36,11 +36,11 @@ function extractMetadata(data) {
     return {
         id: m[2],
         url: m[0],
-        canonical: `https://fast.wistia.com/embed/iframe/${m[2]}`
+        canonical: `https://fast.wistia.com/embed/iframe/${m[2]}`,
     };
 }
 
-export function embedNode(child, links /*images*/) {
+export function embedNode(child, links /* images */) {
     try {
         const { data } = child;
         const wistia = extractMetadata(data);
@@ -76,8 +76,8 @@ export function genIframeMd(idx, id, w, h) {
                 sandbox={
                     sandboxConfig.useSandbox
                         ? sandboxConfig.sandboxAttributes
-                          ? sandboxConfig.sandboxAttributes.join(' ')
-                          : true
+                            ? sandboxConfig.sandboxAttributes.join(' ')
+                            : true
                         : ''
                 }
             />

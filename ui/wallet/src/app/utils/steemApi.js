@@ -8,18 +8,17 @@ export async function getStateAsync(url) {
 
     const raw = await api.getStateAsync(path);
 
-
     await axios
         .get('https://api.blurt.buzz/price_info', { timeout: 3000 })
-        .then(response => {
+        .then((response) => {
             if (response.status === 200) {
                 raw.blurt_price = Number(response.data.price_usd).toFixed(3);
             }
         })
-        .catch(error => {
+        .catch((error) => {
             console.error(error);
         });
-    let chainProperties = await getChainProperties();
+    const chainProperties = await getChainProperties();
     if (chainProperties) {
         raw.props.operation_flat_fee = chainProperties.operation_flat_fee;
         raw.props.bandwidth_kbytes_fee = chainProperties.bandwidth_kbytes_fee;

@@ -54,10 +54,10 @@ describe('App reducer', () => {
     });
     it('should return correct state for a LOCATION_CHANGE action', () => {
         const initial = reducer();
-        const actual = reducer(initial, mockActions['LOCATION_CHANGE']);
+        const actual = reducer(initial, mockActions.LOCATION_CHANGE);
         const out = actual.get('location');
         expect(out.pathname).toEqual(
-            mockActions['LOCATION_CHANGE'].payload.pathname
+            mockActions.LOCATION_CHANGE.payload.pathname
         );
     });
     it('should return correct state for a BLURT_API_ERROR action', () => {
@@ -102,18 +102,18 @@ describe('App reducer', () => {
     });
     it('should return correct state for a SET_USER_PREFERENCES action', () => {
         const initial = reducer();
-        let actual = reducer(
+        const actual = reducer(
             initial,
             setUserPreferences(mockPayloads.setUserPreferences)
         );
-        let out = actual.get('user_preferences');
-        let expected = Map({ cat: 'mymy', dog: 'polly' });
+        const out = actual.get('user_preferences');
+        const expected = Map({ cat: 'mymy', dog: 'polly' });
         expect(out).toEqual(expected);
     });
     it('should return correct state for a TOGGLE_NIGHTMODE action', () => {
         const initial = reducer();
         const before = initial.getIn(['user_preferences', 'nightmode']);
-        let actual = reducer(initial, toggleNightmode());
+        const actual = reducer(initial, toggleNightmode());
         const after = actual.getIn(['user_preferences', 'nightmode']);
         expect(after).toEqual(!before);
     });

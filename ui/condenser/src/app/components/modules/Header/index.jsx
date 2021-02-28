@@ -34,7 +34,7 @@ class Header extends React.Component {
         pathname: PropTypes.string,
         getAccountNotifications: PropTypes.func,
         startNotificationsPolling: PropTypes.func,
-        loggedIn: PropTypes.bool
+        loggedIn: PropTypes.bool,
     };
 
     constructor(props) {
@@ -43,7 +43,7 @@ class Header extends React.Component {
         this.state = {
             gptAdRendered: false,
             showAd: false,
-            showAnnouncement: this.props.showAnnouncement
+            showAnnouncement: this.props.showAnnouncement,
         };
     }
 
@@ -51,7 +51,7 @@ class Header extends React.Component {
         const {
             loggedIn,
             current_account_name,
-            getAccountNotifications
+            getAccountNotifications,
         } = this.props;
         if (loggedIn) {
             getAccountNotifications(current_account_name);
@@ -68,7 +68,7 @@ class Header extends React.Component {
             return null;
         }
 
-        window.addEventListener('gptadshown', e => this.gptAdRendered(e));
+        window.addEventListener('gptadshown', (e) => this.gptAdRendered(e));
     }
 
     componentWillUnmount() {
@@ -138,7 +138,7 @@ class Header extends React.Component {
             display_name,
             walletUrl,
             content,
-            notifications
+            notifications,
         } = this.props;
 
         let { showAd, showAnnouncement } = this.state;
@@ -154,7 +154,7 @@ class Header extends React.Component {
             } else {
                 localStorage.setItem('last_timestamp', 0);
             }
-            notifications.get('unread_notifications').map(notification => {
+            notifications.get('unread_notifications').map((notification) => {
                 let timestamp = notification.toJS().timestamp;
                 if (lastSeenTimestamp < timestamp) {
                     unreadNotificationCount++;
@@ -219,28 +219,28 @@ class Header extends React.Component {
             page_title = user_title;
             if (route.params[1] === 'followers') {
                 page_title = tt('header_jsx.people_following', {
-                    username: user_title
+                    username: user_title,
                 });
             }
             if (route.params[1] === 'followed') {
                 page_title = tt('header_jsx.people_followed_by', {
-                    username: user_title
+                    username: user_title,
                 });
             }
             if (route.params[1] === 'recent-replies') {
                 page_title = tt('header_jsx.replies_to', {
-                    username: user_title
+                    username: user_title,
                 });
             }
             // @user/"posts" is deprecated in favor of "comments" as of oct-2016 (#443)
             if (route.params[1] === 'posts' || route.params[1] === 'comments') {
                 page_title = tt('header_jsx.comments_by', {
-                    username: user_title
+                    username: user_title,
                 });
             }
             if (route.params[1] === 'notifications') {
                 page_title = tt('header_jsx.notifications', {
-                    username: user_title
+                    username: user_title,
                 });
             }
         } else {
@@ -255,7 +255,8 @@ class Header extends React.Component {
 
         if (
             process.env.BROWSER &&
-            (route.page !== 'Post' && route.page !== 'PostNoCategory')
+            route.page !== 'Post' &&
+            route.page !== 'PostNoCategory'
         )
             document.title = page_title + ' — ' + APP_NAME;
 
@@ -264,10 +265,12 @@ class Header extends React.Component {
             resolveRoute(pathname).params.length > 1 &&
             this.last_sort_order
                 ? '/' + this.last_sort_order
-                : current_account_name ? `/@${current_account_name}/feed` : '/';
+                : current_account_name
+                ? `/@${current_account_name}/feed`
+                : '/';
 
         //TopRightHeader Stuff
-        const defaultNavigate = e => {
+        const defaultNavigate = (e) => {
             if (e.metaKey || e.ctrlKey) {
                 // prevent breaking anchor tags
             } else {
@@ -306,31 +309,31 @@ class Header extends React.Component {
             {
                 link: feed_link,
                 icon: 'home',
-                value: tt('g.feed')
+                value: tt('g.feed'),
             },
             { link: account_link, icon: 'profile', value: tt('g.blog') },
             {
                 link: notifications_link,
                 icon: 'notification',
-                value: notif_label
+                value: notif_label,
             },
             { link: comments_link, icon: 'replies', value: tt('g.comments') },
             {
                 link: replies_link,
                 icon: 'reply',
-                value: tt('g.replies')
+                value: tt('g.replies'),
             },
             {
                 link: wallet_link,
                 icon: 'wallet',
-                value: tt('g.wallet')
+                value: tt('g.wallet'),
             },
 
             {
                 link: '#',
                 icon: 'eye',
                 onClick: toggleNightmode,
-                value: tt('g.toggle_nightmode')
+                value: tt('g.toggle_nightmode'),
             },
             { link: settings_link, icon: 'cog', value: tt('g.settings') },
             loggedIn
@@ -338,15 +341,15 @@ class Header extends React.Component {
                       link: '#',
                       icon: 'enter',
                       onClick: logout,
-                      value: tt('g.logout')
+                      value: tt('g.logout'),
                   }
-                : { link: '#', onClick: showLogin, value: tt('g.login') }
+                : { link: '#', onClick: showLogin, value: tt('g.login') },
         ];
         showAd = true;
         return (
             <Headroom
-                onUnpin={e => this.headroomOnUnpin(e)}
-                onUnfix={e => this.headroomOnUnfix(e)}
+                onUnpin={(e) => this.headroomOnUnpin(e)}
+                onUnfix={(e) => this.headroomOnUnfix(e)}
             >
                 <header className="Header">
                     {/*{showAnnouncement && (*/}
@@ -456,7 +459,7 @@ const mapStateToProps = (state, ownProps) => {
     if (!process.env.BROWSER) {
         return {
             username: null,
-            loggedIn: false
+            loggedIn: false,
         };
     }
 
@@ -465,7 +468,7 @@ const mapStateToProps = (state, ownProps) => {
     if (route.page === 'UserProfile') {
         const profile = state.global.getIn([
             'accounts',
-            route.params[0].slice(1)
+            route.params[0].slice(1),
         ]);
         display_name = profile ? normalizeProfile(profile.toJS()).name : null;
     }
@@ -475,7 +478,7 @@ const mapStateToProps = (state, ownProps) => {
 
     const notifications = state.global.getIn([
         'unread_notifications',
-        username
+        username,
     ]);
     const loggedIn = !!username;
     const current_account_name = username
@@ -497,20 +500,20 @@ const mapStateToProps = (state, ownProps) => {
         walletUrl,
         content,
         notifications,
-        ...ownProps
+        ...ownProps,
     };
 };
 
-const mapDispatchToProps = dispatch => ({
-    showLogin: e => {
+const mapDispatchToProps = (dispatch) => ({
+    showLogin: (e) => {
         if (e) e.preventDefault();
         dispatch(userActions.showLogin({ type: 'basic' }));
     },
-    logout: e => {
+    logout: (e) => {
         if (e) e.preventDefault();
         dispatch(userActions.logout({ type: 'default' }));
     },
-    toggleNightmode: e => {
+    toggleNightmode: (e) => {
         if (e) e.preventDefault();
         dispatch(appActions.toggleNightmode());
     },
@@ -521,25 +524,25 @@ const mapDispatchToProps = dispatch => ({
         dispatch(userActions.hideSidePanel());
     },
     hideAnnouncement: () => dispatch(userActions.hideAnnouncement()),
-    getAccountNotifications: username => {
+    getAccountNotifications: (username) => {
         const query = {
-            account: username
+            account: username,
         };
         return dispatch(
             fetchDataSagaActions.getAccountUnreadNotifications(query)
         );
     },
-    startNotificationsPolling: username => {
+    startNotificationsPolling: (username) => {
         const query = {
-            account: username
+            account: username,
         };
         const params = {
             pollAction: fetchDataSagaActions.getAccountUnreadNotifications,
             pollPayload: query,
-            delay: 600000 // The delay between successive polls
+            delay: 600000, // The delay between successive polls
         };
         return dispatch(startPolling(params));
-    }
+    },
 });
 
 const connectedHeader = connect(mapStateToProps, mapDispatchToProps)(Header);

@@ -10,7 +10,7 @@ import {
     RouterContext,
     match,
     applyRouterMiddleware,
-    browserHistory
+    browserHistory,
 } from 'react-router';
 import { Provider } from 'react-redux';
 import { api } from '@blurtfoundation/blurtjs';
@@ -32,16 +32,16 @@ import { contentStats } from 'app/utils/StateFunctions';
 import ScrollBehavior from 'scroll-behavior';
 import { getStateAsync } from 'app/utils/steemApi';
 
-let get_state_perf,
-    get_content_perf = false;
+let get_state_perf;
+let get_content_perf = false;
 if (process.env.OFFLINE_SSR_TEST) {
     const testDataDir = process.env.OFFLINE_SSR_TEST_DATA_DIR || 'api_mockdata';
-    let uri = `${__dirname}/../../`;
+    const uri = `${__dirname}/../../`;
     get_state_perf = require(uri + testDataDir + '/get_state');
     get_content_perf = require(uri + testDataDir + '/get_content');
 }
 
-const calcOffsetRoot = startEl => {
+const calcOffsetRoot = (startEl) => {
     let offset = 0;
     let el = startEl;
     while (el) {
@@ -51,7 +51,7 @@ const calcOffsetRoot = startEl => {
     return offset;
 };
 
-//BEGIN: SCROLL CODE
+// BEGIN: SCROLL CODE
 /**
  * The maximum number of times to attempt scrolling to the target element/y position
  * (total seconds of attempted scrolling is given by (SCROLL_TOP_TRIES * SCROLL_TOP_DELAY_MS)/1000 )
@@ -110,12 +110,12 @@ const scrollTop = (el, topOffset, prevDocumentInfo, triesRemaining) => {
         scrollHeight: document.body.scrollHeight,
         scrollTop: Math.ceil(document.scrollingElement.scrollTop),
         scrollTarget: calcOffsetRoot(el) + topOffset,
-        direction: prevDocumentInfo.direction
+        direction: prevDocumentInfo.direction,
     };
     let doScroll = false;
-    //for both SCROLL_DIRECTION_DOWN, SCROLL_DIRECTION_UP
-    //We scroll if the document has 1. not been deliberately scrolled, AND 2. we have not passed our target scroll,
-    //NOR has the document changed in a meaningful way since we last looked at it
+    // for both SCROLL_DIRECTION_DOWN, SCROLL_DIRECTION_UP
+    // We scroll if the document has 1. not been deliberately scrolled, AND 2. we have not passed our target scroll,
+    // NOR has the document changed in a meaningful way since we last looked at it
     if (prevDocumentInfo.direction === SCROLL_DIRECTION_DOWN) {
         doScroll =
             prevDocumentInfo.scrollTop <=
@@ -153,13 +153,13 @@ class OffsetScrollBehavior extends ScrollBehavior {
      * In cases where we're scrolling to a pixel offset, adjust the offset for the current header, and punt to default behavior.
      */
     scrollToTarget(element, target) {
-        clearTimeout(scrollTopTimeout); //it's likely this will be called multiple times in succession, so clear and existing scrolling.
-        const header = document.getElementsByTagName('header')[0]; //this dimension ideally would be pulled from a scss file.
+        clearTimeout(scrollTopTimeout); // it's likely this will be called multiple times in succession, so clear and existing scrolling.
+        const header = document.getElementsByTagName('header')[0]; // this dimension ideally would be pulled from a scss file.
         let topOffset = SCROLL_TOP_EXTRA_PIXEL_OFFSET * -1;
         if (header) {
             topOffset += header.offsetHeight * -1;
         }
-        const newTarget = []; //x coordinate
+        const newTarget = []; // x coordinate
         let el = false;
         if (typeof target === 'string') {
             el = document.getElementById(target.substr(1));
@@ -179,21 +179,21 @@ class OffsetScrollBehavior extends ScrollBehavior {
             const documentInfo = {
                 scrollHeight: document.body.scrollHeight,
                 scrollTop: Math.ceil(document.scrollingElement.scrollTop),
-                scrollTarget: calcOffsetRoot(el) + topOffset
+                scrollTarget: calcOffsetRoot(el) + topOffset,
             };
             documentInfo.direction =
                 documentInfo.scrollTop < documentInfo.scrollTarget
                     ? SCROLL_DIRECTION_DOWN
                     : SCROLL_DIRECTION_UP;
-            scrollTop(el, topOffset, documentInfo, SCROLL_TOP_TRIES); //this function does the actual work of scrolling.
+            scrollTop(el, topOffset, documentInfo, SCROLL_TOP_TRIES); // this function does the actual work of scrolling.
         } else {
             super.scrollToTarget(element, newTarget);
         }
     }
 }
-//END: SCROLL CODE
+// END: SCROLL CODE
 
-const bindMiddleware = middleware => {
+const bindMiddleware = (middleware) => {
     if (process.env.BROWSER && process.env.NODE_ENV === 'development') {
         const { composeWithDevTools } = require('redux-devtools-extension');
         return composeWithDevTools(applyMiddleware(...middleware));
@@ -202,12 +202,12 @@ const bindMiddleware = middleware => {
 };
 
 const runRouter = (location, routes) => {
-    return new Promise(resolve =>
+    return new Promise((resolve) =>
         match({ routes, location }, (...args) => resolve(args))
     );
 };
 
-const onRouterError = error => {
+const onRouterError = (error) => {
     console.error('onRouterError', error);
 };
 
@@ -240,7 +240,7 @@ export async function serverRender(
             statusCode: 500,
             body: renderToString(
                 ErrorPage ? <ErrorPage /> : <span>Routing error</span>
-            )
+            ),
         };
     }
 
@@ -249,7 +249,7 @@ export async function serverRender(
         return {
             title: 'Page Not Found - Blurt',
             statusCode: 404,
-            body: renderToString(<NotFound />)
+            body: renderToString(<NotFound />),
         };
     }
 
@@ -272,18 +272,16 @@ export async function serverRender(
             return {
                 title: 'User Not Found - Blurt',
                 statusCode: 404,
-                body: renderToString(<NotFound />)
+                body: renderToString(<NotFound />),
             };
         }
 
         // If we are not loading a post, truncate state data to bring response size down.
         if (!url.match(routeRegex.Post)) {
-            for (var key in onchain.content) {
+            for (const key in onchain.content) {
                 // Count some stats then remove voting data. But keep current user's votes. (#1040)
-                onchain.content[key]['stats'] = contentStats(
-                    onchain.content[key]
-                );
-                onchain.content[key]['active_votes'] = null;
+                onchain.content[key].stats = contentStats(onchain.content[key]);
+                onchain.content[key].active_votes = null;
             }
         }
 
@@ -309,20 +307,20 @@ export async function serverRender(
                 return {
                     title: 'Page Not Found - Blurt',
                     statusCode: 404,
-                    body: renderToString(<NotFound />)
+                    body: renderToString(<NotFound />),
                 };
             }
         }
 
         // Insert the special posts into the list of posts, so there is no
         // jumping of content.
-        offchain.special_posts.featured_posts.forEach(featuredPost => {
+        offchain.special_posts.featured_posts.forEach((featuredPost) => {
             onchain.content[
                 `${featuredPost.author}/${featuredPost.permlink}`
             ] = featuredPost;
         });
 
-        offchain.special_posts.promoted_posts.forEach(promotedPost => {
+        offchain.special_posts.promoted_posts.forEach((promotedPost) => {
             onchain.content[
                 `${promotedPost.author}/${promotedPost.permlink}`
             ] = promotedPost;
@@ -331,11 +329,11 @@ export async function serverRender(
         server_store = createStore(rootReducer, {
             app: initialState.app,
             global: onchain,
-            offchain
+            offchain,
         });
         server_store.dispatch({
             type: '@@router/LOCATION_CHANGE',
-            payload: { pathname: location }
+            payload: { pathname: location },
         });
         server_store.dispatch(appActions.setUserPreferences(userPreferences));
     } catch (e) {
@@ -345,7 +343,7 @@ export async function serverRender(
             return {
                 title: 'Page Not Found - Blurt',
                 statusCode: 404,
-                body: renderToString(<NotFound />)
+                body: renderToString(<NotFound />),
             };
             // Ensure error page on state exception
         } else {
@@ -355,7 +353,7 @@ export async function serverRender(
             return {
                 title: 'Server error - Blurt',
                 statusCode: 500,
-                body: renderToString(<ErrorPage />)
+                body: renderToString(<ErrorPage />),
             };
         }
     }
@@ -384,7 +382,7 @@ export async function serverRender(
         titleBase: 'Blurt - ',
         meta,
         statusCode: status,
-        body: Iso.render(app, server_store.getState())
+        body: Iso.render(app, server_store.getState()),
     };
 }
 
@@ -411,16 +409,16 @@ export function clientRender(initialState) {
      * When to scroll - on hash link navigation determine if the page should scroll to that element (forward nav, or ignore nav direction)
      */
     const scroll = useScroll({
-        createScrollBehavior: config => new OffsetScrollBehavior(config), //information assembler for has scrolling.
+        createScrollBehavior: (config) => new OffsetScrollBehavior(config), // information assembler for has scrolling.
         shouldUpdateScroll: (prevLocation, { location }) => {
             // eslint-disable-line no-shadow
-            //if there is a hash, we may want to scroll to it
+            // if there is a hash, we may want to scroll to it
             if (location.hash) {
-                //if disableNavDirectionCheck exists, we want to always navigate to the hash (the page is telling us that's desired behavior based on the element's existence
+                // if disableNavDirectionCheck exists, we want to always navigate to the hash (the page is telling us that's desired behavior based on the element's existence
                 const disableNavDirectionCheck = document.getElementById(
                     DISABLE_ROUTER_HISTORY_NAV_DIRECTION_EL_ID
                 );
-                //we want to navigate to the corresponding id=<hash> element on 'PUSH' navigation (prev null + POP is a new window url nav ~= 'PUSH')
+                // we want to navigate to the corresponding id=<hash> element on 'PUSH' navigation (prev null + POP is a new window url nav ~= 'PUSH')
                 if (
                     disableNavDirectionCheck ||
                     (prevLocation === null && location.action === 'POP') ||
@@ -430,7 +428,7 @@ export function clientRender(initialState) {
                 }
             }
             return true;
-        }
+        },
     });
 
     if (process.env.NODE_ENV === 'production') {

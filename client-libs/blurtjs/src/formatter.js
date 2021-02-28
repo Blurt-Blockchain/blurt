@@ -1,7 +1,7 @@
 import get from "lodash/get";
 import { key_utils } from "./auth/ecc";
 
-module.exports = steemAPI => {
+module.exports = (steemAPI) => {
   function numberWithCommas(x) {
     return x.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   }
@@ -18,7 +18,7 @@ module.exports = steemAPI => {
 
   function calculateSaving(savings_withdraws) {
     let savings_pending = 0;
-    savings_withdraws.forEach(withdraw => {
+    savings_withdraws.forEach((withdraw) => {
       const [amount, asset] = withdraw.amount.split(" ");
       if (asset === "BLURT") savings_pending += parseFloat(amount);
     });
@@ -37,7 +37,7 @@ module.exports = steemAPI => {
     if (!vesting_steem) {
       if (!gprops) {
         promises.push(
-          steemAPI.getStateAsync(`/@${username}`).then(data => {
+          steemAPI.getStateAsync(`/@${username}`).then((data) => {
             gprops = data.props;
             vesting_steem = vestingSteem(account, gprops);
           })
@@ -51,7 +51,7 @@ module.exports = steemAPI => {
       promises.push(
         steemAPI
           .getSavingsWithdrawFromAsync(username)
-          .then(savings_withdraws => {
+          .then((savings_withdraws) => {
             savings = calculateSaving(savings_withdraws);
           })
       );
@@ -70,7 +70,7 @@ module.exports = steemAPI => {
         saving_balance_steem +
         savings.savings_pending;
 
-      return (total_steem).toFixed(2);
+      return total_steem.toFixed(2);
     });
   }
 
@@ -81,7 +81,7 @@ module.exports = steemAPI => {
   }
 
   return {
-    reputation: function(reputation) {
+    reputation: function (reputation) {
       if (reputation == null) return reputation;
       reputation = parseInt(reputation);
       let rep = String(reputation);
@@ -100,7 +100,7 @@ module.exports = steemAPI => {
       return out;
     },
 
-    vestToSteem: function(
+    vestToSteem: function (
       vestingShares,
       totalVestingShares,
       totalVestingFundSteem
@@ -111,7 +111,7 @@ module.exports = steemAPI => {
       );
     },
 
-    commentPermlink: function(parentAuthor, parentPermlink) {
+    commentPermlink: function (parentAuthor, parentPermlink) {
       const timeStr = new Date()
         .toISOString()
         .replace(/[^a-zA-Z0-9]+/g, "")
@@ -120,12 +120,12 @@ module.exports = steemAPI => {
       return "re-" + parentAuthor + "-" + parentPermlink + "-" + timeStr;
     },
 
-    amount: function(amount, asset) {
+    amount: function (amount, asset) {
       return amount.toFixed(3) + " " + asset;
     },
     numberWithCommas,
     vestingSteem,
     estimateAccountValue,
-    createSuggestedPassword
+    createSuggestedPassword,
   };
 };

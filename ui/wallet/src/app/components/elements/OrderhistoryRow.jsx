@@ -1,5 +1,5 @@
-var React = require('react');
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
+const React = require('react');
 
 export default class OrderhistoryRow extends React.Component {
     constructor(props) {
@@ -52,9 +52,9 @@ export default class OrderhistoryRow extends React.Component {
     }
 
     render() {
-        let { order, buy, total } = this.props;
+        const { order, buy, total } = this.props;
 
-        let className = this.state.animate ? 'animate ' : '';
+        const className = this.state.animate ? 'animate ' : '';
 
         return (
             <tr className={className}>

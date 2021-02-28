@@ -6,6 +6,7 @@ class SignUp extends React.Component {
     constructor() {
         super();
     }
+
     render() {
         if ($STM_Config.read_only_mode) {
             return (

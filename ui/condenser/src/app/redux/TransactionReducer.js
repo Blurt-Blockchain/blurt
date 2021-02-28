@@ -15,8 +15,8 @@ const defaultState = fromJS({
     status: { key: '', error: false, busy: false },
     errors: {
         bandwidthError: false,
-        transactionFeeError: false
-    }
+        transactionFeeError: false,
+    },
 });
 
 export default function reducer(state = defaultState, action) {
@@ -32,7 +32,7 @@ export default function reducer(state = defaultState, action) {
                 confirmBroadcastOperation: operation,
                 confirmErrorCallback: payload.errorCallback,
                 confirm,
-                warning
+                warning,
             });
         }
 
@@ -40,7 +40,7 @@ export default function reducer(state = defaultState, action) {
             return state.merge({
                 show_confirm_modal: false,
                 confirmBroadcastOperation: undefined,
-                confirm: undefined
+                confirm: undefined,
             });
 
         case BROADCAST_OPERATION:
@@ -52,7 +52,7 @@ export default function reducer(state = defaultState, action) {
 
             let errorStr = error.toString();
             let errorKey = 'Transaction broadcast error.';
-            for (const [type /*, operation*/] of operations) {
+            for (const [type] of operations) {
                 switch (type) {
                     case 'vote':
                         if (/uniqueness constraint/.test(errorStr)) {
@@ -70,8 +70,9 @@ export default function reducer(state = defaultState, action) {
                             /You may only post once per minute/.test(errorStr)
                         ) {
                             errorKey = 'You may only post once per minute.';
-                        } else if (errorStr === 'Testing, fake error')
+                        } else if (errorStr === 'Testing, fake error') {
                             errorKey = 'Testing, fake error';
+                        }
                         break;
                     default:
                         break;
@@ -95,16 +96,16 @@ export default function reducer(state = defaultState, action) {
                                 txt[txt.length - 1].trim() !== ''
                             ) {
                                 errorKey = errorStr = txt[txt.length - 1];
-                            } else
-                                errorStr = `Transaction failed: ${
-                                    err_lines[1]
-                                }`;
+                            } else {
+                                errorStr = `Transaction failed: ${err_lines[1]}`;
+                            }
                         }
                     }
                     // TODO: This would perhaps be better expressed as a Case, Switch statement.
                     // TODO: The precise reason for why this clipping needs to happen is unclear.
-                    if (errorStr.length > 200)
+                    if (errorStr.length > 200) {
                         errorStr = errorStr.substring(0, 200);
+                    }
                     // Catch for unknown key better error handling
                     if (/unknown key: /.test(errorKey)) {
                         errorKey = "Blurt account doesn't exist.";
@@ -118,7 +119,7 @@ export default function reducer(state = defaultState, action) {
                             'Transaction failed: Not your valid active key.';
                     }
                     // TODO: refactor this so that the keys are consistent and sane, i.e. do not include user name in error key.
-                    state = state.update('errors', errors => {
+                    state = state.update('errors', (errors) => {
                         return errors
                             ? errors.set(errorKey, errorStr)
                             : Map({ [errorKey]: errorStr });
@@ -174,42 +175,42 @@ export default function reducer(state = defaultState, action) {
 }
 
 // Action creators
-export const confirmOperation = payload => ({
+export const confirmOperation = (payload) => ({
     type: CONFIRM_OPERATION,
-    payload
+    payload,
 });
 
-export const hideConfirm = payload => ({
+export const hideConfirm = (payload) => ({
     type: HIDE_CONFIRM,
-    payload
+    payload,
 });
 
-export const broadcastOperation = payload => ({
+export const broadcastOperation = (payload) => ({
     type: BROADCAST_OPERATION,
-    payload
+    payload,
 });
 
-export const error = payload => ({
+export const error = (payload) => ({
     type: ERROR,
-    payload
+    payload,
 });
 
-export const deleteError = payload => ({
+export const deleteError = (payload) => ({
     type: DELETE_ERROR,
-    payload
+    payload,
 });
 
-export const dismissError = payload => ({
+export const dismissError = (payload) => ({
     type: DISMISS_ERROR,
-    payload
+    payload,
 });
 
-export const set = payload => ({
+export const set = (payload) => ({
     type: SET,
-    payload
+    payload,
 });
 
-export const remove = payload => ({
+export const remove = (payload) => ({
     type: REMOVE,
-    payload
+    payload,
 });

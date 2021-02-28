@@ -2,11 +2,11 @@
 
 export default function init(config) {
     if (config.google_analytics_id) {
-        (function(i, s, o, g, r, a, m) {
-            i['GoogleAnalyticsObject'] = r;
+        (function (i, s, o, g, r, a, m) {
+            i.GoogleAnalyticsObject = r;
             (i[r] =
                 i[r] ||
-                function() {
+                function () {
                     (i[r].q = i[r].q || []).push(arguments);
                 }),
                 (i[r].l = 1 * new Date());

@@ -1,4 +1,4 @@
-/*global $STM_Config */
+/* global $STM_Config */
 import koa_router from 'koa-router';
 import koa_body from 'koa-body';
 import config from 'config';
@@ -8,7 +8,7 @@ import Mixpanel from 'mixpanel';
 import {
     PublicKey,
     Signature,
-    hash
+    hash,
 } from '@blurtfoundation/blurtjs/lib/auth/ecc';
 import { api, broadcast } from '@blurtfoundation/blurtjs';
 
@@ -18,8 +18,8 @@ const mixpanel = config.get('mixpanel')
     ? Mixpanel.init(config.get('mixpanel'))
     : null;
 
-const _stringval = v => (typeof v === 'string' ? v : JSON.stringify(v));
-const _parse = params => {
+const _stringval = (v) => (typeof v === 'string' ? v : JSON.stringify(v));
+const _parse = (params) => {
     if (typeof params === 'string') {
         try {
             return JSON.parse(params);
@@ -33,7 +33,7 @@ const _parse = params => {
 };
 
 function logRequest(path, ctx, extra) {
-    let d = { ip: getRemoteIp(ctx.req) };
+    const d = { ip: getRemoteIp(ctx.req) };
     if (ctx.session) {
         if (ctx.session.user) {
             d.user = ctx.session.user;
@@ -46,13 +46,13 @@ function logRequest(path, ctx, extra) {
         }
     }
     if (extra) {
-        Object.keys(extra).forEach(k => {
+        Object.keys(extra).forEach((k) => {
             const nk = d[k] ? '_' + k : k;
             d[nk] = extra[k];
         });
     }
     const info = Object.keys(d)
-        .map(k => `${k}=${_stringval(d[k])}`)
+        .map((k) => `${k}=${_stringval(d[k])}`)
         .join(' ');
     console.log(`-- /${path} --> ${info}`);
 }
@@ -62,7 +62,7 @@ export default function useGeneralApi(app) {
     app.use(router.routes());
     const koaBody = koa_body();
 
-    router.post('/login_account', koaBody, function*() {
+    router.post('/login_account', koaBody, function* () {
         // if (rateLimitReq(this, this.req)) return;
         const params = this.request.body;
         const { csrf, account, signatures } =
@@ -78,7 +78,7 @@ export default function useGeneralApi(app) {
                     );
                 } else {
                     const [chainAccount] = yield api.getAccountsAsync([
-                        account
+                        account,
                     ]);
                     if (!chainAccount) {
                         console.error(
@@ -104,9 +104,7 @@ export default function useGeneralApi(app) {
                             if (!sigHex) return;
                             if (weight !== 1 || weight_threshold !== 1) {
                                 console.error(
-                                    `/login_account login_challenge unsupported ${
-                                        type
-                                    } auth configuration: ${account}`
+                                    `/login_account login_challenge unsupported ${type} auth configuration: ${account}`
                                 );
                             } else {
                                 const sig = parseSig(sigHex);
@@ -129,8 +127,8 @@ export default function useGeneralApi(app) {
                         const {
                             posting: {
                                 key_auths: [[posting_pubkey, weight]],
-                                weight_threshold
-                            }
+                                weight_threshold,
+                            },
                         } = chainAccount;
                         verify(
                             'posting',
@@ -145,13 +143,13 @@ export default function useGeneralApi(app) {
             }
 
             this.body = JSON.stringify({
-                status: 'ok'
+                status: 'ok',
             });
             const remote_ip = getRemoteIp(this.req);
             if (mixpanel) {
                 mixpanel.people.set(this.session.uid, {
                     ip: remote_ip,
-                    $ip: remote_ip
+                    $ip: remote_ip,
                 });
                 mixpanel.people.increment(this.session.uid, 'Logins', 1);
             }
@@ -162,13 +160,13 @@ export default function useGeneralApi(app) {
                 error.message
             );
             this.body = JSON.stringify({
-                error: error.message
+                error: error.message,
             });
             this.status = 500;
         }
     });
 
-    router.post('/logout_account', koaBody, function*() {
+    router.post('/logout_account', koaBody, function* () {
         // if (rateLimitReq(this, this.req)) return; - logout maybe immediately followed with login_attempt event
         const params = this.request.body;
         const { csrf } =
@@ -189,7 +187,7 @@ export default function useGeneralApi(app) {
         }
     });
 
-    router.post('/csp_violation', function*() {
+    router.post('/csp_violation', function* () {
         if (rateLimitReq(this, this.req)) return;
         let params;
         try {
@@ -199,9 +197,7 @@ export default function useGeneralApi(app) {
         }
         if (params && params['csp-report']) {
             const csp_report = params['csp-report'];
-            const value = `${csp_report['document-uri']} : ${
-                csp_report['blocked-uri']
-            }`;
+            const value = `${csp_report['document-uri']} : ${csp_report['blocked-uri']}`;
             console.log(
                 '-- /csp_violation -->',
                 value,
@@ -219,7 +215,7 @@ export default function useGeneralApi(app) {
         this.body = '';
     });
 
-    router.post('/setUserPreferences', koaBody, function*() {
+    router.post('/setUserPreferences', koaBody, function* () {
         const params = this.request.body;
         const { csrf, payload } =
             typeof params === 'string' ? JSON.parse(params) : params;
@@ -251,7 +247,7 @@ export default function useGeneralApi(app) {
         }
     });
 
-    router.post('/isTosAccepted', koaBody, function*() {
+    router.post('/isTosAccepted', koaBody, function* () {
         const params = this.request.body;
         const { csrf } = _parse(params);
         if (!checkCSRF(this, csrf)) return;
@@ -285,7 +281,7 @@ export default function useGeneralApi(app) {
         }
     });
 
-    router.post('/acceptTos', koaBody, function*() {
+    router.post('/acceptTos', koaBody, function* () {
         const params = this.request.body;
         const { csrf } =
             typeof params === 'string' ? JSON.parse(params) : params;
@@ -301,7 +297,7 @@ export default function useGeneralApi(app) {
                 'conveyor.assign_tag',
                 {
                     uid: this.session.a,
-                    tag: ACCEPTED_TOS_TAG
+                    tag: ACCEPTED_TOS_TAG,
                 },
                 config.get('conveyor_username'),
                 config.get('conveyor_posting_wif')
@@ -319,7 +315,7 @@ export default function useGeneralApi(app) {
     });
 }
 
-const parseSig = hexSig => {
+const parseSig = (hexSig) => {
     try {
         return Signature.fromHex(hexSig);
     } catch (e) {

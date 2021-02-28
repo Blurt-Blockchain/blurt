@@ -8,16 +8,16 @@ import { fetchData } from './FetchDataSaga';
 
 describe('FetchDataSaga', () => {
     describe('should fetch multiple and filter', () => {
-        let payload = {
+        const payload = {
             order: 'by_author',
             author: 'alice',
             permlink: 'hair',
             accountname: 'bob',
-            postFilter: value => value.author === 'bob'
+            postFilter: (value) => value.author === 'bob',
         };
-        let action = {
+        const action = {
             category: '',
-            payload
+            payload,
         };
         constants.FETCH_DATA_BATCH_SIZE = 2;
         const gen = fetchData(action);
@@ -27,7 +27,7 @@ describe('FetchDataSaga', () => {
                 put(
                     globalActions.fetchingData({
                         order: 'by_author',
-                        category: ''
+                        category: '',
                     })
                 )
             );
@@ -42,26 +42,26 @@ describe('FetchDataSaga', () => {
                     tag: payload.accountname,
                     limit: constants.FETCH_DATA_BATCH_SIZE,
                     start_author: payload.author,
-                    start_permlink: payload.permlink
+                    start_permlink: payload.permlink,
                 })
             );
         });
         it('should continue fetching data filtering 1 out', () => {
-            let actual = gen.next([
+            const actual = gen.next([
                 {
-                    author: 'alice'
+                    author: 'alice',
                 },
                 {
                     author: 'bob',
-                    permlink: 'post1'
-                }
+                    permlink: 'post1',
+                },
             ]).value;
             expect(actual).toEqual(
                 put(
                     globalActions.receiveData({
                         data: [
                             { author: 'alice' },
-                            { author: 'bob', permlink: 'post1' }
+                            { author: 'bob', permlink: 'post1' },
                         ],
                         order: 'by_author',
                         category: '',
@@ -69,7 +69,7 @@ describe('FetchDataSaga', () => {
                         firstPermlink: payload.permlink,
                         accountname: 'bob',
                         fetching: true,
-                        endOfData: false
+                        endOfData: false,
                     })
                 )
             );
@@ -81,15 +81,15 @@ describe('FetchDataSaga', () => {
                     tag: payload.accountname,
                     limit: constants.FETCH_DATA_BATCH_SIZE,
                     start_author: 'bob',
-                    start_permlink: 'post1'
+                    start_permlink: 'post1',
                 })
             );
 
             actual = gen.next([
                 {
                     author: 'bob',
-                    permlink: 'post2'
-                }
+                    permlink: 'post2',
+                },
             ]).value;
             expect(actual).toEqual(
                 put(
@@ -101,7 +101,7 @@ describe('FetchDataSaga', () => {
                         firstPermlink: payload.permlink,
                         accountname: 'bob',
                         fetching: false,
-                        endOfData: true
+                        endOfData: true,
                     })
                 )
             );
@@ -111,16 +111,16 @@ describe('FetchDataSaga', () => {
         });
     });
     describe('should not fetch more batches than max batch size', () => {
-        let payload = {
+        const payload = {
             order: 'by_author',
             author: 'alice',
             permlink: 'hair',
             accountname: 'bob',
-            postFilter: value => value.author === 'bob'
+            postFilter: (value) => value.author === 'bob',
         };
-        let action = {
+        const action = {
             category: '',
-            payload
+            payload,
         };
         constants.FETCH_DATA_BATCH_SIZE = 2;
         constants.MAX_BATCHES = 2;
@@ -131,7 +131,7 @@ describe('FetchDataSaga', () => {
             put(
                 globalActions.fetchingData({
                     order: 'by_author',
-                    category: ''
+                    category: '',
                 })
             )
         );
@@ -145,18 +145,18 @@ describe('FetchDataSaga', () => {
                 tag: payload.accountname,
                 limit: constants.FETCH_DATA_BATCH_SIZE,
                 start_author: payload.author,
-                start_permlink: payload.permlink
+                start_permlink: payload.permlink,
             })
         );
 
         // these all will not satisfy the filter
         actual = gen.next([
             {
-                author: 'alice'
+                author: 'alice',
             },
             {
-                author: 'alice'
-            }
+                author: 'alice',
+            },
         ]).value;
         expect(actual).toEqual(
             put(
@@ -168,7 +168,7 @@ describe('FetchDataSaga', () => {
                     firstPermlink: payload.permlink,
                     accountname: 'bob',
                     fetching: true,
-                    endOfData: false
+                    endOfData: false,
                 })
             )
         );
@@ -178,17 +178,17 @@ describe('FetchDataSaga', () => {
             call([api, api.getDiscussionsByBlogAsync], {
                 tag: payload.accountname,
                 limit: constants.FETCH_DATA_BATCH_SIZE,
-                start_author: 'alice'
+                start_author: 'alice',
             })
         );
 
         actual = gen.next([
             {
-                author: 'alice'
+                author: 'alice',
             },
             {
-                author: 'alice'
-            }
+                author: 'alice',
+            },
         ]).value;
         expect(actual).toEqual(
             put(
@@ -200,7 +200,7 @@ describe('FetchDataSaga', () => {
                     firstPermlink: payload.permlink,
                     accountname: 'bob',
                     fetching: false,
-                    endOfData: false
+                    endOfData: false,
                 })
             )
         );

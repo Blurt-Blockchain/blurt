@@ -6,7 +6,7 @@ import proxifyImageUrl from 'app/utils/ProxifyUrl';
 import * as Phishing from 'app/utils/Phishing';
 import {
     embedNode as EmbeddedPlayerEmbedNode,
-    preprocessHtml
+    preprocessHtml,
 } from 'app/components/elements/EmbeddedPlayers';
 import { extractMetadata as youTubeId } from 'app/components/elements/EmbeddedPlayers/youtube';
 
@@ -16,7 +16,7 @@ export const getExternalLinkWarningMessage = () =>
 
 const noop = () => {};
 const DOMParser = new xmldom.DOMParser({
-    errorHandler: { warning: noop, error: noop }
+    errorHandler: { warning: noop, error: noop },
 });
 const XMLSerializer = new xmldom.XMLSerializer();
 
@@ -84,7 +84,7 @@ const XMLSerializer = new xmldom.XMLSerializer();
     If hideImages and mutate is set to true all images will be replaced
     by <pre> elements containing just the image url.
 */
-export default function(html, { mutate = true, hideImages = false } = {}) {
+export default function (html, { mutate = true, hideImages = false } = {}) {
     const state = { mutate };
     state.hashtags = new Set();
     state.usertags = new Set();
@@ -117,7 +117,7 @@ export default function(html, { mutate = true, hideImages = false } = {}) {
         if (!mutate) return state;
         return {
             html: doc ? XMLSerializer.serializeToString(doc) : '',
-            ...state
+            ...state,
         };
     } catch (error) {
         // xmldom error is bad
@@ -131,7 +131,7 @@ export default function(html, { mutate = true, hideImages = false } = {}) {
 
 function traverse(node, state, depth = 0) {
     if (!node || !node.childNodes) return;
-    Array(...node.childNodes).forEach(child => {
+    Array(...node.childNodes).forEach((child) => {
         // console.log(depth, 'child.tag,data', child.tagName, child.data)
         const tag = child.tagName ? child.tagName.toLowerCase() : null;
         if (tag) state.htmltags.add(tag);
@@ -158,10 +158,8 @@ function link(state, child) {
             // Unlink potential phishing attempts
             if (
                 (url.indexOf('#') !== 0 && // Allow in-page links
-                    (child.textContent.match(/(www\.)?blurt\.world/i) &&
-                        !url.match(
-                            /https?:\/\/(.*@)?(www\.)?blurt\.world/i
-                        ))) ||
+                    child.textContent.match(/(www\.)?blurt\.world/i) &&
+                    !url.match(/https?:\/\/(.*@)?(www\.)?blurt\.world/i)) ||
                 Phishing.looksPhishy(url)
             ) {
                 const phishyDiv = child.ownerDocument.createElement('div');
@@ -195,8 +193,9 @@ function iframe(state, child) {
     if (
         tag == 'div' &&
         child.parentNode.getAttribute('class') == 'videoWrapper'
-    )
+    ) {
         return;
+    }
     const html = XMLSerializer.serializeToString(child);
     child.parentNode.replaceChild(
         DOMParser.parseFromString(`<div class="videoWrapper">${html}</div>`),
@@ -224,10 +223,11 @@ function img(state, child) {
 // For all img elements with non-local URLs, prepend the proxy URL (e.g. `https://imgp.blurt.world/0x0/`)
 function proxifyImages(doc) {
     if (!doc) return;
-    [...doc.getElementsByTagName('img')].forEach(node => {
+    [...doc.getElementsByTagName('img')].forEach((node) => {
         const url = node.getAttribute('src');
-        if (!linksRe.local.test(url))
+        if (!linksRe.local.test(url)) {
             node.setAttribute('src', proxifyImageUrl(url, true));
+        }
     });
 }
 
@@ -265,7 +265,7 @@ function linkifyNode(child, state) {
 
 function linkify(content, mutate, hashtags, usertags, images, links) {
     // hashtag
-    content = content.replace(/(^|\s)(#[-a-z\d]+)/gi, tag => {
+    content = content.replace(/(^|\s)(#[-a-z\d]+)/gi, (tag) => {
         if (/#[\d]+$/.test(tag)) return tag; // Don't allow numbers to be tags
         const space = /^\s/.test(tag) ? tag[0] : '';
         const tag2 = tag.trim().substring(1);
@@ -295,7 +295,7 @@ function linkify(content, mutate, hashtags, usertags, images, links) {
         }
     );
 
-    content = content.replace(linksAny('gi'), ln => {
+    content = content.replace(linksAny('gi'), (ln) => {
         if (linksRe.image.test(ln)) {
             if (images) images.add(ln);
             return `<img src="${ipfsPrefix(ln)}" />`;
@@ -305,10 +305,9 @@ function linkify(content, mutate, hashtags, usertags, images, links) {
         if (/\.(zip|exe)$/i.test(ln)) return ln;
 
         // do not linkify phishy links
-        if (Phishing.looksPhishy(ln))
-            return `<div title='${getPhishingWarningMessage()}' class='phishy'>${
-                ln
-            }</div>`;
+        if (Phishing.looksPhishy(ln)) {
+            return `<div title='${getPhishingWarningMessage()}' class='phishy'>${ln}</div>`;
+        }
 
         if (links) links.add(ln);
         return `<a href="${ipfsPrefix(ln)}">${ln}</a>`;

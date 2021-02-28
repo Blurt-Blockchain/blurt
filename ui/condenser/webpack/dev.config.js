@@ -11,27 +11,27 @@ module.exports = {
     devtool: 'cheap-module-eval-source-map',
     output: {
         ...baseConfig.output,
-        publicPath: '/assets/'
+        publicPath: '/assets/',
     },
     module: {
         ...baseConfig.module,
-        rules: [
-            ...baseConfig.module.rules,
-        ]
+        rules: [...baseConfig.module.rules],
     },
     plugins: [
         new webpack.DefinePlugin({
             'process.env': {
                 BROWSER: JSON.stringify(true),
                 NODE_ENV: JSON.stringify('development'),
-                VERSION: JSON.stringify(git.long())
-            }
+                VERSION: JSON.stringify(git.long()),
+            },
         }),
         ...baseConfig.plugins,
         function () {
-            console.log("Please wait for app server startup (~60s)" +
-                " after webpack server startup...");
+            console.log(
+                'Please wait for app server startup (~60s)' +
+                    ' after webpack server startup...'
+            );
             this.plugin('done', startKoa);
-        }
-    ]
+        },
+    ],
 };

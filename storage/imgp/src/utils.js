@@ -1,11 +1,16 @@
-const config = require('config.json')('./config.json');
-const needle = require('needle');
+const config = require("config.json")("./config.json");
+const needle = require("needle");
 
 export const getJsonRpcUri = async (api, method, params) => {
-  const jsonrpc = {jsonrpc:"2.0", method:`${api}.${method}`, params: params, "id":1};
-  const api_res = await needle('post', config.rpc_url, jsonrpc , {json: true});
-  const {body} = api_res;
-  return body['result'];
+  const jsonrpc = {
+    jsonrpc: "2.0",
+    method: `${api}.${method}`,
+    params: params,
+    id: 1,
+  };
+  const api_res = await needle("post", config.rpc_url, jsonrpc, { json: true });
+  const { body } = api_res;
+  return body.result;
 };
 
 export const request_remote_image = (url) => {
@@ -23,12 +28,18 @@ export const request_remote_image = (url) => {
   return new Promise((resolve, reject) => {
     needle.get(url, options, (error, response) => {
       if (error) {
-        reject(error)
+        reject(error);
       } else {
-        resolve(response)
+        resolve(response);
       }
-    })
+    });
   });
 };
 
-export const accepted_content_types = [ 'image/gif', 'image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+export const accepted_content_types = [
+  "image/gif",
+  "image/jpeg",
+  "image/jpg",
+  "image/png",
+  "image/webp",
+];

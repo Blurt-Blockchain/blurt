@@ -8,7 +8,7 @@ const widthOptions = {
     range: true,
     min: 300,
     max: 1200,
-    step: 1
+    step: 1,
 };
 
 storiesOf('Elements', module)

@@ -6,7 +6,7 @@ import { VEST_TICKER, LIQUID_TICKER } from 'app/client_config';
 import { fromJS } from 'immutable';
 import { formatter } from '@blurtfoundation/blurtjs';
 
-export const numberWithCommas = x => x.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+export const numberWithCommas = (x) => x.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 
 export function isFetchingOrRecentlyUpdated(global_status, order, category) {
     const status = global_status
@@ -37,7 +37,7 @@ export function hasNsfwTag(content) {
     let tags = [];
     try {
         tags = (json && JSON.parse(json).tags) || [];
-        if (typeof tags == 'string') {
+        if (typeof tags === 'string') {
             tags = [tags];
         }
         if (!Array.isArray(tags)) {
@@ -48,7 +48,7 @@ export function hasNsfwTag(content) {
     }
     tags.push(content.get('category'));
     tags = filterTags(tags);
-    const isNsfw = tags.filter(tag => tag && tag.match(/^nsfw$/i)).length > 0;
+    const isNsfw = tags.filter((tag) => tag && tag.match(/^nsfw$/i)).length > 0;
     return isNsfw;
 }
 
@@ -60,7 +60,7 @@ export function contentStats(content) {
     let total_votes = 0;
 
     // TODO: breaks if content has no active_votes attribute.
-    content.get('active_votes').forEach(v => {
+    content.get('active_votes').forEach((v) => {
         const sign = Math.sign(v.get('percent'));
         if (sign === 0) return;
         total_votes += 1;
@@ -87,13 +87,13 @@ export function contentStats(content) {
     return {
         hide,
         gray,
-        total_votes
+        total_votes,
     };
 }
 
 export function filterTags(tags) {
     return tags
-        .filter(tag => typeof tag === 'string')
+        .filter((tag) => typeof tag === 'string')
         .filter((value, index, self) => value && self.indexOf(value) === index);
 }
 

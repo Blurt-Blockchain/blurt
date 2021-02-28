@@ -68,7 +68,7 @@ export function validate_account_name_with_memo(name, memo) {
 
 export function validate_memo_field(value, username, memokey) {
     value = value.split(' ').filter((v) => v != '');
-    for (var w in value) {
+    for (const w in value) {
         // Only perform key tests if it might be a key, i.e. it is a long string.
         if (value[w].length >= 39) {
             if (/5[HJK]\w{40,45}/i.test(value[w])) {

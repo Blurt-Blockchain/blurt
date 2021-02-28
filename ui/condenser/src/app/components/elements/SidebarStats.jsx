@@ -11,7 +11,7 @@ const SidebarStats = ({ operationFlatFee, bandwidthKbytesFee }) => (
                     <div
                         style={{
                             display: 'flex',
-                            justifyContent: 'space-between'
+                            justifyContent: 'space-between',
                         }}
                     >
                         <div>Operation Flat Fee</div>
@@ -22,7 +22,7 @@ const SidebarStats = ({ operationFlatFee, bandwidthKbytesFee }) => (
                     <div
                         style={{
                             display: 'flex',
-                            justifyContent: 'space-between'
+                            justifyContent: 'space-between',
                         }}
                     >
                         <div>Bandwidth Fee</div>

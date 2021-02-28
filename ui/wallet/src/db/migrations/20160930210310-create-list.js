@@ -1,6 +1,6 @@
 'use strict';
 module.exports = {
-    up: function(queryInterface, Sequelize) {
+    up: function (queryInterface, Sequelize) {
         return queryInterface
             .createTable('lists', {
                 id: {
@@ -16,7 +16,7 @@ module.exports = {
                     type: Sequelize.DATE,
                 },
             })
-            .then(function() {
+            .then(function () {
                 queryInterface.addIndex('lists', ['kk']);
                 queryInterface.addIndex('lists', ['kk', 'value'], {
                     indexName: 'KeyValue',
@@ -24,7 +24,7 @@ module.exports = {
                 });
             });
     },
-    down: function(queryInterface, Sequelize) {
+    down: function (queryInterface, Sequelize) {
         return queryInterface.dropTable('lists');
     },
 };

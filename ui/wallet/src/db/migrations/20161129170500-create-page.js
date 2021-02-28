@@ -1,6 +1,6 @@
 'use strict';
 module.exports = {
-    up: function(queryInterface, Sequelize) {
+    up: function (queryInterface, Sequelize) {
         return queryInterface
             .createTable('pages', {
                 id: {
@@ -16,13 +16,13 @@ module.exports = {
                     type: Sequelize.DATE,
                 },
             })
-            .then(function() {
+            .then(function () {
                 queryInterface.addIndex('pages', ['permlink'], {
                     indicesType: 'UNIQUE',
                 });
             });
     },
-    down: function(queryInterface, Sequelize) {
+    down: function (queryInterface, Sequelize) {
         return queryInterface.dropTable('pages');
     },
 };

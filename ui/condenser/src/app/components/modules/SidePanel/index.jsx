@@ -11,7 +11,7 @@ const SidePanel = ({
     visible,
     hideSidePanel,
     username,
-    walletUrl
+    walletUrl,
 }) => {
     if (process.env.BROWSER) {
         visible && document.addEventListener('click', hideSidePanel);
@@ -55,17 +55,17 @@ const SidePanel = ({
             {
                 value: 'welcome',
                 label: tt('navigation.welcome'),
-                link: `/welcome`
+                link: '/welcome',
             },
             {
                 value: 'faq',
                 label: tt('navigation.faq'),
-                link: `https://blurtfaq.org`
+                link: 'https://blurtfaq.org',
             },
             {
                 value: 'tags',
                 label: tt('navigation.explore'),
-                link: `/tags`
+                link: '/tags',
             },
             // {
             //     value: 'recover_account_step_1',
@@ -75,69 +75,69 @@ const SidePanel = ({
             {
                 value: 'change_password',
                 label: tt('navigation.change_account_password'),
-                link: `${walletUrl}/change_password`
+                link: `${walletUrl}/change_password`,
             },
             {
                 value: 'vote_for_witnesses',
                 label: tt('navigation.vote_for_witnesses'),
-                link: `${walletUrl}/~witnesses`
-            }
+                link: `${walletUrl}/~witnesses`,
+            },
         ],
         exchanges: [
             {
                 value: 'probit',
                 label: 'Probit',
-                link: 'https://www.probit.com/app/exchange/BLURT-BTC'
+                link: 'https://www.probit.com/app/exchange/BLURT-BTC',
             },
             {
                 value: 'ionomy',
                 label: 'Ionomy',
-                link: 'https://ionomy.com/en/markets/btc-blurt'
+                link: 'https://ionomy.com/en/markets/btc-blurt',
             },
             {
                 value: 'beldex',
                 label: 'Beldex',
-                link: 'https://www.beldex.io/tradeAdvance?pair=BLURT_BTC'
+                link: 'https://www.beldex.io/tradeAdvance?pair=BLURT_BTC',
             },
             {
                 value: 'stex',
                 label: 'Stex',
-                link: 'https://app.stex.com/en/trade/pair/BTC/BLURT/1D'
+                link: 'https://app.stex.com/en/trade/pair/BTC/BLURT/1D',
             },
             {
                 value: 'hive-engine',
                 label: 'Hive Engine',
-                link: 'https://hive-engine.com/?p=market&t=BLURT'
+                link: 'https://hive-engine.com/?p=market&t=BLURT',
             },
             {
                 value: 'steem-engine',
                 label: 'Steem Engine',
-                link: 'https://steem-engine.com/?p=market&t=BLURT'
+                link: 'https://steem-engine.com/?p=market&t=BLURT',
             },
             {
                 value: 'leodex',
                 label: 'Leodex',
-                link: 'https://leodex.io/'
-            }
+                link: 'https://leodex.io/',
+            },
         ],
         wrapped: [
             {
                 value: 'wblurt',
                 label: 'Uniswap',
                 link:
-                    'https://app.uniswap.org/#/swap?inputCurrency=ETH&outputCurrency=0x37472814e5c6146e6ca7ed1753cd1b18b733e5d4'
-            }
+                    'https://app.uniswap.org/#/swap?inputCurrency=ETH&outputCurrency=0x37472814e5c6146e6ca7ed1753cd1b18b733e5d4',
+            },
         ],
         external: [
             {
                 value: 'chat',
                 label: tt('navigation.chat'),
-                link: 'https://discord.blurt.world/'
+                link: 'https://discord.blurt.world/',
             },
             {
                 value: 'block_explorer',
                 label: 'Block Explorer',
-                link: 'https://blocks.blurtwallet.com'
+                link: 'https://blocks.blurtwallet.com',
             },
             // {
             //     value: 'jobs',
@@ -147,8 +147,8 @@ const SidePanel = ({
             {
                 value: 'tools',
                 label: 'Blurt Tools',
-                link: 'https://blurt.tools/'
-            }
+                link: 'https://blurt.tools/',
+            },
             // {
             //     value: 'business',
             //     label: tt('navigation.business_center'),
@@ -180,50 +180,50 @@ const SidePanel = ({
                 value: 'about',
                 label: tt('navigation.about'),
                 link: '/about.html',
-                internal: true
-            }
+                internal: true,
+            },
         ],
         legal: [
             {
                 value: 'privacy',
                 label: tt('navigation.privacy_policy'),
-                link: '/privacy.html'
+                link: '/privacy.html',
             },
             {
                 value: 'tos',
                 label: tt('navigation.terms_of_service'),
-                link: '/tos.html'
-            }
+                link: '/tos.html',
+            },
         ],
         extras: [
             {
                 value: 'login',
                 label: tt('g.sign_in'),
-                link: '/login.html'
+                link: '/login.html',
             },
             {
                 value: 'signup',
                 label: tt('g.sign_up'),
-                link: 'https://signup.blurtwallet.com'
+                link: 'https://signup.blurtwallet.com',
             },
             {
                 value: 'post',
                 label: tt('g.post'),
-                link: '/submit.html'
-            }
+                link: '/submit.html',
+            },
         ],
         swag: [
             {
                 value: 'logo-merch',
                 label: 'Logo Merch',
-                link: 'https://www.redbubble.com/shop/ap/51822392'
+                link: 'https://www.redbubble.com/shop/ap/51822392',
             },
             {
                 value: 'text-merch',
                 label: 'Text Merch',
-                link: 'https://www.redbubble.com/shop/ap/51897803'
-            }
-        ]
+                link: 'https://www.redbubble.com/shop/ap/51897803',
+            },
+        ],
     };
 
     return (
@@ -231,10 +231,10 @@ const SidePanel = ({
             <div className={(visible ? 'visible ' : '') + alignment}>
                 <CloseButton onClick={hideSidePanel} />
                 <ul className={`vertical menu ${loggedIn}`}>
-                    {sidePanelLinks['extras'].map(makeLink)}
+                    {sidePanelLinks.extras.map(makeLink)}
                 </ul>
                 <ul className="vertical menu">
-                    {sidePanelLinks['internal'].map(makeLink)}
+                    {sidePanelLinks.internal.map(makeLink)}
                 </ul>
                 <ul className="vertical menu">
                     <li>
@@ -242,13 +242,13 @@ const SidePanel = ({
                             {tt('navigation.third_party_exchanges')}
                         </a>
                     </li>
-                    {sidePanelLinks['exchanges'].map(makeLink)}
+                    {sidePanelLinks.exchanges.map(makeLink)}
                 </ul>
                 <ul className="vertical menu">
                     <li>
                         <a className="menu-section">Wrapped BLURT</a>
                     </li>
-                    {sidePanelLinks['wrapped'].map(makeLink)}
+                    {sidePanelLinks.wrapped.map(makeLink)}
                 </ul>
                 <ul className="vertical menu">
                     <li>
@@ -256,16 +256,16 @@ const SidePanel = ({
                             {tt('navigation.blurt_swag')}
                         </a>
                     </li>
-                    {sidePanelLinks['swag'].map(makeLink)}
+                    {sidePanelLinks.swag.map(makeLink)}
                 </ul>
                 <ul className="vertical menu">
-                    {sidePanelLinks['external'].map(makeLink)}
+                    {sidePanelLinks.external.map(makeLink)}
                 </ul>
                 <ul className="vertical menu">
-                    {sidePanelLinks['organizational'].map(makeLink)}
+                    {sidePanelLinks.organizational.map(makeLink)}
                 </ul>
                 <ul className="vertical menu">
-                    {sidePanelLinks['legal'].map(makeLink)}
+                    {sidePanelLinks.legal.map(makeLink)}
                 </ul>
             </div>
         </div>
@@ -276,11 +276,11 @@ SidePanel.propTypes = {
     alignment: PropTypes.oneOf(['left', 'right']).isRequired,
     visible: PropTypes.bool.isRequired,
     hideSidePanel: PropTypes.func.isRequired,
-    username: PropTypes.string
+    username: PropTypes.string,
 };
 
 SidePanel.defaultProps = {
-    username: undefined
+    username: undefined,
 };
 
 export default connect(
@@ -288,8 +288,8 @@ export default connect(
         const walletUrl = state.app.get('walletUrl');
         return {
             walletUrl,
-            ...ownProps
+            ...ownProps,
         };
     },
-    dispatch => ({})
+    (dispatch) => ({})
 )(SidePanel);

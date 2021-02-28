@@ -224,14 +224,14 @@ export default connect(
                 // Revoke is always 0
                 vesting_shares: `${vests} VESTS`,
             };
-            //Calculate transaction fee
-            let size = JSON.stringify(operation).replace(/[\[\]\,\"]/g, '')
+            // Calculate transaction fee
+            const size = JSON.stringify(operation).replace(/[\[\]\,\"]/g, '')
                 .length;
-            let bw_fee = Math.max(
+            const bw_fee = Math.max(
                 0.001,
                 ((size / 1024) * bandwidthKbytesFee).toFixed(3)
             );
-            let fee = operationFlatFee + bw_fee;
+            const fee = operationFlatFee + bw_fee;
 
             const confirm = () => (
                 <ConfirmDelegationTransfer

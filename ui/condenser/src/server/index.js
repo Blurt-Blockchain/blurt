@@ -33,7 +33,7 @@ global.$STM_Config = {
     google_analytics_id: config.get('google_analytics_id'),
     wallet_url: config.get('wallet_url'),
     failover_threshold: config.get('failover_threshold'),
-    alternative_api_endpoints: alternativeApiEndpoints
+    alternative_api_endpoints: alternativeApiEndpoints,
 };
 
 const WebpackIsomorphicTools = require('webpack-isomorphic-tools');
@@ -51,11 +51,11 @@ global.webpackIsomorphicTools.server(ROOT, () => {
             factor: 5,
             minTimeout: 50, // start at 50ms
             maxTimeout: 60 * 1000,
-            randomize: true
+            randomize: true,
         },
         useAppbaseApi: !!config.blurtd_use_appbase,
         alternative_api_endpoints: alternativeApiEndpoints,
-        failover_threshold: config.get('failover_threshold')
+        failover_threshold: config.get('failover_threshold'),
     });
     blurtjs.config.set('address_prefix', config.get('address_prefix'));
     blurtjs.config.set('chain_id', config.get('chain_id'));

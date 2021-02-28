@@ -5,7 +5,7 @@ const styles = {
     textAlign: 'center',
     display: 'grid',
     gridTemplateColumns: 'repeat(3, 1fr)',
-    gridAutoRows: 'minmax(80px, auto)'
+    gridAutoRows: 'minmax(80px, auto)',
 };
 
 const Grid = ({ children }) => <div style={styles}>{children}</div>;
@@ -14,9 +14,9 @@ class Benchmark extends React.Component {
     render() {
         return (
             <Grid>
-                {icons.map(icon => (
+                {icons.map((icon) => (
                     <div key={'icon_' + icon}>
-                        <Icon name={icon} size={'2x'} />
+                        <Icon name={icon} size="2x" />
                         <p> {icon} </p>
                     </div>
                 ))}
@@ -27,5 +27,5 @@ class Benchmark extends React.Component {
 
 module.exports = {
     path: '/benchmark',
-    component: Benchmark
+    component: Benchmark,
 };

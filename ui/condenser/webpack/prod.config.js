@@ -8,7 +8,7 @@ module.exports = {
             'process.env': {
                 BROWSER: JSON.stringify(true),
                 NODE_ENV: JSON.stringify('production'),
-            }
+            },
         }),
         ...baseConfig.plugins,
         // Fix window.onerror
@@ -16,7 +16,9 @@ module.exports = {
         new webpack.SourceMapDevToolPlugin({
             module: true,
             columns: false,
-            moduleFilenameTemplate: info => { return `${info.resourcePath}?${info.loaders}` }
-        })
-    ]
+            moduleFilenameTemplate: (info) => {
+                return `${info.resourcePath}?${info.loaders}`;
+            },
+        }),
+    ],
 };

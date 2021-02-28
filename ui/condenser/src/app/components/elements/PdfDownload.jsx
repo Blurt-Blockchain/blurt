@@ -91,7 +91,7 @@ export default class PdfDownload extends Component {
                 {this.state.loaded && (
                     <button
                         style={{ display: 'block' }}
-                        onClick={e => {
+                        onClick={(e) => {
                             this.downloadPdf();
                             e.preventDefault();
                         }}
@@ -108,7 +108,7 @@ export default class PdfDownload extends Component {
         text,
         { scale, x, y, lineHeight, maxWidth, color, fontSize, font }
     ) {
-        var textLines = ctx
+        const textLines = ctx
             .setFont(font)
             .setFontSize(fontSize * scale)
             .setTextColor(color)
@@ -136,41 +136,41 @@ export default class PdfDownload extends Component {
 
     drawQr(ctx, data, x, y, size, bgcolor) {
         const canvas = document.createElement('canvas');
-        var qr = new QRious({
+        const qr = new QRious({
             element: canvas,
             size: 250,
             value: data,
-            background: bgcolor
+            background: bgcolor,
         });
         ctx.addImage(canvas, 'PNG', x, y, size, size);
     }
 
     renderPdf(keys, filename) {
-        const widthInches = this.props.widthInches, //8.5,
-            lineHeight = 1.2,
-            margin = 0.3,
-            maxLineWidth = widthInches - margin * 2.0,
-            fontSize = 24,
-            scale = 72, //ptsPerInch
-            oneLineHeight = fontSize * lineHeight / scale,
-            qrSize = 1.1;
+        const widthInches = this.props.widthInches; // 8.5,
+        const lineHeight = 1.2;
+        const margin = 0.3;
+        const maxLineWidth = widthInches - margin * 2.0;
+        const fontSize = 24;
+        const scale = 72; // ptsPerInch
+        const oneLineHeight = (fontSize * lineHeight) / scale;
+        const qrSize = 1.1;
 
         const ctx = new jsPDF({
             orientation: 'portrait',
             unit: 'in',
             lineHeight: lineHeight,
-            format: 'letter'
+            format: 'letter',
         }).setProperties({ title: filename });
 
-        let offset = 0.0,
-            sectionStart = 0,
-            sectionHeight = 0;
+        let offset = 0.0;
+        let sectionStart = 0;
+        let sectionHeight = 0;
 
         // HEADER
 
         sectionHeight = 1.29;
         this.drawFilledRect(ctx, 0.0, 0.0, widthInches, sectionHeight, {
-            color: '#1f0fd1'
+            color: '#1f0fd1',
         });
 
         this.drawImageFromCanvas(
@@ -192,7 +192,7 @@ export default class PdfDownload extends Component {
             maxWidth: maxLineWidth,
             color: 'white',
             fontSize: 0.36,
-            font: 'Roboto-Bold'
+            font: 'Roboto-Bold',
         });
 
         /*
@@ -227,7 +227,7 @@ export default class PdfDownload extends Component {
                 maxWidth: maxLineWidth,
                 color: 'white',
                 fontSize: 0.14,
-                font: 'Roboto-Bold'
+                font: 'Roboto-Bold',
             }
         );
 
@@ -268,7 +268,7 @@ export default class PdfDownload extends Component {
             maxWidth: maxLineWidth,
             color: 'black',
             fontSize: 0.18,
-            font: 'Roboto-Bold'
+            font: 'Roboto-Bold',
         });
 
         offset += 0.1;
@@ -286,7 +286,7 @@ export default class PdfDownload extends Component {
                 maxWidth: maxLineWidth,
                 color: 'black',
                 fontSize: 0.14,
-                font: 'Roboto-Regular'
+                font: 'Roboto-Regular',
             }
         );
         offset += 0.2;
@@ -296,7 +296,7 @@ export default class PdfDownload extends Component {
         sectionStart = offset;
         sectionHeight = qrSize + 0.15 * 2;
         this.drawFilledRect(ctx, 0.0, offset, widthInches, sectionHeight, {
-            color: 'f4f4f4'
+            color: 'f4f4f4',
         });
 
         offset += 0.15;
@@ -321,7 +321,7 @@ export default class PdfDownload extends Component {
             maxWidth: maxLineWidth,
             color: 'black',
             fontSize: 0.14,
-            font: 'Roboto-Bold'
+            font: 'Roboto-Bold',
         });
 
         offset += this.renderText(
@@ -336,7 +336,7 @@ export default class PdfDownload extends Component {
                 maxWidth: maxLineWidth - (qrSize + 0.1),
                 color: 'black',
                 fontSize: 0.14,
-                font: 'Roboto-Regular'
+                font: 'Roboto-Regular',
             }
         );
 
@@ -349,7 +349,7 @@ export default class PdfDownload extends Component {
             maxWidth: maxLineWidth,
             color: 'black',
             fontSize: 0.14,
-            font: 'RobotoMono-Regular'
+            font: 'RobotoMono-Regular',
         });
         offset += 0.2;
         offset = sectionStart + sectionHeight;
@@ -358,7 +358,7 @@ export default class PdfDownload extends Component {
 
         sectionStart = offset;
         sectionHeight = qrSize + 0.15 * 2;
-        //this.drawFilledRect(ctx, 0.0, offset, widthInches, sectionHeight, {color: '#f4f4f4'});
+        // this.drawFilledRect(ctx, 0.0, offset, widthInches, sectionHeight, {color: '#f4f4f4'});
 
         offset += 0.15;
         this.drawQr(
@@ -383,7 +383,7 @@ export default class PdfDownload extends Component {
             maxWidth: maxLineWidth,
             color: 'black',
             fontSize: 0.14,
-            font: 'Roboto-Bold'
+            font: 'Roboto-Bold',
         });
 
         offset += this.renderText(
@@ -397,7 +397,7 @@ export default class PdfDownload extends Component {
                 maxWidth: maxLineWidth - (qrSize + 0.1),
                 color: 'black',
                 fontSize: 0.14,
-                font: 'Roboto-Regular'
+                font: 'Roboto-Regular',
             }
         );
 
@@ -410,7 +410,7 @@ export default class PdfDownload extends Component {
             maxWidth: maxLineWidth,
             color: 'black',
             fontSize: 0.14,
-            font: 'RobotoMono-Regular'
+            font: 'RobotoMono-Regular',
         });
 
         offset += 0.1;
@@ -421,7 +421,7 @@ export default class PdfDownload extends Component {
         sectionStart = offset;
         sectionHeight = qrSize + 0.15 * 2;
         this.drawFilledRect(ctx, 0.0, offset, widthInches, sectionHeight, {
-            color: '#f4f4f4'
+            color: '#f4f4f4',
         });
 
         offset += 0.15;
@@ -447,7 +447,7 @@ export default class PdfDownload extends Component {
             maxWidth: maxLineWidth,
             color: 'black',
             fontSize: 0.14,
-            font: 'Roboto-Bold'
+            font: 'Roboto-Bold',
         });
 
         offset += this.renderText(
@@ -462,7 +462,7 @@ export default class PdfDownload extends Component {
                 maxWidth: maxLineWidth - (qrSize + 0.1),
                 color: 'black',
                 fontSize: 0.14,
-                font: 'Roboto-Regular'
+                font: 'Roboto-Regular',
             }
         );
 
@@ -475,7 +475,7 @@ export default class PdfDownload extends Component {
             maxWidth: maxLineWidth,
             color: 'black',
             fontSize: 0.14,
-            font: 'RobotoMono-Regular'
+            font: 'RobotoMono-Regular',
         });
         offset += 0.2;
 
@@ -485,7 +485,7 @@ export default class PdfDownload extends Component {
 
         sectionStart = offset;
         sectionHeight = qrSize + 0.15 * 2;
-        //this.drawFilledRect(ctx, 0.0, offset, widthInches, sectionHeight, {color: '#f4f4f4'});
+        // this.drawFilledRect(ctx, 0.0, offset, widthInches, sectionHeight, {color: '#f4f4f4'});
 
         offset += 0.15;
         this.drawQr(
@@ -510,7 +510,7 @@ export default class PdfDownload extends Component {
             maxWidth: maxLineWidth - qrSize - 0.1,
             color: 'black',
             fontSize: 0.14,
-            font: 'Roboto-Bold'
+            font: 'Roboto-Bold',
         });
 
         offset += this.renderText(
@@ -527,7 +527,7 @@ export default class PdfDownload extends Component {
                 maxWidth: maxLineWidth - (qrSize + 0.1),
                 color: 'black',
                 fontSize: 0.14,
-                font: 'Roboto-Regular'
+                font: 'Roboto-Regular',
             }
         );
 
@@ -540,7 +540,7 @@ export default class PdfDownload extends Component {
             maxWidth: maxLineWidth - qrSize - 0.1,
             color: 'black',
             fontSize: 0.14,
-            font: 'RobotoMono-Regular'
+            font: 'RobotoMono-Regular',
         });
 
         offset = sectionStart + sectionHeight;
@@ -550,7 +550,7 @@ export default class PdfDownload extends Component {
         sectionHeight = 1;
         sectionStart = offset;
         this.drawFilledRect(ctx, 0.0, offset, widthInches, sectionHeight, {
-            color: '#f4f4f4'
+            color: '#f4f4f4',
         });
 
         offset += 0.2;
@@ -562,7 +562,7 @@ export default class PdfDownload extends Component {
             maxWidth: maxLineWidth,
             color: 'black',
             fontSize: 0.14,
-            font: 'Roboto-Bold'
+            font: 'Roboto-Bold',
         });
 
         offset += this.renderText(
@@ -577,7 +577,7 @@ export default class PdfDownload extends Component {
                 maxWidth: maxLineWidth,
                 color: 'black',
                 fontSize: 0.14,
-                font: 'Roboto-Regular'
+                font: 'Roboto-Regular',
             }
         );
 
@@ -590,7 +590,7 @@ export default class PdfDownload extends Component {
             maxWidth: maxLineWidth,
             color: 'black',
             fontSize: 0.14,
-            font: 'RobotoMono-Regular'
+            font: 'RobotoMono-Regular',
         });
 
         offset = sectionStart + sectionHeight;
@@ -599,7 +599,7 @@ export default class PdfDownload extends Component {
 
         sectionStart = offset;
         sectionHeight = 1.0;
-        //this.drawFilledRect(ctx, 0.0, offset, widthInches, sectionHeight, {color: '#f4f4f4'});
+        // this.drawFilledRect(ctx, 0.0, offset, widthInches, sectionHeight, {color: '#f4f4f4'});
 
         offset += 0.1;
         offset += this.renderText(ctx, 'Your Public Keys', {
@@ -610,7 +610,7 @@ export default class PdfDownload extends Component {
             maxWidth: maxLineWidth,
             color: 'black',
             fontSize: 0.18,
-            font: 'Roboto-Bold'
+            font: 'Roboto-Bold',
         });
 
         offset += 0.1;
@@ -628,7 +628,7 @@ export default class PdfDownload extends Component {
                 maxWidth: maxLineWidth,
                 color: 'black',
                 fontSize: 0.15,
-                font: 'Roboto-Regular'
+                font: 'Roboto-Regular',
             }
         );
 
@@ -644,7 +644,7 @@ export default class PdfDownload extends Component {
             maxWidth: maxLineWidth,
             color: 'black',
             fontSize: 0.14,
-            font: 'Roboto-Bold'
+            font: 'Roboto-Bold',
         });
 
         offset += this.renderText(ctx, keys.postingPublic, {
@@ -655,7 +655,7 @@ export default class PdfDownload extends Component {
             maxWidth: maxLineWidth,
             color: 'black',
             fontSize: 0.14,
-            font: 'RobotoMono-Regular'
+            font: 'RobotoMono-Regular',
         });
 
         this.renderText(ctx, 'Memo Public', {
@@ -666,7 +666,7 @@ export default class PdfDownload extends Component {
             maxWidth: maxLineWidth,
             color: 'black',
             fontSize: 0.14,
-            font: 'Roboto-Bold'
+            font: 'Roboto-Bold',
         });
 
         offset += this.renderText(ctx, keys.memoPublic, {
@@ -677,7 +677,7 @@ export default class PdfDownload extends Component {
             maxWidth: maxLineWidth,
             color: 'black',
             fontSize: 0.14,
-            font: 'RobotoMono-Regular'
+            font: 'RobotoMono-Regular',
         });
 
         this.renderText(ctx, 'Active Public', {
@@ -688,7 +688,7 @@ export default class PdfDownload extends Component {
             maxWidth: maxLineWidth,
             color: 'black',
             fontSize: 0.14,
-            font: 'Roboto-Bold'
+            font: 'Roboto-Bold',
         });
 
         offset += this.renderText(ctx, keys.activePublic, {
@@ -699,7 +699,7 @@ export default class PdfDownload extends Component {
             maxWidth: maxLineWidth,
             color: 'black',
             fontSize: 0.14,
-            font: 'RobotoMono-Regular'
+            font: 'RobotoMono-Regular',
         });
 
         this.renderText(ctx, 'Owner Public', {
@@ -710,7 +710,7 @@ export default class PdfDownload extends Component {
             maxWidth: maxLineWidth,
             color: 'black',
             fontSize: 0.14,
-            font: 'Roboto-Bold'
+            font: 'Roboto-Bold',
         });
 
         offset += this.renderText(ctx, keys.ownerPublic, {
@@ -721,7 +721,7 @@ export default class PdfDownload extends Component {
             maxWidth: maxLineWidth,
             color: 'black',
             fontSize: 0.14,
-            font: 'RobotoMono-Regular'
+            font: 'RobotoMono-Regular',
         });
 
         this.renderText(ctx, 'v0.1', {
@@ -732,7 +732,7 @@ export default class PdfDownload extends Component {
             maxWidth: maxLineWidth,
             color: '#bbbbbb',
             fontSize: 0.14,
-            font: 'Roboto-Regular'
+            font: 'Roboto-Regular',
         });
 
         return ctx;

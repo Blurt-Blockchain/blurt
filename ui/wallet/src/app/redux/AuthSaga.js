@@ -8,7 +8,7 @@ import * as userActions from 'app/redux/UserReducer';
 
 // operations that require only posting authority
 export const postingOps = Set(
-    `vote, comment, delete_comment, custom_json, claim_reward_balance`
+    'vote, comment, delete_comment, custom_json, claim_reward_balance'
         .trim()
         .split(/,\s*/)
 );
@@ -157,8 +157,9 @@ export function* findSigningKey({ opType, username, password }) {
                 );
             }
         } else {
-            if (private_keys)
+            if (private_keys) {
                 private_key = private_keys.get(authType + '_private');
+            }
         }
         if (private_key) {
             const pubkey = private_key.toPublicKey().toString();

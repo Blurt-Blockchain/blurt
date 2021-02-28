@@ -32,11 +32,11 @@ class PostsIndex extends React.Component {
         loading: PropTypes.bool,
         username: PropTypes.string,
         blogmode: PropTypes.bool,
-        categories: PropTypes.object
+        categories: PropTypes.object,
     };
 
     static defaultProps = {
-        showSpam: false
+        showSpam: false,
     };
 
     constructor() {
@@ -67,7 +67,7 @@ class PostsIndex extends React.Component {
         let {
             accountname,
             category,
-            order = constants.DEFAULT_SORT_ORDER
+            order = constants.DEFAULT_SORT_ORDER,
         } = this.props.routeParams;
         if (category === 'feed') {
             accountname = order.slice(1);
@@ -81,7 +81,7 @@ class PostsIndex extends React.Component {
             permlink,
             order,
             category,
-            accountname
+            accountname,
         });
     }
     onShowSpam = () => {
@@ -90,7 +90,7 @@ class PostsIndex extends React.Component {
     render() {
         let {
             category,
-            order = constants.DEFAULT_SORT_ORDER
+            order = constants.DEFAULT_SORT_ORDER,
         } = this.props.routeParams;
 
         const {
@@ -98,7 +98,7 @@ class PostsIndex extends React.Component {
             featured,
             promoted,
             gptBannedTags,
-            topic
+            topic,
         } = this.props;
 
         let allowAdsOnContent = true;
@@ -139,7 +139,7 @@ class PostsIndex extends React.Component {
                 emptyText = (
                     <div>
                         {tt('user_profile.user_hasnt_followed_anything_yet', {
-                            name: account_name
+                            name: account_name,
                         })}
                     </div>
                 );
@@ -184,7 +184,7 @@ class PostsIndex extends React.Component {
                 page_title = tt('g.recommended');
             else
                 page_title = tt('posts_index.accountnames_feed', {
-                    account_name
+                    account_name,
                 });
         } else {
             switch (topics_order) {
@@ -248,9 +248,12 @@ class PostsIndex extends React.Component {
                     </div>
                     <hr className="articles__hr" />
                     {!fetching &&
-                    (posts && !posts.size) &&
-                    (featured && !featured.size) &&
-                    (promoted && !promoted.size) ? (
+                    posts &&
+                    !posts.size &&
+                    featured &&
+                    !featured.size &&
+                    promoted &&
+                    !promoted.size ? (
                         <Callout>{emptyText}</Callout>
                     ) : (
                         <PostsList
@@ -354,7 +357,7 @@ module.exports = {
                 feed_posts = state.global.getIn([
                     'accounts',
                     account_name,
-                    'feed'
+                    'feed',
                 ]);
             }
 
@@ -392,19 +395,19 @@ module.exports = {
                 gptBannedTags: state.app.getIn(['googleAds', 'gptBannedTags']),
                 bandwidthKbytesFee: state.global.getIn([
                     'props',
-                    'bandwidth_kbytes_fee'
+                    'bandwidth_kbytes_fee',
                 ]),
                 operationFlatFee: state.global.getIn([
                     'props',
-                    'operation_flat_fee'
-                ])
+                    'operation_flat_fee',
+                ]),
             };
         },
-        dispatch => {
+        (dispatch) => {
             return {
-                requestData: args =>
-                    dispatch(fetchDataSagaActions.requestData(args))
+                requestData: (args) =>
+                    dispatch(fetchDataSagaActions.requestData(args)),
             };
         }
-    )(PostsIndex)
+    )(PostsIndex),
 };

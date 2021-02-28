@@ -1,5 +1,5 @@
-jest.mock('./utils/GDPRUserList');
 import resolveRoute, { routeRegex } from './ResolveRoute';
+jest.mock('./utils/GDPRUserList');
 
 describe('routeRegex', () => {
     it('should produce the desired regex patterns', () => {

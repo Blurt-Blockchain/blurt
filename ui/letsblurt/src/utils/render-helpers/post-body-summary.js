@@ -30,7 +30,7 @@ const postBodySummary = (entryBody, length) => {
 
   if (length) {
     // Truncate
-    //text = text.substring(0, length);
+    // text = text.substring(0, length);
     // this still causes json parse error:
     // expected another unicode escape ofr second half of surrogate pair
     text = sliceByByte(text, length);

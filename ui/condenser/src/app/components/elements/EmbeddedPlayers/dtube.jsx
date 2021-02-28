@@ -3,13 +3,13 @@ import React from 'react';
 const regex = {
     sanitize: /^https:\/\/emb\.d\.tube\/#!\/([a-zA-Z0-9-.\/]+)$/,
     main: /https:\/\/(?:emb\.)?(?:d\.tube\/#!\/(?:v\/)?)([a-zA-Z0-9\-.\/]*)/,
-    contentId: /(?:d\.tube\/#!\/(?:v\/)?([a-zA-Z0-9\-.\/]*))+/
+    contentId: /(?:d\.tube\/#!\/(?:v\/)?([a-zA-Z0-9\-.\/]*))+/,
 };
 
 export default regex;
 export const sandboxConfig = {
     useSandbox: true,
-    sandboxAttributes: ['allow-scripts', 'allow-same-origin']
+    sandboxAttributes: ['allow-scripts', 'allow-same-origin'],
 };
 
 export function genIframeMd(idx, dtubeId, w, h) {
@@ -27,8 +27,8 @@ export function genIframeMd(idx, dtubeId, w, h) {
                 sandbox={
                     sandboxConfig.useSandbox
                         ? sandboxConfig.sandboxAttributes
-                          ? sandboxConfig.sandboxAttributes.join(' ')
-                          : true
+                            ? sandboxConfig.sandboxAttributes.join(' ')
+                            : true
                         : ''
                 }
             />
@@ -66,11 +66,11 @@ function extractMetadata(data) {
     return {
         id: m[1],
         url: m[0],
-        canonical: `https://emb.d.tube/#!/${m[1]}`
+        canonical: `https://emb.d.tube/#!/${m[1]}`,
     };
 }
 
-export function embedNode(child, links /*images*/) {
+export function embedNode(child, links /* images */) {
     try {
         const { data } = child;
         const dtube = extractMetadata(data);

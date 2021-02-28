@@ -67,11 +67,11 @@ class Approval extends React.Component {
 module.exports = {
     path: 'approval',
     component: connect(
-        state => {
+        (state) => {
             return {
                 viewMode: state.app.get('viewMode'),
             };
         },
-        dispatch => ({})
+        (dispatch) => ({})
     )(Approval),
 };

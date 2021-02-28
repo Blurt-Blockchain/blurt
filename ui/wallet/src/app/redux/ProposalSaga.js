@@ -68,8 +68,9 @@ export function* listProposals({
                 if (nextVotes.length < maxVotes) return votes;
                 beyondThisProposal = false;
                 nextVotes.map((d) => {
-                    if (d.proposal.proposal_id != pId)
+                    if (d.proposal.proposal_id != pId) {
                         beyondThisProposal = true;
+                    }
                 });
                 if (beyondThisProposal) return votes;
             }

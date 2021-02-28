@@ -18,7 +18,7 @@ export const wait = (ms) =>
     });
 
 let polling = false;
-let active_user = null;
+const active_user = null;
 let last_trade = null;
 
 export function* fetchMarket(location_change_action) {
@@ -41,7 +41,7 @@ export function* fetchMarket(location_change_action) {
                 trades = yield call([api, api.getRecentTradesAsync], 25);
                 yield put(marketActions.receiveTradeHistory(trades));
             } else {
-                let start = last_trade.toISOString().slice(0, -5);
+                const start = last_trade.toISOString().slice(0, -5);
                 trades = yield call(
                     [api, api.getTradeHistoryAsync],
                     start,
@@ -53,7 +53,7 @@ export function* fetchMarket(location_change_action) {
             }
             if (trades.length > 0) {
                 last_trade = new Date(
-                    new Date(Date.parse(trades[0]['date'])).getTime() + 1000
+                    new Date(Date.parse(trades[0].date)).getTime() + 1000
                 );
             }
 

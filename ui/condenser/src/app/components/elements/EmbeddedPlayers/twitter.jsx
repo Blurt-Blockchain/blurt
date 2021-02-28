@@ -8,7 +8,7 @@ import _ from 'lodash';
 const regex = {
     main: /(?:https?:\/\/(?:(?:twitter\.com\/(.*?)\/status\/(.*))))/i,
     sanitize: /(?:https?:\/\/(?:(?:twitter\.com\/(.*?)\/status\/(.*))))/i,
-    htmlReplacement: /<blockquote[^>]*?><p[^>]*?>(.*?)<\/p>.*?mdash; (.*)<a href="(https:\/\/twitter.com\/.*?(.*?\/status\/(.*?))\?.*?)">(.*?)<\/a><\/blockquote>/i
+    htmlReplacement: /<blockquote[^>]*?><p[^>]*?>(.*?)<\/p>.*?mdash; (.*)<a href="(https:\/\/twitter.com\/.*?(.*?\/status\/(.*?))\?.*?)">(.*?)<\/a><\/blockquote>/i,
 };
 
 export default regex;
@@ -38,7 +38,7 @@ export function extractMetadataFromEmbedCode(data) {
             thumbnail: null,
             date,
             author,
-            description
+            description,
         };
     }
 
@@ -67,7 +67,7 @@ export function extractMetadata(data) {
             thumbnail: null,
             date: '',
             author,
-            description: ''
+            description: '',
         };
     }
 
@@ -133,7 +133,7 @@ function generateTwitterCode(metadata) {
     }
 
     return {
-        __html: twitterCode
+        __html: twitterCode,
     };
 }
 
@@ -172,9 +172,7 @@ export function embedNode(child) {
 
         if (twitter) {
             const metadata = btoa(
-                `${twitter.author}|${twitter.date}|${twitter.url}|${
-                    twitter.description
-                }`
+                `${twitter.author}|${twitter.date}|${twitter.url}|${twitter.description}`
             );
             child.data = data.replace(
                 regex.main,
@@ -201,9 +199,7 @@ export function preprocessHtml(child) {
             const twitter = extractMetadataFromEmbedCode(child);
             if (twitter) {
                 const metadata = btoa(
-                    `${twitter.author}|${twitter.date}|${twitter.url}|${
-                        twitter.description
-                    }`
+                    `${twitter.author}|${twitter.date}|${twitter.url}|${twitter.description}`
                 );
                 child = child.replace(
                     regex.htmlReplacement,

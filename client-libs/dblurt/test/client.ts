@@ -4,7 +4,7 @@ import { VError } from "verror";
 
 import { Client, utils } from "./../src";
 
-describe("client", function() {
+describe("client", function () {
   this.slow(200);
   this.timeout(30 * 1000);
 
@@ -12,22 +12,27 @@ describe("client", function() {
   const aclient = client as any;
 
   // TODO: change api.hive.blog to testnet
-  it('should handle failover', async () => {
-    const bclient = new Client(['https://wrongapi.hive.blog', 'https://hive-test-beeabode.roelandp.nl'], {timeout: 1000})
-    const result = await bclient.call('condenser_api', 'get_accounts', [['initminer']])
+  it("should handle failover", async () => {
+    const bclient = new Client(
+      ["https://wrongapi.hive.blog", "https://hive-test-beeabode.roelandp.nl"],
+      { timeout: 1000 }
+    );
+    const result = await bclient.call("condenser_api", "get_accounts", [
+      ["initminer"],
+    ]);
     assert.equal(result.length, 1);
     assert.equal(result[0].name, "initminer");
-  })
+  });
 
-  it("should make rpc call", async function() {
+  it("should make rpc call", async function () {
     const result = (await client.call("condenser_api", "get_accounts", [
-      ["initminer"]
+      ["initminer"],
     ])) as any[];
     assert.equal(result.length, 1);
     assert.equal(result[0].name, "initminer");
   });
 
-  it("should handle rpc errors", async function() {
+  it("should handle rpc errors", async function () {
     try {
       await client.call("condenser_api", "i_like_turtles");
       assert(false, "should not be reached");
@@ -46,7 +51,7 @@ describe("client", function() {
     }
   });
 
-  it("should format rpc errors", async function() {
+  it("should format rpc errors", async function () {
     const tx = { operations: [["witness_update", {}]] };
     try {
       await client.call("condenser_api", "broadcast_transaction", [tx]);

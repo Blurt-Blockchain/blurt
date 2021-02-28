@@ -1,6 +1,6 @@
 'use strict';
 module.exports = {
-    up: function(queryInterface, Sequelize) {
+    up: function (queryInterface, Sequelize) {
         return queryInterface
             .createTable('web_events', {
                 id: {
@@ -36,14 +36,14 @@ module.exports = {
                     type: Sequelize.DATE,
                 },
             })
-            .then(function() {
+            .then(function () {
                 queryInterface.addIndex('web_events', ['event_type']);
                 queryInterface.addIndex('web_events', ['user_id']);
                 queryInterface.addIndex('web_events', ['uid']);
                 queryInterface.addIndex('web_events', ['account_name']);
             });
     },
-    down: function(queryInterface, Sequelize) {
+    down: function (queryInterface, Sequelize) {
         return queryInterface.dropTable('web_events');
     },
 };

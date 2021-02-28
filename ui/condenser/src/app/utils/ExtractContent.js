@@ -7,7 +7,7 @@ import Remarkable from 'remarkable';
 
 const remarkable = new Remarkable({ html: true, linkify: false });
 
-const getValidImage = array => {
+const getValidImage = (array) => {
     return array &&
         Array.isArray(array) &&
         array.length >= 1 &&
@@ -27,7 +27,7 @@ export default function extractContent(get, content) {
         title,
         created,
         net_rshares,
-        children
+        children,
     } = get(
         content,
         'author',
@@ -49,7 +49,7 @@ export default function extractContent(get, content) {
     let image_link;
     try {
         jsonMetadata = JSON.parse(json_metadata);
-        if (typeof jsonMetadata == 'string') {
+        if (typeof jsonMetadata === 'string') {
             // At least one case where jsonMetadata was double-encoded: #895
             jsonMetadata = JSON.parse(jsonMetadata);
         }
@@ -139,6 +139,6 @@ export default function extractContent(get, content) {
         desc,
         desc_complete,
         body,
-        pending_payout
+        pending_payout,
     };
 }

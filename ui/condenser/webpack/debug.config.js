@@ -11,9 +11,7 @@ module.exports = {
     },
     module: {
         ...baseConfig.module,
-        rules: [
-            ...baseConfig.module.rules,
-        ],
+        rules: [...baseConfig.module.rules],
     },
     plugins: [
         new webpack.DefinePlugin({
@@ -21,7 +19,7 @@ module.exports = {
                 BROWSER: JSON.stringify(true),
                 NODE_ENV: JSON.stringify('development'),
                 VERSION: JSON.stringify(git.long()),
-            }
+            },
         }),
         ...baseConfig.plugins,
     ],

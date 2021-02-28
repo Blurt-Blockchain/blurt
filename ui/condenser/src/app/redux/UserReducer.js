@@ -47,7 +47,7 @@ const defaultState = fromJS({
     locale: DEFAULT_LANGUAGE,
     show_side_panel: false,
     maybeLoggedIn: false,
-    showAnnouncement: true
+    showAnnouncement: true,
 });
 
 export default function reducer(state = defaultState, action) {
@@ -65,7 +65,7 @@ export default function reducer(state = defaultState, action) {
                 show_login_modal: true,
                 login_type: payload.type,
                 loginBroadcastOperation: operation,
-                loginDefault
+                loginDefault,
             });
         }
 
@@ -79,7 +79,7 @@ export default function reducer(state = defaultState, action) {
             return state.merge({
                 show_login_modal: false,
                 loginBroadcastOperation: undefined,
-                loginDefault: undefined
+                loginDefault: undefined,
             });
 
         case HIDE_LOGIN_WARNING:
@@ -92,14 +92,14 @@ export default function reducer(state = defaultState, action) {
             }
             return state.merge({
                 show_terms_modal: true,
-                termsDefault
+                termsDefault,
             });
         }
 
         case ACCEPT_TERMS:
             return state.merge({
                 show_terms_modal: false,
-                termsDefault: undefined
+                termsDefault: undefined,
             });
 
         case SAVE_LOGIN_CONFIRM:
@@ -114,10 +114,11 @@ export default function reducer(state = defaultState, action) {
             let empty = false;
             state = state.updateIn(
                 ['current', 'private_keys'],
-                private_keys => {
+                (private_keys) => {
                     if (!private_keys) return null;
-                    if (private_keys.has('active_private'))
+                    if (private_keys.has('active_private')) {
                         console.log('removeHighSecurityKeys');
+                    }
                     private_keys = private_keys.delete('active_private');
                     empty = private_keys.size === 0;
                     return private_keys;
@@ -149,23 +150,26 @@ export default function reducer(state = defaultState, action) {
             return state; // saga
 
         case SET_USER:
-            if (payload.vesting_shares)
+            if (payload.vesting_shares) {
                 payload.vesting_shares = parseFloat(payload.vesting_shares);
-            if (payload.delegated_vesting_shares)
+            }
+            if (payload.delegated_vesting_shares) {
                 payload.delegated_vesting_shares = parseFloat(
                     payload.delegated_vesting_shares
                 );
-            if (payload.received_vesting_shares)
+            }
+            if (payload.received_vesting_shares) {
                 payload.received_vesting_shares = parseFloat(
                     payload.received_vesting_shares
                 );
+            }
             return state.mergeDeep({
                 current: payload,
                 show_login_modal: false,
                 show_login_warning: false,
                 loginBroadcastOperation: undefined,
                 loginDefault: undefined,
-                logged_out: undefined
+                logged_out: undefined,
             });
 
         case CLOSE_LOGIN:
@@ -173,13 +177,13 @@ export default function reducer(state = defaultState, action) {
                 login_error: undefined,
                 show_login_modal: false,
                 loginBroadcastOperation: undefined,
-                loginDefault: undefined
+                loginDefault: undefined,
             });
 
         case LOGIN_ERROR:
             return state.merge({
                 login_error: payload.error,
-                logged_out: undefined
+                logged_out: undefined,
             });
 
         case LOGOUT:
@@ -196,8 +200,9 @@ export default function reducer(state = defaultState, action) {
             // AuthSaga
             const { accountName, auth, pub_keys_used } = payload;
             state = state.setIn(['authority', accountName], fromJS(auth));
-            if (pub_keys_used)
+            if (pub_keys_used) {
                 state = state.set('pub_keys_used', pub_keys_used);
+            }
             return state;
         }
 
@@ -241,151 +246,151 @@ export default function reducer(state = defaultState, action) {
 }
 
 // Action creators
-export const showLogin = payload => ({
+export const showLogin = (payload) => ({
     type: SHOW_LOGIN,
-    payload
+    payload,
 });
 
-export const showLoginWarning = payload => ({
+export const showLoginWarning = (payload) => ({
     type: SHOW_LOGIN_WARNING,
-    payload
+    payload,
 });
 
-export const hideLogin = payload => ({
+export const hideLogin = (payload) => ({
     type: HIDE_LOGIN,
-    payload
+    payload,
 });
 
-export const hideLoginWarning = payload => ({
+export const hideLoginWarning = (payload) => ({
     type: HIDE_LOGIN_WARNING,
-    payload
+    payload,
 });
 
-export const showTerms = payload => ({
+export const showTerms = (payload) => ({
     type: SHOW_TERMS,
-    payload
+    payload,
 });
 
 export const acceptTerms = () => ({ type: ACCEPT_TERMS });
 
-export const saveLoginConfirm = payload => ({
+export const saveLoginConfirm = (payload) => ({
     type: SAVE_LOGIN_CONFIRM,
-    payload
+    payload,
 });
 
-export const saveLogin = payload => ({
+export const saveLogin = (payload) => ({
     type: SAVE_LOGIN,
-    payload
+    payload,
 });
 
-export const removeHighSecurityKeys = payload => ({
+export const removeHighSecurityKeys = (payload) => ({
     type: REMOVE_HIGH_SECURITY_KEYS,
-    payload
+    payload,
 });
 
-export const changeLanguage = payload => ({
+export const changeLanguage = (payload) => ({
     type: CHANGE_LANGUAGE,
-    payload
+    payload,
 });
 
-export const showPromotePost = payload => ({
+export const showPromotePost = (payload) => ({
     type: SHOW_PROMOTE_POST,
-    payload
+    payload,
 });
 
-export const hidePromotePost = payload => ({
+export const hidePromotePost = (payload) => ({
     type: HIDE_PROMOTE_POST,
-    payload
+    payload,
 });
 
-export const checkKeyType = payload => ({
+export const checkKeyType = (payload) => ({
     type: CHECK_KEY_TYPE,
-    payload
+    payload,
 });
 
-export const usernamePasswordLogin = payload => ({
+export const usernamePasswordLogin = (payload) => ({
     type: USERNAME_PASSWORD_LOGIN,
-    payload
+    payload,
 });
 
-export const setUser = payload => ({
+export const setUser = (payload) => ({
     type: SET_USER,
-    payload
+    payload,
 });
 
-export const closeLogin = payload => ({
+export const closeLogin = (payload) => ({
     type: CLOSE_LOGIN,
-    payload
+    payload,
 });
 
-export const loginError = payload => ({
+export const loginError = (payload) => ({
     type: LOGIN_ERROR,
-    payload
+    payload,
 });
 
-export const logout = payload => ({
+export const logout = (payload) => ({
     type: LOGOUT,
-    payload
+    payload,
 });
 
-export const keysError = payload => ({
+export const keysError = (payload) => ({
     type: KEYS_ERROR,
-    payload
+    payload,
 });
 
-export const accountAuthLookup = payload => ({
+export const accountAuthLookup = (payload) => ({
     type: ACCOUNT_AUTH_LOOKUP,
-    payload
+    payload,
 });
 
-export const setAuthority = payload => ({
+export const setAuthority = (payload) => ({
     type: SET_AUTHORITY,
-    payload
+    payload,
 });
 
-export const setLatestFeedPrice = payload => ({
+export const setLatestFeedPrice = (payload) => ({
     type: SET_LATEST_FEED_PRICE,
-    payload
+    payload,
 });
 
-export const hideConnectionErrorModal = payload => ({
+export const hideConnectionErrorModal = (payload) => ({
     type: HIDE_CONNECTION_ERROR_MODAL,
-    payload
+    payload,
 });
 
-export const set = payload => ({
+export const set = (payload) => ({
     type: SET,
-    payload
+    payload,
 });
 
-export const uploadImage = payload => ({
+export const uploadImage = (payload) => ({
     type: UPLOAD_IMAGE,
-    payload
+    payload,
 });
 
 export const showSidePanel = () => ({
-    type: SHOW_SIDE_PANEL
+    type: SHOW_SIDE_PANEL,
 });
 
 export const hideSidePanel = () => {
     return {
-        type: HIDE_SIDE_PANEL
+        type: HIDE_SIDE_PANEL,
     };
 };
 
-export const showPostAdvancedSettings = payload => ({
+export const showPostAdvancedSettings = (payload) => ({
     type: SHOW_POST_ADVANCED_SETTINGS,
-    payload
+    payload,
 });
 
 export const hidePostAdvancedSettings = () => ({
-    type: HIDE_POST_ADVANCED_SETTINGS
+    type: HIDE_POST_ADVANCED_SETTINGS,
 });
 
 export const hideAnnouncement = () => ({
-    type: HIDE_ANNOUNCEMENT
+    type: HIDE_ANNOUNCEMENT,
 });
 
 export const showAnnouncement = () => ({
-    type: SHOW_ANNOUNCEMENT
+    type: SHOW_ANNOUNCEMENT,
 });

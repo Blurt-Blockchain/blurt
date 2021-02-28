@@ -153,8 +153,9 @@ function authHeaders({ resource, fields, method = 'GET' }) {
     ).toString(36);
 
     let content_type = '';
-    if (/POST|PUT/.test(method))
+    if (/POST|PUT/.test(method)) {
         content_type = 'application/x-www-form-urlencoded';
+    }
 
     let strToSign = `${method}\n${content_type}\n\nx-ts-auth-method:${auth_method}\nx-ts-date:${currDate}\nx-ts-nonce:${nonce}`;
 

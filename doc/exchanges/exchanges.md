@@ -4,10 +4,9 @@ System Requirements:
 
 A dedicated server or virtual machine with a minimum of 16GB of RAM, and at least 160GB of SSD storage.
 
-
 ### Set up a Blurt Full Node
 
-We've reduced setting up a full node to a single-line installer.  Run the following command as root on your fresh Debian 10 physical or virtual machine.
+We've reduced setting up a full node to a single-line installer. Run the following command as root on your fresh Debian 10 physical or virtual machine.
 
 ```bash
 bash <(curl -s https://gitlab.com/blurt/blurt/-/raw/dev/doc/exchanges/exchange.bash)
@@ -47,3 +46,4 @@ Or `gethelp <command>` to get more details.
 ### Upgrading for major releases that require a full reindex
 
 For upgrades that require a full replay, we highly recommend *performing the upgrade on a separate server* in order to minimize downtime of your wallet. When the replay is complete, switch to the server running the newer version of Blurt.
+```

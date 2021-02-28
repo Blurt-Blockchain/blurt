@@ -3,18 +3,18 @@ import { connect } from 'react-redux';
 
 export default connect(
     (state, ownProps) => ownProps,
-    dispatch => ({
+    (dispatch) => ({
         uploadImage: (file, dataUrl, filename, progress) => {
             dispatch({
                 type: 'user/UPLOAD_IMAGE',
-                payload: { file, dataUrl, filename, progress }
+                payload: { file, dataUrl, filename, progress },
             });
-        }
+        },
     })
 )(
     class Image extends React.Component {
         state = {
-            progress: {}
+            progress: {},
         };
 
         componentWillMount() {
@@ -65,7 +65,7 @@ export default connect(
             if (!file && !dataUrl) return;
             this.setState({ progress: {}, uploading: true }, () => {
                 const { uploadImage } = this.props;
-                uploadImage(file, dataUrl, filename, progress => {
+                uploadImage(file, dataUrl, filename, (progress) => {
                     this.setState({ progress, uploading: false });
                     if (progress.url) {
                         this.setImageSrc(progress.url, filename);
@@ -124,9 +124,8 @@ export default connect(
                     {img}
                     <div className="error">
                         <small>
-                            Image was not Saved (<a onClick={this.load}>
-                                retry
-                            </a>)
+                            Image was not Saved (
+                            <a onClick={this.load}>retry</a>)
                             <br />
                             {error}
                         </small>

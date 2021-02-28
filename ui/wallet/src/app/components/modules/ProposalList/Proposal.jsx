@@ -114,7 +114,7 @@ export default function Proposal(props) {
         </div>
     );
 }
-//TODO: Move Proposal type to a proptypes file and use where we need it.
+// TODO: Move Proposal type to a proptypes file and use where we need it.
 Proposal.propTypes = {
     id: PropTypes.number.isRequired,
     creator: PropTypes.string.isRequired,
@@ -164,16 +164,16 @@ function startedOrFinished(start, end) {
 
     if (remainingTimeUntilFinished <= 0) {
         // Finished
-        return `finished`;
+        return 'finished';
     }
 
     if (remainingTimeUntilStart <= 0) {
         // Started
-        return `started`;
+        return 'started';
     }
 
     // Not started and not finished
-    return `not started`;
+    return 'not started';
 }
 
 /**

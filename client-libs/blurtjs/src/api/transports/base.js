@@ -1,5 +1,5 @@
-import Promise from 'bluebird';
-import EventEmitter from 'events';
+import Promise from "bluebird";
+import EventEmitter from "events";
 
 export default class Transport extends EventEmitter {
   constructor(options = {}) {
@@ -18,9 +18,9 @@ export default class Transport extends EventEmitter {
     else target.on(eventName, callback);
 
     return () => {
-      if (target.removeEventListener)
+      if (target.removeEventListener) {
         target.removeEventListener(eventName, callback);
-      else target.removeListener(eventName, callback);
+      } else target.removeListener(eventName, callback);
     };
   }
 

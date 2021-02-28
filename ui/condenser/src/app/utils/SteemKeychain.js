@@ -27,7 +27,7 @@ export function isLoggedInWithKeychain() {
         password,
         memoWif,
         login_owner_pubkey,
-        login_with_keychain
+        login_with_keychain,
     ] = extractLoginData(data);
     return !!login_with_keychain;
 }

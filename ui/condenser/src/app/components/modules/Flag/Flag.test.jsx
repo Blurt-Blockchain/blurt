@@ -1,4 +1,4 @@
-/*global describe, it, before, beforeEach, after, afterEach */
+/* global describe, it, before, beforeEach, after, afterEach */
 import React from 'react';
 import { configure, shallow } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-15';
@@ -10,14 +10,14 @@ import Flag from 'app/components/modules/Flag';
 configure({ adapter: new Adapter() });
 
 describe('Flag', () => {
-    let component = <LoadingIndicator />;
-    let fallback = <Icon name="user" />;
-    let child = <div> HELLO WORLD </div>;
+    const component = <LoadingIndicator />;
+    const fallback = <Icon name="user" />;
+    const child = <div> HELLO WORLD </div>;
 
     it('should render the children  when the flag prop is true', () => {
         const wrapper = shallow(
             <Flag
-                flagged={true}
+                flagged
                 FlagComponent={component}
                 Fallback={fallback}
                 children={child}
@@ -27,11 +27,7 @@ describe('Flag', () => {
     });
     it('should render the FlagComponent  when the flag prop is true and there are no children', () => {
         const wrapper = shallow(
-            <Flag
-                flagged={true}
-                FlagComponent={component}
-                Fallback={fallback}
-            />
+            <Flag flagged FlagComponent={component} Fallback={fallback} />
         );
         expect(wrapper.text()).toEqual('<LoadingIndicator />');
     });
@@ -58,7 +54,7 @@ describe('Flag', () => {
     it('should render children but not FlagComponent if both are provided', () => {
         const wrapper = shallow(
             <Flag
-                flagged={true}
+                flagged
                 FlagComponent={component}
                 Fallback={fallback}
                 children={child}

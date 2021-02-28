@@ -47,7 +47,7 @@ describe('Global reducer', () => {
             }),
         };
 
-         // Two accounts both with transfer history
+        // Two accounts both with transfer history
         const initial = reducer()
             .setIn(
                 ['accounts', 'fooman', 'transfer_history'],
@@ -58,7 +58,7 @@ describe('Global reducer', () => {
                 List([Map({ c: 3 })])
             );
 
-         // Act
+        // Act
         const actual = reducer(initial, globalActions.receiveState(payload));
         // Assert
         expect(
@@ -173,7 +173,7 @@ describe('Global reducer', () => {
 
     it('should return correct state for a UPDATE_ACCOUNT_WITNESS_VOTE action', () => {
         // Arrange
-        let payload = {
+        const payload = {
             account: 'Smee',
             witness: 'Greech',
             approve: true,
@@ -201,7 +201,7 @@ describe('Global reducer', () => {
 
     it('should return correct state for a UPDATE_ACCOUNT_WITNESS_PROXY action', () => {
         // Arrange
-        let payload = {
+        const payload = {
             account: 'Alice',
             proxy: 'Jane',
         };
@@ -242,7 +242,7 @@ describe('Global reducer', () => {
     });
 
     it('should return correct state for a RECEIVE_DATA action', () => {
-        //Arrange
+        // Arrange
         const postData = {
             author: 'smudge',
             permlink: 'klop',
@@ -251,7 +251,7 @@ describe('Global reducer', () => {
                 two: { percent: 70 },
             },
         };
-        let payload = {
+        const payload = {
             data: [postData],
             order: 'by_author',
             category: 'blog',
@@ -283,7 +283,7 @@ describe('Global reducer', () => {
             }),
         });
 
-        //Act
+        // Act
         const actual1 = reducer(
             initWithData,
             globalActions.receiveData(payload)
@@ -291,7 +291,7 @@ describe('Global reducer', () => {
 
         const postKey = `${postData.author}/${postData.permlink}`;
 
-        //Assert
+        // Assert
         expect(actual1.getIn(['content', postKey, 'author'])).toEqual(
             postData.author
         );
@@ -317,7 +317,7 @@ describe('Global reducer', () => {
 
         // Arrange
         payload.order = 'UnusualOrder';
-        //Act.
+        // Act.
         // Push new key to discussion_idx list, If order does not meet the condition.
         const actual2 = reducer(
             initWithData,
@@ -349,8 +349,8 @@ describe('Global reducer', () => {
     });
 
     it('should handle fetch status for a RECEIVE_DATA action', () => {
-        //Arrange
-        let payload = {
+        // Arrange
+        const payload = {
             data: [],
             order: 'by_author',
             category: 'blog',
@@ -380,13 +380,13 @@ describe('Global reducer', () => {
             }),
         });
 
-        //Act
+        // Act
         const actual1 = reducer(
             initWithData,
             globalActions.receiveData(payload)
         );
 
-        //Assert
+        // Assert
         expect(
             actual1.getIn(['status', payload.category, payload.order]).fetching
         ).toBeFalsy();
@@ -397,7 +397,7 @@ describe('Global reducer', () => {
 
         // Arrange
         payload.fetching = true;
-        //Act.
+        // Act.
         const actual2 = reducer(
             initWithData,
             globalActions.receiveData(payload)

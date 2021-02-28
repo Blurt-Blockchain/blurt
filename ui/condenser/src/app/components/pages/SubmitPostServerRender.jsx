@@ -9,5 +9,5 @@ class SubmitPostServerRender extends React.Component {
 
 module.exports = {
     path: 'submit.html',
-    component: SubmitPostServerRender
+    component: SubmitPostServerRender,
 };

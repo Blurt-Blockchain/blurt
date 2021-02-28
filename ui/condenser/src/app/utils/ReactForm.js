@@ -10,14 +10,17 @@ export default function reactForm({
     instance,
     fields,
     initialValues,
-    validation = () => {}
+    validation = () => {},
 }) {
-    if (typeof instance !== 'object')
+    if (typeof instance !== 'object') {
         throw new TypeError('instance is a required object');
-    if (!Array.isArray(fields))
+    }
+    if (!Array.isArray(fields)) {
         throw new TypeError('fields is a required array');
-    if (typeof initialValues !== 'object')
+    }
+    if (typeof initialValues !== 'object') {
         throw new TypeError('initialValues is a required object');
+    }
 
     // Give API users access to this.props, this.state, this.etc..
     validation = validation.bind(instance);
@@ -25,7 +28,7 @@ export default function reactForm({
     const formState = (instance.state = instance.state || {});
     formState[name] = {
         // validate: () => setFormState(instance, fields, validation),
-        handleSubmit: submitCallback => event => {
+        handleSubmit: (submitCallback) => (event) => {
             event.preventDefault();
             const { valid } = setFormState(name, instance, fields, validation);
             if (!valid) return;
@@ -73,7 +76,7 @@ export default function reactForm({
                 const f = instance.state[fieldName];
                 f.props.onChange();
             }
-        }
+        },
     };
 
     for (const field of fields) {
@@ -83,7 +86,7 @@ export default function reactForm({
         const fs = (formState[fieldName] = {
             value: null,
             error: null,
-            touched: false
+            touched: false,
         });
 
         // Caution: fs.props is expanded <input {...fieldName.props} />, so only add valid props for the component
@@ -103,7 +106,7 @@ export default function reactForm({
             }
         }
 
-        fs.props.onChange = e => {
+        fs.props.onChange = (e) => {
             const value = e && e.target ? e.target.value : e; // API may pass value directly
             const v = { ...(instance.state[fieldName] || {}) };
             const initialValue = initialValues[fieldName];
@@ -141,7 +144,7 @@ function setFormState(name, instance, fields, validation) {
     for (const field of fields) {
         const fieldName = n(field);
         const validate = v[fieldName];
-        const error = validate ? validate : null;
+        const error = validate || null;
         const value = { ...(instance.state[fieldName] || {}) };
         value.error = error;
         formTouched = formTouched || value.touched;
@@ -194,9 +197,7 @@ function n(field) {
     return name;
 }
 
-const hasValue = v =>
-    v == null
-        ? false
-        : (typeof v === 'string' ? v.trim() : v) === '' ? false : true;
-const toString = v => (hasValue(v) ? v : '');
-const toBoolean = v => (hasValue(v) ? JSON.parse(v) : '');
+const hasValue = (v) =>
+    v == null ? false : (typeof v === 'string' ? v.trim() : v) !== '';
+const toString = (v) => (hasValue(v) ? v : '');
+const toBoolean = (v) => (hasValue(v) ? JSON.parse(v) : '');

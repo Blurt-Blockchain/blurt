@@ -36,7 +36,7 @@ export default class Orderbook extends React.Component {
             this.props.orders.length - 10
         );
 
-        let newState = {};
+        const newState = {};
         newState[indexKey] = newIndex;
         // Disable animations while paging
         if (newIndex !== this.state[indexKey]) {
@@ -49,7 +49,7 @@ export default class Orderbook extends React.Component {
     }
 
     renderBuySellHeader() {
-        let buy = this.props.side === 'bids';
+        const buy = this.props.side === 'bids';
 
         return (
             <thead>
@@ -120,7 +120,7 @@ export default class Orderbook extends React.Component {
                 }
                 return null;
             })
-            .filter(a => {
+            .filter((a) => {
                 return !!a;
             });
     }

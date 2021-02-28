@@ -42,21 +42,21 @@ export default class Dropdown extends React.Component {
         document.removeEventListener('click', this.hide);
     }
 
-    toggle = e => {
+    toggle = (e) => {
         const { shown } = this.state;
         if (shown) {
             this.hide(e);
         } else this.show(e);
     };
 
-    show = e => {
+    show = (e) => {
         e.preventDefault();
         this.setState({ shown: true });
         this.props.onShow();
         document.addEventListener('click', this.hide);
     };
 
-    hide = e => {
+    hide = (e) => {
         // Do not hide the dropdown if there was a click within it.
         const inside_dropdown = !!findParent(e.target, 'dropdown__content');
         if (inside_dropdown) return;

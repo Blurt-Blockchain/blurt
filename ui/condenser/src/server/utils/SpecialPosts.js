@@ -12,7 +12,7 @@ function loadSpecialPosts() {
         const emptySpecialPosts = {
             featured_posts: [],
             promoted_posts: [],
-            notices: []
+            notices: [],
         };
 
         if (!config.special_posts_url) {
@@ -20,9 +20,9 @@ function loadSpecialPosts() {
             return;
         }
 
-        const request = https.get(config.special_posts_url, resp => {
+        const request = https.get(config.special_posts_url, (resp) => {
             let data = '';
-            resp.on('data', chunk => {
+            resp.on('data', (chunk) => {
                 data += chunk;
             });
             resp.on('end', () => {
@@ -34,7 +34,7 @@ function loadSpecialPosts() {
             });
         });
 
-        request.on('error', e => {
+        request.on('error', (e) => {
             console.error('Could not load special posts', e);
             resolve(emptySpecialPosts);
         });
@@ -50,22 +50,22 @@ export async function specialPosts() {
 
     const postData = await loadSpecialPosts();
     console.info('Loading special posts', postData);
-    let loadedPostData = {
+    const loadedPostData = {
         featured_posts: [],
         promoted_posts: [],
-        notices: []
+        notices: [],
     };
 
     for (const url of postData.featured_posts) {
         const [username, postId] = url.split('@')[1].split('/');
-        let post = await blurtjs.api.getContentAsync(username, postId);
+        const post = await blurtjs.api.getContentAsync(username, postId);
         post.special = true;
         loadedPostData.featured_posts.push(post);
     }
 
     for (const url of postData.promoted_posts) {
         const [username, postId] = url.split('@')[1].split('/');
-        let post = await blurtjs.api.getContentAsync(username, postId);
+        const post = await blurtjs.api.getContentAsync(username, postId);
         post.special = true;
         loadedPostData.promoted_posts.push(post);
     }
@@ -75,7 +75,7 @@ export async function specialPosts() {
             const [username, postId] = notice.permalink
                 .split('@')[1]
                 .split('/');
-            let post = await blurtjs.api.getContentAsync(username, postId);
+            const post = await blurtjs.api.getContentAsync(username, postId);
             loadedPostData.notices.push(Object.assign({}, notice, post));
         } else {
             loadedPostData.notices.push(notice);
@@ -83,11 +83,7 @@ export async function specialPosts() {
     }
 
     console.info(
-        `Loaded special posts: featured: ${
-            loadedPostData.featured_posts.length
-        }, promoted: ${loadedPostData.promoted_posts.length}, notices: ${
-            loadedPostData.notices.length
-        }`
+        `Loaded special posts: featured: ${loadedPostData.featured_posts.length}, promoted: ${loadedPostData.promoted_posts.length}, notices: ${loadedPostData.notices.length}`
     );
 
     return loadedPostData;

@@ -13,7 +13,7 @@ const blurt = {
   broadcast,
   config,
   formatter,
-  utils
+  utils,
 };
 
 if (typeof window !== "undefined") {

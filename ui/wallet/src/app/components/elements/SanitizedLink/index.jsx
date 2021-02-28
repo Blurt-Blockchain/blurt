@@ -22,7 +22,7 @@ export default class SanitizedLink extends React.Component {
         };
     }
 
-    onRevealPhishyLink = e => {
+    onRevealPhishyLink = (e) => {
         e.preventDefault();
         this.setState({ revealPhishyLink: true });
     };

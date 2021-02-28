@@ -1,6 +1,6 @@
 import {
     getPhishingWarningMessage,
-    getExternalLinkWarningMessage
+    getExternalLinkWarningMessage,
 } from 'shared/HtmlReady'; // the only allowable title attributes for div and a tags
 
 import { validateIframeUrl as validateEmbbeddedPlayerIframeUrl } from 'app/components/elements/EmbeddedPlayers';
@@ -19,7 +19,7 @@ export default ({
     large = true,
     highQualityPost = true,
     noImage = false,
-    sanitizeErrors = []
+    sanitizeErrors = [],
 }) => ({
     allowedTags,
     // figure, figcaption,
@@ -34,7 +34,7 @@ export default ({
             'frameborder',
             'allowfullscreen',
             'webkitallowfullscreen',
-            'mozallowfullscreen'
+            'mozallowfullscreen',
         ],
 
         // class attribute is strictly whitelisted (below)
@@ -46,7 +46,7 @@ export default ({
         img: ['src', 'alt'],
 
         // title is only set in the case of an external link warning
-        a: ['href', 'rel', 'title']
+        a: ['href', 'rel', 'title'],
     },
     allowedSchemes: ['http', 'https', 'blurt', 'esteem'],
     transformTags: {
@@ -55,7 +55,7 @@ export default ({
             const {
                 validUrl,
                 useSandbox,
-                sandboxAttributes
+                sandboxAttributes,
             } = validateEmbbeddedPlayerIframeUrl(srcAtty);
 
             if (validUrl !== false) {
@@ -68,8 +68,8 @@ export default ({
                         mozallowfullscreen: 'mozallowfullscreen', // deprecated but required for vimeo
                         src: validUrl,
                         width: large ? '640' : '480',
-                        height: large ? '360' : '270'
-                    }
+                        height: large ? '360' : '270',
+                    },
                 };
                 if (useSandbox) {
                     if (sandboxAttributes.length > 0) {
@@ -90,7 +90,7 @@ export default ({
         },
         img: (tagName, attribs) => {
             if (noImage) return { tagName: 'div', text: noImageText };
-            //See https://github.com/punkave/sanitize-html/issues/117
+            // See https://github.com/punkave/sanitize-html/issues/117
             let { src, alt } = attribs;
             if (!/^(https?:)?\/\//i.test(src)) {
                 console.log(
@@ -106,7 +106,7 @@ export default ({
 
             // replace http:// with // to force https when needed
             src = src.replace(/^http:\/\//i, '//');
-            let atts = { src };
+            const atts = { src };
             if (alt && alt !== '') atts.alt = alt;
             return { tagName, attribs: atts };
         },
@@ -120,27 +120,29 @@ export default ({
                 'text-center',
                 'text-right',
                 'videoWrapper',
-                'phishy'
+                'phishy',
             ];
-            const validClass = classWhitelist.find(e => attribs.class == e);
+            const validClass = classWhitelist.find((e) => attribs.class == e);
             if (validClass) attys.class = validClass;
             if (
                 validClass === 'phishy' &&
                 attribs.title === getPhishingWarningMessage()
-            )
+            ) {
                 attys.title = attribs.title;
+            }
             return {
                 tagName,
-                attribs: attys
+                attribs: attys,
             };
         },
         td: (tagName, attribs) => {
             const attys = {};
-            if (attribs.style === 'text-align:right')
+            if (attribs.style === 'text-align:right') {
                 attys.style = 'text-align:right';
+            }
             return {
                 tagName,
-                attribs: attys
+                attribs: attys,
             };
         },
         a: (tagName, attribs) => {
@@ -156,8 +158,8 @@ export default ({
             }
             return {
                 tagName,
-                attribs: attys
+                attribs: attys,
             };
-        }
-    }
+        },
+    },
 });

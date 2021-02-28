@@ -5,7 +5,7 @@ import { Iterable } from 'immutable';
     Wrapper for PureRenderMixin.
     This allows debugging that will show which properties changed.
 */
-export default function(instance, name) {
+export default function (instance, name) {
     const mixin = PureRenderMixin.shouldComponentUpdate.bind(instance);
     if (
         process.env.BROWSER &&
@@ -37,7 +37,7 @@ export function compare(name, a, b) {
     const aKeys = new Set(a && Object.keys(a));
     const bKeys = new Set(b && Object.keys(b));
     const ab = new Set([...aKeys, ...aKeys]);
-    ab.forEach(key => {
+    ab.forEach((key) => {
         const hasA = aKeys.has(key);
         const hasB = bKeys.has(key);
         if (!hasA && !hasB) return;
@@ -47,11 +47,11 @@ export function compare(name, a, b) {
         const aKey = a[key];
         const bKey = b[key];
         if (typeof aKey !== 'function' && typeof bKey !== 'function') {
-            //functions are too verbose
+            // functions are too verbose
             console.log(key, 'was', a && toJS(aKey));
             console.log(key, 'is', b && toJS(bKey));
         }
     });
 }
 
-const toJS = o => (Iterable.isIterable(o) ? o.toJS() : o);
+const toJS = (o) => (Iterable.isIterable(o) ? o.toJS() : o);

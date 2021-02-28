@@ -1,5 +1,5 @@
-module.exports = function(sequelize, DataTypes) {
-    var WebEvent = sequelize.define(
+module.exports = function (sequelize, DataTypes) {
+    const WebEvent = sequelize.define(
         'WebEvent',
         {
             event_type: DataTypes.STRING(64),

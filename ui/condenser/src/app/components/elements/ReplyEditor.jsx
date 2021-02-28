@@ -42,7 +42,7 @@ class ReplyEditor extends React.Component {
         body: PropTypes.string, // initial value
         richTextEditor: PropTypes.func,
         defaultPayoutType: PropTypes.string,
-        payoutType: PropTypes.string
+        payoutType: PropTypes.string,
     };
 
     static defaultProps = {
@@ -50,7 +50,7 @@ class ReplyEditor extends React.Component {
         author: '',
         parent_author: '',
         parent_permlink: '',
-        type: 'submit_comment'
+        type: 'submit_comment',
     };
 
     constructor(props) {
@@ -102,7 +102,7 @@ class ReplyEditor extends React.Component {
                 rte,
                 rte_value: rte
                     ? stateFromHtml(this.props.richTextEditor, raw)
-                    : null
+                    : null,
             });
         }
     }
@@ -141,7 +141,7 @@ class ReplyEditor extends React.Component {
                     category: category ? category.value : undefined,
                     body: body.value,
                     payoutType,
-                    beneficiaries
+                    beneficiaries,
                 };
 
                 clearTimeout(saveEditorTimeout);
@@ -166,25 +166,25 @@ class ReplyEditor extends React.Component {
             instance: this,
             name: 'replyForm',
             initialValues: props.initialValues,
-            validation: values => ({
+            validation: (values) => ({
                 title:
                     isStory &&
                     (!values.title || values.title.trim() === ''
                         ? tt('g.required')
                         : values.title.length > 255
-                          ? tt('reply_editor.shorten_title')
-                          : null),
+                        ? tt('reply_editor.shorten_title')
+                        : null),
                 category: isStory && validateCategory(values.category, !isEdit),
                 body: !values.body
                     ? tt('g.required')
                     : values.body.length > maxKb * 1024
-                      ? tt('reply_editor.exceeds_maximum_length', { maxKb })
-                      : null
-            })
+                    ? tt('reply_editor.exceeds_maximum_length', { maxKb })
+                    : null,
+            }),
         });
     }
 
-    onTitleChange = e => {
+    onTitleChange = (e) => {
         const value = e.target.value;
         // TODO block links in title (they do not make good permlinks)
         const hasMarkdown = /(?:\*[\w\s]*\*|\#[\w\s]*\#|_[\w\s]*_|~[\w\s]*~|\]\s*\(|\]\s*\[)/.test(
@@ -193,13 +193,13 @@ class ReplyEditor extends React.Component {
         this.setState({
             titleWarn: hasMarkdown
                 ? tt('reply_editor.markdown_not_supported')
-                : ''
+                : '',
         });
         const { title } = this.state;
         title.props.onChange(e);
     };
 
-    onCancel = e => {
+    onCancel = (e) => {
         if (e) e.preventDefault();
         const { formId, onCancel, defaultPayoutType } = this.props;
         const { replyForm, body } = this.state;
@@ -209,7 +209,7 @@ class ReplyEditor extends React.Component {
         ) {
             replyForm.resetForm();
             this.setState({
-                rte_value: stateFromHtml(this.props.richTextEditor)
+                rte_value: stateFromHtml(this.props.richTextEditor),
             });
             this.setState({ progress: {} });
             this.props.setPayoutType(formId, defaultPayoutType);
@@ -219,14 +219,14 @@ class ReplyEditor extends React.Component {
     };
 
     // As rte_editor is updated, keep the (invisible) 'body' field in sync.
-    onChange = rte_value => {
+    onChange = (rte_value) => {
         this.setState({ rte_value });
         const html = stateToHtml(rte_value);
         const { body } = this.state;
         if (body.value !== html) body.props.onChange(html);
     };
 
-    toggleRte = e => {
+    toggleRte = (e) => {
         e.preventDefault();
         const state = { rte: !this.state.rte };
         if (state.rte) {
@@ -249,14 +249,14 @@ class ReplyEditor extends React.Component {
         }
     }
 
-    showAdvancedSettings = e => {
+    showAdvancedSettings = (e) => {
         e.preventDefault();
         this.props.setPayoutType(this.props.formId, this.props.payoutType);
         this.props.showAdvancedSettings(this.props.formId);
     };
-    displayErrorMessage = message => {
+    displayErrorMessage = (message) => {
         this.setState({
-            progress: { error: message }
+            progress: { error: message },
         });
 
         setTimeout(() => {
@@ -284,7 +284,7 @@ class ReplyEditor extends React.Component {
             const acceptedFile = acceptedFiles[fi];
             const imageToUpload = {
                 file: acceptedFile,
-                temporaryTag: ''
+                temporaryTag: '',
             };
             imagesToUpload.push(imageToUpload);
         }
@@ -297,7 +297,7 @@ class ReplyEditor extends React.Component {
         this.dropzone.open();
     };
 
-    onPasteCapture = e => {
+    onPasteCapture = (e) => {
         try {
             if (e.clipboardData) {
                 for (const item of e.clipboardData.items) {
@@ -305,7 +305,7 @@ class ReplyEditor extends React.Component {
                         const blob = item.getAsFile();
                         imagesToUpload.push({
                             file: blob,
-                            temporaryTag: ''
+                            temporaryTag: '',
                         });
                     }
                 }
@@ -337,9 +337,7 @@ class ReplyEditor extends React.Component {
 
             if (imageToUpload.temporaryTag === '') {
                 imagesUploadCount++;
-                imageToUpload.temporaryTag = `![Uploading image #${
-                    imagesUploadCount
-                }...]()`;
+                imageToUpload.temporaryTag = `![Uploading image #${imagesUploadCount}...]()`;
                 placeholder += `\n${imageToUpload.temporaryTag}\n`;
             }
         }
@@ -353,12 +351,12 @@ class ReplyEditor extends React.Component {
         );
     };
 
-    upload = image => {
+    upload = (image) => {
         const { uploadImage } = this.props;
         this.setState({
-            progress: { message: tt('reply_editor.uploading') }
+            progress: { message: tt('reply_editor.uploading') },
         });
-        uploadImage(image.file, progress => {
+        uploadImage(image.file, (progress) => {
             if (progress.url) {
                 this.setState({ progress: {} });
                 const { url } = progress;
@@ -387,7 +385,7 @@ class ReplyEditor extends React.Component {
     render() {
         const originalPost = {
             category: this.props.category,
-            body: this.props.body
+            body: this.props.body,
         };
         const { onCancel, onTitleChange } = this;
         const { title, category, body } = this.state;
@@ -408,7 +406,7 @@ class ReplyEditor extends React.Component {
             defaultPayoutType,
             payoutType,
             tags,
-            beneficiaries
+            beneficiaries,
         } = this.props;
         const { submitting, valid, handleSubmit } = this.state.replyForm;
         const { postError, titleWarn, rte } = this.state;
@@ -416,7 +414,7 @@ class ReplyEditor extends React.Component {
         const disabled = submitting || !valid;
         const loading = submitting || this.state.loading;
 
-        const errorCallback = estr => {
+        const errorCallback = (estr) => {
             this.setState({ postError: estr, loading: false });
         };
         const successCallbackWrapper = (...args) => {
@@ -441,7 +439,7 @@ class ReplyEditor extends React.Component {
             payoutType,
             beneficiaries,
             successCallback: successCallbackWrapper,
-            errorCallback
+            errorCallback,
         };
         const postLabel = username ? (
             <Tooltip t={tt('g.post_as_user', { username })}>
@@ -488,12 +486,12 @@ class ReplyEditor extends React.Component {
                             const startLoadingIndicator = () =>
                                 this.setState({
                                     loading: true,
-                                    postError: undefined
+                                    postError: undefined,
                                 });
                             reply({
                                 ...data,
                                 ...replyParams,
-                                startLoadingIndicator
+                                startLoadingIndicator,
                             });
                         })}
                         onChange={() => {
@@ -528,15 +526,14 @@ class ReplyEditor extends React.Component {
                                                     : 'Markdown'}
                                             </a>
                                         )}
-                                        {!rte &&
-                                            (isHtml || !body.value) && (
-                                                <a
-                                                    href="#"
-                                                    onClick={this.toggleRte}
-                                                >
-                                                    {tt('reply_editor.editor')}
-                                                </a>
-                                            )}
+                                        {!rte && (isHtml || !body.value) && (
+                                            <a
+                                                href="#"
+                                                onClick={this.toggleRte}
+                                            >
+                                                {tt('reply_editor.editor')}
+                                            </a>
+                                        )}
                                     </div>
                                     {titleError}
                                 </span>
@@ -572,7 +569,7 @@ class ReplyEditor extends React.Component {
                                         disableClick
                                         multiple
                                         accept="image/*"
-                                        ref={node => {
+                                        ref={(node) => {
                                             this.dropzone = node;
                                         }}
                                     >
@@ -608,7 +605,8 @@ class ReplyEditor extends React.Component {
                                         {tt('reply_editor.or_by')}{' '}
                                         <a onClick={this.onOpenClick}>
                                             {tt('reply_editor.selecting_them')}
-                                        </a>.
+                                        </a>
+                                        .
                                     </p>
                                     {progress.message && (
                                         <div className="info">
@@ -648,64 +646,55 @@ class ReplyEditor extends React.Component {
                                     />
                                     <div className="error">
                                         {(category.touched || category.value) &&
-                                            category.error}&nbsp;
+                                            category.error}
+                                        &nbsp;
                                     </div>
                                 </span>
                             )}
                         </div>
                         <div className={vframe_section_shrink_class}>
-                            {isStory &&
-                                !isEdit && (
-                                    <div className="ReplyEditor__options">
+                            {isStory && !isEdit && (
+                                <div className="ReplyEditor__options">
+                                    <div>
                                         <div>
-                                            <div>
-                                                {tt('g.rewards')}
-                                                {': '}
-                                                {this.props.payoutType ==
-                                                    '0%' &&
-                                                    tt(
-                                                        'reply_editor.decline_payout'
-                                                    )}
-                                                {this.props.payoutType ==
-                                                    '100%' &&
-                                                    tt(
-                                                        'reply_editor.power_up_100'
-                                                    )}
-                                            </div>
-                                            <div>
-                                                {beneficiaries &&
-                                                    beneficiaries.length >
-                                                        0 && (
-                                                        <span>
-                                                            {tt(
-                                                                'g.beneficiaries'
-                                                            )}
-                                                            {': '}
-                                                            {tt(
-                                                                'reply_editor.beneficiaries_set',
-                                                                {
-                                                                    count:
-                                                                        beneficiaries.length
-                                                                }
-                                                            )}
-                                                        </span>
-                                                    )}
-                                            </div>
-                                            <a
-                                                href="#"
-                                                onClick={
-                                                    this.showAdvancedSettings
-                                                }
-                                            >
-                                                {tt(
-                                                    'reply_editor.advanced_settings'
+                                            {tt('g.rewards')}
+                                            {': '}
+                                            {this.props.payoutType == '0%' &&
+                                                tt(
+                                                    'reply_editor.decline_payout'
                                                 )}
-                                            </a>{' '}
-                                            <br />
-                                            &nbsp;
+                                            {this.props.payoutType == '100%' &&
+                                                tt('reply_editor.power_up_100')}
                                         </div>
+                                        <div>
+                                            {beneficiaries &&
+                                                beneficiaries.length > 0 && (
+                                                    <span>
+                                                        {tt('g.beneficiaries')}
+                                                        {': '}
+                                                        {tt(
+                                                            'reply_editor.beneficiaries_set',
+                                                            {
+                                                                count:
+                                                                    beneficiaries.length,
+                                                            }
+                                                        )}
+                                                    </span>
+                                                )}
+                                        </div>
+                                        <a
+                                            href="#"
+                                            onClick={this.showAdvancedSettings}
+                                        >
+                                            {tt(
+                                                'reply_editor.advanced_settings'
+                                            )}
+                                        </a>{' '}
+                                        <br />
+                                        &nbsp;
                                     </div>
-                                )}
+                                </div>
+                            )}
                         </div>
                         <div className={vframe_section_shrink_class}>
                             {postError && (
@@ -732,28 +721,26 @@ class ReplyEditor extends React.Component {
                                 </span>
                             )}
                             &nbsp;{' '}
-                            {!loading &&
-                                this.props.onCancel && (
-                                    <button
-                                        type="button"
-                                        className="secondary hollow button no-border"
-                                        tabIndex={5}
-                                        onClick={onCancel}
-                                    >
-                                        {tt('g.cancel')}
-                                    </button>
-                                )}
-                            {!loading &&
-                                !this.props.onCancel && (
-                                    <button
-                                        className="button hollow no-border"
-                                        tabIndex={5}
-                                        disabled={submitting}
-                                        onClick={onCancel}
-                                    >
-                                        {tt('g.clear')}
-                                    </button>
-                                )}
+                            {!loading && this.props.onCancel && (
+                                <button
+                                    type="button"
+                                    className="secondary hollow button no-border"
+                                    tabIndex={5}
+                                    onClick={onCancel}
+                                >
+                                    {tt('g.cancel')}
+                                </button>
+                            )}
+                            {!loading && !this.props.onCancel && (
+                                <button
+                                    className="button hollow no-border"
+                                    tabIndex={5}
+                                    disabled={submitting}
+                                    onClick={onCancel}
+                                >
+                                    {tt('g.clear')}
+                                </button>
+                            )}
                             {!isStory &&
                                 !isEdit &&
                                 this.props.payoutType != '100%' && (
@@ -770,36 +757,32 @@ class ReplyEditor extends React.Component {
                                 )}
                         </div>
                     </form>
-                    {!loading &&
-                        !rte &&
-                        body.value && (
-                            <div
-                                className={
-                                    'Preview ' + vframe_section_shrink_class
-                                }
-                            >
-                                {!isHtml && (
-                                    <div className="float-right">
-                                        <a
-                                            target="_blank"
-                                            href="https://guides.github.com/features/mastering-markdown/"
-                                            rel="noopener noreferrer"
-                                        >
-                                            {tt(
-                                                'reply_editor.markdown_styling_guide'
-                                            )}
-                                        </a>
-                                    </div>
-                                )}
-                                <h6>{tt('g.preview')}</h6>
-                                <MarkdownViewer
-                                    text={body.value}
-                                    jsonMetadata={jsonMetadata}
-                                    large={isStory}
-                                    noImage={noImage}
-                                />
-                            </div>
-                        )}
+                    {!loading && !rte && body.value && (
+                        <div
+                            className={'Preview ' + vframe_section_shrink_class}
+                        >
+                            {!isHtml && (
+                                <div className="float-right">
+                                    <a
+                                        target="_blank"
+                                        href="https://guides.github.com/features/mastering-markdown/"
+                                        rel="noopener noreferrer"
+                                    >
+                                        {tt(
+                                            'reply_editor.markdown_styling_guide'
+                                        )}
+                                    </a>
+                                </div>
+                            )}
+                            <h6>{tt('g.preview')}</h6>
+                            <MarkdownViewer
+                                text={body.value}
+                                jsonMetadata={jsonMetadata}
+                                large={isStory}
+                                noImage={noImage}
+                            />
+                        </div>
+                    )}
                 </div>
             </div>
         );
@@ -815,7 +798,7 @@ function stripHtmlWrapper(text) {
 }
 
 // See also MarkdownViewer render
-const isHtmlTest = text => /^<html>/.test(text);
+const isHtmlTest = (text) => /^<html>/.test(text);
 
 function stateToHtml(state) {
     let html = state.toString('html');
@@ -850,7 +833,7 @@ const richTextEditor = process.env.BROWSER
     ? require('react-rte-image').default
     : null;
 
-export default formId =>
+export default (formId) =>
     connect(
         // mapStateToProps
         (state, ownProps) => {
@@ -873,7 +856,7 @@ export default formId =>
             const defaultPayoutType = state.app.getIn(
                 [
                     'user_preferences',
-                    isStory ? 'defaultBlogPayout' : 'defaultCommentPayout'
+                    isStory ? 'defaultBlogPayout' : 'defaultCommentPayout',
                 ],
                 '100%'
             );
@@ -881,7 +864,7 @@ export default formId =>
                 'current',
                 'post',
                 formId,
-                'payoutType'
+                'payoutType',
             ]);
             if (!payoutType) {
                 payoutType = defaultPayoutType;
@@ -890,7 +873,7 @@ export default formId =>
                 'current',
                 'post',
                 formId,
-                'beneficiaries'
+                'beneficiaries',
             ]);
             beneficiaries = beneficiaries ? beneficiaries.toJS() : [];
 
@@ -906,29 +889,29 @@ export default formId =>
                 formId,
                 richTextEditor,
                 beneficiaries,
-                tags
+                tags,
             };
             return ret;
         },
 
         // mapDispatchToProps
-        dispatch => ({
+        (dispatch) => ({
             uploadImage: (file, progress) =>
                 dispatch(userActions.uploadImage({ file, progress })),
-            showAdvancedSettings: formId =>
+            showAdvancedSettings: (formId) =>
                 dispatch(userActions.showPostAdvancedSettings({ formId })),
             setPayoutType: (formId, payoutType) =>
                 dispatch(
                     userActions.set({
                         key: ['current', 'post', formId, 'payoutType'],
-                        value: payoutType
+                        value: payoutType,
                     })
                 ),
             setBeneficiaries: (formId, beneficiaries) =>
                 dispatch(
                     userActions.set({
                         key: ['current', 'post', formId, 'beneficiaries'],
-                        value: fromJS(beneficiaries)
+                        value: fromJS(beneficiaries),
                     })
                 ),
             reply: ({
@@ -949,7 +932,7 @@ export default formId =>
                 beneficiaries = [],
                 successCallback,
                 errorCallback,
-                startLoadingIndicator
+                startLoadingIndicator,
             }) => {
                 // const post = state.global.getIn(['content', author + '/' + permlink])
                 const username = state.user.getIn(['current', 'username']);
@@ -964,13 +947,13 @@ export default formId =>
                           // submit new
                           parent_author: author,
                           parent_permlink: permlink,
-                          author: username
+                          author: username,
                           // permlink,  assigned in TransactionSaga
                       }
                     : // edit existing
-                      isEdit
-                      ? { author, permlink, parent_author, parent_permlink }
-                      : null;
+                    isEdit
+                    ? { author, permlink, parent_author, parent_permlink }
+                    : null;
 
                 if (!linkProps) throw new Error('Unknown type: ' + type);
 
@@ -988,7 +971,7 @@ export default formId =>
                     rtags = HtmlReady(html, { mutate: false });
                 }
 
-                allowedTags.forEach(tag => {
+                allowedTags.forEach((tag) => {
                     rtags.htmltags.delete(tag);
                 });
                 if (isHtml) rtags.htmltags.delete('html'); // html tag allowed only in HTML mode
@@ -996,7 +979,7 @@ export default formId =>
                     errorCallback(
                         'Please remove the following HTML elements from your post: ' +
                             Array(...rtags.htmltags)
-                                .map(tag => `<${tag}>`)
+                                .map((tag) => `<${tag}>`)
                                 .join(', ')
                     );
                     return;
@@ -1004,10 +987,7 @@ export default formId =>
 
                 const formCategories = Set(
                     category
-                        ? category
-                              .trim()
-                              .replace(/#/g, '')
-                              .split(/ +/)
+                        ? category.trim().replace(/#/g, '').split(/ +/)
                         : []
                 );
                 const rootCategory =
@@ -1050,13 +1030,13 @@ export default formId =>
                 if (meta.tags.length > 5) {
                     const includingCategory = isEdit
                         ? tt('reply_editor.including_the_category', {
-                              rootCategory
+                              rootCategory,
                           })
                         : '';
                     errorCallback(
                         tt('reply_editor.use_limited_amount_of_tags', {
                             tagsLength: meta.tags.length,
-                            includingCategory
+                            includingCategory,
                         })
                     );
                     return;
@@ -1071,7 +1051,7 @@ export default formId =>
                     switch (payoutType) {
                         case '0%': // decline payout
                             __config.comment_options = {
-                                max_accepted_payout: '0.000 BLURT'
+                                max_accepted_payout: '0.000 BLURT',
                             };
                             break;
                         default: // 100% steem power payout
@@ -1086,20 +1066,19 @@ export default formId =>
                                 0,
                                 {
                                     beneficiaries: beneficiaries
-                                        .sort(
-                                            (a, b) =>
-                                                a.username < b.username
-                                                    ? -1
-                                                    : a.username > b.username
-                                                      ? 1
-                                                      : 0
+                                        .sort((a, b) =>
+                                            a.username < b.username
+                                                ? -1
+                                                : a.username > b.username
+                                                ? 1
+                                                : 0
                                         )
-                                        .map(elt => ({
+                                        .map((elt) => ({
                                             account: elt.username,
-                                            weight: parseInt(elt.percent) * 100
-                                        }))
-                                }
-                            ]
+                                            weight: parseInt(elt.percent) * 100,
+                                        })),
+                                },
+                            ],
                         ];
                     } else {
                         if (!__config.comment_options) {
@@ -1107,7 +1086,7 @@ export default formId =>
                         }
                         const account = state.global.getIn([
                             'accounts',
-                            username
+                            username,
                         ]);
                         let referrer = '';
                         if (
@@ -1137,11 +1116,11 @@ export default formId =>
                                         beneficiaries: [
                                             {
                                                 account: referrer,
-                                                weight: 300
-                                            }
-                                        ]
-                                    }
-                                ]
+                                                weight: 300,
+                                            },
+                                        ],
+                                    },
+                                ],
                             ];
                         }
                     }
@@ -1153,21 +1132,21 @@ export default formId =>
                     title,
                     body,
                     json_metadata: meta,
-                    __config
+                    __config,
                 };
                 const operationFlatFee = state.global.getIn([
                     'props',
-                    'operation_flat_fee'
+                    'operation_flat_fee',
                 ]);
                 const bandwidthKbytesFee = state.global.getIn([
                     'props',
-                    'bandwidth_kbytes_fee'
+                    'bandwidth_kbytes_fee',
                 ]);
                 let size = JSON.stringify(operation).replace(/[\[\]\,\"]/g, '')
                     .length;
                 let bw_fee = Math.max(
                     0.001,
-                    (size / 1024 * bandwidthKbytesFee).toFixed(3)
+                    ((size / 1024) * bandwidthKbytesFee).toFixed(3)
                 );
                 let fee = (operationFlatFee + bw_fee).toFixed(3);
 
@@ -1177,9 +1156,9 @@ export default formId =>
                         confirm: tt('g.operation_cost', { fee }),
                         operation,
                         errorCallback,
-                        successCallback
+                        successCallback,
                     })
                 );
-            }
+            },
         })
     )(ReplyEditor);

@@ -153,15 +153,15 @@ const Unicode = {
 };
 
 Unicode.C = Unicode.Cc + Unicode.Cf + Unicode.Cs + Unicode.Co;
-//+ Unicode.Cn ; //This is not defined.
+// + Unicode.Cn ; //This is not defined.
 
 Unicode.L =
     Unicode.Lu +
     Unicode.Ll +
     Unicode.Lt +
     Unicode.Lm +
-    Unicode.Mn + //Added 2014-05-29 due to some letters in names not being recognized.
-    //This is where accent marks are individually combined instead of using an explicit character.
+    Unicode.Mn + // Added 2014-05-29 due to some letters in names not being recognized.
+    // This is where accent marks are individually combined instead of using an explicit character.
     Unicode.Lo;
 
 Unicode.LC = Unicode.Lu + Unicode.Ll + Unicode.Lt;
@@ -183,10 +183,10 @@ Unicode.S = Unicode.Sm + Unicode.Sc + Unicode.Sk + Unicode.So;
 
 Unicode.Z = Unicode.Zs + Unicode.Zl + Unicode.Zp;
 
-//Not in Unicode spec:
+// Not in Unicode spec:
 Unicode.w = '_' + Unicode.L + Unicode.N;
 
-//A Unicode based word boundry built with non-capturing parentheses
+// A Unicode based word boundry built with non-capturing parentheses
 Unicode.b =
     '(?:[' +
     Unicode.w +
@@ -200,19 +200,19 @@ Unicode.b =
     ']' +
     ')';
 
-//A Unicode based word boundry build with non-capturing parentheses
+// A Unicode based word boundry build with non-capturing parentheses
 Unicode.bOut = '(?=[^' + Unicode.w + ']|$)';
 
-//A Unicode based word boundry build with non-capturing parentheses
-//JavaScript does not have a non-consuming look-behind.
-//This makes a direct replacement for \b not possible as we may consume
+// A Unicode based word boundry build with non-capturing parentheses
+// JavaScript does not have a non-consuming look-behind.
+// This makes a direct replacement for \b not possible as we may consume
 // part of the string to make this test.
 Unicode.bIn = '(?:^|[^' + Unicode.w + '])';
 
-//A possible work-around is to use a capture and replace it.
+// A possible work-around is to use a capture and replace it.
 Unicode.bInCapture = '(?:^|([^' + Unicode.w + ']))';
 
-//A Unicode based non-word boundry build with non-capturing parentheses
+// A Unicode based non-word boundry build with non-capturing parentheses
 Unicode.B =
     '(?:[' +
     Unicode.w +

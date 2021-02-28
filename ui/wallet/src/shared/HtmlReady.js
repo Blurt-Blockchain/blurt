@@ -185,8 +185,9 @@ function iframe(state, child) {
     if (
         tag == 'div' &&
         child.parentNode.getAttribute('class') == 'videoWrapper'
-    )
+    ) {
         return;
+    }
     const html = XMLSerializer.serializeToString(child);
     child.parentNode.replaceChild(
         DOMParser.parseFromString(`<div class="videoWrapper">${html}</div>`),
@@ -216,8 +217,9 @@ function proxifyImages(doc) {
     if (!doc) return;
     [...doc.getElementsByTagName('img')].forEach((node) => {
         const url = node.getAttribute('src');
-        if (!linksRe.local.test(url))
+        if (!linksRe.local.test(url)) {
             node.setAttribute('src', proxifyImageUrl(url, true));
+        }
     });
 }
 
@@ -298,8 +300,9 @@ function linkify(content, mutate, hashtags, usertags, images, links) {
         if (/\.(zip|exe)$/i.test(ln)) return ln;
 
         // do not linkify phishy links
-        if (Phishing.looksPhishy(ln))
+        if (Phishing.looksPhishy(ln)) {
             return `<div title='${getPhishingWarningMessage()}' class='phishy'>${ln}</div>`;
+        }
 
         if (links) links.add(ln);
         return `<a href="${ipfsPrefix(ln)}">${ln}</a>`;
@@ -342,7 +345,7 @@ function youTubeId(data) {
     };
 }
 
-function embedVimeoNode(child, links /*images*/) {
+function embedVimeoNode(child, links /* images */) {
     try {
         const data = child.data;
         const vimeo = vimeoId(data);
@@ -371,7 +374,7 @@ function vimeoId(data) {
     };
 }
 
-function embedTwitchNode(child, links /*images*/) {
+function embedTwitchNode(child, links /* images */) {
     try {
         const data = child.data;
         const twitch = twitchId(data);
@@ -395,10 +398,10 @@ function twitchId(data) {
     if (!m || m.length < 3) return null;
 
     return {
-        id: m[1] === `videos` ? `?video=${m[2]}` : `?channel=${m[2]}`,
+        id: m[1] === 'videos' ? `?video=${m[2]}` : `?channel=${m[2]}`,
         url: m[0],
         canonical:
-            m[1] === `videos`
+            m[1] === 'videos'
                 ? `https://player.twitch.tv/?video=${m[2]}`
                 : `https://player.twitch.tv/?channel=${m[2]}`,
     };

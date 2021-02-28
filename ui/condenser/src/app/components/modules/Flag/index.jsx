@@ -23,7 +23,7 @@ Flag.propTypes = {
             );
         }
     },
-    Fallback: PropTypes.element
+    Fallback: PropTypes.element,
 };
 
 export default Flag;

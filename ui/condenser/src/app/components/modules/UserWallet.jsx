@@ -27,7 +27,7 @@ export default connect(
         const walletUrl = state.app.get('walletUrl');
         return {
             walletUrl,
-            ...ownProps
+            ...ownProps,
         };
     }
 )(UserWallet);

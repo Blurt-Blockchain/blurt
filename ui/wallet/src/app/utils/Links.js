@@ -10,7 +10,7 @@ const urlChars = '(?:' + urlChar + '*' + urlCharEnd + ')?';
 const urlSet = ({ domain = domainPath, path } = {}) => {
     // urlChars is everything but html or markdown stop chars
     return `https?:\/\/${domain}(?::\\d{2,5})?(?:[/\\?#]${urlChars}${
-        path ? path : ''
+        path || ''
     })${path ? '' : '?'}`;
 };
 
@@ -48,7 +48,7 @@ export default {
     twitch: /https?:\/\/(?:www.)?twitch.tv\/(?:(videos)\/)?([a-zA-Z0-9][\w]{3,24})/i,
 };
 
-//TODO: possible this should go somewhere else.
+// TODO: possible this should go somewhere else.
 /**
  * Returns a new object extended from outputParams with [key] == inputParams[key] if the value is in allowedValues
  * @param outputParams
@@ -65,7 +65,7 @@ export const addToParams = (outputParams, inputParams, key, allowedValues) => {
     return respParams;
 };
 
-//TODO: possible this should go somewhere else.
+// TODO: possible this should go somewhere else.
 export const makeParams = (params, prefix) => {
     let paramsList = [];
     if (params.constructor === Array) {
@@ -100,7 +100,7 @@ export const determineViewMode = (search) => {
     for (let i = 0; i < searchList.length; i++) {
         if (searchList[i].indexOf(PARAM_VIEW_MODE) === 0) {
             if (searchList[i] == PARAM_VIEW_MODE + '=' + VIEW_MODE_WHISTLE) {
-                //we only want to support known view modes.
+                // we only want to support known view modes.
                 return VIEW_MODE_WHISTLE;
             }
             return '';

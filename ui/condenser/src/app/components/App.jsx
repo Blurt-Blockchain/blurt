@@ -20,7 +20,7 @@ class App extends React.Component {
         // TODO: put both of these and associated toggles into Redux Store.
         this.state = {
             showCallout: true,
-            showBanner: true
+            showBanner: true,
         };
         this.listenerActive = null;
     }
@@ -55,7 +55,7 @@ class App extends React.Component {
             pathname,
             new_visitor,
             nightmodeEnabled,
-            showAnnouncement
+            showAnnouncement,
         } = this.props;
         const n = nextProps;
         return (
@@ -81,7 +81,7 @@ class App extends React.Component {
             viewMode,
             pathname,
             category,
-            order
+            order,
         } = this.props;
 
         const whistleView = viewMode === VIEW_MODE_WHISTLE;
@@ -163,7 +163,7 @@ class App extends React.Component {
                 className={classNames('App', themeClass, {
                     'index-page': ip,
                     'whistle-view': whistleView,
-                    withAnnouncement: this.props.showAnnouncement
+                    withAnnouncement: this.props.showAnnouncement,
                 })}
                 ref="App_root"
             >
@@ -203,7 +203,7 @@ App.propTypes = {
     pathname: PropTypes.string,
     category: PropTypes.string,
     order: PropTypes.string,
-    loginUser: PropTypes.func.isRequired
+    loginUser: PropTypes.func.isRequired,
 };
 
 export default connect(
@@ -224,15 +224,15 @@ export default connect(
 
             nightmodeEnabled: state.app.getIn([
                 'user_preferences',
-                'nightmode'
+                'nightmode',
             ]),
             pathname: ownProps.location.pathname,
             order: ownProps.params.order,
             category: ownProps.params.category,
-            showAnnouncement: state.user.get('showAnnouncement')
+            showAnnouncement: state.user.get('showAnnouncement'),
         };
     },
-    dispatch => ({
-        loginUser: () => dispatch(userActions.usernamePasswordLogin({}))
+    (dispatch) => ({
+        loginUser: () => dispatch(userActions.usernamePasswordLogin({})),
     })
 )(App);

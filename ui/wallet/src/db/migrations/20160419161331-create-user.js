@@ -1,5 +1,5 @@
 module.exports = {
-    up: function(queryInterface, Sequelize) {
+    up: function (queryInterface, Sequelize) {
         return queryInterface
             .createTable('users', {
                 id: {
@@ -62,14 +62,14 @@ module.exports = {
                     type: Sequelize.DATE,
                 },
             })
-            .then(function() {
+            .then(function () {
                 queryInterface.addIndex('users', ['email']);
                 queryInterface.addIndex('users', ['uid'], {
                     indicesType: 'UNIQUE',
                 });
             });
     },
-    down: function(queryInterface, Sequelize) {
+    down: function (queryInterface, Sequelize) {
         return queryInterface.dropTable('users');
     },
 };

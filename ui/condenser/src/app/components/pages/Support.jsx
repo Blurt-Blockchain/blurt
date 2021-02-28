@@ -12,7 +12,8 @@ class Support extends React.Component {
                         {tt('g.please_email_questions_to')}{' '}
                         <a href="mailto:info@blurt.foundation">
                             info@blurt.foundation
-                        </a>.
+                        </a>
+                        .
                     </p>
                 </div>
             </div>
@@ -22,5 +23,5 @@ class Support extends React.Component {
 
 module.exports = {
     path: 'support.html',
-    component: Support
+    component: Support,
 };

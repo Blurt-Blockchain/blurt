@@ -15,8 +15,8 @@ export const schema = {
     toolbarMarks: [
         { type: 'bold', label: <strong>B</strong> },
         { type: 'italic', label: <i>i</i> },
-        //{ type: 'underline', label: <u>U</u> },
-        //{ type: 'strike',    label: <del>S</del> },
+        // { type: 'underline', label: <u>U</u> },
+        // { type: 'strike',    label: <del>S</del> },
         { type: 'code', label: <code>{'{}'}</code> },
         {
             type: 'sup',
@@ -93,13 +93,13 @@ export const schema = {
     },
 
     marks: {
-        bold: props => <strong>{props.children}</strong>,
-        code: props => <code>{props.children}</code>,
-        italic: props => <em>{props.children}</em>,
-        underline: props => <u>{props.children}</u>,
-        strike: props => <del>{props.children}</del>,
-        sub: props => <sub>{props.children}</sub>,
-        sup: props => <sup>{props.children}</sup>,
+        bold: (props) => <strong>{props.children}</strong>,
+        code: (props) => <code>{props.children}</code>,
+        italic: (props) => <em>{props.children}</em>,
+        underline: (props) => <u>{props.children}</u>,
+        strike: (props) => <del>{props.children}</del>,
+        sub: (props) => <sub>{props.children}</sub>,
+        sup: (props) => <sup>{props.children}</sup>,
     },
 };
 
@@ -157,8 +157,8 @@ const validAligns = [
 export const HtmlRules = [
     // Catch-all debug wrapper
     {
-        //deserialize: (el, next) => console.log("** deserialize: ", $.html(el).replace(/\n/g, "\\n")),
-        //serialize: (object, children) => console.log("** serialize:", object.type, object.kind, 'data:', JSON.stringify(object.data))
+        // deserialize: (el, next) => console.log("** deserialize: ", $.html(el).replace(/\n/g, "\\n")),
+        // serialize: (object, children) => console.log("** serialize:", object.type, object.kind, 'data:', JSON.stringify(object.data))
     },
 
     // Alignment wrapper
@@ -206,7 +206,7 @@ export const HtmlRules = [
             //   i.e. removal of text nodes where they are invalid -- otherwise they may convert to <br />s in bad places
             const noTextChildren = 'ol,ul,table,thead,tbody,tr'.split(',');
             if (noTextChildren.includes(el.tagName)) {
-                children = children.filter(el => el.type !== 'text');
+                children = children.filter((el) => el.type !== 'text');
             }
 
             // If this block-level node contains *any* <center> tags, strip them out and wrap-align node
@@ -214,7 +214,7 @@ export const HtmlRules = [
             children = children.reduce((out, child) => {
                 if (child.tagName == 'center') {
                     center = true;
-                    //child.children.map(c => out.push(c))
+                    // child.children.map(c => out.push(c))
                     out.push(...child.children);
                 } else {
                     out.push(child);
@@ -384,11 +384,12 @@ export const HtmlRules = [
             if (object.kind == 'inline' && object.type == 'image') {
                 const src = object.data.get('src');
                 const alt = object.data.get('alt');
-                if (!src)
+                if (!src) {
                     console.log(
                         '** ERR: serializing image with no src...',
                         JSON.stringify(object)
                     );
+                }
                 return <img src={src} alt={alt} />;
             }
         },
@@ -397,14 +398,15 @@ export const HtmlRules = [
     // debug uncaught nodes/elements
     {
         deserialize: (el, next) => {
-            if (el.type !== 'text')
+            if (el.type !== 'text') {
                 console.log(
                     '** no deserializer for: ',
                     $.html(el).replace(/\n/g, '\\n')
                 );
+            }
         },
         serialize: (object, children) => {
-            if (object.kind != 'string')
+            if (object.kind != 'string') {
                 console.log(
                     '** no serializer for:',
                     object.type,
@@ -412,11 +414,12 @@ export const HtmlRules = [
                     'data:',
                     JSON.stringify(object)
                 );
+            }
         },
     },
 ];
 
-export const getMarkdownType = chars => {
+export const getMarkdownType = (chars) => {
     switch (chars) {
         case '1.':
         case '*':

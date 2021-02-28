@@ -69,7 +69,10 @@ class ShowKey extends Component {
     };
 
     render() {
-        const { showLogin, props: { pubkey, authType } } = this;
+        const {
+            showLogin,
+            props: { pubkey, authType },
+        } = this;
         const { wif } = this.state;
 
         const qrIcon = (
@@ -135,7 +138,7 @@ class ShowKey extends Component {
 
 export default connect(
     (state, ownProps) => ownProps,
-    dispatch => ({
+    (dispatch) => ({
         showLogin: ({ username, authType }) => {
             dispatch(
                 userActions.showLogin({ loginDefault: { username, authType } })

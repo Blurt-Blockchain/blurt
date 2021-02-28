@@ -18,14 +18,14 @@ export class Memo extends React.Component {
         // redux props
         myAccount: PropTypes.bool,
         memo_private: PropTypes.object,
-        fromNegativeRepUser: PropTypes.bool.isRequired
+        fromNegativeRepUser: PropTypes.bool.isRequired,
     };
 
     constructor() {
         super();
         this.shouldComponentUpdate = shouldComponentUpdate(this, 'Memo');
         this.state = {
-            revealMemo: false
+            revealMemo: false,
         };
     }
 
@@ -38,7 +38,7 @@ export class Memo extends React.Component {
         }
     }
 
-    onRevealMemo = e => {
+    onRevealMemo = (e) => {
         e.preventDefault();
         this.setState({ revealMemo: true });
     };
@@ -50,7 +50,7 @@ export class Memo extends React.Component {
             text,
             myAccount,
             fromAccount,
-            fromNegativeRepUser
+            fromNegativeRepUser,
         } = this.props;
         const isEncoded = /^#/.test(text);
 
@@ -62,7 +62,7 @@ export class Memo extends React.Component {
             Memo: true,
             'Memo--badActor': isFromBadActor,
             'Memo--fromNegativeRepUser': fromNegativeRepUser,
-            'Memo--private': memo_private
+            'Memo--private': memo_private,
         });
 
         let renderText = '';

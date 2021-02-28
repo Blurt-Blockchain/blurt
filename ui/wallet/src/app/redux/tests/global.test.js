@@ -1,4 +1,4 @@
-/*global describe, it, before, beforeEach, after, afterEach */
+/* global describe, it, before, beforeEach, after, afterEach */
 import Immutable from 'immutable';
 import reducer, * as globalActions from '../GlobalReducer';
 
@@ -12,7 +12,7 @@ describe('global reducer', () => {
     it('should apply new global state', () => {
         const state = Immutable.fromJS(require('./global.json'));
         const reduced = reducer(undefined, globalActions.receiveState(state));
-        //const action = {type: 'global/RECEIVE_STATE', payload: state};
+        // const action = {type: 'global/RECEIVE_STATE', payload: state};
         expect(reduced.toJS()).toEqual(state.toJS());
     });
 });

@@ -1,11 +1,11 @@
-/*global $STM_Config */
+/* global $STM_Config */
 import koa_router from 'koa-router';
 import koa_body from 'koa-body';
 import crypto from 'crypto';
-import models from 'db/models';
+import models, { esc, escAttrs } from 'db/models';
 import findUser from 'db/utils/find_user';
 import config from 'config';
-import { esc, escAttrs } from 'db/models';
+
 import {
     emailRegex,
     getRemoteIp,
@@ -29,7 +29,7 @@ const mixpanel = config.get('mixpanel')
 
 const _stringval = (v) => (typeof v === 'string' ? v : JSON.stringify(v));
 function logRequest(path, ctx, extra) {
-    let d = { ip: getRemoteIp(ctx.req) };
+    const d = { ip: getRemoteIp(ctx.req) };
     if (ctx.session) {
         if (ctx.session.user) {
             d.user = ctx.session.user;
@@ -279,15 +279,17 @@ export default function useGeneralApi(app) {
                 ? JSON.parse(this.request.body)
                 : this.request.body;
 
-        if (secret !== process.env.CREATE_USER_SECRET)
+        if (secret !== process.env.CREATE_USER_SECRET) {
             throw new Error('invalid secret');
+        }
 
         logRequest('create_user', this, { name, email, owner_key });
 
         try {
-            if (!emailRegex.test(email.toLowerCase()))
+            if (!emailRegex.test(email.toLowerCase())) {
                 throw new Error('not valid email: ' + email);
-            let user = yield models.User.create({
+            }
+            const user = yield models.User.create({
                 name: esc(name),
                 email: esc(email),
             });
@@ -491,10 +493,10 @@ export default function useGeneralApi(app) {
             where: { id: this.session.user },
         });
         if (user) {
-            let data = user.sign_up_meta ? JSON.parse(user.sign_up_meta) : {};
-            data['button_screen_x'] = x;
-            data['button_screen_y'] = y;
-            data['last_step'] = 3;
+            const data = user.sign_up_meta ? JSON.parse(user.sign_up_meta) : {};
+            data.button_screen_x = x;
+            data.button_screen_y = y;
+            data.last_step = 3;
             try {
                 user.update({
                     sign_up_meta: JSON.stringify(data),

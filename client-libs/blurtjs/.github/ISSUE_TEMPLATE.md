@@ -1,5 +1,5 @@
 <!--
-Thanks for opening an issue! To help the team to understand your needs, please complete the below template to ensure we have the necessary details to assist you. 
+Thanks for opening an issue! To help the team to understand your needs, please complete the below template to ensure we have the necessary details to assist you.
 -->
 
 #### Expected behavior

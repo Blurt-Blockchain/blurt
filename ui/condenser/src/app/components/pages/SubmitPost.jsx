@@ -14,12 +14,13 @@ class SubmitPost extends React.Component {
     // }
     constructor() {
         super();
-        this.success = (/*operation*/) => {
+        this.success = (/* operation */) => {
             // const { category } = operation
             localStorage.removeItem('replyEditorData-' + formId);
-            browserHistory.push('/created'); //'/category/' + category)
+            browserHistory.push('/created'); // '/category/' + category)
         };
     }
+
     render() {
         const { success } = this;
         return (
@@ -35,5 +36,5 @@ class SubmitPost extends React.Component {
 
 module.exports = {
     path: 'submit.html',
-    component: SubmitPost // connect(state => ({ global: state.global }))(SubmitPost)
+    component: SubmitPost, // connect(state => ({ global: state.global }))(SubmitPost)
 };

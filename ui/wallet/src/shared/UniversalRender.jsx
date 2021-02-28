@@ -32,11 +32,11 @@ import { contentStats } from 'app/utils/StateFunctions';
 import ScrollBehavior from 'scroll-behavior';
 import { getStateAsync } from 'app/utils/steemApi';
 
-let get_state_perf,
-    get_content_perf = false;
+let get_state_perf;
+let get_content_perf = false;
 if (process.env.OFFLINE_SSR_TEST) {
     const testDataDir = process.env.OFFLINE_SSR_TEST_DATA_DIR || 'api_mockdata';
-    let uri = `${__dirname}/../../`;
+    const uri = `${__dirname}/../../`;
     get_state_perf = require(uri + testDataDir + '/get_state');
     get_content_perf = require(uri + testDataDir + '/get_content');
 }
@@ -51,7 +51,7 @@ const calcOffsetRoot = (startEl) => {
     return offset;
 };
 
-//BEGIN: SCROLL CODE
+// BEGIN: SCROLL CODE
 /**
  * The maximum number of times to attempt scrolling to the target element/y position
  * (total seconds of attempted scrolling is given by (SCROLL_TOP_TRIES * SCROLL_TOP_DELAY_MS)/1000 )
@@ -113,9 +113,9 @@ const scrollTop = (el, topOffset, prevDocumentInfo, triesRemaining) => {
         direction: prevDocumentInfo.direction,
     };
     let doScroll = false;
-    //for both SCROLL_DIRECTION_DOWN, SCROLL_DIRECTION_UP
-    //We scroll if the document has 1. not been deliberately scrolled, AND 2. we have not passed our target scroll,
-    //NOR has the document changed in a meaningful way since we last looked at it
+    // for both SCROLL_DIRECTION_DOWN, SCROLL_DIRECTION_UP
+    // We scroll if the document has 1. not been deliberately scrolled, AND 2. we have not passed our target scroll,
+    // NOR has the document changed in a meaningful way since we last looked at it
     if (prevDocumentInfo.direction === SCROLL_DIRECTION_DOWN) {
         doScroll =
             prevDocumentInfo.scrollTop <=
@@ -153,13 +153,13 @@ class OffsetScrollBehavior extends ScrollBehavior {
      * In cases where we're scrolling to a pixel offset, adjust the offset for the current header, and punt to default behavior.
      */
     scrollToTarget(element, target) {
-        clearTimeout(scrollTopTimeout); //it's likely this will be called multiple times in succession, so clear and existing scrolling.
-        const header = document.getElementsByTagName('header')[0]; //this dimension ideally would be pulled from a scss file.
+        clearTimeout(scrollTopTimeout); // it's likely this will be called multiple times in succession, so clear and existing scrolling.
+        const header = document.getElementsByTagName('header')[0]; // this dimension ideally would be pulled from a scss file.
         let topOffset = SCROLL_TOP_EXTRA_PIXEL_OFFSET * -1;
         if (header) {
             topOffset += header.offsetHeight * -1;
         }
-        const newTarget = []; //x coordinate
+        const newTarget = []; // x coordinate
         let el = false;
         if (typeof target === 'string') {
             el = document.getElementById(target.substr(1));
@@ -185,13 +185,13 @@ class OffsetScrollBehavior extends ScrollBehavior {
                 documentInfo.scrollTop < documentInfo.scrollTarget
                     ? SCROLL_DIRECTION_DOWN
                     : SCROLL_DIRECTION_UP;
-            scrollTop(el, topOffset, documentInfo, SCROLL_TOP_TRIES); //this function does the actual work of scrolling.
+            scrollTop(el, topOffset, documentInfo, SCROLL_TOP_TRIES); // this function does the actual work of scrolling.
         } else {
             super.scrollToTarget(element, newTarget);
         }
     }
 }
-//END: SCROLL CODE
+// END: SCROLL CODE
 
 const bindMiddleware = (middleware) => {
     if (process.env.BROWSER && process.env.NODE_ENV === 'development') {
@@ -359,16 +359,16 @@ export function clientRender(initialState) {
      * When to scroll - on hash link navigation determine if the page should scroll to that element (forward nav, or ignore nav direction)
      */
     const scroll = useScroll({
-        createScrollBehavior: (config) => new OffsetScrollBehavior(config), //information assembler for has scrolling.
+        createScrollBehavior: (config) => new OffsetScrollBehavior(config), // information assembler for has scrolling.
         shouldUpdateScroll: (prevLocation, { location }) => {
             // eslint-disable-line no-shadow
-            //if there is a hash, we may want to scroll to it
+            // if there is a hash, we may want to scroll to it
             if (location.hash) {
-                //if disableNavDirectionCheck exists, we want to always navigate to the hash (the page is telling us that's desired behavior based on the element's existence
+                // if disableNavDirectionCheck exists, we want to always navigate to the hash (the page is telling us that's desired behavior based on the element's existence
                 const disableNavDirectionCheck = document.getElementById(
                     DISABLE_ROUTER_HISTORY_NAV_DIRECTION_EL_ID
                 );
-                //we want to navigate to the corresponding id=<hash> element on 'PUSH' navigation (prev null + POP is a new window url nav ~= 'PUSH')
+                // we want to navigate to the corresponding id=<hash> element on 'PUSH' navigation (prev null + POP is a new window url nav ~= 'PUSH')
                 if (
                     disableNavDirectionCheck ||
                     (prevLocation === null && location.action === 'POP') ||
@@ -419,16 +419,21 @@ function getUrlFromLocation(location) {
     let url = location === '/' ? 'trending' : location;
     // Replace /curation-rewards and /author-rewards with /transfers for UserProfile
     // to resolve data correctly
-    if (url.indexOf('/curation-rewards') !== -1)
+    if (url.indexOf('/curation-rewards') !== -1) {
         url = url.replace(/\/curation-rewards$/, '/transfers');
-    if (url.indexOf('/author-rewards') !== -1)
+    }
+    if (url.indexOf('/author-rewards') !== -1) {
         url = url.replace(/\/author-rewards$/, '/transfers');
-    if (url.indexOf('/permissions') !== -1)
+    }
+    if (url.indexOf('/permissions') !== -1) {
         url = url.replace(/\/permissions$/, '/transfers');
-    if (url.indexOf('/password') !== -1)
+    }
+    if (url.indexOf('/password') !== -1) {
         url = url.replace(/\/password$/, '/transfers');
-    if (url.indexOf('/delegations') !== -1)
+    }
+    if (url.indexOf('/delegations') !== -1) {
         url = url.replace(/\/delegations$/, '/transfers');
+    }
 
     return url;
 }

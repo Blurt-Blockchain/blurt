@@ -162,9 +162,7 @@ class Powerdown extends React.Component {
                     {tt('powerdown_jsx.amount')}
                     <br />
                     <input
-                        value={
-                            manual_entry ? manual_entry : formatHp(new_withdraw)
-                        }
+                        value={manual_entry || formatHp(new_withdraw)}
                         onChange={inputChange}
                         autoCorrect={false}
                     />

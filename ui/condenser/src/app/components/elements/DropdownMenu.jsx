@@ -13,14 +13,14 @@ export default class DropdownMenu extends React.Component {
         className: PropTypes.string,
         title: PropTypes.string,
         href: PropTypes.string,
-        el: PropTypes.string.isRequired
+        el: PropTypes.string.isRequired,
     };
 
     constructor(props) {
         super(props);
         this.state = {
             shown: false,
-            selected: props.selected
+            selected: props.selected,
         };
     }
 
@@ -28,19 +28,19 @@ export default class DropdownMenu extends React.Component {
         document.removeEventListener('click', this.hide);
     }
 
-    toggle = e => {
+    toggle = (e) => {
         const { shown } = this.state;
         if (shown) this.hide(e);
         else this.show(e);
     };
 
-    show = e => {
+    show = (e) => {
         e.preventDefault();
         this.setState({ shown: true });
         document.addEventListener('click', this.hide);
     };
 
-    hide = e => {
+    hide = (e) => {
         // Do not hide the dropdown if there was a click within it.
         const inside_dropdown = !!findParent(e.target, 'VerticalMenu');
         if (inside_dropdown) return;
@@ -50,7 +50,7 @@ export default class DropdownMenu extends React.Component {
         document.removeEventListener('click', this.hide);
     };
 
-    navigate = e => {
+    navigate = (e) => {
         const a =
             e.target.nodeName.toLowerCase() === 'a'
                 ? e.target
@@ -62,7 +62,7 @@ export default class DropdownMenu extends React.Component {
     };
 
     getSelectedLabel = (items, selected) => {
-        const selectedEntry = items.find(i => i.value === selected);
+        const selectedEntry = items.find((i) => i.value === selected);
         const selectedLabel =
             selectedEntry && selectedEntry.label
                 ? selectedEntry.label
@@ -79,7 +79,7 @@ export default class DropdownMenu extends React.Component {
             className,
             title,
             href,
-            position
+            position,
         } = this.props;
         const hasDropdown = items.length > 0;
 

@@ -9,7 +9,7 @@ import {
     createPermlink,
     createPatch,
     transactionWatches,
-    broadcastOperation
+    broadcastOperation,
 } from './TransactionSaga';
 import { DEBT_TICKER } from 'app/client_config';
 
@@ -27,7 +27,7 @@ const operation = {
     json_metadata: {
         tags: ['hi'],
         app: 'blurt/0.1',
-        format: 'markdown'
+        format: 'markdown',
     },
     parent_author: 'candide',
     parent_permlink: 'cool',
@@ -35,7 +35,7 @@ const operation = {
     __config: {},
     errorCallback: () => '',
     successCallback: () => '',
-    memo: '#testing'
+    memo: '#testing',
 };
 
 const username = 'Beatrice';
@@ -48,7 +48,7 @@ describe('TransactionSaga', () => {
                 takeEvery(
                     transactionActions.BROADCAST_OPERATION,
                     broadcastOperation
-                )
+                ),
             ]);
         });
     });
@@ -104,7 +104,7 @@ describe('TransactionSaga', () => {
             expect(expected).toEqual(actual);
         });
         it('should return the comment options array.', () => {
-            let actual = gen.next('mock-permlink-123').value;
+            const actual = gen.next('mock-permlink-123').value;
             const expected = [
                 [
                     'comment',
@@ -121,9 +121,9 @@ describe('TransactionSaga', () => {
                         permlink: 'mock-permlink-123',
                         json_metadata: JSON.stringify(operation.json_metadata),
                         title: (operation.title || '').trim(),
-                        body: operation.body
-                    }
-                ]
+                        body: operation.body,
+                    },
+                ],
             ];
             expect(actual).toEqual(expected);
         });

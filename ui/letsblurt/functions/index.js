@@ -115,10 +115,10 @@ exports.createAccountRequest = functions.https.onCall(async (data, context) => {
     key_auths: [[postingKey.createPublic(client.addressPrefix), 1]],
   };
 
-  //// send creation operation
+  /// / send creation operation
   // operations
-  let operations = [];
-  //create operation to transmit
+  const operations = [];
+  // create operation to transmit
   const create_op = [
     'account_create',
     {
@@ -143,7 +143,7 @@ exports.createAccountRequest = functions.https.onCall(async (data, context) => {
     );
     console.log('create account, result', result);
 
-    //// if successful, transfer 3 blurt to the account
+    /// / if successful, transfer 3 blurt to the account
     if (result) {
       // get privake key from creator active wif
       const privateKey = dblurt.PrivateKey.from(creatorWif);

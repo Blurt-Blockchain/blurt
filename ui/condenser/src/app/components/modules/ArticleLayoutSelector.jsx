@@ -55,15 +55,15 @@ class ArticleLayoutSelector extends React.Component {
 }
 
 export default connect(
-    state => ({
+    (state) => ({
         blogmode:
             state.app.getIn(['user_preferences', 'blogmode']) === undefined
                 ? true
-                : state.app.getIn(['user_preferences', 'blogmode'])
+                : state.app.getIn(['user_preferences', 'blogmode']),
     }),
-    dispatch => ({
+    (dispatch) => ({
         toggleBlogmode: () => {
             dispatch(appActions.toggleBlogmode());
-        }
+        },
     })
 )(ArticleLayoutSelector);

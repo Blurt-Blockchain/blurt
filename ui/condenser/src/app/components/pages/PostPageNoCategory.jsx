@@ -10,7 +10,7 @@ class PostWrapper extends React.Component {
         super();
 
         this.state = {
-            loading: true
+            loading: true,
         };
     }
 
@@ -22,9 +22,9 @@ class PostWrapper extends React.Component {
             this.props
                 .getContent({
                     author: route_params.username,
-                    permlink: route_params.slug
+                    permlink: route_params.slug,
                 })
-                .then(content => {
+                .then((content) => {
                     if (content) {
                         browserHistory.replace(`/${content.category}/@${post}`);
                     }
@@ -36,8 +36,9 @@ class PostWrapper extends React.Component {
             // non-existing post
             this.setState({ loading: false });
         } else {
-            if (browserHistory)
+            if (browserHistory) {
                 browserHistory.replace(`/${dis.get('category')}/@${post}`);
+            }
         }
     }
 
@@ -65,26 +66,26 @@ class PostWrapper extends React.Component {
 }
 
 const StoreWrapped = connect(
-    state => {
+    (state) => {
         return {
-            content: state.global.get('content')
+            content: state.global.get('content'),
         };
     },
-    dispatch => ({
-        getContent: payload =>
+    (dispatch) => ({
+        getContent: (payload) =>
             new Promise((resolve, reject) => {
                 dispatch(
                     fetchDataSagaActions.getContent({
                         ...payload,
                         resolve,
-                        reject
+                        reject,
                     })
                 );
-            })
+            }),
     })
 )(PostWrapper);
 
 module.exports = {
     path: '/@:username/:slug',
-    component: StoreWrapped
+    component: StoreWrapped,
 };

@@ -78,7 +78,7 @@ app.use(
 );
 
 app.use(
-    mount('/ads.txt', function*() {
+    mount('/ads.txt', function* () {
         this.type = 'text/plain';
         this.body = adstxt;
     })
@@ -93,7 +93,7 @@ if (env === 'development') {
     console.log('proxying to webpack dev server at ' + proxyhost);
     const proxy = require('koa-proxy')({
         host: proxyhost,
-        map: filePath => 'assets/' + filePath
+        map: (filePath) => 'assets/' + filePath,
     });
     app.use(mount('/assets', proxy));
 } else {
@@ -134,7 +134,7 @@ encryptedSession(
     {
         maxAge: 1000 * 3600 * 24 * 60,
         key: config.get('session_cookie_key'),
-        secretKey: crypto_key
+        secretKey: crypto_key,
     },
     app
 );
@@ -152,13 +152,13 @@ function convertEntriesToArrays(obj) {
 
 // Fetch cached currency data for homepage
 const steemMarket = new SteemMarket();
-app.use(function*(next) {
+app.use(function* (next) {
     this.steemMarketData = yield steemMarket.get();
     yield next;
 });
 
 // some redirects and health status
-app.use(function*(next) {
+app.use(function* (next) {
     if (this.method === 'GET' && this.url === '/.well-known/healthcheck.json') {
         this.status = 200;
         this.body = {
@@ -166,7 +166,7 @@ app.use(function*(next) {
             docker_tag: process.env.DOCKER_TAG ? process.env.DOCKER_TAG : false,
             source_commit: process.env.SOURCE_COMMIT
                 ? process.env.SOURCE_COMMIT
-                : false
+                : false,
         };
         return;
     }
@@ -213,7 +213,7 @@ app.use(function*(next) {
     }
     // remember ch, cn, r url params in the session and remove them from url
     if (this.method === 'GET' && /\?[^\w]*(ch=|cn=|r=)/.test(this.url)) {
-        let redir = this.url.replace(/((ch|cn|r)=[^&]+)/gi, r => {
+        let redir = this.url.replace(/((ch|cn|r)=[^&]+)/gi, (r) => {
             const p = r.split('=');
             if (p.length === 2) this.session[p[0]] = p[1];
             return '';
@@ -256,7 +256,7 @@ app.use(
 );
 
 app.use(
-    mount('/robots.txt', function*() {
+    mount('/robots.txt', function* () {
         this.set('Cache-Control', 'public, max-age=86400000');
         this.type = 'text/plain';
         this.body = 'User-agent: *\nAllow: /';
@@ -265,7 +265,7 @@ app.use(
 
 // set user's uid - used to identify users in logs and some other places
 // FIXME SECURITY PRIVACY cycle this uid after a period of time
-app.use(function*(next) {
+app.use(function* (next) {
     const last_visit = this.session.last_visit;
     this.session.last_visit = (new Date().getTime() / 1000) | 0;
     const from_link = this.request.headers.referer;
@@ -294,7 +294,7 @@ if (env === 'production') {
     const helmetConfig = {
         directives: convertEntriesToArrays(config.get('helmet.directives')),
         reportOnly: config.get('helmet.reportOnly'),
-        setAllHeaders: config.get('helmet.setAllHeaders')
+        setAllHeaders: config.get('helmet.setAllHeaders'),
     };
     helmetConfig.directives.reportUri = helmetConfig.directives.reportUri[0];
     if (helmetConfig.directives.reportUri === '-') {
@@ -311,21 +311,19 @@ if (env !== 'test') {
     // so `src/server/app_render.jsx` can `await` on it.
     app.specialPostsPromise = specialPosts();
     // refresh special posts every five minutes
-    setInterval(function() {
-        return new Promise(function(resolve, reject) {
+    setInterval(function () {
+        return new Promise(function (resolve, reject) {
             app.specialPostsPromise = specialPosts();
             resolve();
         });
     }, 300000);
 
-    app.use(function*() {
+    app.use(function* () {
         yield appRender(this, supportedLocales, resolvedAssets);
         const bot = this.state.isBot;
         if (bot) {
             console.log(
-                `  --> ${this.method} ${this.originalUrl} ${
-                    this.status
-                } (BOT '${bot}')`
+                `  --> ${this.method} ${this.originalUrl} ${this.status} (BOT '${bot}')`
             );
         }
     });
@@ -336,11 +334,11 @@ if (env !== 'test') {
 
     if (env === 'production') {
         if (cluster.isMaster) {
-            for (var i = 0; i < numProcesses; i++) {
+            for (let i = 0; i < numProcesses; i++) {
                 cluster.fork();
             }
             // if a worker dies replace it so application keeps running
-            cluster.on('exit', function(worker) {
+            cluster.on('exit', function (worker) {
                 console.log(
                     'error: worker %d died, starting a new one',
                     worker.id
@@ -362,7 +360,8 @@ if (env !== 'test') {
 
 // set PERFORMANCE_TRACING to the number of seconds desired for
 // logging hardware stats to the console
-if (process.env.PERFORMANCE_TRACING)
+if (process.env.PERFORMANCE_TRACING) {
     setInterval(hardwareStats, 1000 * process.env.PERFORMANCE_TRACING);
+}
 
 module.exports = app;

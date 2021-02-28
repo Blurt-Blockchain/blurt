@@ -14,7 +14,7 @@ const remarkable = new Remarkable({
     breaks: true,
     linkify: false, // linkify is done locally
     typographer: false, // https://github.com/jonschlinkert/remarkable/issues/142#issuecomment-221546793
-    quotes: '“”‘’'
+    quotes: '“”‘’',
 });
 
 const remarkableToSpec = new Remarkable({
@@ -22,7 +22,7 @@ const remarkableToSpec = new Remarkable({
     breaks: false, // real markdown uses \n\n for paragraph breaks
     linkify: false,
     typographer: false,
-    quotes: '“”‘’'
+    quotes: '“”‘’',
 });
 
 class MarkdownViewer extends Component {
@@ -36,7 +36,7 @@ class MarkdownViewer extends Component {
         noImage: PropTypes.bool,
         allowDangerousHTML: PropTypes.bool,
         hideImages: PropTypes.bool, // whether to replace images with just a span containing the src url
-        breaks: PropTypes.bool // true to use bastardized markdown that cares about newlines
+        breaks: PropTypes.bool, // true to use bastardized markdown that cares about newlines
         // used for the ImageUserBlockList
     };
 
@@ -45,7 +45,7 @@ class MarkdownViewer extends Component {
         breaks: true,
         className: '',
         hideImages: false,
-        large: false
+        large: false,
     };
 
     constructor() {
@@ -72,7 +72,7 @@ class MarkdownViewer extends Component {
         if (!text) text = ''; // text can be empty, still view the link meta data
         const {
             large,
-            highQualityPost
+            highQualityPost,
             //jsonMetadata,
         } = this.props;
 
@@ -120,7 +120,7 @@ class MarkdownViewer extends Component {
                 sanitizeConfig({
                     large,
                     highQualityPost,
-                    noImage: noImage && allowNoImage
+                    noImage: noImage && allowNoImage,
                 })
             );
         }
@@ -176,24 +176,23 @@ class MarkdownViewer extends Component {
         return (
             <div className={'MarkdownViewer ' + cn}>
                 {sections}
-                {noImageActive &&
-                    allowNoImage && (
-                        <div
-                            key={'hidden-content'}
-                            onClick={this.onAllowNoImage}
-                            className="MarkdownViewer__negative_group"
+                {noImageActive && allowNoImage && (
+                    <div
+                        key={'hidden-content'}
+                        onClick={this.onAllowNoImage}
+                        className="MarkdownViewer__negative_group"
+                    >
+                        {tt(
+                            'markdownviewer_jsx.images_were_hidden_due_to_low_ratings'
+                        )}
+                        <button
+                            style={{ marginBottom: 0 }}
+                            className="button hollow tiny float-right"
                         >
-                            {tt(
-                                'markdownviewer_jsx.images_were_hidden_due_to_low_ratings'
-                            )}
-                            <button
-                                style={{ marginBottom: 0 }}
-                                className="button hollow tiny float-right"
-                            >
-                                {tt('g.show')}
-                            </button>
-                        </div>
-                    )}
+                            {tt('g.show')}
+                        </button>
+                    </div>
+                )}
             </div>
         );
     }

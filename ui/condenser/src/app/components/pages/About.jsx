@@ -18,5 +18,5 @@ class About extends React.Component {
 
 module.exports = {
     path: 'about.html',
-    component: About
+    component: About,
 };

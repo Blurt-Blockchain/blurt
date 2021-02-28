@@ -27,10 +27,10 @@ class TransferHistoryRow extends React.Component {
         /* All transfers involve up to 2 accounts, context and 1 other. */
         let message = '';
 
-        let description_start = '';
-        let other_account = null;
-        let description_end = '';
-        let trxUrl = "https://blocks.blurtwallet.com/#/tx/" + op[1].trx_id;
+        const description_start = '';
+        const other_account = null;
+        const description_end = '';
+        const trxUrl = 'https://blocks.blurtwallet.com/#/tx/' + op[1].trx_id;
         if (type === 'transfer_to_vesting') {
             const amount = data.amount.split(' ')[0];
 
@@ -89,8 +89,8 @@ class TransferHistoryRow extends React.Component {
                 type === 'transfer_to_savings'
                     ? 'to_savings'
                     : type === 'transfer_from_savings'
-                        ? 'from_savings'
-                        : 'not_savings';
+                    ? 'from_savings'
+                    : 'not_savings';
 
             if (data.from === context) {
                 // Semi-bad behavior - passing `type` to translation engine -- @todo better somehow?
@@ -154,9 +154,9 @@ class TransferHistoryRow extends React.Component {
                         )}
                         {data.request_id &&
                             ' ' +
-                            tt('transferhistoryrow_jsx.request_id', {
-                                request_id: data.request_id,
-                            })}
+                                tt('transferhistoryrow_jsx.request_id', {
+                                    request_id: data.request_id,
+                                })}
                     </span>
                 );
                 // tt('g.transfer') + `${fromWhere} ${data.amount}` + tt('g.from');
@@ -170,12 +170,13 @@ class TransferHistoryRow extends React.Component {
             );
             // `${tt('transferhistoryrow_jsx.cancel_transfer_from_savings')} (${tt('g.request')} ${data.request_id})`;
         } else if (type === 'withdraw_vesting') {
-            if (data.vesting_shares === '0.000000 VESTS')
+            if (data.vesting_shares === '0.000000 VESTS') {
                 message = tt('transferhistoryrow_jsx.stop_power_down');
-            else
+            } else {
                 message = tt('transferhistoryrow_jsx.withdraw_vesting', {
                     powerdown_vests,
                 });
+            }
             // tt('transferhistoryrow_jsx.start_power_down_of') + ' ' + powerdown_vests + ' BLURT';
         } else if (type === 'curation_reward') {
             message = (
@@ -193,13 +194,13 @@ class TransferHistoryRow extends React.Component {
             // `${curation_reward} BLURT POWER` + tt('g.for');
         } else if (type === 'author_reward') {
             let blurt_payout = '';
-            if (data.steem_payout !== '0.000 BLURT')
+            if (data.steem_payout !== '0.000 BLURT') {
                 blurt_payout = ', ' + data.steem_payout;
+            }
             message = (
                 <span>
                     {tt('transferhistoryrow_jsx.author_reward', {
-                        author_reward
-
+                        author_reward,
                     })}
                     {postLink(socialUrl, data.author, data.permlink)}
                 </span>
@@ -207,10 +208,12 @@ class TransferHistoryRow extends React.Component {
             // `${data.sbd_payout}${blurt_payout}, ${tt( 'g.and' )} ${author_reward} BLURT POWER ${tt('g.for')}`;
         } else if (type === 'claim_reward_balance') {
             const rewards = [];
-            if (parseFloat(data.reward_blurt.split(' ')[0]) > 0)
+            if (parseFloat(data.reward_blurt.split(' ')[0]) > 0) {
                 rewards.push(data.reward_blurt);
-            if (parseFloat(data.reward_vests.split(' ')[0]) > 0)
+            }
+            if (parseFloat(data.reward_vests.split(' ')[0]) > 0) {
                 rewards.push(`${data.reward_vests}`);
+            }
 
             switch (rewards.length) {
                 case 3:
@@ -291,10 +294,7 @@ class TransferHistoryRow extends React.Component {
                     className="TransferHistoryRow__text"
                     style={{ maxWidth: '40rem' }}
                 >
-                    <a href={trxUrl}>
-
-                        {message}
-                    </a>
+                    <a href={trxUrl}>{message}</a>
                 </td>
                 <td
                     className="show-for-medium"
@@ -311,8 +311,8 @@ const otherAccountLink = (username) =>
     GDPRUserList.includes(username) ? (
         <span>{username}</span>
     ) : (
-            <Link to={`/@${username}`}>{username}</Link>
-        );
+        <Link to={`/@${username}`}>{username}</Link>
+    );
 
 const postLink = (socialUrl, author, permlink) => (
     <a href={`${socialUrl}/@${author}/${permlink}`} target="_blank">

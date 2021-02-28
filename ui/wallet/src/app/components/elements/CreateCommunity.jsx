@@ -16,6 +16,7 @@ class CreateCommunity extends React.Component {
             accountCreated: false,
         };
     }
+
     componentDidMount() {}
     render() {
         const {
@@ -146,8 +147,9 @@ class CreateCommunity extends React.Component {
 
         let formError = null;
         const rx = new RegExp('^[' + Unicode.L + ']');
-        if (!rx.test(communityTitle) && (communityTitle || hasPass))
+        if (!rx.test(communityTitle) && (communityTitle || hasPass)) {
             formError = 'Must start with a letter.';
+        }
 
         const form = (
             <form className="community--form" onSubmit={handleCommunitySubmit}>

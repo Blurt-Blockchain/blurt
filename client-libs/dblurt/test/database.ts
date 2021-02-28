@@ -4,7 +4,7 @@ import * as assert from "assert";
 import { Client, Asset, Transaction, PrivateKey } from "./../src";
 import { getTestnetAccounts, randomString, agent, TEST_NODE } from "./common";
 
-describe("database api", function() {
+describe("database api", function () {
   this.slow(500);
   this.timeout(20 * 1000);
 
@@ -13,11 +13,11 @@ describe("database api", function() {
   const liveClient = new Client(TEST_NODE, { agent });
 
   let acc: { username: string; password: string };
-  before(async function() {
+  before(async function () {
     [acc] = await getTestnetAccounts();
   });
 
-  it("getDynamicGlobalProperties", async function() {
+  it("getDynamicGlobalProperties", async function () {
     const result = await liveClient.database.getDynamicGlobalProperties();
     assert.deepEqual(Object.keys(result), [
       "head_block_number",
@@ -58,11 +58,11 @@ describe("database api", function() {
       "vesting_reward_percent",
       "sps_fund_percent",
       "sps_interval_ledger",
-      "downvote_pool_percent"
+      "downvote_pool_percent",
     ]);
   });
 
-  it("getConfig", async function() {
+  it("getConfig", async function () {
     const result = await client.database.getConfig();
     // HIVE_ config stuff here
     const r = (key: string) => result["HIVE_" + key];
@@ -79,41 +79,45 @@ describe("database api", function() {
     // assert.equal(version["chain_id"], client.options.chainId);
   });
 
-  it("getBlockHeader", async function() {
+  it("getBlockHeader", async function () {
     const result = await client.database.getBlockHeader(1);
     assert.equal("0000000000000000000000000000000000000000", result.previous);
   });
 
-  it("getBlock", async function() {
+  it("getBlock", async function () {
     const result = await client.database.getBlock(1);
     assert.equal("0000000000000000000000000000000000000000", result.previous);
     assert.equal(serverConfig["HIVE_INIT_PUBLIC_KEY_STR"], result.signing_key);
   });
 
-  it("getOperations", async function() {
+  it("getOperations", async function () {
     const result = await liveClient.database.getOperations(1);
     assert.equal(result.length, 1);
     assert.equal(result[0].op[0], "producer_reward");
   });
 
-  it("getDiscussions", async function() {
+  it("getDiscussions", async function () {
     const r1 = await liveClient.database.getDiscussions("comments", {
       start_author: "almost-digital",
       start_permlink:
         "re-pal-re-almost-digital-dsteem-a-strongly-typed-steem-client-library-20170702t131034262z",
-      limit: 1
+      limit: 1,
     });
     assert.equal(r1.length, 1);
     assert.equal(r1[0].body, "☀️heroin for programmers");
   });
 
-  it("getTransaction", async function() {
-    const tx = await liveClient.database.getTransaction("c20a84c8a12164e1e0750f0ee5d3c37214e2f073");
+  it("getTransaction", async function () {
+    const tx = await liveClient.database.getTransaction(
+      "c20a84c8a12164e1e0750f0ee5d3c37214e2f073"
+    );
     assert.deepEqual(tx.signatures, [
-      "201e02e8daa827382b1a3aefb6809a4501eb77aa813b705be4983d50d74c66432529601e5ae43981dcba2a7e171de5fd75be2e1820942260375d2daf647df2ccaa"
+      "201e02e8daa827382b1a3aefb6809a4501eb77aa813b705be4983d50d74c66432529601e5ae43981dcba2a7e171de5fd75be2e1820942260375d2daf647df2ccaa",
     ]);
     try {
-      await client.database.getTransaction("11c20a84c8a12164e1e0750f0ee5d3c37214e2f073");
+      await client.database.getTransaction(
+        "11c20a84c8a12164e1e0750f0ee5d3c37214e2f073"
+      );
       assert(false, "should not be reached");
     } catch (error) {
       assert.equal(
@@ -123,19 +127,19 @@ describe("database api", function() {
     }
   });
 
-  it("getChainProperties", async function() {
+  it("getChainProperties", async function () {
     const props = await liveClient.database.getChainProperties();
     assert.equal(Asset.from(props.account_creation_fee).symbol, "HIVE");
   });
 
-  it("getCurrentMedianHistoryPrice", async function() {
+  it("getCurrentMedianHistoryPrice", async function () {
     const price = await liveClient.database.getCurrentMedianHistoryPrice();
     assert.equal(Asset.from(price.base).symbol, "HBD");
     assert.equal(price.quote.symbol, "HIVE");
   });
 
   // this tests for delegations from the steem account
-  it("getVestingDelegations", async function() {
+  it("getVestingDelegations", async function () {
     this.slow(5 * 1000);
     const [delegation] = await liveClient.database.getVestingDelegations(
       "mahdiyari",
@@ -143,14 +147,14 @@ describe("database api", function() {
       1
     );
     if (!delegation) {
-      return
+      return;
     }
     assert.equal(delegation.delegator, "mahdiyari");
     assert.equal(typeof delegation.id, "number");
     assert.equal(Asset.from(delegation.vesting_shares).symbol, "VESTS");
   });
 
-  it("verifyAuthority", async function() {
+  it("verifyAuthority", async function () {
     this.slow(5 * 1000);
     const tx: Transaction = {
       ref_block_num: 0,
@@ -163,18 +167,21 @@ describe("database api", function() {
             required_auths: [],
             required_posting_auths: [acc.username],
             id: "rpc-params",
-            json: '{"foo": "bar"}'
-          }
-        ]
+            json: '{"foo": "bar"}',
+          },
+        ],
       ],
-      extensions: []
+      extensions: [],
     };
     const key = PrivateKey.fromLogin(acc.username, acc.password, "posting");
 
     // remove chainId after hf24
-    const HFV = await client.database.call('get_hardfork_version')
-    if (HFV === '0.23.0') {
-      client.chainId = Buffer.from('0000000000000000000000000000000000000000000000000000000000000000', 'hex')
+    const HFV = await client.database.call("get_hardfork_version");
+    if (HFV === "0.23.0") {
+      client.chainId = Buffer.from(
+        "0000000000000000000000000000000000000000000000000000000000000000",
+        "hex"
+      );
     }
 
     const stx = client.broadcast.sign(tx, key);

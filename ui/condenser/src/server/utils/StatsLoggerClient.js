@@ -9,7 +9,7 @@ export default class StatsLoggerClient {
         if (STATSD_IP) {
             this.SDC = new SDC({
                 host: STATSD_IP,
-                prefix: 'condenser'
+                prefix: 'condenser',
             });
         } else {
             console.log(
@@ -19,7 +19,7 @@ export default class StatsLoggerClient {
             this.SDC = {
                 timing() {
                     console.log('StatsLoggerClient call: ', arguments);
-                }
+                },
             };
         }
     }
@@ -30,7 +30,7 @@ export default class StatsLoggerClient {
      */
     logTimers(tuples) {
         const timestamp = +new Date();
-        tuples.map(tuple => {
+        tuples.map((tuple) => {
             this.SDC.timing(tuple[0], tuple[1]);
         });
     }

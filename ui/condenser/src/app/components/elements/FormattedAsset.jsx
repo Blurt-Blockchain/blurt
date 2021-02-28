@@ -1,7 +1,7 @@
 import React from 'react';
 import {
     formatDecimal,
-    parsePayoutAmount
+    parsePayoutAmount,
 } from 'app/utils/ParsersAndFormatters';
 
 const FormattedAsset = ({ amount, asset, classname }) => {

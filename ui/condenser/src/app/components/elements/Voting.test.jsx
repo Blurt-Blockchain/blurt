@@ -9,9 +9,9 @@ import renderer from 'react-test-renderer';
 import rootReducer from 'app/redux/RootReducer';
 import Voting from './Voting';
 import configureMockStore from 'redux-mock-store';
+import localStorage from 'mock-local-storage';
 
 global.window = {};
-import localStorage from 'mock-local-storage';
 window.localStorage = global.localStorage;
 
 configure({ adapter: new Adapter() });
@@ -20,7 +20,7 @@ const mockGlobal = Map({
     props: Map({ sbd_print_rate: 99 }),
     feed_price: Map({
         base: '5 SBD',
-        quote: '10 BLURT'
+        quote: '10 BLURT',
     }),
     content: Map({
         test: Map({
@@ -28,25 +28,25 @@ const mockGlobal = Map({
             permlink: 'zip',
             active_votes: Map({}),
             stats: {
-                total_votes: 1
+                total_votes: 1,
             },
             max_accepted_payout: '999999 SBD',
             pending_payout_value: '10 SBD',
             cashout_time: '2018-03-30T10:00:00Z',
-            pending_payout_sbd: 99
-        })
-    })
+            pending_payout_sbd: 99,
+        }),
+    }),
 });
 
 const mockUser = Map({ current: Map({ username: 'Janice' }) });
 
 const voteTestObj = fromJS({
     stats: {
-        total_votes: 1
+        total_votes: 1,
     },
     max_accepted_payout: '999999 SBD',
     pending_payout_value: '10 SBD',
-    cashout_time: '2018-03-30T10:00:00Z'
+    cashout_time: '2018-03-30T10:00:00Z',
 });
 
 describe('Voting', () => {
@@ -58,12 +58,12 @@ describe('Voting', () => {
             transaction: {},
             discussion: {},
             routing: {},
-            app: {}
+            app: {},
         });
-        let wrapped = shallow(
+        const wrapped = shallow(
             <Voting
                 post="test"
-                flag={true}
+                flag
                 vote={(w, p) => {}}
                 post_obj={voteTestObj}
                 price_per_blurt={1}
@@ -82,12 +82,12 @@ describe('Voting', () => {
             transaction: {},
             discussion: {},
             routing: {},
-            app: {}
+            app: {},
         });
-        let wrapped = shallow(
+        const wrapped = shallow(
             <Voting
                 post="test"
-                flag={true}
+                flag
                 vote={(w, p) => {}}
                 post_obj={voteTestObj}
                 price_per_blurt={1}
@@ -108,12 +108,12 @@ describe('Voting', () => {
             transaction: {},
             discussion: {},
             routing: {},
-            app: {}
+            app: {},
         });
-        let wrapped = shallow(
+        const wrapped = shallow(
             <Voting
                 post="test"
-                flag={true}
+                flag
                 vote={(w, p) => {}}
                 post_obj={voteTestObj}
                 price_per_blurt={1}
@@ -133,9 +133,9 @@ describe('Voting', () => {
             transaction: {},
             discussion: {},
             routing: {},
-            app: {}
+            app: {},
         });
-        let wrapped = shallow(
+        const wrapped = shallow(
             <Voting
                 post="test"
                 flag={false}
@@ -158,9 +158,9 @@ describe('Voting', () => {
             transaction: {},
             discussion: {},
             routing: {},
-            app: {}
+            app: {},
         });
-        let wrapped = shallow(
+        const wrapped = shallow(
             <Voting
                 post="test"
                 flag={false}
@@ -187,11 +187,11 @@ describe('Voting', () => {
         const store = createStore(rootReducer);
         const post_obj = fromJS({
             stats: {
-                total_votes: 1
+                total_votes: 1,
             },
             max_accepted_payout: '999999 SBD',
             pending_payout_value: '10 SBD',
-            cashout_time: '2018-03-30T10:00:00Z'
+            cashout_time: '2018-03-30T10:00:00Z',
         });
         const component = renderer.create(
             <Provider store={store}>
@@ -214,11 +214,11 @@ describe('Voting', () => {
     it('should show liquid steem if print rate is < 10000', () => {
         const post_obj = fromJS({
             stats: {
-                total_votes: 1
+                total_votes: 1,
             },
             max_accepted_payout: '999999 SBD',
             pending_payout_value: '10 SBD',
-            cashout_time: '2018-03-30T10:00:00Z'
+            cashout_time: '2018-03-30T10:00:00Z',
         });
         const store = createStore(rootReducer);
         const component = renderer.create(

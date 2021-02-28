@@ -1,12 +1,12 @@
 Last Updated June 15, 2018
 
-Welcome to Blurt.blog!  This agreement (the “Agreement”) between you and
+Welcome to Blurt.blog! This agreement (the “Agreement”) between you and
 Blurt.blog, (“we”, “us”, “our”) sets out your rights to access
 and use of blurt.blog and any other products or services provided by us (the
 “Service”). If you are accepting this Agreement and using the Services on
 behalf of a company, organization, government, or other legal entity, you
 represent and warrant that you are authorized to do so and have the authority
-to bind such entity to this Agreement.  By accessing our Service, you agree
+to bind such entity to this Agreement. By accessing our Service, you agree
 that you have read, understood and accepted this Agreement.
 
 If we decide to make changes to this Agreement, we will provide notice of those
@@ -52,7 +52,7 @@ to Content you post.
 “Blurt.blog,”, the Blurt.blog logo and any other product or service names, logos,
 slogans that may appear on the Service are trademarks of Blurt.blog, and,
 may not be copied, imitated, or used, in whole or in part, unless explicitly
-permitted or without first receiving written permission from us to do so.  The
+permitted or without first receiving written permission from us to do so. The
 look and feel of blurt.blog and the Service is protected by copyright ©
 Blurt.blog, All rights reserved. You may not duplicate, copy, or reuse any
 portion of the HTML/CSS, Javascript, or visual design elements or concepts
@@ -65,14 +65,14 @@ questions.
 All other trademarks, registered trademarks, product names and company names or
 logos mentioned or used on our Service are the property of their respective
 owners and may not be copied, imitated, or used, in whole or in part, without
-the permission of the applicable trademark holder.  Reference to any products,
+the permission of the applicable trademark holder. Reference to any products,
 services, processes or other information by name, trademark, manufacturer,
 supplier or otherwise does not constitute or imply endorsement, sponsorship, or
 recommendation by us.
 
 ## 5. Assumption of Risk, Limitations on Liability.
 
-5.1.   You accept and acknowledge that there are risks associated with
+5.1. You accept and acknowledge that there are risks associated with
 utilizing an Internet-based Blurt blockchain account service including, but not
 limited to, the risk of failure of hardware, software and Internet connections,
 the risk of malicious software introduction, and the risk that third-parties
@@ -88,7 +88,7 @@ functions made accessible through the Service, any hyperlinks to third-party
 websites, nor for any breach of security associated with the transmission of
 information through the Service or any website linked to by the Service.
 
-5.3.  We will not be responsible or liable to you for any loss and take no
+5.3. We will not be responsible or liable to you for any loss and take no
 responsibility for and will not be liable to you for any use of our Services,
 including but not limited to any losses, damages or claims arising from: (a)
 User error such as forgotten passwords, incorrectly constructed transactions,
@@ -98,21 +98,21 @@ unauthorized third-party activities, including without limitation the use of
 viruses, phishing, brute forcing or other means of attack against the Service
 or Services.
 
-5.4.  We make no warranty that the Service or the server that makes it
+5.4. We make no warranty that the Service or the server that makes it
 available, are free of viruses or errors, that its content is accurate, that it
 will be uninterrupted, or that defects will be corrected. We will not be
 responsible or liable to you for any loss of any kind, from action taken, or
 taken in reliance on material, or information, contained on the Service.
 
-5.5.  Subject to 6.1 below, any and all indemnities, warranties, terms, and
+5.5. Subject to 6.1 below, any and all indemnities, warranties, terms, and
 conditions (whether express or implied) are hereby excluded to the fullest
 extent permitted under New York law.
 
-5.6.  We will not be liable, in contract, or tort (including, without
+5.6. We will not be liable, in contract, or tort (including, without
 limitation, negligence), other than where we have been fraudulent or made
 negligent misrepresentations.
 
-5.7.  Nothing in this Agreement excludes or limits liability for death or
+5.7. Nothing in this Agreement excludes or limits liability for death or
 personal injury caused by negligence, fraudulent misrepresentation, or any
 other liability which may not otherwise be limited or excluded under United
 States law.
@@ -130,7 +130,7 @@ legal fees, arising out, or relating to:
 
 6.1.3. Violation of any rights of any other person or entity.
 
-6.2.  If you are obligated to indemnify us, we will have the right, in our sole
+6.2. If you are obligated to indemnify us, we will have the right, in our sole
 discretion, to control any action or proceeding (at our expense) and determine
 whether we will pursue a settlement of any action or proceeding.
 
@@ -180,10 +180,10 @@ Blurt blockchain command line interface.
 9.2. Account and Private Keys. Should you agree to create an Account through
 our Service, we generate a cryptographic private and public key pair that are
 provided solely to you and completely owned by you; provided however that we
-not store passwords or Private Keys for our you.  We never have access to your
+not store passwords or Private Keys for our you. We never have access to your
 Private Key and do not custody any Private Keys on your behalf, and therefore,
 assume no responsibility for the management of the Private Key tied to your
-Account.  The Private Key uniquely match the Account name and must be used in
+Account. The Private Key uniquely match the Account name and must be used in
 connection with the Account to authorize the transfer of BLURT and Blurt
 Dollars from that Account. You are solely responsible for maintaining the
 security of your Private Keys. You must keep your Private Key access
@@ -192,14 +192,14 @@ BLURT, Blurt Power and Blurt Dollars associated with your Account.
 
 9.3. No Password Retrieval. We do not receive or store your Account password or
 Private Keys. Your Private Key is your own and you are solely responsible for
-their safekeeping.  We cannot assist you with Account password retrieval,
+their safekeeping. We cannot assist you with Account password retrieval,
 reset, or recovery. You are solely responsible for remembering your Account
 password. If you have not safely stored a backup of any Account and password
 pairs maintained in your Account, you accept and acknowledge that any BLURT,
 Blurt Dollars and Blurt Power you have associated with such Account will become
 permanently inaccessible if you do not have your Account password.
 
-9.4.  Transactions. All proposed Blurt blockchain transactions must be
+9.4. Transactions. All proposed Blurt blockchain transactions must be
 confirmed and recorded in the Blurt blockchain via the Blurt distributed
 consensus network (a peer-to-peer network), which is not owned, controlled, or
 operated by us. The Blurt blockchain is operated by a decentralized network of
@@ -210,9 +210,9 @@ agree that the transaction details you submit via the Services may not be
 completed, or may be substantially delayed, by the Blurt blockchain. You may
 use the Services to submit these details to the Blurt blockchain.
 
-9.5.  No Storage or Transmission of BLURT, Blurt Dollars or Blurt Power. BLURT,
+9.5. No Storage or Transmission of BLURT, Blurt Dollars or Blurt Power. BLURT,
 in any of its forms (BLURT, Blurt Dollars and Blurt Power) is an intangible,
-digital asset controlled by you.  These assets exist only by virtue of the
+digital asset controlled by you. These assets exist only by virtue of the
 ownership record maintained on the Blurt blockchain. The Service does not
 store, send, or receive BLURT, Blurt Dollars, or Blurt Power. Any transfer of
 title that might occur in any BLURT, Blurt Dollars or Blurt Power occurs on the
@@ -220,7 +220,7 @@ Blurt blockchain and not within the Services. We do not guarantee that the
 Service can affect the transfer of title or right in any BLURT, Blurt Dollars
 or Blurt Power.
 
-9.6.  Relationship. Nothing in this Agreement is intended to nor shall create
+9.6. Relationship. Nothing in this Agreement is intended to nor shall create
 any partnership, joint venture, agency, consultancy, or trusteeship, between
 you and us.
 
@@ -295,7 +295,7 @@ negatively affect, or inhibit other users from fully enjoying our Services, or
 that could damage, disable, overburden, or impair the functioning of our
 Services in any manner;
 
-14.1.2.  Use our Services to pay for, support or otherwise engage in any
+14.1.2. Use our Services to pay for, support or otherwise engage in any
 activity prohibited by law, including, but not limited to illegal gambling,
 fraud, money-laundering, or terrorist financing activities.
 
@@ -318,7 +318,7 @@ Copyright Act ("DMCA"), and we retain the right to remove access to user
 content provided via the Service that we deem to be infringing the copyright of
 others. If you become aware of user content on the Service that infringes your
 copyright rights, you may submit a properly formatted DMCA request (see 17
-U.S.C. § 512) to Blurt.blog. 
+U.S.C. § 512) to Blurt.blog.
 Misrepresentations of infringement can result in liability for monetary
 damages. You may want to consult an attorney before taking any action pursuant
 to the DMCA. A DMCA request can be sent to us via the contact information below:
@@ -335,47 +335,54 @@ copyright@blurt.blog
 
 Please send our Copyright Agent the following information:
 
-1.        The electronic or physical signature of the owner of the copyright or
-the person authorized to act on the owner's behalf;
+1.                                              The electronic or physical signature of the owner of the copyright or
 
-2.        Identification of the copyrighted work claimed to have been
-infringed, or a representative list of such works;
+    the person authorized to act on the owner's behalf;
 
-3.        The URL or Internet location of the materials claimed to be
-infringing or to be the subject of infringing activity, or information
-reasonably sufficient to permit us to locate the material;
+2.                                              Identification of the copyrighted work claimed to have been
 
-4.        Your name, address, telephone number, and email address;
+    infringed, or a representative list of such works;
 
-5.        A statement by you that you have a good faith belief that the
-disputed use of the material is not authorized by the copyright owner, its
-agent, or the law; and
+3.                                              The URL or Internet location of the materials claimed to be
 
-6.        A statement by you, made under penalty of perjury, that the above
-information in your notice is accurate and that you are the copyright owner or
-are authorized to act on the copyright owner's behalf.
+    infringing or to be the subject of infringing activity, or information
+    reasonably sufficient to permit us to locate the material;
 
-15.2 Your right to file a counter-notice.  If you believe your user content was
-wrongly removed due to a mistake or misidentification of the material, you can s
-end a counter-notice to our Copyright Agent (contact information provided above)
- that includes the following:
+4.                                              Your name, address, telephone number, and email address;
 
-1.        Your physical or electronic signature;
+5.                                              A statement by you that you have a good faith belief that the
 
-2.        Identification of the material that has been removed or to which
-access has been disabled and where the material was located online before it
-was removed or access to it was disabled;
+    disputed use of the material is not authorized by the copyright owner, its
+    agent, or the law; and
 
-3.        A statement by you, under penalty of perjury, that you have a good
-faith belief that the material was removed or disabled because of mistake or
-misidentification of the material to be removed or disabled; and
+6.                                              A statement by you, made under penalty of perjury, that the above
 
-4.        Your name, address, and telephone number, and a statement that you
-consent to the jurisdiction of federal district court for the judicial district
-in which the address is located, or if your address is outside of the United
-States, for any judicial district in which the service provider may be found,
-and that you will accept service of process from the person who provided
-notification under DMCA 512 subsection (c)(1)(c) or an agent of such person.
+    information in your notice is accurate and that you are the copyright owner or
+    are authorized to act on the copyright owner's behalf.
+
+    15.2 Your right to file a counter-notice. If you believe your user content was
+    wrongly removed due to a mistake or misidentification of the material, you can s
+    end a counter-notice to our Copyright Agent (contact information provided above)
+    that includes the following:
+
+7.                                              Your physical or electronic signature;
+
+8.                                              Identification of the material that has been removed or to which
+
+    access has been disabled and where the material was located online before it
+    was removed or access to it was disabled;
+
+9.                                              A statement by you, under penalty of perjury, that you have a good
+
+    faith belief that the material was removed or disabled because of mistake or
+    misidentification of the material to be removed or disabled; and
+
+10.        Your name, address, and telephone number, and a statement that you
+    consent to the jurisdiction of federal district court for the judicial district
+    in which the address is located, or if your address is outside of the United
+    States, for any judicial district in which the service provider may be found,
+    and that you will accept service of process from the person who provided
+    notification under DMCA 512 subsection (c)(1)(c) or an agent of such person.
 
 Upon receiving a counter-notice we will forward it to the complaining party and
 tell them we will restore your content within 10 business days. If that party
@@ -565,5 +572,3 @@ Services after a change to this agreement, you agree to those changes.
 ## 25. Contact Information
 
 Notices to Blurt.blog. should be directed to legal@blurt.blog.
-
-

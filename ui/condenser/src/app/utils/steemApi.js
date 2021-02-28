@@ -10,20 +10,23 @@ export async function getStateAsync(url) {
 
     // strip off leading and trailing slashes
     if (url.length > 0 && url[0] == '/') url = url.substring(1, url.length);
-    if (url.length > 0 && url[url.length - 1] == '/')
+    if (url.length > 0 && url[url.length - 1] == '/') {
         url = url.substring(0, url.length - 1);
+    }
 
     // blank URL defaults to `trending`
     if (url === '') url = 'hot';
 
     // curation and author rewards pages are alias of `transfers`
-    if (url.indexOf('/curation-rewards') !== -1)
+    if (url.indexOf('/curation-rewards') !== -1) {
         url = url.replace('/curation-rewards', '/transfers');
-    if (url.indexOf('/author-rewards') !== -1)
+    }
+    if (url.indexOf('/author-rewards') !== -1) {
         url = url.replace('/author-rewards', '/transfers');
+    }
 
     const raw = await api.getStateAsync(url);
-    let chainProperties = await getChainProperties();
+    const chainProperties = await getChainProperties();
     if (chainProperties) {
         raw.props.operation_flat_fee = parseFloat(
             chainProperties.operation_flat_fee
@@ -32,7 +35,7 @@ export async function getStateAsync(url) {
             chainProperties.bandwidth_kbytes_fee
         );
     }
-    let rewardFund = await getRewardFund();
+    const rewardFund = await getRewardFund();
     if (rewardFund) {
         raw.reward_fund = rewardFund;
     }
@@ -42,7 +45,7 @@ export async function getStateAsync(url) {
 }
 
 function getChainProperties() {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
         api.getChainProperties((err, result) => {
             if (result) {
                 resolve(result);
@@ -53,7 +56,7 @@ function getChainProperties() {
     });
 }
 function getRewardFund() {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
         api.getRewardFund('post', (err, result) => {
             if (result) {
                 resolve(result);

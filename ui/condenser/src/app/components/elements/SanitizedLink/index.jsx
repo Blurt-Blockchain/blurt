@@ -8,7 +8,7 @@ import { looksPhishy } from 'app/utils/Phishing';
 export default class SanitizedLink extends React.Component {
     static propTypes = {
         url: PropTypes.string,
-        text: PropTypes.string
+        text: PropTypes.string,
     };
 
     constructor() {
@@ -18,11 +18,11 @@ export default class SanitizedLink extends React.Component {
             'SanitizedLink'
         );
         this.state = {
-            revealPhishyLink: false
+            revealPhishyLink: false,
         };
     }
 
-    onRevealPhishyLink = e => {
+    onRevealPhishyLink = (e) => {
         e.preventDefault();
         this.setState({ revealPhishyLink: true });
     };
@@ -34,7 +34,7 @@ export default class SanitizedLink extends React.Component {
 
         const classes = classnames({
             SanitizedLink: true,
-            'SanitizedLink--phishyLink': isPhishy
+            'SanitizedLink--phishyLink': isPhishy,
         });
 
         if (!isPhishy) {

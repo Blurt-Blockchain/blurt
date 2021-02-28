@@ -8,7 +8,7 @@ const { Asset, PrivateKey, Client, HexBuffer } = ds;
 
 import { getTestnetAccounts, randomString, agent } from "./common";
 
-describe("operations", function() {
+describe("operations", function () {
   this.slow(20 * 1000);
   this.timeout(60 * 1000);
 
@@ -17,12 +17,12 @@ describe("operations", function() {
   let acc1: { username: string; password: string },
     acc2: { username: string; password: string };
   let acc1Key: ds.PrivateKey;
-  before(async function() {
+  before(async function () {
     [acc1, acc2] = await getTestnetAccounts();
     acc1Key = PrivateKey.fromLogin(acc1.username, acc1.password, "active");
   });
 
-  it("should delegate vesting shares", async function() {
+  it("should delegate vesting shares", async function () {
     const [user1] = await client.database.getAccounts([acc1.username]);
     const currentDelegation = Asset.from(user1.received_vesting_shares);
     const newDelegation = Asset.from(
@@ -33,7 +33,7 @@ describe("operations", function() {
       {
         delegator: acc1.username,
         delegatee: acc2.username,
-        vesting_shares: newDelegation
+        vesting_shares: newDelegation,
       },
       acc1Key
     );
@@ -41,15 +41,15 @@ describe("operations", function() {
     assert.equal(user2.received_vesting_shares, newDelegation.toString());
   });
 
-  it("should send custom", async function() {
+  it("should send custom", async function () {
     const props = await client.database.getDynamicGlobalProperties();
     const op: ds.CustomOperation = [
       "custom",
       {
         required_auths: [acc1.username],
         id: ~~(Math.random() * 65535),
-        data: randomBytes(512)
-      }
+        data: randomBytes(512),
+      },
     ];
     const rv = await client.broadcast.sendOperations([op], acc1Key);
     const tx = await client.database.getTransaction(rv.id);
@@ -58,14 +58,14 @@ describe("operations", function() {
     assert.equal(rop[1].data, HexBuffer.from(op[1].data).toString());
   });
 
-  it("should send custom json", async function() {
+  it("should send custom json", async function () {
     const data = { test: 123, string: "unicode🐳" };
     const rv = await client.broadcast.json(
       {
         required_auths: [acc1.username],
         required_posting_auths: [],
         id: "something",
-        json: JSON.stringify(data)
+        json: JSON.stringify(data),
       },
       acc1Key
     );
@@ -73,14 +73,14 @@ describe("operations", function() {
     assert.deepEqual(JSON.parse(tx.operations[0][1].json), data);
   });
 
-  it("should transfer hive", async function() {
+  it("should transfer hive", async function () {
     const [acc2bf] = await client.database.getAccounts([acc2.username]);
     await client.broadcast.transfer(
       {
         from: acc1.username,
         to: acc2.username,
         amount: "0.001 TESTS",
-        memo: "Hej på dig!"
+        memo: "Hej på dig!",
       },
       acc1Key
     );
@@ -90,7 +90,7 @@ describe("operations", function() {
     assert.equal(new_bal.subtract(old_bal).toString(), "0.001 TESTS");
   });
 
-  it("should create account and post with options", async function() {
+  it("should create account and post with options", async function () {
     // ensure not testing accounts on mainnet
     // TODO: uncomment after HF24
     // assert(
@@ -105,18 +105,23 @@ describe("operations", function() {
         username,
         password,
         creator: acc1.username,
-        metadata: { date: new Date() }
+        metadata: { date: new Date() },
       },
       acc1Key
     );
-    await client.broadcast.sendOperations([[
-      'transfer_to_vesting',
-      {
-        amount: '100.000 TESTS',
-        from: acc1.username,
-        to: username
-      }
-    ]], acc1Key)
+    await client.broadcast.sendOperations(
+      [
+        [
+          "transfer_to_vesting",
+          {
+            amount: "100.000 TESTS",
+            from: acc1.username,
+            to: username,
+          },
+        ],
+      ],
+      acc1Key
+    );
     const [newAcc] = await client.database.getAccounts([username]);
     assert.equal(newAcc.name, username);
     // not sure why but on the testnet the recovery account is always 'steem'
@@ -137,7 +142,7 @@ describe("operations", function() {
         permlink,
         title: "Hello world!",
         body: `My password is: ${password}`,
-        json_metadata: JSON.stringify({ tags: ["test", "hello"] })
+        json_metadata: JSON.stringify({ tags: ["test", "hello"] }),
       },
       {
         permlink,
@@ -147,25 +152,25 @@ describe("operations", function() {
         percent_steem_dollars: 0,
         max_accepted_payout: Asset.from(10, "TBD"),
         extensions: [
-          [0, { beneficiaries: [{ weight: 10000, account: acc1.username }] }]
-        ]
+          [0, { beneficiaries: [{ weight: 10000, account: acc1.username }] }],
+        ],
       },
       postingWif
     );
 
     const post = await client.call("condenser_api", "get_content", [
       username,
-      permlink
+      permlink,
     ]);
     assert.deepEqual(post.beneficiaries, [
-      { account: acc1.username, weight: 10000 }
+      { account: acc1.username, weight: 10000 },
     ]);
     assert.equal(post.max_accepted_payout, "10.000 TBD");
     assert.equal(post.percent_steem_dollars, 0);
     assert.equal(post.allow_votes, true);
   });
 
-  it("should update account", async function() {
+  it("should update account", async function () {
     const key = PrivateKey.fromLogin(acc1.username, acc1.password, "active");
     const foo = Math.random();
     const rv = await client.broadcast.updateAccount(
@@ -176,7 +181,7 @@ describe("operations", function() {
           acc1.password,
           "memo"
         ).createPublic(client.addressPrefix),
-        json_metadata: JSON.stringify({ foo })
+        json_metadata: JSON.stringify({ foo }),
       },
       key
     );
@@ -184,7 +189,7 @@ describe("operations", function() {
     assert.deepEqual({ foo }, JSON.parse(acc.json_metadata));
   });
 
-  it("should create account custom auths", async function() {
+  it("should create account custom auths", async function () {
     const key = PrivateKey.fromLogin(acc1.username, acc1.password, "active");
 
     const username = "ds-" + randomString(12);
@@ -221,11 +226,11 @@ describe("operations", function() {
           posting: {
             weight_threshold: 1,
             account_auths: [],
-            key_auths: [[postingKey, 1]]
+            key_auths: [[postingKey, 1]],
           },
-          memoKey
+          memoKey,
         },
-        metadata
+        metadata,
       },
       key
     );
@@ -234,7 +239,7 @@ describe("operations", function() {
     assert.equal(newAccount.memo_key, memoKey);
   });
 
-  it("should create account and calculate fees", async function() {
+  it("should create account and calculate fees", async function () {
     const password = randomString(32);
     const metadata = { my_password_is: password };
     const creator = acc1.username;
@@ -256,7 +261,7 @@ describe("operations", function() {
         metadata,
         creator,
         username: "foo" + randomString(12),
-        delegation: 0
+        delegation: 0,
       },
       acc1Key
     );
@@ -268,7 +273,7 @@ describe("operations", function() {
         metadata,
         creator,
         username: "foo" + randomString(12),
-        fee: creationFee
+        fee: creationFee,
       },
       acc1Key
     );
@@ -280,7 +285,7 @@ describe("operations", function() {
         creator,
         username: "foo" + randomString(12),
         fee: creationFee,
-        delegation: Asset.from(1000, "VESTS")
+        delegation: Asset.from(1000, "VESTS"),
       },
       acc1Key
     );
@@ -310,20 +315,20 @@ describe("operations", function() {
     }
   });
 
-  it("should change recovery account", async function() {
+  it("should change recovery account", async function () {
     const op: ds.ChangeRecoveryAccountOperation = [
       "change_recovery_account",
       {
         account_to_recover: acc1.username,
         new_recovery_account: acc2.username,
-        extensions: []
-      }
+        extensions: [],
+      },
     ];
     const key = PrivateKey.fromLogin(acc1.username, acc1.password, "owner");
     await client.broadcast.sendOperations([op], key);
   });
 
-  it("should report overproduction", async function() {
+  it("should report overproduction", async function () {
     const b1 = await client.database.getBlock(10);
     const b2 = await client.database.getBlock(11);
     b1.timestamp = b2.timestamp;
@@ -332,8 +337,8 @@ describe("operations", function() {
       {
         reporter: acc1.username,
         first_block: b1,
-        second_block: b2
-      }
+        second_block: b2,
+      },
     ];
     try {
       await client.broadcast.sendOperations([op], acc1Key);

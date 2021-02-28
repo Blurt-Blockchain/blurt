@@ -11,7 +11,7 @@ const store = createStore(rootReducer);
 storiesOf('Elements', module)
     .addDecorator(withKnobs)
     .addDecorator(Center)
-    .addDecorator(getStory => <Provider store={store}>{getStory()}</Provider>)
+    .addDecorator((getStory) => <Provider store={store}>{getStory()}</Provider>)
     .add('TransactionError', () => (
         <TransactionError
             opType="This is a test"

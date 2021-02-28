@@ -4,13 +4,13 @@ import YoutubePreview from 'app/components/elements/YoutubePreview';
 const regex = {
     sanitize: /^(https?:)?\/\/www.youtube.com\/embed\/.*/i,
     main: /(?:https?:\/\/)(?:www\.)?(?:(?:youtube\.com\/watch\?v=)|(?:youtu.be\/)|(?:youtube\.com\/embed\/))([A-Za-z0-9_\-]+)[^ ]*/i,
-    contentId: /(?:(?:youtube\.com\/watch\?v=)|(?:youtu.be\/)|(?:youtube\.com\/embed\/))([A-Za-z0-9_\-]+)/i
+    contentId: /(?:(?:youtube\.com\/watch\?v=)|(?:youtu.be\/)|(?:youtube\.com\/embed\/))([A-Za-z0-9_\-]+)/i,
 };
 
 export default regex;
 export const sandboxConfig = {
     useSandbox: false,
-    sandboxAttributes: []
+    sandboxAttributes: [],
 };
 
 // <iframe width="560" height="315" src="https://www.youtube.com/embed/KOnk7Nbqkhs" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
@@ -55,7 +55,7 @@ export function extractMetadata(data) {
         url,
         canonical: url,
         startTime: startTime ? startTime[1] : 0,
-        thumbnail: 'https://img.youtube.com/vi/' + id + '/0.jpg'
+        thumbnail: 'https://img.youtube.com/vi/' + id + '/0.jpg',
     };
 }
 

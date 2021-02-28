@@ -6,13 +6,13 @@ export default class SvgImage extends React.Component {
         name: PropTypes.string.isRequired,
         width: PropTypes.string.isRequired,
         height: PropTypes.string.isRequired,
-        className: PropTypes.string
+        className: PropTypes.string,
     };
     render() {
         const style = {
             display: 'inline-block',
             width: this.props.width,
-            height: this.props.height
+            height: this.props.height,
         };
         const image = require(`assets/images/${this.props.name}.svg`);
         const cn =

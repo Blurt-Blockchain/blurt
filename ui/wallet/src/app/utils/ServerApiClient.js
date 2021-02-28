@@ -69,8 +69,9 @@ export function saveCords(x, y) {
 }
 
 export function setUserPreferences(payload) {
-    if (!process.env.BROWSER || window.$STM_ServerBusy)
+    if (!process.env.BROWSER || window.$STM_ServerBusy) {
         return Promise.resolve();
+    }
     const request = Object.assign({}, request_base, {
         body: JSON.stringify({ csrf: window.$STM_csrf, payload }),
     });

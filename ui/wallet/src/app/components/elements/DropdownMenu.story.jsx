@@ -31,10 +31,10 @@ storiesOf('Elements', module)
         <div>
             <h3>Dropdown Menu</h3>
             <DropdownMenu
-                title={'Other actions'}
+                title="Other actions"
                 key="_others"
                 items={mockMenu}
-                el={'div'}
+                el="div"
                 selected={select(
                     'Currently Selected',
                     selectOptions,

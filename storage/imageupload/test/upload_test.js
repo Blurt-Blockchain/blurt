@@ -1,42 +1,51 @@
 // require('dotenv').config();
-const request = require('supertest');
-let app = require('../src/index');
+const request = require("supertest");
+const app = require("../src/index");
 
-const Datauri = require('datauri');
+const Datauri = require("datauri");
 
-let chainLib = require('@blurtfoundation/blurtjs');
+const chainLib = require("@blurtfoundation/blurtjs");
 
-let { PrivateKey, PublicKey, Signature } = require('@blurtfoundation/blurtjs/lib/auth/ecc');
+const {
+  PrivateKey,
+  PublicKey,
+  Signature,
+} = require("@blurtfoundation/blurtjs/lib/auth/ecc");
 
-//==================== API test ====================
+//= =================== API test ====================
 
 /**
  * Testing upload api
  */
-describe('POST /:username/:sig', () => {
+describe("POST /:username/:sig", () => {
   const username = process.env.TEST_ACCOUNT_NAME;
-  let datauri = new Datauri('test/test_img.png');
+  const datauri = new Datauri("test/test_img.png");
   /**
    * console.log(datauri.content); //=> "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA..."
    * console.log(datauri.mimetype); //=> "image/png"
    * console.log(datauri.base64); //=> "iVBORw0KGgoAAAANSUhEUgAA..."
    */
-    // console.log(datauri.content);
+  // console.log(datauri.content);
 
-  let data_sign = Signature.signBuffer(Buffer.from(datauri.base64, 'base64'), process.env.TEST_POSTING_KEY).toBuffer().toString('base64');
+  let data_sign = Signature.signBuffer(
+    Buffer.from(datauri.base64, "base64"),
+    process.env.TEST_POSTING_KEY
+  )
+    .toBuffer()
+    .toString("base64");
   data_sign = encodeURIComponent(data_sign);
   // console.log(data_sign);
   // let sign_data = Signature.fromBuffer(new Buffer(sig, 'base64'));
 
   console.log(`/${username}/${data_sign}`);
 
-  it('should return ok', (done) => {
+  it("should return ok", (done) => {
     // use request('https://blurt.world/imageupload') to test remote endpoint
     request(app)
       .post(`/${username}/${data_sign}`)
-      .set('Accept', 'application/json')
-      .send({data:datauri.content})
-      .expect('Content-Type', /json/)
+      .set("Accept", "application/json")
+      .send({ data: datauri.content })
+      .expect("Content-Type", /json/)
       .expect(200)
       .expect((res) => {
         console.log(`res.body=${JSON.stringify(res.body)}`);
@@ -50,13 +59,13 @@ describe('POST /:username/:sig', () => {
       .end(done);
   });
 
-  it('should return error as rate-limit hit', (done) => {
+  it("should return error as rate-limit hit", (done) => {
     // use request('https://blurt.world/imageupload') to test remote endpoint
     request(app)
       .post(`/${username}/${data_sign}`)
-      .set('Accept', 'application/json')
-      .send({data:datauri.content})
-      .expect('Content-Type', /json/)
+      .set("Accept", "application/json")
+      .send({ data: datauri.content })
+      .expect("Content-Type", /json/)
       .expect(200)
       .expect((res) => {
         // console.log(`res.body=${res.body.status}`);

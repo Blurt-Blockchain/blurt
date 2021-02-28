@@ -25,7 +25,7 @@ export function* getAccount(username, force = false) {
     );
 
     // blurt never serves `owner` prop (among others)
-    let isLite = !!account && !account.get('owner');
+    const isLite = !!account && !account.get('owner');
 
     if (!account || force || isLite) {
         console.log(

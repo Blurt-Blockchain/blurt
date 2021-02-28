@@ -277,7 +277,7 @@ if (env !== 'test') {
 
     if (env === 'production') {
         if (cluster.isMaster) {
-            for (var i = 0; i < numProcesses; i++) {
+            for (let i = 0; i < numProcesses; i++) {
                 cluster.fork();
             }
             // if a worker dies replace it so application keeps running
@@ -303,7 +303,8 @@ if (env !== 'test') {
 
 // set PERFORMANCE_TRACING to the number of seconds desired for
 // logging hardware stats to the console
-if (process.env.PERFORMANCE_TRACING)
+if (process.env.PERFORMANCE_TRACING) {
     setInterval(hardwareStats, 1000 * process.env.PERFORMANCE_TRACING);
+}
 
 module.exports = app;

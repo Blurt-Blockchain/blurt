@@ -13,6 +13,6 @@ export default function* rootSaga() {
         ...sharedWatches,
         ...authWatches,
         ...transactionWatches,
-        watchPollingTasks()
+        watchPollingTasks(),
     ]);
 }

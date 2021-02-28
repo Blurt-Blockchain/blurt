@@ -28,7 +28,7 @@ export default class HorizontalMenu extends React.Component {
                 }
             >
                 {title && <li className="title">{title}</li>}
-                {items.map(i => {
+                {items.map((i) => {
                     if (i.value === hideValue) return null;
                     return (
                         <li key={i.value} className={i.active ? 'active' : ''}>

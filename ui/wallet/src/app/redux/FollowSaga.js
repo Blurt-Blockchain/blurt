@@ -70,7 +70,7 @@ function* loadFollowsLoop(account, type, start = '', limit = 1000) {
                         'following'
                     ));
                     whatList.forEach((what) => {
-                        //currently this is always true: what === type
+                        // currently this is always true: what === type
                         m.update(what, OrderedSet(), (s) => s.add(accountName));
                     });
                 });

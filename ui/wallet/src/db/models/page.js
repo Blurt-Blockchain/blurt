@@ -1,5 +1,5 @@
-module.exports = function(sequelize, DataTypes) {
-    var Page = sequelize.define(
+module.exports = function (sequelize, DataTypes) {
+    const Page = sequelize.define(
         'Page',
         {
             permlink: DataTypes.STRING(256),

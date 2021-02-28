@@ -22,12 +22,14 @@ class UserList extends React.Component {
     };
 
     render() {
-        const { state: { historyIndex } } = this;
+        const {
+            state: { historyIndex },
+        } = this;
         const users = this.props.users;
         const title = this.props.title;
 
         let idx = 0;
-        let user_list = users.map(user => (
+        let user_list = users.map((user) => (
             <UserListRow user={user} key={idx++} />
         ));
         user_list = user_list.toArray();

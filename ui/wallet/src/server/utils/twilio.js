@@ -44,7 +44,7 @@ function checkEligibility(phone) {
 
 export default function verify(phone) {
     if (!client) client = new twilio.LookupsClient(accountSid, authToken);
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
         if (!checkEligibility(phone)) {
             resolve('na');
             return;

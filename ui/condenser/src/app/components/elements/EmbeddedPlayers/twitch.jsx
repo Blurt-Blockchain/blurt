@@ -2,13 +2,13 @@ import React from 'react';
 
 const regex = {
     sanitize: /^(https?:)?\/\/player.twitch.tv\/.*/i,
-    main: /https?:\/\/(?:www.)?twitch.tv\/(?:(videos)\/)?([a-zA-Z0-9][\w]{3,24})/i
+    main: /https?:\/\/(?:www.)?twitch.tv\/(?:(videos)\/)?([a-zA-Z0-9][\w]{3,24})/i,
 };
 
 export default regex;
 export const sandboxConfig = {
     useSandbox: false,
-    sandboxAttributes: []
+    sandboxAttributes: [],
 };
 
 // <iframe src="https://player.twitch.tv/?channel=tfue" frameborder="0" allowfullscreen="true" scrolling="no" height="378" width="620"></iframe>
@@ -27,9 +27,7 @@ export function normalizeEmbedUrl(url) {
 
     if (match && match.length >= 3) {
         if (match[1] === undefined) {
-            return `https://player.twitch.tv/?autoplay=false&channel=${
-                match[2]
-            }`;
+            return `https://player.twitch.tv/?autoplay=false&channel=${match[2]}`;
         }
 
         return `https://player.twitch.tv/?autoplay=false&video=${match[1]}`;
@@ -46,16 +44,16 @@ function extractMetadata(data) {
     if (!m || m.length < 3) return null;
 
     return {
-        id: m[1] === `videos` ? `?video=${m[2]}` : `?channel=${m[2]}`,
+        id: m[1] === 'videos' ? `?video=${m[2]}` : `?channel=${m[2]}`,
         url: m[0],
         canonical:
-            m[1] === `videos`
+            m[1] === 'videos'
                 ? `https://player.twitch.tv/?video=${m[2]}`
-                : `https://player.twitch.tv/?channel=${m[2]}`
+                : `https://player.twitch.tv/?channel=${m[2]}`,
     };
 }
 
-export function embedNode(child, links /*images*/) {
+export function embedNode(child, links /* images */) {
     try {
         const { data } = child;
         const twitch = extractMetadata(data);
@@ -88,8 +86,8 @@ export function genIframeMd(idx, id, w, h) {
                 sandbox={
                     sandboxConfig.useSandbox
                         ? sandboxConfig.sandboxAttributes
-                          ? sandboxConfig.sandboxAttributes.join(' ')
-                          : true
+                            ? sandboxConfig.sandboxAttributes.join(' ')
+                            : true
                         : ''
                 }
             />

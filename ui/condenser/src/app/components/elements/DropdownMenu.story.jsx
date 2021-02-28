@@ -10,18 +10,18 @@ const mockMenu = [
     {
         value: 'transfer',
         link: '#',
-        onClick: () => {}
+        onClick: () => {},
     },
     {
         value: 'transfer to savings',
         link: '#',
-        onClick: () => {}
+        onClick: () => {},
     },
     {
         value: 'power up',
         link: '#',
-        onClick: () => {}
-    }
+        onClick: () => {},
+    },
 ];
 
 storiesOf('Elements', module)
@@ -31,10 +31,10 @@ storiesOf('Elements', module)
         <div>
             <h3>Dropdown Menu</h3>
             <DropdownMenu
-                title={'Other actions'}
+                title="Other actions"
                 key="_others"
                 items={mockMenu}
-                el={'div'}
+                el="div"
                 selected={select(
                     'Currently Selected',
                     selectOptions,

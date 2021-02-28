@@ -15,8 +15,8 @@ export const schema = {
     toolbarMarks: [
         { type: 'bold', label: <strong>B</strong> },
         { type: 'italic', label: <i>i</i> },
-        //{ type: 'underline', label: <u>U</u> },
-        //{ type: 'strike',    label: <del>S</del> },
+        // { type: 'underline', label: <u>U</u> },
+        // { type: 'strike',    label: <del>S</del> },
         { type: 'code', label: <code>{'{}'}</code> },
         {
             type: 'sup',
@@ -24,7 +24,7 @@ export const schema = {
                 <span>
                     x<sup>2</sup>
                 </span>
-            )
+            ),
         },
         {
             type: 'sub',
@@ -32,8 +32,8 @@ export const schema = {
                 <span>
                     x<sub>2</sub>
                 </span>
-            )
-        }
+            ),
+        },
     ],
 
     // blockTypes: {...Blocks,},
@@ -89,18 +89,18 @@ export const schema = {
         image: Image,
         link: Link,
         embed: Iframe,
-        align: Align
+        align: Align,
     },
 
     marks: {
-        bold: props => <strong>{props.children}</strong>,
-        code: props => <code>{props.children}</code>,
-        italic: props => <em>{props.children}</em>,
-        underline: props => <u>{props.children}</u>,
-        strike: props => <del>{props.children}</del>,
-        sub: props => <sub>{props.children}</sub>,
-        sup: props => <sup>{props.children}</sup>
-    }
+        bold: (props) => <strong>{props.children}</strong>,
+        code: (props) => <code>{props.children}</code>,
+        italic: (props) => <em>{props.children}</em>,
+        underline: (props) => <u>{props.children}</u>,
+        strike: (props) => <del>{props.children}</del>,
+        sub: (props) => <sub>{props.children}</sub>,
+        sup: (props) => <sup>{props.children}</sup>,
+    },
 };
 
 /**
@@ -125,7 +125,7 @@ const BLOCK_TAGS = {
     tbody: 'tbody',
     tr: 'tr',
     td: 'td',
-    th: 'th'
+    th: 'th',
 };
 
 // Map HTML --> mark type
@@ -138,7 +138,7 @@ const MARK_TAGS = {
     del: 'strike',
     strike: 'strike',
     sup: 'sup',
-    sub: 'sub'
+    sub: 'sub',
 };
 
 const validAligns = [
@@ -147,7 +147,7 @@ const validAligns = [
     'text-justify',
     'text-rtl',
     'text-center',
-    'text-right'
+    'text-right',
 ];
 
 /**
@@ -157,8 +157,8 @@ const validAligns = [
 export const HtmlRules = [
     // Catch-all debug wrapper
     {
-        //deserialize: (el, next) => console.log("** deserialize: ", $.html(el).replace(/\n/g, "\\n")),
-        //serialize: (object, children) => console.log("** serialize:", object.type, object.kind, 'data:', JSON.stringify(object.data))
+        // deserialize: (el, next) => console.log("** deserialize: ", $.html(el).replace(/\n/g, "\\n")),
+        // serialize: (object, children) => console.log("** serialize:", object.type, object.kind, 'data:', JSON.stringify(object.data))
     },
 
     // Alignment wrapper
@@ -169,7 +169,7 @@ export const HtmlRules = [
                     kind: 'block',
                     type: 'align',
                     data: { align: 'text-center' },
-                    nodes: next(el.children)
+                    nodes: next(el.children),
                 };
             }
             if (el.tagName == 'div') {
@@ -179,7 +179,7 @@ export const HtmlRules = [
                     kind: 'block',
                     type: 'align',
                     data: { align },
-                    nodes: next(el.children)
+                    nodes: next(el.children),
                 };
             }
         },
@@ -188,7 +188,7 @@ export const HtmlRules = [
                 const align = object.data.get('align');
                 return <div className={align}>{children}</div>;
             }
-        }
+        },
     },
 
     // Block rules
@@ -206,7 +206,7 @@ export const HtmlRules = [
             //   i.e. removal of text nodes where they are invalid -- otherwise they may convert to <br />s in bad places
             const noTextChildren = 'ol,ul,table,thead,tbody,tr'.split(',');
             if (noTextChildren.includes(el.tagName)) {
-                children = children.filter(el => el.type !== 'text');
+                children = children.filter((el) => el.type !== 'text');
             }
 
             // If this block-level node contains *any* <center> tags, strip them out and wrap-align node
@@ -214,7 +214,7 @@ export const HtmlRules = [
             children = children.reduce((out, child) => {
                 if (child.tagName == 'center') {
                     center = true;
-                    //child.children.map(c => out.push(c))
+                    // child.children.map(c => out.push(c))
                     out.push(...child.children);
                 } else {
                     out.push(child);
@@ -227,7 +227,7 @@ export const HtmlRules = [
                 kind: 'block',
                 type: type,
                 isVoid: type == 'hr',
-                nodes: next(children)
+                nodes: next(children),
             };
 
             // Wrap output block with align node if needed
@@ -237,7 +237,7 @@ export const HtmlRules = [
                     kind: 'block',
                     type: 'align',
                     data: { align: 'text-center' },
-                    nodes: [block]
+                    nodes: [block],
                 };
             }
 
@@ -287,7 +287,7 @@ export const HtmlRules = [
                 case 'th':
                     return <th>{children}</th>;
             }
-        }
+        },
     },
 
     // Mark rules
@@ -298,7 +298,7 @@ export const HtmlRules = [
             return {
                 kind: 'mark',
                 type: type,
-                nodes: next(el.children)
+                nodes: next(el.children),
             };
         },
         serialize: (object, children) => {
@@ -319,7 +319,7 @@ export const HtmlRules = [
                 case 'sub':
                     return <sub>{children}</sub>;
             }
-        }
+        },
     },
 
     // Custom
@@ -332,7 +332,7 @@ export const HtmlRules = [
                         type: 'embed',
                         isVoid: true,
                         data: { src: el.attribs.src },
-                        nodes: next(el.children)
+                        nodes: next(el.children),
                     };
                 case 'img':
                     return {
@@ -341,21 +341,21 @@ export const HtmlRules = [
                         isVoid: true,
                         data: {
                             src: el.attribs.src,
-                            alt: el.attribs.alt
+                            alt: el.attribs.alt,
                         },
-                        nodes: next(el.children)
+                        nodes: next(el.children),
                     };
                 case 'a':
                     return {
                         kind: 'inline',
                         type: 'link',
                         data: { href: el.attribs.href },
-                        nodes: next(el.children)
+                        nodes: next(el.children),
                     };
                 case 'br':
                     return {
                         kind: 'text',
-                        ranges: [{ text: '\n' }]
+                        ranges: [{ text: '\n' }],
                     };
                 case 'code':
                     // may not be necessary after pr #406
@@ -363,7 +363,7 @@ export const HtmlRules = [
                         return {
                             kind: 'mark',
                             type: 'code',
-                            nodes: next(el.children)
+                            nodes: next(el.children),
                         };
                     } else {
                         console.log('** skipping <code> within a <pre>');
@@ -384,27 +384,29 @@ export const HtmlRules = [
             if (object.kind == 'inline' && object.type == 'image') {
                 const src = object.data.get('src');
                 const alt = object.data.get('alt');
-                if (!src)
+                if (!src) {
                     console.log(
                         '** ERR: serializing image with no src...',
                         JSON.stringify(object)
                     );
+                }
                 return <img src={src} alt={alt} />;
             }
-        }
+        },
     },
 
     // debug uncaught nodes/elements
     {
         deserialize: (el, next) => {
-            if (el.type !== 'text')
+            if (el.type !== 'text') {
                 console.log(
                     '** no deserializer for: ',
                     $.html(el).replace(/\n/g, '\\n')
                 );
+            }
         },
         serialize: (object, children) => {
-            if (object.kind != 'string')
+            if (object.kind != 'string') {
                 console.log(
                     '** no serializer for:',
                     object.type,
@@ -412,11 +414,12 @@ export const HtmlRules = [
                     'data:',
                     JSON.stringify(object)
                 );
-        }
-    }
+            }
+        },
+    },
 ];
 
-export const getMarkdownType = chars => {
+export const getMarkdownType = (chars) => {
     switch (chars) {
         case '1.':
         case '*':

@@ -64,7 +64,7 @@ class Order {
 class TradeHistory {
     constructor(fill) {
         // Norm date (FF bug)
-        var zdate = fill.date;
+        let zdate = fill.date;
         if (!/Z$/.test(zdate)) zdate = zdate + 'Z';
 
         this.date = new Date(zdate);

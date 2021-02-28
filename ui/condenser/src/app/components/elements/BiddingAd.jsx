@@ -23,13 +23,13 @@ class BiddingAd extends Component {
 
                     googletag
                         .pubads()
-                        .addEventListener('impressionViewable', e => {
+                        .addEventListener('impressionViewable', (e) => {
                             window.dispatchEvent(new Event('gptadshown', e));
                         });
 
                     googletag
                         .pubads()
-                        .addEventListener('slotRenderEnded', e => {
+                        .addEventListener('slotRenderEnded', (e) => {
                             window.dispatchEvent(new Event('gptadshown', e));
                         });
                 });
@@ -42,10 +42,10 @@ class BiddingAd extends Component {
             pbjs.requestBids({
                 timeout: 2000,
                 adUnitCodes: [path],
-                bidsBackHandler: function() {
+                bidsBackHandler: function () {
                     pbjs.setTargetingForGPTAsync([path]);
                     googletag.pubads().refresh([slot]);
-                }
+                },
             });
         });
     }
@@ -88,10 +88,10 @@ class BiddingAd extends Component {
 BiddingAd.propTypes = {
     ad: PropTypes.shape({
         path: PropTypes.string,
-        dimensions: PropTypes.array
+        dimensions: PropTypes.array,
     }).isRequired,
     enabled: PropTypes.bool.isRequired,
-    type: PropTypes.oneOf(['Bidding', 'Category', 'Basic'])
+    type: PropTypes.oneOf(['Bidding', 'Category', 'Basic']),
 };
 
 export default connect(
@@ -101,22 +101,26 @@ export default connect(
             !!process.env.BROWSER &&
             !!window.googletag;
         const postCategory = state.global.get('postCategory');
-        const basicSlots = state.app.getIn(['googleAds', `gptBasicSlots`]);
-        const biddingSlots = state.app.getIn(['googleAds', `gptBiddingSlots`]);
+        const basicSlots = state.app.getIn(['googleAds', 'gptBasicSlots']);
+        const biddingSlots = state.app.getIn(['googleAds', 'gptBiddingSlots']);
         const categorySlots = state.app.getIn([
             'googleAds',
-            `gptCategorySlots`
+            'gptCategorySlots',
         ]);
 
         const slotName = props.slotName;
-        let type = props.type;
-        let slot = state.app.getIn(['googleAds', `gpt${type}Slots`, slotName]);
+        const type = props.type;
+        const slot = state.app.getIn([
+            'googleAds',
+            `gpt${type}Slots`,
+            slotName,
+        ]);
 
         return {
             enabled,
             ad: slot,
-            ...props
+            ...props,
         };
     },
-    dispatch => ({})
+    (dispatch) => ({})
 )(BiddingAd);

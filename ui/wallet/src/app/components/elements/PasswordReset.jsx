@@ -44,5 +44,5 @@ export default connect(
         const isMyAccount = username === accountName;
         return { ...ownProps, isMyAccount, accountName };
     },
-    dispatch => ({})
+    (dispatch) => ({})
 )(PasswordReset);

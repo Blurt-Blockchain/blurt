@@ -11,12 +11,13 @@ const mapStateToProps = (state, ownProps) => {
     };
 };
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
     hideSidePanel: () => dispatch(userActions.hideSidePanel()),
 });
 
-const ConnectedSideBar = connect(mapStateToProps, mapDispatchToProps)(
-    SidePanel
-);
+const ConnectedSideBar = connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(SidePanel);
 
 export default ConnectedSideBar;

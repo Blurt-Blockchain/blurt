@@ -1,7 +1,7 @@
 import React from 'react';
-import { Link } from 'react-router';
+import { Link, browserHistory } from 'react-router';
 import { connect } from 'react-redux';
-import { browserHistory } from 'react-router';
+
 import tt from 'counterpart';
 import DropdownMenu from 'app/components/elements/DropdownMenu';
 import Icon from 'app/components/elements/Icon';
@@ -11,7 +11,7 @@ import Userpic from 'app/components/elements/Userpic';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import { SIGNUP_URL } from 'shared/constants';
 
-const defaultNavigate = e => {
+const defaultNavigate = (e) => {
     if (e.metaKey || e.ctrlKey) {
         // prevent breaking anchor tags
     } else {
@@ -96,14 +96,14 @@ function TopRightMenu({
                 {!vertical && submit_icon}
                 {!vertical && (
                     <DropdownMenu
-                        className={'Header__usermenu'}
+                        className="Header__usermenu"
                         items={user_menu}
                         title={username}
                         el="span"
                         selected={tt('g.rewards')}
                         position="left"
                     >
-                        <li className={'Header__userpic '}>
+                        <li className="Header__userpic ">
                             <span title={username}>
                                 <Userpic account={username} />
                             </span>
@@ -174,7 +174,7 @@ TopRightMenu.propTypes = {
 };
 
 export default connect(
-    state => {
+    (state) => {
         if (!process.env.BROWSER) {
             return {
                 username: null,
@@ -196,16 +196,16 @@ export default connect(
             ]),
         };
     },
-    dispatch => ({
-        showLogin: e => {
+    (dispatch) => ({
+        showLogin: (e) => {
             if (e) e.preventDefault();
             dispatch(userActions.showLogin());
         },
-        logout: e => {
+        logout: (e) => {
             if (e) e.preventDefault();
             dispatch(userActions.logout({ type: 'default' }));
         },
-        toggleNightmode: e => {
+        toggleNightmode: (e) => {
             if (e) e.preventDefault();
             dispatch(appActions.toggleNightmode());
         },

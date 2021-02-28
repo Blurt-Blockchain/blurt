@@ -1,29 +1,35 @@
-const config = require('config.json')('./config.json');
-const express = require('express');
-const path = require('path');
-const chainLib = require('@blurtfoundation/blurtjs');
-const sharp = require('sharp');
-import { normalize } from './uri_normalize';
-import { getJsonRpcUri, request_remote_image, accepted_content_types } from './utils';
+import { normalize } from "./uri_normalize";
+import {
+  getJsonRpcUri,
+  request_remote_image,
+  accepted_content_types,
+} from "./utils";
+const config = require("config.json")("./config.json");
+const express = require("express");
+const path = require("path");
+const chainLib = require("@blurtfoundation/blurtjs");
+const sharp = require("sharp");
 
-let router = express.Router();
+const router = express.Router();
 
 const get_image_url = async (accountname) => {
   let url = null;
 
   try {
-    let [acc] = await getJsonRpcUri("condenser_api", "get_accounts", [[accountname]]);
+    const [acc] = await getJsonRpcUri("condenser_api", "get_accounts", [
+      [accountname],
+    ]);
 
     if (acc) {
-      let json_metadata = acc.json_metadata;
-      let md = JSON.parse(json_metadata);
+      const json_metadata = acc.json_metadata;
+      const md = JSON.parse(json_metadata);
 
       if (md.profile.profile_image) {
         url = md.profile.profile_image;
       }
 
       // console.log("url=" + url);
-      if ((typeof url === 'undefined') || (url === null)) {
+      if (typeof url === "undefined" || url === null) {
         url = null;
       }
     }
@@ -35,19 +41,19 @@ const get_image_url = async (accountname) => {
   return url;
 };
 
-router.get('/:accountname/:size?', async function (req, res) {
+router.get("/:accountname/:size?", async function (req, res) {
   try {
     let img_size = 64; // default is 64
-    const {accountname, size} = req.params;
+    const { accountname, size } = req.params;
 
-    let isValidUsername = chainLib.utils.validateAccountName(accountname);
+    const isValidUsername = chainLib.utils.validateAccountName(accountname);
     if (isValidUsername) {
       throw new Error(isValidUsername);
     }
 
     let url = await get_image_url(accountname);
 
-    if ((typeof url === 'undefined') || (url === null)) {
+    if (typeof url === "undefined" || url === null) {
       throw new Error(`no profile image for ${accountname}`);
     }
 
@@ -61,7 +67,7 @@ router.get('/:accountname/:size?', async function (req, res) {
       throw new Error(`error on remote response (${img_res.statusCode})`);
     }
 
-    const content_length = img_res.headers['content-length'];
+    const content_length = img_res.headers["content-length"];
     if (content_length > config.max_size) {
       throw new Error(`Resource size exceeds limit (${content_length})`);
     }
@@ -84,7 +90,7 @@ router.get('/:accountname/:size?', async function (req, res) {
       img_size = 512;
     }
 
-    img = await sharp(img, {failOnError: true})
+    img = await sharp(img, { failOnError: true })
       .resize(img_size, img_size)
       .toBuffer();
 
@@ -93,16 +99,16 @@ router.get('/:accountname/:size?', async function (req, res) {
       throw new Error(`Unsupported content-type (${content_type})`);
     }
 
-    res.set('content-type', content_type);
-    res.set('Cache-Control', 'public,max-age=86400,immutable');
+    res.set("content-type", content_type);
+    res.set("Cache-Control", "public,max-age=86400,immutable");
 
-    res.end(img, 'binary');
+    res.end(img, "binary");
   } catch (e) {
     console.log(e.message);
 
-    res.set('content-type', 'image/png');
-    res.set('Cache-Control', 'public,max-age=600,immutable'); // cache 10 min
-    res.sendFile('user.png', { root: path.join(__dirname, '../assets') });
+    res.set("content-type", "image/png");
+    res.set("Cache-Control", "public,max-age=600,immutable"); // cache 10 min
+    res.sendFile("user.png", { root: path.join(__dirname, "../assets") });
   }
 });
 

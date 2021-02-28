@@ -10,7 +10,7 @@ export const routeRegex = {
     Post: /^\/([\w\d\-\/]+)\/(\@[\w\d\.-]+)\/([\w\d-]+)\/?($|\?)/,
     PostJson: /^\/([\w\d\-\/]+)\/(\@[\w\d\.-]+)\/([\w\d-]+)(\.json)$/,
     UserJson: /^\/(@[\w\.\d-]+)(\.json)$/,
-    UserNameJson: /^.*(?=(\.json))/
+    UserNameJson: /^.*(?=(\.json))/,
 };
 
 export default function resolveRoute(path) {

@@ -9,8 +9,8 @@ module.exports = {
             'process.env': {
                 BROWSER: JSON.stringify(true),
                 NODE_ENV: JSON.stringify('production'),
-                VERSION: JSON.stringify(git.long())
-            }
+                VERSION: JSON.stringify(git.long()),
+            },
         }),
         new webpack.optimize.UglifyJsPlugin({
             compress: {
@@ -28,11 +28,11 @@ module.exports = {
                 hoist_funs: true,
                 if_return: true,
                 join_vars: true,
-                cascade: true
+                cascade: true,
             },
             output: {
-                comments: false
-            }
+                comments: false,
+            },
         }),
         ...baseConfig.plugins,
         // Fix window.onerror
@@ -40,7 +40,9 @@ module.exports = {
         new webpack.SourceMapDevToolPlugin({
             module: true,
             columns: false,
-            moduleFilenameTemplate: info => { return `${info.resourcePath}?${info.loaders}` }
-        })
-    ]
+            moduleFilenameTemplate: (info) => {
+                return `${info.resourcePath}?${info.loaders}`;
+            },
+        }),
+    ],
 };

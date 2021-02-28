@@ -1,4 +1,4 @@
-module.exports = function(sequelize, DataTypes) {
+module.exports = function (sequelize, DataTypes) {
     var Identity = sequelize.define(
         'Identity',
         {
@@ -26,7 +26,7 @@ module.exports = function(sequelize, DataTypes) {
             timestamps: true,
             underscored: true,
             classMethods: {
-                associate: function(models) {
+                associate: function (models) {
                     Identity.belongsTo(models.User, {
                         onDelete: 'CASCADE',
                         foreignKey: {

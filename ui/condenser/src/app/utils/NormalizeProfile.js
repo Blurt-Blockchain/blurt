@@ -24,7 +24,7 @@ export default function normalizeProfile(account) {
             if (md.profile) {
                 profile = md.profile;
             }
-            if (!(typeof profile == 'object')) {
+            if (!(typeof profile === 'object')) {
                 console.error(
                     'Expecting object in account.json_metadata.profile:',
                     profile
@@ -48,7 +48,7 @@ export default function normalizeProfile(account) {
         location,
         website,
         profile_image,
-        cover_image
+        cover_image,
     } = profile;
 
     name = truncate(name, 20);
@@ -68,8 +68,9 @@ export default function normalizeProfile(account) {
         }
     }
 
-    if (profile_image && !/^https?:\/\//.test(profile_image))
+    if (profile_image && !/^https?:\/\//.test(profile_image)) {
         profile_image = null;
+    }
     if (cover_image && !/^https?:\/\//.test(cover_image)) cover_image = null;
 
     return {
@@ -78,6 +79,6 @@ export default function normalizeProfile(account) {
         location,
         website,
         profile_image,
-        cover_image
+        cover_image,
     };
 }

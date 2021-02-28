@@ -30,7 +30,7 @@ export default class OrderHistory extends React.Component {
             return null;
         }
 
-        let { historyIndex } = this.state;
+        const { historyIndex } = this.state;
 
         return history
             .map((order, index) => {
@@ -49,13 +49,13 @@ export default class OrderHistory extends React.Component {
                     );
                 }
             })
-            .filter(a => {
+            .filter((a) => {
                 return !!a;
             });
     }
 
     _setHistoryPage(back) {
-        let newState = {};
+        const newState = {};
         const newIndex = this.state.historyIndex + (back ? 10 : -10);
         newState.historyIndex = Math.min(
             Math.max(0, newIndex),

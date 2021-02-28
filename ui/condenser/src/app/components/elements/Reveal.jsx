@@ -12,23 +12,23 @@ const Reveal = ({ children, onHide, show }) => {
         right: 0,
         top: 0,
         display: 'block',
-        zIndex: 105
+        zIndex: 105,
     };
 
     return (
         <Modal
-            backdrop={true}
+            backdrop
             transition={Transition}
             onHide={onHide}
             show={show}
-            backdropClassName={'reveal-overlay'}
+            backdropClassName="reveal-overlay"
             backdropStyle={{ display: 'block' }}
             style={modalStyle}
         >
             <div
-                className={'reveal fade in'}
-                role={'document'}
-                tabIndex={'-1'}
+                className="reveal fade in"
+                role="document"
+                tabIndex="-1"
                 style={{ display: 'block' }}
             >
                 {children}
@@ -39,7 +39,7 @@ const Reveal = ({ children, onHide, show }) => {
 
 Reveal.propTypes = {
     show: PropTypes.bool.isRequired,
-    onHide: PropTypes.func.isRequired
+    onHide: PropTypes.func.isRequired,
 };
 
 export default Reveal;

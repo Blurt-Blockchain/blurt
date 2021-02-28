@@ -20,7 +20,7 @@ export default function* verify({
     mobile,
     confirmation_code,
     ip,
-    ignore_score
+    ignore_score,
 }) {
     try {
         const result = yield getScore(mobile);
@@ -29,14 +29,12 @@ export default function* verify({
         // if (!ignore_score && recommendation !== 'allow') {
         if (!ignore_score && (!score || score > 600)) {
             console.log(
-                `TeleSign did not allow phone ${mobile} ip ${
-                    ip
-                }. TeleSign responded: ${recommendation}`
+                `TeleSign did not allow phone ${mobile} ip ${ip}. TeleSign responded: ${recommendation}`
             );
             return {
                 error:
                     'Unable to verify your phone number. Please try a different phone number.',
-                score
+                score,
             };
         }
         if (
@@ -50,7 +48,7 @@ export default function* verify({
         const { reference_id } = yield verifySms({
             mobile,
             confirmation_code,
-            ip
+            ip,
         });
         return { reference_id, score, phone };
     } catch (error) {
@@ -61,23 +59,23 @@ export default function* verify({
 
 function getScore(mobile) {
     const fields = urlencode({
-        ucid: use_case_code
+        ucid: use_case_code,
     });
     const resource = '/v1/phoneid/score/' + mobile.match(/\d+/g).join('');
     const method = 'GET';
     return fetch(`https://rest-ww.telesign.com${resource}?${fields}`, {
         method,
-        headers: authHeaders({ resource, method })
+        headers: authHeaders({ resource, method }),
     })
-        .then(r => r.json())
-        .catch(error => {
+        .then((r) => r.json())
+        .catch((error) => {
             console.error(
                 `ERROR: Phone ${mobile} score exception`,
                 JSON.stringify(error, null, 0)
             );
             return Promise.reject(error);
         })
-        .then(response => {
+        .then((response) => {
             const { status } = response;
             if (status.code === 300) {
                 // Transaction successfully completed
@@ -102,7 +100,7 @@ function verifySms({ mobile, confirmation_code, ip }) {
         language: 'en-US',
         ucid: use_case_code,
         verify_code: confirmation_code,
-        template: '$$CODE$$ is your Blurt confirmation code'
+        template: '$$CODE$$ is your Blurt confirmation code',
     };
     if (ip) f.originating_ip = ip;
     const fields = urlencode(f);
@@ -113,19 +111,17 @@ function verifySms({ mobile, confirmation_code, ip }) {
     return fetch('https://rest.telesign.com' + resource, {
         method,
         body: fields,
-        headers: authHeaders({ resource, method, fields })
+        headers: authHeaders({ resource, method, fields }),
     })
-        .then(r => r.json())
-        .catch(error => {
+        .then((r) => r.json())
+        .catch((error) => {
             console.error(
-                `ERROR: SMS failed to ${mobile} code ${
-                    confirmation_code
-                } req ip ${ip} exception`,
+                `ERROR: SMS failed to ${mobile} code ${confirmation_code} req ip ${ip} exception`,
                 JSON.stringify(error, null, 0)
             );
             return Promise.reject(error);
         })
-        .then(response => {
+        .then((response) => {
             const { status } = response;
             if (status.code === 290) {
                 // Message in progress
@@ -157,12 +153,11 @@ function authHeaders({ resource, fields, method = 'GET' }) {
     ).toString(36);
 
     let content_type = '';
-    if (/POST|PUT/.test(method))
+    if (/POST|PUT/.test(method)) {
         content_type = 'application/x-www-form-urlencoded';
+    }
 
-    let strToSign = `${method}\n${content_type}\n\nx-ts-auth-method:${
-        auth_method
-    }\nx-ts-date:${currDate}\nx-ts-nonce:${nonce}`;
+    let strToSign = `${method}\n${content_type}\n\nx-ts-auth-method:${auth_method}\nx-ts-date:${currDate}\nx-ts-nonce:${nonce}`;
 
     if (fields) {
         strToSign += '\n' + fields;
@@ -180,12 +175,12 @@ function authHeaders({ resource, fields, method = 'GET' }) {
         'Content-Type': content_type,
         'x-ts-date': currDate,
         'x-ts-auth-method': auth_method,
-        'x-ts-nonce': nonce
+        'x-ts-nonce': nonce,
     };
     return headers;
 }
 
-const urlencode = json =>
+const urlencode = (json) =>
     Object.keys(json)
-        .map(key => encodeURI(key) + '=' + encodeURI(json[key]))
+        .map((key) => encodeURI(key) + '=' + encodeURI(json[key]))
         .join('&');

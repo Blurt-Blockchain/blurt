@@ -14,15 +14,15 @@ const options = {
     range: true,
     min: 0,
     max: 150,
-    step: 1
+    step: 1,
 };
 
 storiesOf('Elements', module)
     .addDecorator(withKnobs)
     .addDecorator(Center)
-    .addDecorator(getStory => <Provider store={store}>{getStory()}</Provider>)
+    .addDecorator((getStory) => <Provider store={store}>{getStory()}</Provider>)
     .add('UserList', () => {
-        let mockUsers = List(
+        const mockUsers = List(
             Array(number('number of users', 10, options)).fill('test')
         );
         return <UserList users={mockUsers} title="User List" />;

@@ -1,8 +1,7 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { withKnobs, select } from '@storybook/addon-knobs';
-import Icon from './Icon';
-import { icons } from './Icon';
+import Icon, { icons } from './Icon';
 
 const styles = {
     textAlign: 'center',
@@ -19,7 +18,7 @@ storiesOf('Elements', module)
     .addDecorator(withKnobs)
     .add('Icon', () => (
         <Grid>
-            {icons.map(icon => (
+            {icons.map((icon) => (
                 <div key={'icon_' + icon}>
                     <Icon name={icon} size={select('size', options, '2x')} />
                     <p> {icon} </p>

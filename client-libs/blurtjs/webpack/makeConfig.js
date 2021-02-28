@@ -1,12 +1,12 @@
-'use strict';
-const Visualizer = require('webpack-visualizer-plugin');
-const _ = require('lodash');
-const path = require('path');
-const webpack = require('webpack');
+"use strict";
+const Visualizer = require("webpack-visualizer-plugin");
+const _ = require("lodash");
+const path = require("path");
+const webpack = require("webpack");
 
 const DEFAULTS = {
-  isDevelopment: process.env.NODE_ENV !== 'production',
-  baseDir: path.join(__dirname, '..'),
+  isDevelopment: process.env.NODE_ENV !== "production",
+  baseDir: path.join(__dirname, ".."),
 };
 
 function makePlugins(options) {
@@ -14,7 +14,7 @@ function makePlugins(options) {
 
   let plugins = [
     new Visualizer({
-      filename: './statistics.html'
+      filename: "./statistics.html",
     }),
   ];
 
@@ -28,7 +28,7 @@ function makePlugins(options) {
         minimize: true,
         compress: {
           warnings: false,
-        }
+        },
       }),
       new webpack.optimize.AggressiveMergingPlugin(),
     ]);
@@ -43,10 +43,10 @@ function makeStyleLoaders(options) {
       {
         test: /\.s[ac]ss$/,
         loaders: [
-          'style',
-          'css?sourceMap',
-          'autoprefixer-loader?browsers=last 2 version',
-          'sass?sourceMap&sourceMapContents',
+          "style",
+          "css?sourceMap",
+          "autoprefixer-loader?browsers=last 2 version",
+          "sass?sourceMap&sourceMapContents",
         ],
       },
     ];
@@ -56,8 +56,8 @@ function makeStyleLoaders(options) {
     {
       test: /\.s[ac]ss$/,
       loader: ExtractTextPlugin.extract(
-        'style-loader',
-        'css!autoprefixer-loader?browsers=last 2 version!sass'
+        "style-loader",
+        "css!autoprefixer-loader?browsers=last 2 version!sass"
       ),
     },
   ];
@@ -70,25 +70,25 @@ function makeConfig(options) {
   const isDevelopment = options.isDevelopment;
 
   return {
-    devtool: isDevelopment ? 'cheap-eval-source-map' : 'source-map',
+    devtool: isDevelopment ? "cheap-eval-source-map" : "source-map",
     entry: {
-      blurt: path.join(options.baseDir, 'src/browser.js'),
-      'blurt-tests': path.join(options.baseDir, 'test/api.test.js'),
+      blurt: path.join(options.baseDir, "src/browser.js"),
+      "blurt-tests": path.join(options.baseDir, "test/api.test.js"),
     },
     output: {
-      path: path.join(options.baseDir, 'dist'),
-      filename: '[name].min.js',
+      path: path.join(options.baseDir, "dist"),
+      filename: "[name].min.js",
     },
     plugins: makePlugins(options),
     module: {
       loaders: [
         {
           test: /\.js?$/,
-          loader: 'babel',
+          loader: "babel",
         },
         {
           test: /\.json?$/,
-          loader: 'json',
+          loader: "json",
         },
       ],
     },
@@ -96,9 +96,11 @@ function makeConfig(options) {
 }
 
 if (!module.parent) {
-  console.log(makeConfig({
-    isDevelopment: process.env.NODE_ENV !== 'production',
-  }));
+  console.log(
+    makeConfig({
+      isDevelopment: process.env.NODE_ENV !== "production",
+    })
+  );
 }
 
 exports = module.exports = makeConfig;

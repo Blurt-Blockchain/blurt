@@ -55,27 +55,28 @@ const SidePanel = ({
             {
                 value: 'welcome',
                 label: tt('navigation.welcome'),
-                link: `/welcome`,
+                link: '/welcome',
             },
             {
                 value: 'faq',
                 label: tt('navigation.faq'),
-                link: `https://blurtfaq.org/wiki/FAQ_%E2%80%93_The_Bloggers_Almanac`,
+                link:
+                    'https://blurtfaq.org/wiki/FAQ_%E2%80%93_The_Bloggers_Almanac',
             },
             {
                 value: 'change_password',
                 label: tt('navigation.change_account_password'),
-                link: `/change_password`,
+                link: '/change_password',
             },
             {
                 value: 'change_recovery_account',
                 label: tt('navigation.change_recovery_account'),
-                link: `https://ericet.github.io/BlurtAccountRecovery/`,
+                link: 'https://ericet.github.io/BlurtAccountRecovery/',
             },
             {
                 value: 'vote_for_witnesses',
                 label: tt('navigation.vote_for_witnesses'),
-                link: `/~witnesses`,
+                link: '/~witnesses',
             },
         ],
         exchanges: [
@@ -97,7 +98,7 @@ const SidePanel = ({
             {
                 value: 'stex',
                 label: 'Stex',
-                link: 'https://app.stex.com/en/trade/pair/BTC/BLURT/1D'
+                link: 'https://app.stex.com/en/trade/pair/BTC/BLURT/1D',
             },
             {
                 value: 'hive-engine',
@@ -226,10 +227,10 @@ const SidePanel = ({
             <div className={(visible ? 'visible ' : '') + alignment}>
                 <CloseButton onClick={hideSidePanel} />
                 <ul className={`vertical menu ${loggedIn}`}>
-                    {sidePanelLinks['extras'].map(makeLink)}
+                    {sidePanelLinks.extras.map(makeLink)}
                 </ul>
                 <ul className="vertical menu">
-                    {sidePanelLinks['internal'].map(makeLink)}
+                    {sidePanelLinks.internal.map(makeLink)}
                 </ul>
                 <ul className="vertical menu">
                     <li>
@@ -237,13 +238,13 @@ const SidePanel = ({
                             {tt('navigation.third_party_exchanges')}
                         </a>
                     </li>
-                    {sidePanelLinks['exchanges'].map(makeLink)}
+                    {sidePanelLinks.exchanges.map(makeLink)}
                 </ul>
                 <ul className="vertical menu">
                     <li>
                         <a className="menu-section">Wrapped BLURT</a>
                     </li>
-                    {sidePanelLinks['wrapped'].map(makeLink)}
+                    {sidePanelLinks.wrapped.map(makeLink)}
                 </ul>
                 <ul className="vertical menu">
                     <li>
@@ -251,16 +252,16 @@ const SidePanel = ({
                             {tt('navigation.blurt_swag')}
                         </a>
                     </li>
-                    {sidePanelLinks['swag'].map(makeLink)}
+                    {sidePanelLinks.swag.map(makeLink)}
                 </ul>
                 <ul className="vertical menu">
-                    {sidePanelLinks['external'].map(makeLink)}
+                    {sidePanelLinks.external.map(makeLink)}
                 </ul>
                 <ul className="vertical menu">
-                    {sidePanelLinks['organizational'].map(makeLink)}
+                    {sidePanelLinks.organizational.map(makeLink)}
                 </ul>
                 <ul className="vertical menu">
-                    {sidePanelLinks['legal'].map(makeLink)}
+                    {sidePanelLinks.legal.map(makeLink)}
                 </ul>
             </div>
         </div>
@@ -286,5 +287,5 @@ export default connect(
             ...ownProps,
         };
     },
-    dispatch => ({})
+    (dispatch) => ({})
 )(SidePanel);

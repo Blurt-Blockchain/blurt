@@ -5,7 +5,7 @@ import {
     validateIframeUrl as validateDtubeIframeUrl,
     normalizeEmbedUrl as normalizeDtubeEmbedUrl,
     embedNode as embedDtubeNode,
-    sandboxConfig as sandboxConfigDtube
+    sandboxConfig as sandboxConfigDtube,
 } from 'app/components/elements/EmbeddedPlayers/dtube';
 
 import {
@@ -13,17 +13,17 @@ import {
     validateIframeUrl as validateTwitchIframeUrl,
     normalizeEmbedUrl as normalizeTwitchEmbedUrl,
     embedNode as embedTwitchNode,
-    sandboxConfig as sandboxConfigTwitch
+    sandboxConfig as sandboxConfigTwitch,
 } from 'app/components/elements/EmbeddedPlayers/twitch';
 
 import {
     validateIframeUrl as validateSoundcloudIframeUrl,
-    sandboxConfig as sandboxConfigSoundcloud
+    sandboxConfig as sandboxConfigSoundcloud,
 } from 'app/components/elements/EmbeddedPlayers/soundcloud';
 
 import {
     validateIframeUrl as validateLbryIframeUrl,
-    sandboxConfig as sandboxConfigLbry
+    sandboxConfig as sandboxConfigLbry,
 } from 'app/components/elements/EmbeddedPlayers/lbry';
 
 import {
@@ -31,7 +31,7 @@ import {
     sandboxConfig as sandboxConfigWistia,
     genIframeMd as genWistiaIframeMd,
     normalizeEmbedUrl as normalizeWistiaEmbedUrl,
-    embedNode as embedWistiaNode
+    embedNode as embedWistiaNode,
 } from 'app/components/elements/EmbeddedPlayers/wistia';
 
 import {
@@ -39,7 +39,7 @@ import {
     validateIframeUrl as validateYoutubeIframeUrl,
     normalizeEmbedUrl as normalizeYoutubeEmbedUrl,
     embedNode as embedYoutubeNode,
-    sandboxConfig as sandboxConfigYoutube
+    sandboxConfig as sandboxConfigYoutube,
 } from 'app/components/elements/EmbeddedPlayers/youtube';
 
 import {
@@ -47,7 +47,7 @@ import {
     validateIframeUrl as validateVimeoIframeUrl,
     normalizeEmbedUrl as normalizeVimeoEmbedUrl,
     embedNode as embedVimeoNode,
-    sandboxConfig as sandboxConfigVimeo
+    sandboxConfig as sandboxConfigVimeo,
 } from 'app/components/elements/EmbeddedPlayers/vimeo';
 import {
     genIframeMd as genThreespeakIframeMd,
@@ -55,7 +55,7 @@ import {
     normalizeEmbedUrl as normalizeThreespeakEmbedUrl,
     embedNode as embedThreeSpeakNode,
     preprocessHtml as preprocess3SpeakHtml,
-    sandboxConfig as sandboxConfigThreespeak
+    sandboxConfig as sandboxConfigThreespeak,
 } from 'app/components/elements/EmbeddedPlayers/threespeak';
 
 import {
@@ -63,7 +63,7 @@ import {
     validateIframeUrl as validateTwitterIframeUrl,
     normalizeEmbedUrl as normalizeTwitterEmbedUrl,
     embedNode as embedTwitterNode,
-    preprocessHtml as preprocessTwitterHtml
+    preprocessHtml as preprocessTwitterHtml,
 } from 'app/components/elements/EmbeddedPlayers/twitter';
 
 const supportedProviders = [
@@ -73,7 +73,7 @@ const supportedProviders = [
         normalizeEmbedUrlFn: normalizeDtubeEmbedUrl,
         embedNodeFn: embedDtubeNode,
         genIframeMdFn: genDtubeIframeMd,
-        ...sandboxConfigDtube
+        ...sandboxConfigDtube,
     },
     {
         id: 'twitch',
@@ -81,7 +81,7 @@ const supportedProviders = [
         normalizeEmbedUrlFn: normalizeTwitchEmbedUrl,
         embedNodeFn: embedTwitchNode,
         genIframeMdFn: embedTwitchNode,
-        ...sandboxConfigTwitch
+        ...sandboxConfigTwitch,
     },
     {
         id: 'soundcloud',
@@ -89,7 +89,7 @@ const supportedProviders = [
         normalizeEmbedUrlFn: null,
         embedNodeFn: null,
         genIframeMdFn: null,
-        ...sandboxConfigSoundcloud
+        ...sandboxConfigSoundcloud,
     },
     {
         id: 'youtube',
@@ -97,7 +97,7 @@ const supportedProviders = [
         normalizeEmbedUrlFn: normalizeYoutubeEmbedUrl,
         embedNodeFn: embedYoutubeNode,
         genIframeMdFn: genYoutubeIframeMd,
-        ...sandboxConfigYoutube
+        ...sandboxConfigYoutube,
     },
     {
         id: 'vimeo',
@@ -105,7 +105,7 @@ const supportedProviders = [
         normalizeEmbedUrlFn: normalizeVimeoEmbedUrl,
         embedNodeFn: embedVimeoNode,
         genIframeMdFn: genVimeoIframeMd,
-        ...sandboxConfigVimeo
+        ...sandboxConfigVimeo,
     },
     {
         id: 'threespeak',
@@ -113,7 +113,7 @@ const supportedProviders = [
         normalizeEmbedUrlFn: normalizeThreespeakEmbedUrl,
         embedNodeFn: embedThreeSpeakNode,
         genIframeMdFn: genThreespeakIframeMd,
-        ...sandboxConfigThreespeak
+        ...sandboxConfigThreespeak,
     },
     {
         id: 'lbry',
@@ -121,14 +121,14 @@ const supportedProviders = [
         normalizeEmbedUrlFn: null,
         embedNodeFn: null,
         genIframeMdFn: null,
-        ...sandboxConfigLbry
+        ...sandboxConfigLbry,
     },
     {
         id: 'twitter',
         validateIframeUrlFn: validateTwitterIframeUrl,
         normalizeEmbedUrlFn: normalizeTwitterEmbedUrl,
         embedNodeFn: embedTwitterNode,
-        genIframeMdFn: genTwitterIframeMd
+        genIframeMdFn: genTwitterIframeMd,
     },
     {
         id: 'wistia',
@@ -136,8 +136,8 @@ const supportedProviders = [
         normalizeEmbedUrlFn: normalizeWistiaEmbedUrl,
         embedNodeFn: embedWistiaNode,
         genIframeMdFn: genWistiaIframeMd,
-        ...sandboxConfigWistia
-    }
+        ...sandboxConfigWistia,
+    },
 ];
 
 export default supportedProviders;
@@ -153,7 +153,7 @@ export function validateIframeUrl(url) {
                 providerId: provider.id,
                 sandboxAttributes: provider.sandboxAttributes || [],
                 useSandbox: provider.useSandbox,
-                validUrl
+                validUrl,
             };
         }
     }
@@ -203,7 +203,7 @@ function getProviderById(id) {
 }
 
 function getProviderIds() {
-    return supportedProviders.map(o => {
+    return supportedProviders.map((o) => {
         return o.id;
     });
 }
@@ -229,8 +229,8 @@ export function generateMd(section, idx, large) {
             metadata = metadataString.substring(9);
         }
 
-        const w = large ? 640 : 480,
-            h = large ? 360 : 270;
+        const w = large ? 640 : 480;
+        const h = large ? 360 : 270;
 
         const provider = getProviderById(type);
         if (provider) {
@@ -249,7 +249,7 @@ export function generateMd(section, idx, large) {
 
         return {
             section,
-            markdown
+            markdown,
         };
     }
 

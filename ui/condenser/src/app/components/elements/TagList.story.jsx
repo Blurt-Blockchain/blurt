@@ -5,8 +5,8 @@ import { Center } from 'decorators';
 
 const mockPost = {
     json_metadata: {
-        tags: ['water', 'snow', 'ice', 'steam']
-    }
+        tags: ['water', 'snow', 'ice', 'steam'],
+    },
 };
 
 storiesOf('Elements', module)

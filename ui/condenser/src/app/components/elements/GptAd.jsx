@@ -37,11 +37,11 @@ class GptAd extends Component {
         window.optimize.queue.push(() => {
             window.optimize.push(unique_slot_id);
 
-            googletag.pubads().addEventListener('impressionViewable', e => {
+            googletag.pubads().addEventListener('impressionViewable', (e) => {
                 window.dispatchEvent(new Event('gptadshown', e));
             });
 
-            googletag.pubads().addEventListener('slotRenderEnded', e => {
+            googletag.pubads().addEventListener('slotRenderEnded', (e) => {
                 window.dispatchEvent(new Event('gptadshown', e));
             });
         });
@@ -67,12 +67,12 @@ GptAd.propTypes = {
     enabled: PropTypes.bool.isRequired,
     type: PropTypes.oneOf(['Bidding', 'Category', 'Basic', 'Freestar']),
     tags: PropTypes.arrayOf(PropTypes.string),
-    bannedTags: PropTypes.arrayOf(PropTypes.string).isRequired
+    bannedTags: PropTypes.arrayOf(PropTypes.string).isRequired,
 };
 
 GptAd.defaultProps = {
     type: 'Freestar',
-    tags: []
+    tags: [],
 };
 
 export default connect(
@@ -82,11 +82,11 @@ export default connect(
             !!process.env.BROWSER &&
             !!window.googletag;
         const postCategory = state.global.get('postCategory');
-        const basicSlots = state.app.getIn(['googleAds', `gptBasicSlots`]);
-        const biddingSlots = state.app.getIn(['googleAds', `gptBiddingSlots`]);
+        const basicSlots = state.app.getIn(['googleAds', 'gptBasicSlots']);
+        const biddingSlots = state.app.getIn(['googleAds', 'gptBiddingSlots']);
         const categorySlots = state.app.getIn([
             'googleAds',
-            `gptCategorySlots`
+            'gptCategorySlots',
         ]);
         const bannedTags = state.app.getIn(['googleAds', 'gptBannedTags']);
         const bannedTagsJS = bannedTags ? bannedTags.toJS() : [];
@@ -103,11 +103,11 @@ export default connect(
 
         return {
             enabled,
-            ad: slot, //TODO: Clean this up. This is from old GPT/Coinzilla stuffs
+            ad: slot, // TODO: Clean this up. This is from old GPT/Coinzilla stuffs
             ad_identifier: slotName,
             bannedTagsJS,
-            ...props
+            ...props,
         };
     },
-    dispatch => ({})
+    (dispatch) => ({})
 )(GptAd);

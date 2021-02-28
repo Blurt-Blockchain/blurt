@@ -61,7 +61,7 @@ describe('htmlready', () => {
         const resnoendingslash = HtmlReady(noendingslash).html;
         expect(resnoendingslash).toEqual(cleansednoendingslash);
 
-        //make sure extra-domain in-page links are also caught by our phishy link scan.
+        // make sure extra-domain in-page links are also caught by our phishy link scan.
         const domainInpage =
             '<xml xmlns="http://www.w3.org/1999/xhtml"><a href="https://steamit.com#really-evil-inpage-component" xmlns="http://www.w3.org/1999/xhtml">https://blurt.world</a></xml>';
         const cleanDomainInpage =

@@ -1,5 +1,4 @@
 form.search-input {
-
     height: 42px;
 
     svg.search-input__icon {
@@ -10,7 +9,6 @@ form.search-input {
         }
         stroke-width: 1.2;
         fill: none;
-        
     }
 
     input.search-input__inner {
@@ -32,7 +30,7 @@ form.search-input {
             border: 1px solid rgba(202, 202, 202, 0.6);
         }
         &::placeholder {
-            color: transparent
+            color: transparent;
         }
         &:hover {
             background-color: $color-orange;
@@ -44,7 +42,7 @@ form.search-input {
                 border: themed('moduleBackgroundColor');
             }
             border-color: $color-orange;
-            box-shadow: 0 0 5px rgba(109,207,246,.5);
+            box-shadow: 0 0 5px rgba(109, 207, 246, 0.5);
             width: 180px;
             padding-left: 2.5rem;
             @include themify($themes) {
@@ -63,6 +61,5 @@ form.search-input {
 
     /* small */
     input.search-input__inner.search-input__inner--small {
-
     }
 }

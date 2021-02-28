@@ -9,9 +9,9 @@ module.exports = {
                     server_response: null,
                     error: null,
                     confirmed: {
-                        blocknum: 1234
-                    }
-                }
+                        blocknum: 1234,
+                    },
+                },
             },
             wallet: {
                 locked: false,
@@ -20,12 +20,12 @@ module.exports = {
                     $pubkey: 'privkey',
                     $pubkey1: 'privkey1',
                     $pubkey2: 'privkey2',
-                    $pubkey3: 'privkey3'
+                    $pubkey3: 'privkey3',
                 },
                 encrypted_keys: {
-                    $pubkey: 'encryptedprivkey'
-                }
-            }
+                    $pubkey: 'encryptedprivkey',
+                },
+            },
         },
         users: {
             alice: {
@@ -36,16 +36,16 @@ module.exports = {
                     transfer: [],
                     vote: [],
                     post: [],
-                    reward: []
+                    reward: [],
                 },
                 posts: {
                     recent: ['slug', 'slug1'],
                     expiring: ['slug', 'slug'],
-                    best: ['slug', 'slug']
+                    best: ['slug', 'slug'],
                 },
-                proxy: null
-            }
-        }
+                proxy: null,
+            },
+        },
     },
     discussions: {
         update_status: {
@@ -54,7 +54,7 @@ module.exports = {
                 last_update: new Date(),
                 fetching: false,
                 timeout: new Date(),
-                fetch_cursor: null /// fetching from start, else author/slug
+                fetch_cursor: null, /// fetching from start, else author/slug
             },
             recent: {},
             expiring: {},
@@ -68,13 +68,13 @@ module.exports = {
                         last_update: new Date(),
                         fetching: false,
                         timeout: new Date(),
-                        fetch_cursor: null /// fetching from start, else author/slug
+                        fetch_cursor: null, /// fetching from start, else author/slug
                     },
                     recent: {},
                     expiring: {},
-                    best: {}
-                }
-            }
+                    best: {},
+                },
+            },
         },
         trending: ['author/slug', 'author3/slug'],
         recent: ['author3/slug', 'author/slug'],
@@ -90,8 +90,8 @@ module.exports = {
                 recent: ['author2/slug', 'author3/slug'],
                 expiring: ['author1/slug', 'author/slug'],
                 best: ['author2/slug', 'author3/slug'],
-                active: ['author2/slug', 'author3/slug']
-            }
+                active: ['author2/slug', 'author3/slug'],
+            },
         },
         'author/slug': {
             fetched: new Date(), /// the date at which this data was requested from the server
@@ -118,7 +118,7 @@ module.exports = {
             total_pending_payout_value: '0.000 CLOUT',
             replies: [], /// there is data to be fetched if 'children' is not 0
             fetched_replies: new Date(),
-            fetching_replies: false
-        }
-    }
+            fetching_replies: false,
+        },
+    },
 };

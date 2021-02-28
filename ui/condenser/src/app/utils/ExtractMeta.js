@@ -15,7 +15,7 @@ function addSiteMeta(metas) {
     metas.push({ property: 'og:description', content: site_desc });
     metas.push({
         property: 'og:image',
-        content: 'https://blurt.world/images/Blurtlogo.png'
+        content: 'https://blurt.world/images/Blurtlogo.png',
     });
     metas.push({ property: 'fb:app_id', content: $STM_Config.fb_app });
     metas.push({ name: 'twitter:card', content: 'summary' });
@@ -24,7 +24,7 @@ function addSiteMeta(metas) {
     metas.push({ name: 'twitter:description', site_desc });
     metas.push({
         name: 'twitter:image',
-        content: 'https://blurt.world/images/blurt-blog-twshare.png'
+        content: 'https://blurt.world/images/blurt-blog-twshare.png',
     });
 }
 
@@ -58,7 +58,7 @@ export default function extractMeta(chain_data, rp) {
             metas.push({ name: 'og:url', content: url });
             metas.push({
                 name: 'og:image',
-                content: image || 'https://blurt.world/images/Blurtlogo.png'
+                content: image || 'https://blurt.world/images/Blurtlogo.png',
             });
             metas.push({ name: 'og:description', content: desc });
             metas.push({ name: 'og:site_name', content: 'Blurt' });
@@ -66,20 +66,20 @@ export default function extractMeta(chain_data, rp) {
             metas.push({ name: 'article:tag', content: category });
             metas.push({
                 name: 'article:published_time',
-                content: created
+                content: created,
             });
 
             // Twitter card data
             metas.push({
                 name: 'twitter:card',
-                content: image ? 'summary_large_image' : 'summary'
+                content: image ? 'summary_large_image' : 'summary',
             });
             metas.push({ name: 'twitter:site', content: '@blurt' });
             metas.push({ name: 'twitter:title', content: title });
             metas.push({ name: 'twitter:description', content: desc });
             metas.push({
                 name: 'twitter:image',
-                content: image || 'https://blurt.world/images/Blurtlogo.png'
+                content: image || 'https://blurt.world/images/Blurtlogo.png',
             });
         } else {
             addSiteMeta(metas);
@@ -89,15 +89,15 @@ export default function extractMeta(chain_data, rp) {
         const account = chain_data.accounts[rp.accountname];
         let { name, about, profile_image } = normalizeProfile(account);
         if (name == null) name = account.name;
-        if (about == null)
+        if (about == null) {
             about = 'Join thousands on blurt who share, post and earn rewards.';
-        if (profile_image == null)
+        }
+        if (profile_image == null) {
             profile_image = 'https://blurt.world/images/Blurtlogo.png';
+        }
         // Set profile tags
         const title = `@${account.name}`;
-        const desc = `The latest posts from ${name}. Follow me at @${
-            account.name
-        }. ${about}`;
+        const desc = `The latest posts from ${name}. Follow me at @${account.name}. ${about}`;
         const image = profile_image;
 
         // Standard meta

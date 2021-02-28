@@ -8,8 +8,8 @@ import * as transactionActions from './TransactionReducer';
 import { setUserPreferences } from 'app/utils/ServerApiClient';
 import { getStateAsync } from 'app/utils/steemApi';
 
-const wait = ms =>
-    new Promise(resolve => {
+const wait = (ms) =>
+    new Promise((resolve) => {
         setTimeout(() => resolve(), ms);
     });
 
@@ -19,20 +19,20 @@ export const sharedWatches = [
         [
             appActions.SET_USER_PREFERENCES,
             appActions.TOGGLE_NIGHTMODE,
-            appActions.TOGGLE_BLOGMODE
+            appActions.TOGGLE_BLOGMODE,
         ],
         saveUserPreferences
     ),
-    takeEvery('transaction/ERROR', showTransactionErrorNotification)
+    takeEvery('transaction/ERROR', showTransactionErrorNotification),
 ];
 
 export function* getAccount(username, force = false) {
-    let account = yield select(state =>
+    let account = yield select((state) =>
         state.global.get('accounts').get(username)
     );
 
     // hive never serves `owner` prop (among others)
-    let isLite = !!account && !account.get('owner');
+    const isLite = !!account && !account.get('owner');
 
     if (!account || force || isLite) {
         console.log(
@@ -65,7 +65,7 @@ export function* getState({ payload: { url } }) {
 }
 
 function* showTransactionErrorNotification() {
-    const errors = yield select(state => state.transaction.get('errors'));
+    const errors = yield select((state) => state.transaction.get('errors'));
     for (const [key, message] of errors) {
         // Do not display a notification for the bandwidthError/transactionFeeError key.
         if (key === 'bandwidthError' || key === 'transactionFeeError') {
@@ -80,7 +80,7 @@ export function* getContent({ author, permlink, resolve, reject }) {
     let content;
     while (!content) {
         content = yield call([api, api.getContentAsync], author, permlink);
-        if (content['author'] == '') {
+        if (content.author == '') {
             // retry if content not found. #1870
             content = null;
             yield call(wait, 3000);
@@ -105,6 +105,6 @@ function* saveUserPreferences({ payload }) {
         yield setUserPreferences(payload);
     }
 
-    const prefs = yield select(state => state.app.get('user_preferences'));
+    const prefs = yield select((state) => state.app.get('user_preferences'));
     yield setUserPreferences(prefs.toJS());
 }

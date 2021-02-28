@@ -21,11 +21,11 @@ class LoginForm extends Component {
     static propTypes = {
         // Steemit.
         loginError: PropTypes.string,
-        onCancel: PropTypes.func
+        onCancel: PropTypes.func,
     };
 
     static defaultProps = {
-        afterLoginRedirectToWelcome: false
+        afterLoginRedirectToWelcome: false,
     };
 
     constructor(props) {
@@ -41,11 +41,11 @@ class LoginForm extends Component {
             cryptographyFailure = true;
         }
         this.state = { cryptographyFailure };
-        this.usernameOnChange = e => {
+        this.usernameOnChange = (e) => {
             const value = e.target.value.toLowerCase();
             this.state.username.props.onChange(value);
         };
-        this.onCancel = e => {
+        this.onCancel = (e) => {
             if (e.preventDefault) e.preventDefault();
             const { onCancel, loginBroadcastOperation } = this.props;
             const errorCallback =
@@ -57,7 +57,7 @@ class LoginForm extends Component {
         this.qrReader = () => {
             const { qrReader } = props;
             const { password } = this.state;
-            qrReader(data => {
+            qrReader((data) => {
                 password.props.onChange(data);
             });
         };
@@ -81,21 +81,21 @@ class LoginForm extends Component {
                 'username',
                 'password',
                 'saveLogin:checked',
-                'useKeychain:checked'
+                'useKeychain:checked',
             ],
             initialValues: props.initialValues,
-            validation: values => ({
+            validation: (values) => ({
                 username: !values.username
                     ? tt('g.required')
                     : validate_account_name(values.username.split('/')[0]),
                 password: values.useKeychain
                     ? null
                     : !values.password
-                      ? tt('g.required')
-                      : PublicKey.fromString(values.password)
-                        ? tt('loginform_jsx.you_need_a_private_password_or_key')
-                        : null
-            })
+                    ? tt('g.required')
+                    : PublicKey.fromString(values.password)
+                    ? tt('loginform_jsx.you_need_a_private_password_or_key')
+                    : null,
+            }),
         });
     }
 
@@ -183,7 +183,7 @@ class LoginForm extends Component {
             reallySubmit,
             hideWarning,
             afterLoginRedirectToWelcome,
-            msg
+            msg,
         } = this.props;
         const { username, password, useKeychain, saveLogin } = this.state;
         const { submitting, valid, handleSubmit } = this.state.login;
@@ -212,7 +212,9 @@ class LoginForm extends Component {
             : tt('loginform_jsx.active_or_owner');
         const submitLabel = showLoginWarning
             ? tt('loginform_jsx.continue_anyway')
-            : loginBroadcastOperation ? tt('g.sign_in') : tt('g.login');
+            : loginBroadcastOperation
+            ? tt('g.sign_in')
+            : tt('g.login');
         let error =
             password.touched && password.error
                 ? password.error
@@ -254,7 +256,7 @@ class LoginForm extends Component {
                     <div className="callout primary">
                         <p>
                             {tt('loginform_jsx.password_update_succes', {
-                                accountName: username.value
+                                accountName: username.value,
                             })}
                         </p>
                     </div>
@@ -348,12 +350,9 @@ class LoginForm extends Component {
                             disabled={submitting}
                         />
                         {error && <div className="error">{error}&nbsp;</div>}
-                        {error &&
-                            password_info && (
-                                <div className="warning">
-                                    {password_info}&nbsp;
-                                </div>
-                            )}
+                        {error && password_info && (
+                            <div className="warning">{password_info}&nbsp;</div>
+                        )}
                     </div>
                 )}
                 {loginBroadcastOperation && (
@@ -379,7 +378,8 @@ class LoginForm extends Component {
                                 {...useKeychain.props}
                                 onChange={this.useKeychainToggle}
                                 disabled={submitting}
-                            />&nbsp;{tt('loginform_jsx.use_keychain')}
+                            />
+                            &nbsp;{tt('loginform_jsx.use_keychain')}
                         </label>
                     </div>
                 )}
@@ -395,7 +395,8 @@ class LoginForm extends Component {
                             {...saveLogin.props}
                             onChange={this.saveLoginToggle}
                             disabled={submitting}
-                        />&nbsp;{tt('loginform_jsx.keep_me_logged_in')}
+                        />
+                        &nbsp;{tt('loginform_jsx.keep_me_logged_in')}
                     </label>
                 </div>
                 <div className="login-modal-buttons">
@@ -434,7 +435,7 @@ class LoginForm extends Component {
                         username: username.value,
                         password: password.value,
                         saveLogin: saveLogin.value,
-                        loginBroadcastOperation: loginBroadcastOperation
+                        loginBroadcastOperation: loginBroadcastOperation,
                     };
                     reallySubmit(data, afterLoginRedirectToWelcome);
                 })}
@@ -462,7 +463,7 @@ class LoginForm extends Component {
                         type="submit"
                         disabled={submitting}
                         className="button"
-                        onClick={e => {
+                        onClick={(e) => {
                             e.preventDefault();
                             console.log('Login\thideWarning');
                             hideWarning();
@@ -518,7 +519,7 @@ function checkPasswordChecksum(password) {
 import { connect } from 'react-redux';
 export default connect(
     // mapStateToProps
-    state => {
+    (state) => {
         const walletUrl = state.app.get('walletUrl');
         const showLoginWarning = state.user.get('show_login_warning');
         const loginError = state.user.get('login_error');
@@ -528,7 +529,7 @@ export default connect(
         );
         const initialValues = {
             useKeychain: !!hasCompatibleKeychain(),
-            saveLogin: saveLoginDefault
+            saveLogin: saveLoginDefault,
         };
 
         // The username input has a value prop, so it should not use initialValues
@@ -560,12 +561,12 @@ export default connect(
             initialValues,
             initialUsername,
             msg,
-            offchain_user: state.offchain.get('user')
+            offchain_user: state.offchain.get('user'),
         };
     },
 
     // mapDispatchToProps
-    dispatch => ({
+    (dispatch) => ({
         dispatchSubmit: (
             data,
             useKeychain,
@@ -579,7 +580,7 @@ export default connect(
                     type,
                     operation,
                     successCallback,
-                    errorCallback
+                    errorCallback,
                 } = loginBroadcastOperation.toJS();
                 dispatch(
                     transactionActions.broadcastOperation({
@@ -589,7 +590,7 @@ export default connect(
                         password,
                         useKeychain,
                         successCallback,
-                        errorCallback
+                        errorCallback,
                     })
                 );
                 dispatch(
@@ -599,7 +600,7 @@ export default connect(
                         useKeychain,
                         saveLogin,
                         afterLoginRedirectToWelcome,
-                        operationType: type
+                        operationType: type,
                     })
                 );
 
@@ -613,7 +614,7 @@ export default connect(
                         password,
                         useKeychain,
                         saveLogin,
-                        afterLoginRedirectToWelcome
+                        afterLoginRedirectToWelcome,
                     })
                 );
             }
@@ -633,7 +634,7 @@ export default connect(
                     username,
                     password,
                     saveLogin,
-                    afterLoginRedirectToWelcome
+                    afterLoginRedirectToWelcome,
                 })
             );
         },
@@ -643,13 +644,13 @@ export default connect(
         clearError: () => {
             if (hasError) dispatch(userActions.loginError({ error: null }));
         },
-        qrReader: dataCallback => {
+        qrReader: (dataCallback) => {
             dispatch(
                 globalActions.showDialog({
                     name: 'qr_reader',
-                    params: { handleScan: dataCallback }
+                    params: { handleScan: dataCallback },
                 })
             );
-        }
+        },
     })
 )(LoginForm);

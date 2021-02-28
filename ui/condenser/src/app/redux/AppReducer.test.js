@@ -11,32 +11,32 @@ import reducer, {
     receiveFeatureFlags,
     selectors,
     toggleNightmode,
-    toggleBlogmode
+    toggleBlogmode,
 } from './AppReducer';
 
 const mockPayloads = {
     addNotification: {
-        key: 'testKey'
+        key: 'testKey',
     },
     removeNotification: {
-        pathname: 'testPath'
+        pathname: 'testPath',
     },
     removeNotification: {
-        key: 'testKey'
+        key: 'testKey',
     },
     setUserPreferences: {
         cat: 'mymy',
-        dog: 'polly'
-    }
+        dog: 'polly',
+    },
 };
 
 const mockActions = {
     LOCATION_CHANGE: {
         type: '@@router/LOCATION_CHANGE',
         payload: {
-            pathname: 'testPath'
-        }
-    }
+            pathname: 'testPath',
+        },
+    },
 };
 
 const key = mockPayloads.addNotification.key;
@@ -44,8 +44,8 @@ const mockNotification = OrderedMap({
     [key]: {
         action: 'missing translation: en.g.dismiss',
         dismissAfter: 10000,
-        key
-    }
+        key,
+    },
 });
 
 describe('App reducer', () => {
@@ -55,10 +55,10 @@ describe('App reducer', () => {
     });
     it('should return correct state for a LOCATION_CHANGE action', () => {
         const initial = reducer();
-        const actual = reducer(initial, mockActions['LOCATION_CHANGE']);
+        const actual = reducer(initial, mockActions.LOCATION_CHANGE);
         const out = actual.get('location');
         expect(out.pathname).toEqual(
-            mockActions['LOCATION_CHANGE'].payload.pathname
+            mockActions.LOCATION_CHANGE.payload.pathname
         );
     });
     it('should return correct state for a BLURT_API_ERROR action', () => {
@@ -103,25 +103,25 @@ describe('App reducer', () => {
     });
     it('should return correct state for a SET_USER_PREFERENCES action', () => {
         const initial = reducer();
-        let actual = reducer(
+        const actual = reducer(
             initial,
             setUserPreferences(mockPayloads.setUserPreferences)
         );
-        let out = actual.get('user_preferences');
-        let expected = Map({ cat: 'mymy', dog: 'polly' });
+        const out = actual.get('user_preferences');
+        const expected = Map({ cat: 'mymy', dog: 'polly' });
         expect(out).toEqual(expected);
     });
     it('should return correct state for a TOGGLE_NIGHTMODE action', () => {
         const initial = reducer();
         const before = initial.getIn(['user_preferences', 'nightmode']);
-        let actual = reducer(initial, toggleNightmode());
+        const actual = reducer(initial, toggleNightmode());
         const after = actual.getIn(['user_preferences', 'nightmode']);
         expect(after).toEqual(!before);
     });
     it('should return correct state for a TOGGLE_BLOGMODE action', () => {
         const initial = reducer();
         const before = initial.getIn(['user_preferences', 'blogmode']);
-        let actual = reducer(initial, toggleBlogmode());
+        const actual = reducer(initial, toggleBlogmode());
         const after = actual.getIn(['user_preferences', 'blogmode']);
         expect(after).toEqual(!before);
     });
@@ -133,13 +133,13 @@ describe('App reducer', () => {
         const withFlags = reducer(
             initial,
             receiveFeatureFlags({
-                flying: true
+                flying: true,
             })
         );
         const withMoreFlags = reducer(
             withFlags,
             receiveFeatureFlags({
-                swimming: false
+                swimming: false,
             })
         );
 

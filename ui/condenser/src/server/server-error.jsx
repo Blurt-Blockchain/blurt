@@ -14,7 +14,7 @@ class ServerError extends Component {
                         position: 'relative',
                         left: '400px',
                         top: '-400px',
-                        textAlign: 'left'
+                        textAlign: 'left',
                     }}
                 >
                     <h4>Sorry.</h4>

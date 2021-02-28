@@ -9,14 +9,14 @@ import {
     DEBT_TOKEN,
     DEBT_TOKEN_SHORT,
     CURRENCY_SIGN,
-    DEBT_TICKER
+    DEBT_TICKER,
 } from 'app/client_config';
 import tt from 'counterpart';
 
 class PromotePost extends Component {
     static propTypes = {
         author: PropTypes.string.isRequired,
-        permlink: PropTypes.string.isRequired
+        permlink: PropTypes.string.isRequired,
     };
 
     constructor(props) {
@@ -26,7 +26,7 @@ class PromotePost extends Component {
             asset: '',
             loading: false,
             amountError: '',
-            trxError: ''
+            trxError: '',
         };
         this.onSubmit = this.onSubmit.bind(this);
         this.errorCallback = this.errorCallback.bind(this);
@@ -57,7 +57,7 @@ class PromotePost extends Component {
             permlink,
             onClose,
             currentUser: this.props.currentUser,
-            errorCallback: this.errorCallback
+            errorCallback: this.errorCallback,
         });
     }
 
@@ -92,7 +92,8 @@ class PromotePost extends Component {
                             {tt(
                                 'promote_post_jsx.spend_your_DEBT_TOKEN_to_advertise_this_post',
                                 { DEBT_TOKEN }
-                            )}.
+                            )}
+                            .
                         </p>
                         <hr />
                         <div className="row">
@@ -110,9 +111,8 @@ class PromotePost extends Component {
                                         onChange={this.amountChange}
                                     />
                                     <span className="input-group-label">
-                                        {DEBT_TOKEN_SHORT + ' '} ({
-                                            CURRENCY_SIGN
-                                        })
+                                        {DEBT_TOKEN_SHORT + ' '} (
+                                        {CURRENCY_SIGN})
                                     </span>
                                     <div className="error">{amountError}</div>
                                 </div>
@@ -120,9 +120,7 @@ class PromotePost extends Component {
                         </div>
                         <div>
                             {tt('g.balance', {
-                                balanceValue: `${balance} ${
-                                    DEBT_TOKEN_SHORT
-                                } (${CURRENCY_SIGN})`
+                                balanceValue: `${balance} ${DEBT_TOKEN_SHORT} (${CURRENCY_SIGN})`,
                             })}
                         </div>
                         <br />
@@ -161,13 +159,13 @@ export default connect(
         const currentUser = state.user.getIn(['current']);
         const currentAccount = state.global.getIn([
             'accounts',
-            currentUser.get('username')
+            currentUser.get('username'),
         ]);
         return { ...ownProps, currentAccount, currentUser };
     },
 
     // mapDispatchToProps
-    dispatch => ({
+    (dispatch) => ({
         dispatchSubmit: ({
             amount,
             asset,
@@ -175,7 +173,7 @@ export default connect(
             permlink,
             currentUser,
             onClose,
-            errorCallback
+            errorCallback,
         }) => {
             const username = currentUser.get('username');
             alert('Promoted posts are currently disabled');
@@ -190,9 +188,9 @@ export default connect(
                     successMessage:
                         tt(
                             'promote_post_jsx.you_successfully_promoted_this_post'
-                        ) + '.'
-                }
+                        ) + '.',
+                },
             };
-        }
+        },
     })
 )(PromotePost);

@@ -1,4 +1,4 @@
-module.exports = function(sequelize, DataTypes) {
+module.exports = function (sequelize, DataTypes) {
     var AccountRecoveryRequest = sequelize.define(
         'AccountRecoveryRequest',
         {
@@ -34,7 +34,7 @@ module.exports = function(sequelize, DataTypes) {
             timestamps: true,
             underscored: true,
             classMethods: {
-                associate: function(models) {
+                associate: function (models) {
                     AccountRecoveryRequest.belongsTo(models.User, {
                         onDelete: 'SET NULL',
                         foreignKey: {

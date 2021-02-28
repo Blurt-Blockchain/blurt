@@ -23,7 +23,8 @@ class NotFound extends React.Component {
                             Not to worry. You can head back to{' '}
                             <a style={{ fontWeight: 800 }} href="/">
                                 our homepage
-                            </a>, or check out some great posts.
+                            </a>
+                            , or check out some great posts.
                         </p>
                         <ul className="NotFound__menu">
                             <li>
@@ -51,5 +52,5 @@ class NotFound extends React.Component {
 
 module.exports = {
     path: '*',
-    component: NotFound
+    component: NotFound,
 };

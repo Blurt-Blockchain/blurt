@@ -14,14 +14,14 @@ describe('Memo', () => {
 
     it('should render a plain ol memo', () => {
         const wrapper = shallow(
-            <Memo fromNegativeRepUser={false} text={'hi dude'} />
+            <Memo fromNegativeRepUser={false} text="hi dude" />
         );
         expect(wrapper.html()).toEqual('<span class="Memo">hi dude</span>');
     });
 
     it('should deal with a memo from a user with bad reputation', () => {
         const wrapper = shallow(
-            <Memo fromNegativeRepUser={true} text={'sorry charlie'} />
+            <Memo fromNegativeRepUser text="sorry charlie" />
         );
 
         expect(wrapper.html()).toEqual(

@@ -1,22 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Blurt.js Stream</title>
-</head>
-<body>
-
-<script src="https://cdn.jsdelivr.net/npm/@blurtfoundation/blurtjs/dist/blurt.min.js"></script>
-<script>
-blurt.api.setOptions({ url: 'https://rpc.blurt.world', useAppbaseApi: true });
-blurt.api.getOpsInBlock(
-  1681635,  // blockNum
-  false,  // onlyVirtual
-  function (err, result) {
-    console.log('result', result)
-  }
-);
-</script>
-
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Blurt.js Stream</title>
+  </head>
+  <body>
+    <script src="https://cdn.jsdelivr.net/npm/@blurtfoundation/blurtjs/dist/blurt.min.js"></script>
+    <script>
+      blurt.api.setOptions({
+        url: "https://rpc.blurt.world",
+        useAppbaseApi: true,
+      });
+      blurt.api.getOpsInBlock(
+        1681635, // blockNum
+        false, // onlyVirtual
+        function (err, result) {
+          console.log("result", result);
+        }
+      );
+    </script>
+  </body>
 </html>

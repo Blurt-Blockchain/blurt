@@ -19,12 +19,12 @@ const path = require('path');
 const ROOT = path.join(__dirname, '../../..');
 
 // FIXME copy paste code, refactor mixpanel out
-var mixpanel = null;
+let mixpanel = null;
 if (config.has('mixpanel') && config.get('mixpanel')) {
     mixpanel = Mixpanel.init(config.get('mixpanel'));
 }
 
-var assets_file = ROOT + '/tmp/webpack-stats-dev.json';
+let assets_file = ROOT + '/tmp/webpack-stats-dev.json';
 if (process.env.NODE_ENV === 'production') {
     assets_file = ROOT + '/tmp/webpack-stats-prod.json';
 }
@@ -44,7 +44,7 @@ function* confirmMobileHandler(e) {
     const params = addToParams({}, this.request.query, PARAM_VIEW_MODE, [
         VIEW_MODE_WHISTLE,
     ]);
-    const enterMobileUrl = `/enter_mobile` + makeParams(params);
+    const enterMobileUrl = '/enter_mobile' + makeParams(params);
 
     const confirmation_code =
         this.params && this.params.code
@@ -88,7 +88,7 @@ function* confirmMobileHandler(e) {
     }
 
     const number_of_created_accounts = yield models.sequelize.query(
-        `select count(*) as result from identities i join accounts a on a.user_id=i.user_id where i.provider='phone' and i.phone=:phone and a.created=1 and a.ignored<>1`,
+        "select count(*) as result from identities i join accounts a on a.user_id=i.user_id where i.provider='phone' and i.phone=:phone and a.created=1 and a.ignored<>1",
         {
             replacements: { phone: mid.phone },
             type: models.sequelize.QueryTypes.SELECT,
@@ -110,10 +110,12 @@ function* confirmMobileHandler(e) {
 
     // successful new verified phone number
     yield mid.update({ provider: 'phone', verified: true });
-    if (user.account_status === 'onhold')
+    if (user.account_status === 'onhold') {
         yield user.update({ account_status: 'waiting' });
-    if (mixpanel)
+    }
+    if (mixpanel) {
         mixpanel.track('SignupStepPhone', { distinct_id: this.session.uid });
+    }
 
     console.log('--/Success phone redirecting user', this.session.user);
     this.redirect('/approval' + makeParams(params));
@@ -215,8 +217,9 @@ export default function useEnterAndConfirmMobilePages(app) {
         const props = { body, title: 'Phone Number', assets, meta: [] };
         this.body =
             '<!DOCTYPE html>' + renderToString(<ServerHTML {...props} />);
-        if (mixpanel)
+        if (mixpanel) {
             mixpanel.track('SignupStep2', { distinct_id: this.session.uid });
+        }
     });
 
     router.post('/submit_mobile', koaBody, function* () {
@@ -239,7 +242,7 @@ export default function useEnterAndConfirmMobilePages(app) {
         params.country = country;
         params.phone = localPhone;
 
-        const enterMobileUrl = `/enter_mobile` + makeParams(params);
+        const enterMobileUrl = '/enter_mobile' + makeParams(params);
 
         if (!country || country === '') {
             this.flash = { error: 'Please select a country code' };
@@ -284,10 +287,11 @@ export default function useEnterAndConfirmMobilePages(app) {
             if (mid.verified) {
                 if (mid.phone === phone) {
                     this.flash = { success: 'Phone number has been verified' };
-                    if (mixpanel)
+                    if (mixpanel) {
                         mixpanel.track('SignupStep3', {
                             distinct_id: this.session.uid,
                         });
+                    }
                     this.redirect('/approval' + makeParams(params));
                     return;
                 }
@@ -318,7 +322,7 @@ export default function useEnterAndConfirmMobilePages(app) {
             mobile: phone,
             confirmation_code,
             ip: getRemoteIp(this.req),
-            ignore_score: true, //twilioResult === 'pass'
+            ignore_score: true, // twilioResult === 'pass'
         });
 
         if (verifyResult.error) {

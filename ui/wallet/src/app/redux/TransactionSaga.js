@@ -18,6 +18,8 @@ import { DEBT_TICKER } from 'app/client_config';
 import { serverApiRecordEvent } from 'app/utils/ServerApiClient';
 import { isLoggedInWithKeychain } from 'app/utils/BlurtKeychain';
 
+import diff_match_patch from 'diff-match-patch';
+
 function toSteemSymbols(symbol) {
     return symbol.replace('BLURT', 'BLURT');
 }
@@ -64,10 +66,11 @@ export function* preBroadcast_transfer({ operation }) {
             const memo_private = yield select((state) =>
                 state.user.getIn(['current', 'private_keys', 'memo_private'])
             );
-            if (!memo_private)
+            if (!memo_private) {
                 throw new Error(
                     'Unable to encrypt memo, missing memo private key'
                 );
+            }
             const account = yield call(getAccount, operation.to);
             if (!account) throw new Error(`Unknown to account ${operation.to}`);
             const memo_key = account.get('memo_key');
@@ -202,8 +205,9 @@ export function* broadcastOperation({
         let eventType = type
             .replace(/^([a-z])/, (g) => g.toUpperCase())
             .replace(/_([a-z])/g, (g) => g[1].toUpperCase());
-        if (eventType === 'Comment' && !operation.parent_author)
+        if (eventType === 'Comment' && !operation.parent_author) {
             eventType = 'Post';
+        }
         const page =
             eventType === 'Vote'
                 ? `@${operation.author}/${operation.permlink}`
@@ -217,8 +221,8 @@ export function* broadcastOperation({
 
 function hasPrivateKeys(payload) {
     const blob = JSON.stringify(payload.operations);
-    let m,
-        re = /P?(5[123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz]{50})/g;
+    let m;
+    const re = /P?(5[123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz]{50})/g;
     while (true) {
         m = re.exec(blob);
         if (m) {
@@ -365,12 +369,13 @@ function* broadcastPayload({
                 );
             }
         }
-        if (successCallback)
+        if (successCallback) {
             try {
                 successCallback();
             } catch (error) {
                 console.error(error);
             }
+        }
     } catch (error) {
         console.error('TransactionSaga\tbroadcastPayload', error);
         // status: error
@@ -421,8 +426,6 @@ function* accepted_account_update({ operation }) {
     account = fromJS(account);
     yield put(globalActions.receiveAccount({ account }));
 }
-
-import diff_match_patch from 'diff-match-patch';
 
 const dmp = new diff_match_patch();
 
@@ -617,10 +620,11 @@ export function* updateAuthorities({
             oldAuthPubkey = oldPrivateAuth.toPublicKey().toString();
         }
         if (authType === 'owner' && !oldPrivate) oldPrivate = oldPrivateAuth;
-        else if (authType === 'active' && !oldPrivate)
+        else if (authType === 'active' && !oldPrivate) {
             oldPrivate = oldPrivateAuth;
-        else if (authType === 'posting' && !oldPrivate)
+        } else if (authType === 'posting' && !oldPrivate) {
             oldPrivate = oldPrivateAuth;
+        }
 
         let newPrivate, newAuthPubkey;
         try {
@@ -642,11 +646,12 @@ export function* updateAuthorities({
                 authority.weight_threshold,
             ]);
         }
-        ops2[authType] = authority ? authority : account[authType];
+        ops2[authType] = authority || account[authType];
         return true;
     };
-    for (const auth of auths)
+    for (const auth of auths) {
         if (!addAuth(auth.authType, auth.oldAuth, auth.newAuth)) return;
+    }
 
     let key = oldPrivate;
     if (!key) {
@@ -673,7 +678,7 @@ export function* updateAuthorities({
         }
     }
     if (!key) {
-        onError(`Incorrect Password`);
+        onError('Incorrect Password');
         throw new Error('Trying to update a memo without a signing key?');
     }
     const { memo_key, json_metadata, posting_json_metadata } = account;

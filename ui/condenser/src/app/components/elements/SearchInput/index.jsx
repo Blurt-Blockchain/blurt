@@ -6,7 +6,7 @@ const SearchInput = ({ type }) => {
     return (
         <span>
             <form
-                className={'search-input'}
+                className="search-input"
                 action="/static/search.html"
                 method="GET"
             >

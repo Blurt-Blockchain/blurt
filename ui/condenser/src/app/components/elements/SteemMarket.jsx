@@ -12,13 +12,13 @@ class Coin extends Component {
 
     componentDidMount() {
         const node = ReactDOM.findDOMNode(this.refs.coin);
-        node.querySelectorAll('circle').forEach(circle => {
+        node.querySelectorAll('circle').forEach((circle) => {
             circle.setAttribute('r', '8');
             circle.style.fillOpacity = 0;
             circle.style.cursor = 'pointer';
             circle.addEventListener('mouseover', this.onPointMouseMove);
         });
-        node.querySelectorAll('polyline').forEach(circle => {
+        node.querySelectorAll('polyline').forEach((circle) => {
             circle.style.pointerEvents = 'none';
         });
         node.addEventListener('mouseout', this.onPointMouseOut);
@@ -26,7 +26,7 @@ class Coin extends Component {
 
     componentWillUnmount() {
         const node = ReactDOM.findDOMNode(this.refs.coin);
-        node.querySelectorAll('circle').forEach(circle => {
+        node.querySelectorAll('circle').forEach((circle) => {
             circle.removeEventListener('mouseover', this.onPointMouseMove);
         });
         node.removeEventListener('mouseout', this.onPointMouseOut);
@@ -40,7 +40,7 @@ class Coin extends Component {
         const timepoints = coin.get('timepoints');
         const priceUsd = timepoints.last().get('price_usd');
         const pricesUsd = timepoints
-            .map(point => parseFloat(point.get('price_usd')))
+            .map((point) => parseFloat(point.get('price_usd')))
             .toJS();
         return (
             <div ref="coin" className="coin">
@@ -49,7 +49,7 @@ class Coin extends Component {
                         <SparklinesLine
                             color={color}
                             style={{ strokeWidth: 3.0 }}
-                            onMouseMove={e => {
+                            onMouseMove={(e) => {
                                 console.log(e);
                             }}
                         />
@@ -104,7 +104,7 @@ class SteemMarket extends Component {
                 <div className="c-sidebar__content">
                     <div className="blurt-market">
                         <Coin coin={blurt} color="#09d6a8" />
-                        {topCoins.map(coin => (
+                        {topCoins.map((coin) => (
                             <Coin
                                 key={coin.get('name')}
                                 coin={coin}
@@ -124,9 +124,9 @@ export default connect(
         const steemMarketData = state.app.get('steemMarket');
         return {
             ...ownProps,
-            steemMarketData
+            steemMarketData,
         };
     },
     // mapDispatchToProps
-    dispatch => ({})
+    (dispatch) => ({})
 )(SteemMarket);

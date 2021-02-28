@@ -5,24 +5,26 @@ import DropdownMenu from 'app/components/elements/DropdownMenu';
 
 export default ({ post, horizontal, single }) => {
     let sort_order = 'hot';
-    if (process.env.BROWSER && window.last_sort_order)
+    if (process.env.BROWSER && window.last_sort_order) {
         sort_order = window.last_sort_order;
+    }
 
-    if (single)
+    if (single) {
         return (
             <Link to={`/${sort_order}/${post.category}`}>{post.category}</Link>
         );
+    }
 
     const json = post.json_metadata;
     let tags = [];
 
     try {
-        if (typeof json == 'object') {
+        if (typeof json === 'object') {
             tags = json.tags || [];
         } else {
             tags = (json && JSON.parse(json).tags) || [];
         }
-        if (typeof tags == 'string') tags = tags.split(' ');
+        if (typeof tags === 'string') tags = tags.split(' ');
         if (!Array.isArray(tags)) {
             tags = [];
         }
@@ -48,7 +50,7 @@ export default ({ post, horizontal, single }) => {
     if (tags.length == 1) {
         return <Link to={`/${sort_order}/${tags[0]}`}>{tags[0]}</Link>;
     }
-    const list = tags.map(tag => {
+    const list = tags.map((tag) => {
         return { value: tag, link: `/${sort_order}/${tag}` };
     });
     return (

@@ -58,15 +58,15 @@ class AuthorRewards extends React.Component {
         const { account_name, transfer_history } = this.props;
 
         /// transfer log
-        let rewards24Vests = 0,
-            rewardsWeekVests = 0,
-            totalRewardsVests = 0;
-        let rewards24Blurt = 0,
-            rewardsWeekBlurt = 0,
-            totalRewardsBlurt = 0;
-        let rewards24HBD = 0,
-            rewardsWeekHBD = 0,
-            totalRewardsHBD = 0;
+        let rewards24Vests = 0;
+        let rewardsWeekVests = 0;
+        let totalRewardsVests = 0;
+        const rewards24Blurt = 0;
+        const rewardsWeekBlurt = 0;
+        const totalRewardsBlurt = 0;
+        const rewards24HBD = 0;
+        const rewardsWeekHBD = 0;
+        const totalRewardsHBD = 0;
         const today = new Date();
         const oneDay = 86400 * 1000;
         const yesterday = new Date(today.getTime() - oneDay).getTime();
@@ -98,16 +98,16 @@ class AuthorRewards extends React.Component {
                     if (new Date(item[1].timestamp).getTime() > lastWeek) {
                         if (new Date(item[1].timestamp).getTime() > yesterday) {
                             rewards24Vests += vest;
-                            //rewards24Blurt += blurt;
-                            //rewards24HBD += hbd;
+                            // rewards24Blurt += blurt;
+                            // rewards24HBD += hbd;
                         }
                         rewardsWeekVests += vest;
-                        //rewardsWeekBlurt += blurt;
-                        //rewardsWeekHBD += hbd;
+                        // rewardsWeekBlurt += blurt;
+                        // rewardsWeekHBD += hbd;
                     }
                     totalRewardsVests += vest;
-                   // totalRewardsBlurt += blurt;
-                   // totalRewardsHBD += hbd;
+                    // totalRewardsBlurt += blurt;
+                    // totalRewardsHBD += hbd;
 
                     return (
                         <TransferHistoryRow

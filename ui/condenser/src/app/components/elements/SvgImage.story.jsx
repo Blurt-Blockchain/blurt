@@ -10,14 +10,14 @@ const options = {
     range: true,
     min: 10,
     max: 200,
-    step: 1
+    step: 1,
 };
 
 storiesOf('Elements', module)
     .addDecorator(withKnobs)
     .add('SvgImage', () => (
         <Grid>
-            {svgs.map(svg => (
+            {svgs.map((svg) => (
                 <div key={svg}>
                     <SvgImage
                         name={svg}

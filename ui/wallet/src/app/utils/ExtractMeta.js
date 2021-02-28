@@ -92,12 +92,14 @@ export default function extractMeta(chain_data, rp) {
         const account = chain_data.accounts[rp.accountname];
         let { name, about, profile_image } = normalizeProfile(account);
         if (name == null) name = account.name;
-        if (about == null)
+        if (about == null) {
             about =
                 'Join thousands on Blurt.blog who share, post and earn rewards.';
-        if (profile_image == null)
+        }
+        if (profile_image == null) {
             profile_image =
                 'https://blurtwallet.com/images/blurt-blog-twshare.png';
+        }
         // Set profile tags
         const title = `@${account.name}`;
         const desc = `The latest posts from ${name}. Follow me at @${account.name}. ${about}`;

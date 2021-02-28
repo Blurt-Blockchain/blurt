@@ -9,7 +9,7 @@ import Icon from 'app/components/elements/Icon';
 import Userpic from 'app/components/elements/Userpic';
 import tt from 'counterpart';
 
-const notificationsIcon = type => {
+const notificationsIcon = (type) => {
     const types = {
         reply: 'chatbox',
         reply_post: 'chatbox',
@@ -21,7 +21,7 @@ const notificationsIcon = type => {
         reblog: 'reblog',
         mention: 'chatboxes',
         transfer: 'transfer',
-        witness_vote: 'witness'
+        witness_vote: 'witness',
     };
 
     let icon = 'chain';
@@ -56,7 +56,7 @@ const highlightText = (text, highlight) => {
     );
 };
 
-const pic = author => {
+const pic = (author) => {
     return (
         <a href={'/@' + author}>
             <Userpic account={author} />
@@ -67,11 +67,11 @@ const pic = author => {
 class NotificationsList extends React.Component {
     static propTypes = {
         username: PropTypes.string.isRequired,
-        markAsRead: PropTypes.func.isRequired
+        markAsRead: PropTypes.func.isRequired,
     };
 
     static defaultProps = {
-        notifications: []
+        notifications: [],
     };
 
     constructor() {
@@ -92,7 +92,7 @@ class NotificationsList extends React.Component {
         }
     }
 
-    onClickMarkAsRead = e => {
+    onClickMarkAsRead = (e) => {
         e.preventDefault();
         const { username, markAsRead } = this.props;
         markAsRead(username);
@@ -117,7 +117,7 @@ class NotificationsList extends React.Component {
                                 <a href={`/@${account}/${permlink}`}>
                                     {highlightText(
                                         `${tt('notificationsList_jsx.mention', {
-                                            account
+                                            account,
                                         })}`,
                                         `${account}`
                                     )}
@@ -150,9 +150,7 @@ class NotificationsList extends React.Component {
                         <div className="flex-column">
                             <div className="notification__message">
                                 <a
-                                    href={`https://blurtwallet.com/@${
-                                        accountName
-                                    }/transfers`}
+                                    href={`https://blurtwallet.com/@${accountName}/transfers`}
                                 >
                                     {highlightText(
                                         `${tt(
@@ -192,7 +190,7 @@ class NotificationsList extends React.Component {
                                 <a href={`/@${account}/${permlink}`}>
                                     {highlightText(
                                         `${tt('notificationsList_jsx.reply', {
-                                            account
+                                            account,
                                         })}`,
                                         `${account}`
                                     )}
@@ -227,7 +225,7 @@ class NotificationsList extends React.Component {
                                 <a href={`/@${accountName}/${permlink}`}>
                                     {highlightText(
                                         `${tt('notificationsList_jsx.reblog', {
-                                            account
+                                            account,
                                         })}`,
                                         `${account}`
                                     )}
@@ -261,7 +259,7 @@ class NotificationsList extends React.Component {
                                 <a href={`/@${account}`}>
                                     {highlightText(
                                         `${tt('notificationsList_jsx.follow', {
-                                            account
+                                            account,
                                         })}`,
                                         `${account}`
                                     )}
@@ -297,7 +295,7 @@ class NotificationsList extends React.Component {
                                         `${tt(
                                             'notificationsList_jsx.witness_vote',
                                             {
-                                                account
+                                                account,
                                             }
                                         )}`,
                                         `${account}`
@@ -326,33 +324,28 @@ class NotificationsList extends React.Component {
         return (
             <div className="">
                 {isOwnAccount}
-                {notifications &&
-                    notifications.length > 0 && (
-                        <center>
-                            <br />
-                            <a href="#" onClick={this.onClickMarkAsRead}>
-                                <strong>
-                                    {tt(
-                                        'notificationsList_jsx.mark_all_as_read'
-                                    )}
-                                </strong>
-                            </a>
-                            <br />
-                        </center>
-                    )}
+                {notifications && notifications.length > 0 && (
+                    <center>
+                        <br />
+                        <a href="#" onClick={this.onClickMarkAsRead}>
+                            <strong>
+                                {tt('notificationsList_jsx.mark_all_as_read')}
+                            </strong>
+                        </a>
+                        <br />
+                    </center>
+                )}
 
-                {notifications &&
-                    notifications.length > 0 && (
-                        <div style={{ lineHeight: '1rem' }}>
-                            {notifications.map(item => renderItem(item))}
-                        </div>
-                    )}
-                {!notifications &&
-                    process.env.BROWSER && (
-                        <Callout>
-                            Welcome! You don't have any notifications yet.
-                        </Callout>
-                    )}
+                {notifications && notifications.length > 0 && (
+                    <div style={{ lineHeight: '1rem' }}>
+                        {notifications.map((item) => renderItem(item))}
+                    </div>
+                )}
+                {!notifications && process.env.BROWSER && (
+                    <Callout>
+                        Welcome! You don't have any notifications yet.
+                    </Callout>
+                )}
             </div>
         );
     }
@@ -370,21 +363,21 @@ export default connect(
             ...props,
             isOwnAccount,
             accountName,
-            notifications
+            notifications,
         };
     },
-    dispatch => ({
-        getAccountNotifications: username => {
+    (dispatch) => ({
+        getAccountNotifications: (username) => {
             const query = {
-                account: username
+                account: username,
             };
             return dispatch(
                 fetchDataSagaActions.getAccountNotifications(query)
             );
         },
-        markAsRead: username => {
+        markAsRead: (username) => {
             const query = {
-                account: username
+                account: username,
             };
             if (typeof localStorage != 'undefined') {
                 localStorage.setItem(
@@ -396,6 +389,6 @@ export default connect(
             return dispatch(
                 fetchDataSagaActions.getAccountNotifications(query)
             );
-        }
+        },
     })
 )(NotificationsList);

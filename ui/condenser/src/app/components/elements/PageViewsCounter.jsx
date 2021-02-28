@@ -6,7 +6,7 @@ import pluralize from 'pluralize';
 
 export default class PageViewsCounter extends React.Component {
     static propTypes = {
-        page: React.PropTypes.string
+        page: React.PropTypes.string,
     };
 
     constructor(props) {
@@ -21,7 +21,9 @@ export default class PageViewsCounter extends React.Component {
     componentDidMount() {
         console.log('post in pageViewsCounter');
         console.log(this.props.page);
-        recordPageView(this.props.page).then(views => this.setState({ views }));
+        recordPageView(this.props.page).then((views) =>
+            this.setState({ views })
+        );
     }
 
     render() {

@@ -4,7 +4,7 @@ import {
     select,
     fork,
     takeLatest,
-    takeEvery
+    takeEvery,
 } from 'redux-saga/effects';
 import { api } from '@blurtfoundation/blurtjs';
 import { loadFollows, fetchFollowCount } from 'app/redux/FollowSaga';
@@ -29,7 +29,7 @@ export const fetchDataWatches = [
     takeLatest(FETCH_STATE, fetchState),
     takeEvery('global/FETCH_JSON', fetchJson),
     takeEvery(GET_ACCOUNT_NOTIFICATIONS, getAccountNotifications),
-    takeEvery(GET_ACCOUNT_UNREAD_NOTIFICATIONS, getAccountUnreadNotifications)
+    takeEvery(GET_ACCOUNT_UNREAD_NOTIFICATIONS, getAccountUnreadNotifications),
 ];
 
 export function* getContentCaller(action) {
@@ -49,7 +49,7 @@ export function* fetchState(location_change_action) {
 
     // `ignore_fetch` case should only trigger on initial page load. No need to call
     // fetchState immediately after loading fresh state from the server. Details: #593
-    const server_location = yield select(state =>
+    const server_location = yield select((state) =>
         state.offchain.get('server_location')
     );
     const ignore_fetch = pathname === server_location && is_initial_state;
@@ -82,12 +82,12 @@ function* syncSpecialPosts() {
     if (!process.env.BROWSER) return null;
 
     // Get special posts from the store.
-    const specialPosts = yield select(state =>
+    const specialPosts = yield select((state) =>
         state.offchain.get('special_posts')
     );
 
     // Mark seen featured posts.
-    const seenFeaturedPosts = specialPosts.get('featured_posts').map(post => {
+    const seenFeaturedPosts = specialPosts.get('featured_posts').map((post) => {
         const id = `${post.get('author')}/${post.get('permlink')}`;
         return post.set(
             'seen',
@@ -96,7 +96,7 @@ function* syncSpecialPosts() {
     });
 
     // Mark seen promoted posts.
-    const seenPromotedPosts = specialPosts.get('promoted_posts').map(post => {
+    const seenPromotedPosts = specialPosts.get('promoted_posts').map((post) => {
         const id = `${post.get('author')}/${post.get('permlink')}`;
         return post.set(
             'seen',
@@ -108,18 +108,18 @@ function* syncSpecialPosts() {
     yield put(
         globalActions.syncSpecialPosts({
             featuredPosts: seenFeaturedPosts,
-            promotedPosts: seenPromotedPosts
+            promotedPosts: seenPromotedPosts,
         })
     );
 
     // Mark all featured posts as seen.
-    specialPosts.get('featured_posts').forEach(post => {
+    specialPosts.get('featured_posts').forEach((post) => {
         const id = `${post.get('author')}/${post.get('permlink')}`;
         localStorage.setItem(`featured-post-seen:${id}`, 'true');
     });
 
     // Mark all promoted posts as seen.
-    specialPosts.get('promoted_posts').forEach(post => {
+    specialPosts.get('promoted_posts').forEach((post) => {
         const id = `${post.get('author')}/${post.get('permlink')}`;
         localStorage.setItem(`promoted-post-seen:${id}`, 'true');
     });
@@ -162,7 +162,7 @@ export function* getAccountNotifications(action) {
             yield put(
                 globalActions.receiveNotifications({
                     name: action.payload.account,
-                    notifications
+                    notifications,
                 })
             );
         }
@@ -190,7 +190,7 @@ export function* getAccountUnreadNotifications(action) {
             yield put(
                 globalActions.receiveUnreadNotifications({
                     name: action.payload.account,
-                    notifications
+                    notifications,
                 })
             );
         }
@@ -215,8 +215,8 @@ export function* fetchData(action) {
                 tag: category,
                 limit: constants.FETCH_DATA_BATCH_SIZE,
                 start_author: author,
-                start_permlink: permlink
-            }
+                start_permlink: permlink,
+            },
         ];
     } else if (order === 'hot') {
         call_name = 'getDiscussionsByHotAsync';
@@ -225,8 +225,8 @@ export function* fetchData(action) {
                 tag: category,
                 limit: constants.FETCH_DATA_BATCH_SIZE,
                 start_author: author,
-                start_permlink: permlink
-            }
+                start_permlink: permlink,
+            },
         ];
     } else if (order === 'promoted') {
         call_name = 'getDiscussionsByPromotedAsync';
@@ -235,8 +235,8 @@ export function* fetchData(action) {
                 tag: category,
                 limit: constants.FETCH_DATA_BATCH_SIZE,
                 start_author: author,
-                start_permlink: permlink
-            }
+                start_permlink: permlink,
+            },
         ];
     } else if (order === 'payout') {
         call_name = 'getPostDiscussionsByPayoutAsync';
@@ -245,8 +245,8 @@ export function* fetchData(action) {
                 tag: category,
                 limit: constants.FETCH_DATA_BATCH_SIZE,
                 start_author: author,
-                start_permlink: permlink
-            }
+                start_permlink: permlink,
+            },
         ];
     } else if (order === 'payout_comments') {
         call_name = 'getCommentDiscussionsByPayoutAsync';
@@ -255,8 +255,8 @@ export function* fetchData(action) {
                 tag: category,
                 limit: constants.FETCH_DATA_BATCH_SIZE,
                 start_author: author,
-                start_permlink: permlink
-            }
+                start_permlink: permlink,
+            },
         ];
     } else if (order === 'created') {
         call_name = 'getDiscussionsByCreatedAsync';
@@ -265,8 +265,8 @@ export function* fetchData(action) {
                 tag: category,
                 limit: constants.FETCH_DATA_BATCH_SIZE,
                 start_author: author,
-                start_permlink: permlink
-            }
+                start_permlink: permlink,
+            },
         ];
     } else if (order === 'by_replies') {
         call_name = 'getRepliesByLastUpdateAsync';
@@ -279,8 +279,8 @@ export function* fetchData(action) {
                 tag: accountname,
                 limit: constants.FETCH_DATA_BATCH_SIZE,
                 start_author: author,
-                start_permlink: permlink
-            }
+                start_permlink: permlink,
+            },
         ];
     } else if (order === 'by_author') {
         call_name = 'getDiscussionsByBlogAsync';
@@ -289,8 +289,8 @@ export function* fetchData(action) {
                 tag: accountname,
                 limit: constants.FETCH_DATA_BATCH_SIZE,
                 start_author: author,
-                start_permlink: permlink
-            }
+                start_permlink: permlink,
+            },
         ];
     } else if (order === 'by_comments') {
         call_name = 'getDiscussionsByCommentsAsync';
@@ -298,8 +298,8 @@ export function* fetchData(action) {
             {
                 limit: constants.FETCH_DATA_BATCH_SIZE,
                 start_author: author,
-                start_permlink: permlink
-            }
+                start_permlink: permlink,
+            },
         ];
     } else {
         // this should never happen. undefined behavior
@@ -349,7 +349,7 @@ export function* fetchData(action) {
                     firstPermlink,
                     accountname,
                     fetching: !fetchDone,
-                    endOfData
+                    endOfData,
                 })
             );
         }
@@ -366,16 +366,16 @@ export function* fetchData(action) {
     @arg {object} body (for JSON.stringify)
 */
 function* fetchJson({
-    payload: { id, url, body, successCallback, skipLoading = false }
+    payload: { id, url, body, successCallback, skipLoading = false },
 }) {
     try {
         const payload = {
             method: body ? 'POST' : 'GET',
             headers: {
                 Accept: 'application/json',
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
             },
-            body: body ? JSON.stringify(body) : undefined
+            body: body ? JSON.stringify(body) : undefined,
         };
         let result = yield skipLoading
             ? fetch(url, payload)
@@ -391,26 +391,26 @@ function* fetchJson({
 
 // Action creators
 export const actions = {
-    requestData: payload => ({
+    requestData: (payload) => ({
         type: REQUEST_DATA,
-        payload
+        payload,
     }),
 
-    getContent: payload => ({
+    getContent: (payload) => ({
         type: GET_CONTENT,
-        payload
+        payload,
     }),
 
-    fetchState: payload => ({
+    fetchState: (payload) => ({
         type: FETCH_STATE,
-        payload
+        payload,
     }),
-    getAccountNotifications: payload => ({
+    getAccountNotifications: (payload) => ({
         type: GET_ACCOUNT_NOTIFICATIONS,
-        payload
+        payload,
     }),
-    getAccountUnreadNotifications: payload => ({
+    getAccountUnreadNotifications: (payload) => ({
         type: GET_ACCOUNT_UNREAD_NOTIFICATIONS,
-        payload
-    })
+        payload,
+    }),
 };

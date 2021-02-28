@@ -2,11 +2,11 @@
 
 ## Front End
 
-* recommend fronting with a reverse proxy such as nginx
+-   recommend fronting with a reverse proxy such as nginx
 
 ## Rate Limiting
 
-* You will want to rate limit certain paths, likely to ~1r/s in your proxy
+-   You will want to rate limit certain paths, likely to ~1r/s in your proxy
 
 ```
 /api/v1/initiate_account_recovery

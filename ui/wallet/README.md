@@ -1,12 +1,11 @@
 # Blurt Wallet
 
-This is the Wallet for the Blurt Blockchain.  You can use it to send and recieve funds.  It is deployed to Blurt's Kubernetes cluster, and using the CI files you find here, you can deploy it to your own Kubernetes cluster, as well.  Blurt provides free use of its Kubernetes cluster to application developers in the Blurt Ecosystem.  
-
+This is the Wallet for the Blurt Blockchain. You can use it to send and recieve funds. It is deployed to Blurt's Kubernetes cluster, and using the CI files you find here, you can deploy it to your own Kubernetes cluster, as well. Blurt provides free use of its Kubernetes cluster to application developers in the Blurt Ecosystem.
 
 ## Installation
 
-
 ## Building from source without docker (the 'traditional' way):
+
 (better if you're planning to do condenser development)
 
 #### Clone the repository and make a tmp folder
@@ -47,6 +46,7 @@ yarn global add babel-cli
 yarn install --frozen-lockfile
 yarn run build
 ```
+
 To run condenser in production mode, run:
 
 ```bash
@@ -121,8 +121,8 @@ node
 
 If you've followed the instructions up until this point you will already
 have a running condenser installation which is entirely acceptable for
-development purposes. It is *not required to run a SQL server for
-development*. If you're running a full-fledged site however, you will want
+development purposes. It is _not required to run a SQL server for
+development_. If you're running a full-fledged site however, you will want
 to set one up.
 
 Once set up, you can set the mysql server configuration option for
@@ -168,6 +168,7 @@ FLUSH PRIVILEGES;
 ```
 
 Now launch mysql client and create steemit_dev database:
+
 ```bash
 mysql -u root
 > create database steemit_dev;
@@ -194,33 +195,32 @@ yarn exec sequelize db:migrate
 
 ### File naming and location
 
-- Prefer CamelCase js and jsx file names
-- Prefer lower case one word directory names
-- Keep stylesheet files close to components
-- Component's stylesheet file name should match component name
+-   Prefer CamelCase js and jsx file names
+-   Prefer lower case one word directory names
+-   Keep stylesheet files close to components
+-   Component's stylesheet file name should match component name
 
 #### Js & Jsx
 
 We use [prettier](https://github.com/prettier/prettier) to autofromat the
 code, with [this configuration](.prettierrc). Run `yarn run fmt` to format
-everything in `src/`, or `yarn exec -- prettier --config .prettierrc
---write src/whatever/file.js` for a specific file.
+everything in `src/`, or `yarn exec -- prettier --config .prettierrc --write src/whatever/file.js` for a specific file.
 
 #### CSS & SCSS
 
 If a component requires a css rule, please use its uppercase name for the
-class, e.g. "Header" class for the header's root div.  We adhere to BEM
+class, e.g. "Header" class for the header's root div. We adhere to BEM
 methodology with exception for Foundation classes, here is an example for
 the Header component:
 
 ```html
 <!-- Block -->
 <ul class="Header">
-  ...
-  <!-- Element -->
-  <li class="Header__menu-item">Menu Item 1</li>
-  <!-- Element with modifier -->
-  <li class="Header__menu-item--selected">Element with modifier</li>
+    ...
+    <!-- Element -->
+    <li class="Header__menu-item">Menu Item 1</li>
+    <!-- Element with modifier -->
+    <li class="Header__menu-item--selected">Element with modifier</li>
 </ul>
 ```
 

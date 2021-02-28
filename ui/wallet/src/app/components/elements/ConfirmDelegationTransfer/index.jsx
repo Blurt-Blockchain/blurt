@@ -17,7 +17,7 @@ const ConfirmDelegationTransfer = ({ operation, amount, fee }) => {
                         type="text"
                         required
                         value={amount}
-                        disabled={true}
+                        disabled
                         key={`transaction-input-${i}`}
                     />
                 </div>
@@ -36,7 +36,7 @@ const ConfirmDelegationTransfer = ({ operation, amount, fee }) => {
                     type="text"
                     required
                     value={operation[k]}
-                    disabled={true}
+                    disabled
                     key={`transaction-input-${i}`}
                 />
             </div>

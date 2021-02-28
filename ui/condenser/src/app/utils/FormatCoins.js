@@ -5,7 +5,7 @@ import {
     DEBT_TOKEN,
     DEBT_TOKEN_SHORT,
     CURRENCY_SIGN,
-    VESTING_TOKEN
+    VESTING_TOKEN,
 } from 'app/client_config';
 
 // TODO add comments and explanations

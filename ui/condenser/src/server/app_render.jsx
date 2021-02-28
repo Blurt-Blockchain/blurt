@@ -36,8 +36,10 @@ async function appRender(ctx, locales = false, resolvedAssets = false) {
         if (!userPreferences.locale) {
             let locale = ctx.getLocaleFromHeader();
             if (locale) locale = locale.substring(0, 2);
-            const supportedLocales = locales ? locales : getSupportedLocales();
-            const localeIsSupported = supportedLocales.find(l => l === locale);
+            const supportedLocales = locales || getSupportedLocales();
+            const localeIsSupported = supportedLocales.find(
+                (l) => l === locale
+            );
             if (!localeIsSupported) locale = 'en';
             userPreferences.locale = locale;
         }
@@ -51,7 +53,7 @@ async function appRender(ctx, locales = false, resolvedAssets = false) {
             new_visit: ctx.session.new_visit,
             config: $STM_Config,
             special_posts: await ctx.app.specialPostsPromise,
-            login_challenge
+            login_challenge,
         };
 
         const googleAds = {
@@ -64,11 +66,11 @@ async function appRender(ctx, locales = false, resolvedAssets = false) {
             gptBasicSlots: config.gpt_basic_slots,
             gptCategorySlots: config.gpt_category_slots,
             gptBiddingSlots: config.gpt_bidding_slots,
-            gptBannedTags: config.gpt_banned_tags
+            gptBannedTags: config.gpt_banned_tags,
         };
         const cookieConsent = {
             enabled: !!config.cookie_consent_enabled,
-            api_key: config.cookie_consent_api_key
+            api_key: config.cookie_consent_api_key,
         };
         // ... and that's the end of user-session-related SSR
         const initial_state = {
@@ -77,8 +79,8 @@ async function appRender(ctx, locales = false, resolvedAssets = false) {
                 googleAds: googleAds,
                 env: process.env.NODE_ENV,
                 walletUrl: config.wallet_url,
-                steemMarket: ctx.steemMarketData
-            }
+                steemMarket: ctx.steemMarketData,
+            },
         };
 
         const { body, title, statusCode, meta } = await serverRender(
@@ -111,7 +113,7 @@ async function appRender(ctx, locales = false, resolvedAssets = false) {
             adClient: googleAds.client,
             gptBidding: googleAds.gptBidding,
             shouldSeeCookieConsent: cookieConsent.enabled,
-            cookieConsentApiKey: cookieConsent.api_key
+            cookieConsentApiKey: cookieConsent.api_key,
         };
         ctx.status = statusCode;
         ctx.body =

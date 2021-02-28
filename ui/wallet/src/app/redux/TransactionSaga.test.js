@@ -203,7 +203,7 @@ describe('TransactionSaga', () => {
             expect(Object.keys(actual)).toEqual(['@@redux-saga/IO', 'SELECT']);
         });
         it('should return the operation unchanged if it has no memo attribute', () => {
-            let gen = preBroadcast_transfer(arg);
+            const gen = preBroadcast_transfer(arg);
             const actual = gen.next().value;
             expect(actual).toEqual(operationSansMemo);
         });

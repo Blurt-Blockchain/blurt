@@ -1,5 +1,5 @@
-module.exports = function(sequelize, DataTypes) {
-    var List = sequelize.define(
+module.exports = function (sequelize, DataTypes) {
+    const List = sequelize.define(
         'List',
         {
             kk: DataTypes.STRING(64),

@@ -5,7 +5,7 @@ import NodeCache from 'node-cache';
 export function SteemMarket() {
     const ttl = config.steem_market_cache.ttl;
     const cache = new NodeCache({
-        stdTTL: ttl
+        stdTTL: ttl,
     });
     const key = config.steem_market_cache.key;
     cache.on('expired', (k, v) => {
@@ -19,7 +19,7 @@ export function SteemMarket() {
     this.storeEmpty().then(() => this.refresh());
 }
 
-SteemMarket.prototype.storeEmpty = function() {
+SteemMarket.prototype.storeEmpty = function () {
     const key = config.steem_market_cache.key;
     return new Promise((res, rej) => {
         this.cache.set(key, {}, (err, success) => {
@@ -29,7 +29,7 @@ SteemMarket.prototype.storeEmpty = function() {
     });
 };
 
-SteemMarket.prototype.get = async function() {
+SteemMarket.prototype.get = async function () {
     return new Promise((res, rej) => {
         const key = config.steem_market_cache.key;
         this.cache.get(key, (err, value) => {
@@ -43,7 +43,7 @@ SteemMarket.prototype.get = async function() {
     });
 };
 
-SteemMarket.prototype.refresh = async function() {
+SteemMarket.prototype.refresh = async function () {
     console.info('Refreshing Blurt Market data...');
 
     const url = config.steem_market_endpoint;
@@ -58,10 +58,10 @@ SteemMarket.prototype.refresh = async function() {
         url: url,
         method: 'GET',
         headers: {
-            Authorization: `Token ${token}`
-        }
+            Authorization: `Token ${token}`,
+        },
     })
-        .then(response => {
+        .then((response) => {
             console.info('Received Blurt Market data from endpoint...');
             this.cache.set(key, response.data, (err, success) => {
                 if (err) {
@@ -71,7 +71,7 @@ SteemMarket.prototype.refresh = async function() {
                 console.info('Blurt Market data refreshed...');
             });
         })
-        .catch(err => {
+        .catch((err) => {
             console.error('Could not fetch Blurt Market data', err);
             return this.storeEmpty();
         });

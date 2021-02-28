@@ -14,7 +14,7 @@ class VotesAndComments extends React.Component {
 
         // Redux connect properties
         comments: PropTypes.number,
-        totalVotes: PropTypes.number
+        totalVotes: PropTypes.number,
     };
 
     constructor(props) {
@@ -55,9 +55,8 @@ class VotesAndComments extends React.Component {
                     }
                 >
                     <Link to={commentsLink} title={comments_tooltip}>
-                        <Icon name={comments > 1 ? 'chatboxes' : 'chatbox'} />&nbsp;{
-                            comments
-                        }
+                        <Icon name={comments > 1 ? 'chatboxes' : 'chatbox'} />
+                        &nbsp;{comments}
                     </Link>
                 </span>
             </span>
@@ -71,6 +70,6 @@ export default connect((state, props) => {
     return {
         ...props,
         totalVotes: post.getIn(['stats', 'total_votes']),
-        comments: post.get('children')
+        comments: post.get('children'),
     };
 })(VotesAndComments);

@@ -61,13 +61,13 @@ class CurationRewards extends React.Component {
         const { transfer_history, account_name } = this.props;
 
         /// transfer log
-        let rewards24 = 0,
-            rewardsWeek = 0,
-            totalRewards = 0;
-        let today = new Date();
-        let oneDay = 86400 * 1000;
-        let yesterday = new Date(today.getTime() - oneDay).getTime();
-        let lastWeek = new Date(today.getTime() - 7 * oneDay).getTime();
+        let rewards24 = 0;
+        let rewardsWeek = 0;
+        let totalRewards = 0;
+        const today = new Date();
+        const oneDay = 86400 * 1000;
+        const yesterday = new Date(today.getTime() - oneDay).getTime();
+        const lastWeek = new Date(today.getTime() - 7 * oneDay).getTime();
 
         let firstDate, finalDate;
         let curation_log = transfer_history

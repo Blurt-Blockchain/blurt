@@ -17,8 +17,10 @@ import { DEBT_TICKER } from 'app/client_config';
 import { serverApiRecordEvent } from 'app/utils/ServerApiClient';
 import { isLoggedInWithKeychain } from 'app/utils/SteemKeychain';
 
+import diff_match_patch from 'diff-match-patch';
+
 export const transactionWatches = [
-    takeEvery(transactionActions.BROADCAST_OPERATION, broadcastOperation)
+    takeEvery(transactionActions.BROADCAST_OPERATION, broadcastOperation),
 ];
 
 const hook = {
@@ -29,10 +31,10 @@ const hook = {
     accepted_comment,
     accepted_custom_json,
     accepted_delete_comment,
-    accepted_vote
+    accepted_vote,
 };
 
-const toStringUtf8 = o =>
+const toStringUtf8 = (o) =>
     o ? (Buffer.isBuffer(o) ? o.toString('utf-8') : o.toString()) : o;
 
 function* preBroadcast_vote({ operation, username }) {
@@ -42,7 +44,7 @@ function* preBroadcast_vote({ operation, username }) {
     yield put(
         globalActions.set({
             key: `transaction_vote_active_${author}_${permlink}`,
-            value: true
+            value: true,
         })
     );
     yield put(
@@ -64,8 +66,8 @@ export function* broadcastOperation({
         useKeychain,
         successCallback,
         errorCallback,
-        allowPostUnsafe
-    }
+        allowPostUnsafe,
+    },
 }) {
     const operationParam = {
         type,
@@ -76,7 +78,7 @@ export function* broadcastOperation({
         useKeychain,
         successCallback,
         errorCallback,
-        allowPostUnsafe
+        allowPostUnsafe,
     };
     console.log('broadcastOperation', operationParam);
 
@@ -87,7 +89,7 @@ export function* broadcastOperation({
                 confirm,
                 warning,
                 operation: operationParam,
-                errorCallback
+                errorCallback,
             })
         );
         return;
@@ -97,7 +99,7 @@ export function* broadcastOperation({
         keys,
         username,
         successCallback,
-        errorCallback
+        errorCallback,
     };
     if (!allowPostUnsafe && hasPrivateKeys(payload)) {
         const confirm = tt('g.post_key_warning.confirm');
@@ -110,7 +112,7 @@ export function* broadcastOperation({
                 warning,
                 checkbox,
                 operation: operationParam,
-                errorCallback
+                errorCallback,
             })
         );
         return;
@@ -123,7 +125,7 @@ export function* broadcastOperation({
                 const signingKey = yield call(findSigningKey, {
                     opType: type,
                     username,
-                    password
+                    password,
                 });
                 if (signingKey) payload.keys.push(signingKey);
                 else {
@@ -136,8 +138,8 @@ export function* broadcastOperation({
                                     username,
                                     successCallback,
                                     errorCallback,
-                                    saveLogin: true
-                                }
+                                    saveLogin: true,
+                                },
                             })
                         );
                         return;
@@ -147,10 +149,11 @@ export function* broadcastOperation({
         }
         yield call(broadcastPayload, { payload });
         let eventType = type
-            .replace(/^([a-z])/, g => g.toUpperCase())
-            .replace(/_([a-z])/g, g => g[1].toUpperCase());
-        if (eventType === 'Comment' && !operation.parent_author)
+            .replace(/^([a-z])/, (g) => g.toUpperCase())
+            .replace(/_([a-z])/g, (g) => g[1].toUpperCase());
+        if (eventType === 'Comment' && !operation.parent_author) {
             eventType = 'Post';
+        }
         const page =
             eventType === 'Vote'
                 ? `@${operation.author}/${operation.permlink}`
@@ -164,8 +167,8 @@ export function* broadcastOperation({
 
 function hasPrivateKeys(payload) {
     const blob = JSON.stringify(payload.operations);
-    let m,
-        re = /P?(5[123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz]{50})/g;
+    let m;
+    const re = /P?(5[123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz]{50})/g;
     while (true) {
         m = re.exec(blob);
         if (m) {
@@ -181,7 +184,7 @@ function hasPrivateKeys(payload) {
 }
 
 function* broadcastPayload({
-    payload: { operations, keys, username, successCallback, errorCallback }
+    payload: { operations, keys, username, successCallback, errorCallback },
 }) {
     let needsActiveAuth = false;
 
@@ -203,7 +206,7 @@ function* broadcastPayload({
             if (hook['preBroadcast_' + type]) {
                 const op = yield call(hook['preBroadcast_' + type], {
                     operation,
-                    username
+                    username,
                 });
                 if (Array.isArray(op)) for (const o of op) newOps.push(o);
                 else newOps.push([type, op]);
@@ -228,7 +231,7 @@ function* broadcastPayload({
     };
 
     // get username
-    const currentUser = yield select(state => state.user.get('current'));
+    const currentUser = yield select((state) => state.user.get('current'));
     const currentUsername = currentUser && currentUser.get('username');
     username = username || currentUsername;
 
@@ -264,7 +267,7 @@ function* broadcastPayload({
                     broadcast.send(
                         { extensions: [], operations },
                         keys,
-                        err => {
+                        (err) => {
                             if (err) {
                                 console.error(err);
                                 reject(err);
@@ -280,7 +283,7 @@ function* broadcastPayload({
                         username,
                         operations,
                         authType,
-                        response => {
+                        (response) => {
                             if (!response.success) {
                                 reject(response.message);
                             } else {
@@ -307,17 +310,18 @@ function* broadcastPayload({
                     appActions.addNotification({
                         key: 'trx_' + Date.now(),
                         message: config.successMessage,
-                        dismissAfter: 5000
+                        dismissAfter: 5000,
                     })
                 );
             }
         }
-        if (successCallback)
+        if (successCallback) {
             try {
                 successCallback();
             } catch (error) {
                 console.error(error);
             }
+        }
     } catch (error) {
         console.error('TransactionSaga\tbroadcastPayload', error);
         // status: error
@@ -345,14 +349,18 @@ function* accepted_comment({ operation }) {
 
 function updateFollowState(action, following, state) {
     if (action == null) {
-        state = state.update('blog_result', Set(), r => r.delete(following));
-        state = state.update('ignore_result', Set(), r => r.delete(following));
+        state = state.update('blog_result', Set(), (r) => r.delete(following));
+        state = state.update('ignore_result', Set(), (r) =>
+            r.delete(following)
+        );
     } else if (action === 'blog') {
-        state = state.update('blog_result', Set(), r => r.add(following));
-        state = state.update('ignore_result', Set(), r => r.delete(following));
+        state = state.update('blog_result', Set(), (r) => r.add(following));
+        state = state.update('ignore_result', Set(), (r) =>
+            r.delete(following)
+        );
     } else if (action === 'ignore') {
-        state = state.update('ignore_result', Set(), r => r.add(following));
-        state = state.update('blog_result', Set(), r => r.delete(following));
+        state = state.update('ignore_result', Set(), (r) => r.add(following));
+        state = state.update('blog_result', Set(), (r) => r.delete(following));
     }
     state = state.set('blog_count', state.get('blog_result', Set()).size);
     state = state.set('ignore_count', state.get('ignore_result', Set()).size);
@@ -365,12 +373,16 @@ function* accepted_custom_json({ operation }) {
         console.log(operation);
         try {
             if (json[0] === 'follow') {
-                const { follower, following, what: [action] } = json[1];
+                const {
+                    follower,
+                    following,
+                    what: [action],
+                } = json[1];
                 yield put(
                     globalActions.update({
                         key: ['follow', 'getFollowingAsync', follower],
                         notSet: Map(),
-                        updater: m => updateFollowState(action, following, m)
+                        updater: (m) => updateFollowState(action, following, m),
                     })
                 );
             }
@@ -399,7 +411,7 @@ function* accepted_vote({ operation: { author, permlink, weight } }) {
     // update again with new $$ amount from the steemd node
     yield put(
         globalActions.remove({
-            key: `transaction_vote_active_${author}_${permlink}`
+            key: `transaction_vote_active_${author}_${permlink}`,
         })
     );
     yield call(getContent, { author, permlink });
@@ -408,10 +420,13 @@ function* accepted_vote({ operation: { author, permlink, weight } }) {
 export function* preBroadcast_comment({ operation, username }) {
     if (!operation.author) operation.author = username;
     let permlink = operation.permlink;
-    const { author, __config: { originalBody, comment_options } } = operation;
+    const {
+        author,
+        __config: { originalBody, comment_options },
+    } = operation;
     const {
         parent_author = '',
-        parent_permlink = operation.category
+        parent_permlink = operation.category,
     } = operation;
     const { title } = operation;
     let { body } = operation;
@@ -424,8 +439,9 @@ export function* preBroadcast_comment({ operation, username }) {
     if (originalBody) {
         const patch = createPatch(originalBody, body);
         // Putting body into buffer will expand Unicode characters into their true length
-        if (patch && patch.length < new Buffer(body, 'utf-8').length)
+        if (patch && patch.length < new Buffer(body, 'utf-8').length) {
             body2 = patch;
+        }
     }
     if (!body2) body2 = body;
     if (!permlink) permlink = yield createPermlink(title, author);
@@ -439,7 +455,7 @@ export function* preBroadcast_comment({ operation, username }) {
         parent_permlink,
         json_metadata,
         title: (operation.title || '').trim(),
-        body: body2
+        body: body2,
     };
 
     const comment_op = [['comment', op]];
@@ -449,7 +465,7 @@ export function* preBroadcast_comment({ operation, username }) {
         const {
             max_accepted_payout = ['1000000.000', DEBT_TICKER].join(' '),
             allow_votes = true,
-            allow_curation_rewards = true
+            allow_curation_rewards = true,
         } = comment_options;
         comment_op.push([
             'comment_options',
@@ -461,8 +477,8 @@ export function* preBroadcast_comment({ operation, username }) {
                 allow_curation_rewards,
                 extensions: comment_options.extensions
                     ? comment_options.extensions
-                    : []
-            }
+                    : [],
+            },
         ]);
     }
 
@@ -500,8 +516,6 @@ export function* createPermlink(title, author) {
 
     return permlink;
 }
-
-import diff_match_patch from 'diff-match-patch';
 const dmp = new diff_match_patch();
 
 export function createPatch(text1, text2) {
@@ -517,7 +531,7 @@ function* error_custom_json({ operation: { id, required_posting_auths } }) {
         yield put(
             globalActions.update({
                 key: ['follow', 'getFollowingAsync', follower, 'loading'],
-                updater: () => null
+                updater: () => null,
             })
         );
     }
@@ -526,7 +540,7 @@ function* error_custom_json({ operation: { id, required_posting_auths } }) {
 function* error_vote({ operation: { author, permlink } }) {
     yield put(
         globalActions.remove({
-            key: `transaction_vote_active_${author}_${permlink}`
+            key: `transaction_vote_active_${author}_${permlink}`,
         })
     );
     yield call(getContent, { author, permlink }); // unvote

@@ -6,7 +6,7 @@ export default class BottomPanel extends React.Component {
     static propTypes = {
         children: PropTypes.object,
         visible: PropTypes.bool,
-        hide: PropTypes.func.isRequired
+        hide: PropTypes.func.isRequired,
     };
 
     componentWillReceiveProps(nextProps) {

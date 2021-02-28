@@ -1,6 +1,4 @@
-
-Python Debug Node Readme
-------------------------
+## Python Debug Node Readme
 
 The Python Debug Node is a wrapper class that automates the creation and maintenance
 of a running Steem Debug Node. The Debug Node is a plugin for Steem that allows realtime
@@ -9,8 +7,7 @@ without corrupting a localally saved blockchain or propogating changes to the li
 
 More information of the debug node can be found [here](debug_node_plugin.md)
 
-Why Should I Use This?
-----------------------
+## Why Should I Use This?
 
 While the Debug Node Plugin is very powerful, it does require intimate knowledge of how
 to run a node in various configurations as well as interfacing with the node over the
@@ -21,8 +18,7 @@ This plugin closes the gap by allowing a node to be launched programmatically in
 in addition to interfacing with the node. This module utilizes community member Xeroc's
 [Python Steem library](https://github.com/xeroc/python-steemlib).
 
-How Do I Use This?
-------------------
+## How Do I Use This?
 
 First of all, you need to install the module. Navigate to `tests/external_testing_scripts`
 and run `python3 setup.py install`
@@ -46,7 +42,7 @@ through RPC calls or the CLI Wallet.
 
 What is the important part of these scripts?
 
-``` Python
+```Python
 debug_node = DebugNode( str( blurtd ), str( data_dir ) )
 with debug_node:
    # Do stuff with blockchain
@@ -62,8 +58,7 @@ specify the blurtd binary location and a populated data directory. For most conf
 this will be `programs/blurtd/blurtd` and `witness_node_data_dir` respectively, from the
 git root directory for Steem.
 
-TODO/ Long Term Goals
----------------------
+## TODO/ Long Term Goals
 
 While this is a great start to a Python testing framework, there are a lot of areas in
 which this script is lacking. There is a lot of flexibility in the node, from piping

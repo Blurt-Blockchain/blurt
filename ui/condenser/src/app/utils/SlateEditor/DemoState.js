@@ -6,9 +6,9 @@ export default {
             nodes: [
                 {
                     kind: 'text',
-                    text: ''
-                }
-            ]
-        }
-    ]
+                    text: '',
+                },
+            ],
+        },
+    ],
 };

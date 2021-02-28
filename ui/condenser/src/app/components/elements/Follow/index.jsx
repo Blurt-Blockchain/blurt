@@ -18,13 +18,13 @@ export default class Follow extends React.Component {
         showMute: bool,
         fat: bool,
         children: any,
-        showLogin: PropTypes.func.isRequired
+        showLogin: PropTypes.func.isRequired,
     };
 
     static defaultProps = {
         showFollow: true,
         showMute: true,
-        fat: false
+        fat: false,
     };
 
     constructor(props) {
@@ -45,9 +45,9 @@ export default class Follow extends React.Component {
             follower,
             following,
             operation_flat_fee,
-            bandwidth_kbytes_fee
+            bandwidth_kbytes_fee,
         } = props;
-        const upd = type => {
+        const upd = (type) => {
             if (this.state.busy) return;
             this.setState({ busy: true });
             const done = () => {
@@ -122,33 +122,29 @@ export default class Follow extends React.Component {
         const cnInactive = cnActive + ' hollow secondary ' + cnBusy;
         return (
             <span>
-                {showFollow &&
-                    followingWhat !== 'blog' && (
-                        <label className={cnInactive} onClick={this.follow}>
-                            {tt('g.follow')}
-                        </label>
-                    )}
+                {showFollow && followingWhat !== 'blog' && (
+                    <label className={cnInactive} onClick={this.follow}>
+                        {tt('g.follow')}
+                    </label>
+                )}
 
-                {showFollow &&
-                    followingWhat === 'blog' && (
-                        <label className={cnInactive} onClick={this.unfollow}>
-                            {tt('g.unfollow')}
-                        </label>
-                    )}
+                {showFollow && followingWhat === 'blog' && (
+                    <label className={cnInactive} onClick={this.unfollow}>
+                        {tt('g.unfollow')}
+                    </label>
+                )}
 
-                {showMute &&
-                    followingWhat !== 'ignore' && (
-                        <label className={cnInactive} onClick={this.ignore}>
-                            {tt('g.mute')}
-                        </label>
-                    )}
+                {showMute && followingWhat !== 'ignore' && (
+                    <label className={cnInactive} onClick={this.ignore}>
+                        {tt('g.mute')}
+                    </label>
+                )}
 
-                {showMute &&
-                    followingWhat === 'ignore' && (
-                        <label className={cnInactive} onClick={this.unignore}>
-                            {tt('g.unmute')}
-                        </label>
-                    )}
+                {showMute && followingWhat === 'ignore' && (
+                    <label className={cnInactive} onClick={this.unignore}>
+                        {tt('g.unmute')}
+                    </label>
+                )}
 
                 {children && <span>&nbsp;&nbsp;{children}</span>}
             </span>
@@ -180,8 +176,8 @@ module.exports = connect(
         const followingWhat = f.get('blog_result', emptySet).contains(following)
             ? 'blog'
             : f.get('ignore_result', emptySet).contains(following)
-              ? 'ignore'
-              : null;
+            ? 'ignore'
+            : null;
 
         return {
             follower,
@@ -190,15 +186,15 @@ module.exports = connect(
             loading,
             operation_flat_fee: state.global.getIn([
                 'props',
-                'operation_flat_fee'
+                'operation_flat_fee',
             ]),
             bandwidth_kbytes_fee: state.global.getIn([
                 'props',
-                'bandwidth_kbytes_fee'
-            ])
+                'bandwidth_kbytes_fee',
+            ]),
         };
     },
-    dispatch => ({
+    (dispatch) => ({
         updateFollow: (
             follower,
             following,
@@ -212,13 +208,13 @@ module.exports = connect(
             let operation = {
                 id: 'follow',
                 required_posting_auths: [follower],
-                json: JSON.stringify(json)
+                json: JSON.stringify(json),
             };
             let size = JSON.stringify(operation).replace(/[\[\]\,\"]/g, '')
                 .length;
             let bw_fee = Math.max(
                 0.001,
-                (size / 1024 * bandwidthKbytesFee).toFixed(3)
+                ((size / 1024) * bandwidthKbytesFee).toFixed(3)
             );
             let fee = (operationFlatFee + bw_fee).toFixed(3);
             dispatch(
@@ -227,18 +223,18 @@ module.exports = connect(
                     operation: {
                         id: 'follow',
                         required_posting_auths: [follower],
-                        json: JSON.stringify(json)
+                        json: JSON.stringify(json),
                     },
                     confirm: tt('g.operation_cost', { fee }),
                     successCallback: done,
                     // TODO: Why?
-                    errorCallback: done
+                    errorCallback: done,
                 })
             );
         },
-        showLogin: e => {
+        showLogin: (e) => {
             if (e) e.preventDefault();
             dispatch(userActions.showLogin());
-        }
+        },
     })
 )(Follow);

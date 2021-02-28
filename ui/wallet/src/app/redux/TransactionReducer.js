@@ -84,9 +84,10 @@ export default function reducer(state = defaultState, action) {
                             /Account registered by another account requires 10x account creation fee worth of Blurt Power/.test(
                                 errorStr
                             )
-                        )
+                        ) {
                             errorKey =
                                 'Account requires 10x the account creation fee in Blurt Power (approximately 30 BP) before it can power down.';
+                        }
                         break;
                     default:
                         break;
@@ -110,14 +111,16 @@ export default function reducer(state = defaultState, action) {
                                 txt[txt.length - 1].trim() !== ''
                             ) {
                                 errorKey = errorStr = txt[txt.length - 1];
-                            } else
+                            } else {
                                 errorStr = `Transaction failed: ${err_lines[1]}`;
+                            }
                         }
                     }
                     // TODO: This would perhaps be better expressed as a Case, Switch statement.
                     // TODO: The precise reason for why this clipping needs to happen is unclear.
-                    if (errorStr.length > 200)
+                    if (errorStr.length > 200) {
                         errorStr = errorStr.substring(0, 200);
+                    }
                     // Catch for unknown key better error handling
                     if (/unknown key: /.test(errorKey)) {
                         errorKey = "Blurt account doesn't exist.";

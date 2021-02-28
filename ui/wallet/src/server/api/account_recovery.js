@@ -1,8 +1,8 @@
 import koa_router from 'koa-router';
 import koa_body from 'koa-body';
-import models from 'db/models';
+import models, { esc, escAttrs } from 'db/models';
 import config from 'config';
-import { esc, escAttrs } from 'db/models';
+
 import { getRemoteIp, rateLimitReq, checkCSRF } from 'server/utils/misc';
 import { broadcast } from '@blurtfoundation/blurtjs';
 

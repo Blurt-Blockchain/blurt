@@ -30,7 +30,7 @@ export default class StatsLoggerClient {
      */
     logTimers(tuples) {
         const timestamp = +new Date();
-        tuples.map(tuple => {
+        tuples.map((tuple) => {
             this.SDC.timing(tuple[0], tuple[1]);
         });
     }

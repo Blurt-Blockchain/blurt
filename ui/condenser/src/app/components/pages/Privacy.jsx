@@ -412,12 +412,12 @@ class Privacy extends React.Component {
                             API please see{' '}
                         </span>
                         <span className="c8 c12">
-                            {/*<a*/}
-                            {/*    className="c5"*/}
-                            {/*    href="https://www.google.com/url?q=https://github.com/steemit/conveyor%23get_user_data-username&amp;sa=D&amp;ust=1527292847102000"*/}
-                            {/*>*/}
-                            {/*    here*/}
-                            {/*</a>*/}
+                            {/* <a */}
+                            {/*    className="c5" */}
+                            {/*    href="https://www.google.com/url?q=https://github.com/steemit/conveyor%23get_user_data-username&amp;sa=D&amp;ust=1527292847102000" */}
+                            {/* > */}
+                            {/*    here */}
+                            {/* </a> */}
                         </span>
                         <span className="c1">.</span>
                     </p>
@@ -742,12 +742,12 @@ class Privacy extends React.Component {
                             can find your data protection regulator{' '}
                         </span>
                         <span className="c8 c12">
-                            {/*<a*/}
-                            {/*    className="c5"*/}
-                            {/*    href="https://www.google.com/url?q=http://ec.europa.eu/justice/article-29/structure/data-protection-authorities/index_en.htm&amp;sa=D&amp;ust=1527292847107000"*/}
-                            {/*>*/}
-                            {/*    here*/}
-                            {/*</a>*/}
+                            {/* <a */}
+                            {/*    className="c5" */}
+                            {/*    href="https://www.google.com/url?q=http://ec.europa.eu/justice/article-29/structure/data-protection-authorities/index_en.htm&amp;sa=D&amp;ust=1527292847107000" */}
+                            {/* > */}
+                            {/*    here */}
+                            {/* </a> */}
                         </span>
                         <span className="c1">.</span>
                     </p>
@@ -1013,5 +1013,5 @@ class Privacy extends React.Component {
 
 module.exports = {
     path: 'privacy.html',
-    component: Privacy
+    component: Privacy,
 };

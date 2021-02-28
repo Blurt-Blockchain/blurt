@@ -75,7 +75,7 @@ function* confirmEmailHandler() {
     }
 
     const number_of_created_accounts = yield models.sequelize.query(
-        `select count(*) as result from identities i join accounts a on a.user_id=i.user_id where i.provider='email' and i.email=:email and a.created=1 and a.ignored<>1`,
+        "select count(*) as result from identities i join accounts a on a.user_id=i.user_id where i.provider='email' and i.email=:email and a.created=1 and a.ignored<>1",
         {
             replacements: { email: eid.email },
             type: models.sequelize.QueryTypes.SELECT,
@@ -111,10 +111,11 @@ function* confirmEmailHandler() {
             where: { id: eid.user_id, account_status: 'onhold' },
         }
     );
-    if (mixpanel)
+    if (mixpanel) {
         mixpanel.track('SignupStepConfirmEmail', {
             distinct_id: this.session.uid,
         });
+    }
 
     const eid_phone = yield models.Identity.findOne({
         where: { user_id: eid.user_id, provider: 'phone', verified: true },
@@ -197,8 +198,9 @@ export default function useEnterAndConfirmEmailPages(app) {
                     ]);
                     const account_created =
                         check_account_res && check_account_res.length > 0;
-                    if (account_created && !a.ignored)
+                    if (account_created && !a.ignored) {
                         there_is_created_account = true;
+                    }
                     if (!account_created && a.created) {
                         console.log(
                             '-- found ghost account -->',
@@ -272,8 +274,9 @@ export default function useEnterAndConfirmEmailPages(app) {
             return;
         }
         let default_email = '';
-        if (this.request.query && this.request.query.email)
+        if (this.request.query && this.request.query.email) {
             default_email = this.request.query.email;
+        }
         const body = renderToString(
             <div className="App CreateAccount">
                 {viewMode !== VIEW_MODE_WHISTLE ? <MiniHeader /> : null}
@@ -343,10 +346,11 @@ export default function useEnterAndConfirmEmailPages(app) {
         const props = { body, title: 'Email Address', assets, meta: [] };
         this.body =
             '<!DOCTYPE html>' + renderToString(<ServerHTML {...props} />);
-        if (mixpanel)
+        if (mixpanel) {
             mixpanel.track('SignupStepEmail', {
                 distinct_id: this.session.uid,
             });
+        }
     });
 
     router.post('/submit_email', koaBody, function* () {
@@ -373,7 +377,7 @@ export default function useEnterAndConfirmEmailPages(app) {
         email = params.email = email.trim().toLowerCase();
         account = params.account = account.trim().toLowerCase();
 
-        //recaptcha
+        // recaptcha
         if (config.get('recaptcha.site_key')) {
             if (!(yield checkRecaptcha(this))) {
                 console.log(
@@ -385,7 +389,7 @@ export default function useEnterAndConfirmEmailPages(app) {
                 this.flash = {
                     error: 'Failed captcha verification, please try again',
                 };
-                this.redirect(`/enter_email` + makeParams(params));
+                this.redirect('/enter_email' + makeParams(params));
                 return;
             }
         }
@@ -399,7 +403,7 @@ export default function useEnterAndConfirmEmailPages(app) {
                 email
             );
             this.flash = { error: 'Not valid email address' };
-            this.redirect(`/enter_email` + makeParams(params));
+            this.redirect('/enter_email' + makeParams(params));
             return;
         }
 

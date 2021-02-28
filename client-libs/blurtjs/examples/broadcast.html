@@ -1,118 +1,124 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Blurt.js Broadcast</title>
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Blurt.js Broadcast</title>
+  </head>
+  <body>
+    <script src="../dist/blurt.min.js"></script>
+    <script>
+      /** Configure your account */
+      var username = "guest123";
+      var postingWif = "5JRaypasxMx1L97ZUX7YuC5Psb5EAbF821kkAGtBj7xCJFQcbLg";
 
-<script src="../dist/blurt.min.js"></script>
-<script>
-  /** Configure your account */
-  var username = 'guest123';
-  var postingWif = '5JRaypasxMx1L97ZUX7YuC5Psb5EAbF821kkAGtBj7xCJFQcbLg';
+      /** Broadcast a vote */
+      blurt.broadcast.vote(
+        postingWif,
+        username, // Voter
+        "hiveio", // Author
+        "announcing-the-launch-of-hive-blockchain", // Permlink
+        10000, // Weight (10000 = 100%)
+        function (err, result) {
+          console.log(err, result);
+        }
+      );
 
-  /** Broadcast a vote */
-  blurt.broadcast.vote(
-    postingWif,
-    username, // Voter
-    'hiveio', // Author
-    'announcing-the-launch-of-hive-blockchain', // Permlink
-    10000, // Weight (10000 = 100%)
-    function(err, result) {
-      console.log(err, result);
-    }
-  );
+      /** Broadcast a comment */
+      var permlink = new Date()
+        .toISOString()
+        .replace(/[^a-zA-Z0-9]+/g, "")
+        .toLowerCase();
 
-  /** Broadcast a comment */
-  var permlink = new Date().toISOString().replace(/[^a-zA-Z0-9]+/g, '').toLowerCase();
+      blurt.broadcast.comment(
+        postingWif,
+        "siol", // Parent Author
+        "test", // Parent Permlink
+        username, // Author
+        permlink, // Permlink
+        "", // Title
+        "This is a test!", // Body
+        { tags: ["test"], app: "blurtjs/examples" }, // Json Metadata
+        function (err, result) {
+          console.log(err, result);
+        }
+      );
 
-  blurt.broadcast.comment(
-    postingWif,
-    'siol', // Parent Author
-    'test', // Parent Permlink
-    username, // Author
-    permlink, // Permlink
-    '', // Title
-    'This is a test!', // Body
-    { tags: ['test'], app: 'blurtjs/examples' }, // Json Metadata
-    function(err, result) {
-      console.log(err, result);
-    }
-  );
+      /** Broadcast a post */
+      var permlink = new Date()
+        .toISOString()
+        .replace(/[^a-zA-Z0-9]+/g, "")
+        .toLowerCase();
 
-  /** Broadcast a post */
-  var permlink = new Date().toISOString().replace(/[^a-zA-Z0-9]+/g, '').toLowerCase();
+      blurt.broadcast.comment(
+        postingWif,
+        "", // Leave parent author empty
+        "photography", // Main tag
+        username, // Author
+        permlink + "-post", // Permlink
+        "This is just a test!", // Title
+        "Nothing to see here", // Body
+        { tags: ["test"], app: "blurtjs/examples" }, // Json Metadata
+        function (err, result) {
+          console.log(err, result);
+        }
+      );
 
-  blurt.broadcast.comment(
-    postingWif,
-    '', // Leave parent author empty
-    'photography', // Main tag
-    username, // Author
-    permlink + '-post', // Permlink
-    'This is just a test!', // Title
-    'Nothing to see here', // Body
-    { tags: ['test'], app: 'blurtjs/examples' }, // Json Metadata
-    function(err, result) {
-      console.log(err, result);
-    }
-  );
+      /** Follow an user */
+      var follower = username; // Your username
+      var following = "hiveio"; // User to follow
 
-  /** Follow an user */
-  var follower = username; // Your username
-  var following = 'hiveio'; // User to follow
+      var json = JSON.stringify([
+        "follow",
+        {
+          follower: follower,
+          following: following,
+          what: ["blog"],
+        },
+      ]);
 
-  var json = JSON.stringify(
-    ['follow', {
-      follower: follower,
-      following: following,
-      what: ['blog']
-    }]
-  );
+      blurt.broadcast.customJson(
+        postingWif,
+        [], // Required_auths
+        [follower], // Required Posting Auths
+        "follow", // Id
+        json, //
+        function (err, result) {
+          console.log(err, result);
+        }
+      );
 
-  blurt.broadcast.customJson(
-    postingWif,
-    [], // Required_auths
-    [follower], // Required Posting Auths
-    'follow', // Id
-    json, //
-    function(err, result) {
-      console.log(err, result);
-    }
-  );
+      /** Unfollow an user */
+      var json = JSON.stringify([
+        "follow",
+        {
+          follower: follower,
+          following: following,
+          what: [],
+        },
+      ]);
 
-  /** Unfollow an user */
-  var json = JSON.stringify(
-    ['follow', {
-      follower: follower,
-      following: following,
-      what: []
-    }]
-  );
+      blurt.broadcast.customJson(
+        postingWif,
+        [], // Required_auths
+        [follower], // Required Posting Auths
+        "follow", // Id
+        json, //
+        function (err, result) {
+          console.log(err, result);
+        }
+      );
 
-  blurt.broadcast.customJson(
-    postingWif,
-    [], // Required_auths
-    [follower], // Required Posting Auths
-    'follow', // Id
-    json, //
-    function(err, result) {
-      console.log(err, result);
-    }
-  );
-
-  /** set withdraw vesting route */
-  blurt.broadcast.setWithdrawVestingRoute(
-    '5J_active_key',  // active or owner key
-    'guest123', // from_account
-    'guest321', // to_account
-    10000, // percent (The percent of the withdraw to go to the ‘to’ account.)
-    false, // auto_vest (Set to true if the from account should receive the VESTS as VESTS (BLURT POWER), or false if it should receive them as liquid BLURT)
-    function(err, result) {
-      console.log(err, result);
-    }
-  );
-</script>
-
-</body>
+      /** set withdraw vesting route */
+      blurt.broadcast.setWithdrawVestingRoute(
+        "5J_active_key", // active or owner key
+        "guest123", // from_account
+        "guest321", // to_account
+        10000, // percent (The percent of the withdraw to go to the ‘to’ account.)
+        false, // auto_vest (Set to true if the from account should receive the VESTS as VESTS (BLURT POWER), or false if it should receive them as liquid BLURT)
+        function (err, result) {
+          console.log(err, result);
+        }
+      );
+    </script>
+  </body>
 </html>

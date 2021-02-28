@@ -123,8 +123,9 @@ export default function reducer(state = defaultState, action) {
                     if (
                         private_keys.has('active_private') ||
                         private_keys.has('owner_private')
-                    )
+                    ) {
                         console.log('removeHighSecurityKeys');
+                    }
                     private_keys = private_keys.delete('active_private');
                     private_keys = private_keys.delete('owner_private');
                     empty = private_keys.size === 0;
@@ -185,16 +186,19 @@ export default function reducer(state = defaultState, action) {
             });
 
         case SET_USER:
-            if (payload.vesting_shares)
+            if (payload.vesting_shares) {
                 payload.vesting_shares = parseFloat(payload.vesting_shares);
-            if (payload.delegated_vesting_shares)
+            }
+            if (payload.delegated_vesting_shares) {
                 payload.delegated_vesting_shares = parseFloat(
                     payload.delegated_vesting_shares
                 );
-            if (payload.received_vesting_shares)
+            }
+            if (payload.received_vesting_shares) {
                 payload.received_vesting_shares = parseFloat(
                     payload.received_vesting_shares
                 );
+            }
             return state.mergeDeep({
                 current: payload,
                 show_login_modal: false,
@@ -237,8 +241,9 @@ export default function reducer(state = defaultState, action) {
             // AuthSaga
             const { accountName, auth, pub_keys_used } = payload;
             state = state.setIn(['authority', accountName], fromJS(auth));
-            if (pub_keys_used)
+            if (pub_keys_used) {
                 state = state.set('pub_keys_used', pub_keys_used);
+            }
             return state;
         }
 

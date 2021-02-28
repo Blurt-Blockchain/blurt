@@ -13,18 +13,18 @@ import {
   Signature,
   cryptoUtils,
   Transaction,
-  Types
+  Types,
 } from "./../src";
 
-describe("crypto", function() {
+describe("crypto", function () {
   const testnetPrefix = "STX";
   const testnetPair = {
     private: "5JQy7moK9SvNNDxn8rKNfQYFME5VDYC2j9Mv2tb7uXV5jz3fQR8",
-    public: "STX8FiV6v7yqYWTZz8WuFDckWr62L9X34hCy6koe8vd2cDJHimtgM"
+    public: "STX8FiV6v7yqYWTZz8WuFDckWr62L9X34hCy6koe8vd2cDJHimtgM",
   };
   const mainPair = {
     private: "5K2yDAd9KAZ3ZitBsAPyRka9PLFemUrbcL6UziZiPaw2c6jCeLH",
-    public: "STM8QykigLRi9ZUcNy1iXGY3KjRuCiLM8Ga49LHti1F8hgawKFc3K"
+    public: "STM8QykigLRi9ZUcNy1iXGY3KjRuCiLM8Ga49LHti1F8hgawKFc3K",
   };
   const mainPairPub = Buffer.from(
     "03d0519ddad62bd2a833bee5dc04011c08f77f66338c38d99c685dee1f454cd1b8",
@@ -35,7 +35,7 @@ describe("crypto", function() {
     "202c52188b0ecbc26c766fe6d3ec68dac58644f43f43fc7d97da122f76fa028f98691dd48b44394bdd8cecbbe66e94795dcf53291a1ef7c16b49658621273ea68e";
   const testKey = PrivateKey.from(randomBytes(32));
 
-  it("should decode public keys", function() {
+  it("should decode public keys", function () {
     const k1 = PublicKey.fromString(testnetPair.public);
     assert.equal(k1.prefix, testnetPrefix);
     assert(k1.toString(), testnetPair.public);
@@ -47,19 +47,19 @@ describe("crypto", function() {
     assert(k4.toString(), testnetPair.public);
   });
 
-  it("should decode private keys", function() {
+  it("should decode private keys", function () {
     const k1 = PrivateKey.fromString(testnetPair.private);
     assert(k1.toString(), testnetPair.private);
     const k2 = PrivateKey.from(mainPair.private);
     assert(k2.toString(), mainPair.private);
   });
 
-  it("should create public from private", function() {
+  it("should create public from private", function () {
     const key = PrivateKey.fromString(testnetPair.private);
     assert(key.createPublic().toString(), testnetPair.public);
   });
 
-  it("should handle prefixed keys", function() {
+  it("should handle prefixed keys", function () {
     const key = PublicKey.from(testnetPair.public);
     assert(key.toString(), testnetPair.public);
     assert(
@@ -79,7 +79,7 @@ describe("crypto", function() {
   //   );
   // });
 
-  it("should sign and verify", function() {
+  it("should sign and verify", function () {
     const message = randomBytes(32);
     const signature = testKey.sign(message);
     assert(testKey.createPublic().verify(message, signature));
@@ -87,12 +87,12 @@ describe("crypto", function() {
     assert(!testKey.createPublic().verify(message, signature));
   });
 
-  it("should de/encode signatures", function() {
+  it("should de/encode signatures", function () {
     const signature = Signature.fromString(testSig);
     assert.equal(signature.toString(), testSig);
   });
 
-  it("should recover pubkey from signatures", function() {
+  it("should recover pubkey from signatures", function () {
     const key = PrivateKey.fromString(testnetPair.private);
     const msg = randomBytes(32);
     const signature = key.sign(msg);
@@ -102,7 +102,7 @@ describe("crypto", function() {
     );
   });
 
-  it("should create key from login", function() {
+  it("should create key from login", function () {
     const key = PrivateKey.fromLogin("foo", "barman");
     assert.equal(
       key.createPublic().toString(),
@@ -110,7 +110,7 @@ describe("crypto", function() {
     );
   });
 
-  it("should sign and verify transaction", async function() {
+  it("should sign and verify transaction", async function () {
     const tx: Transaction = {
       ref_block_num: 1234,
       ref_block_prefix: 1122334455,
@@ -119,9 +119,9 @@ describe("crypto", function() {
       operations: [
         [
           "vote",
-          { voter: "foo", author: "bar", permlink: "baz", weight: 10000 }
-        ]
-      ]
+          { voter: "foo", author: "bar", permlink: "baz", weight: 10000 },
+        ],
+      ],
     };
     const key = PrivateKey.fromSeed("hello");
     const buffer = new ByteBuffer(
@@ -144,13 +144,13 @@ describe("crypto", function() {
     );
   });
 
-  it("should handle serialization errors", function() {
+  it("should handle serialization errors", function () {
     const tx: any = {
       ref_block_num: 1234,
       ref_block_prefix: 1122334455,
       expiration: new Date().toISOString().slice(0, -5),
       extensions: [],
-      operations: [["shutdown_network", {}]]
+      operations: [["shutdown_network", {}]],
     };
     try {
       cryptoUtils.signTransaction(tx, testKey);

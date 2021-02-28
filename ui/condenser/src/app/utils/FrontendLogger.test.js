@@ -4,9 +4,9 @@ describe('formatEventReport', () => {
     it('should handle modern firefox/chrome errors with a stacktrace', () => {
         const modernErrorEvent = {
             error: {
-                stack: 'i am a stacktrace'
+                stack: 'i am a stacktrace',
             },
-            message: 'i am a message'
+            message: 'i am a message',
         };
 
         const logged = formatEventReport(
@@ -22,7 +22,7 @@ describe('formatEventReport', () => {
     });
     it('should handle errors from browsers that do not provide a stack trace', () => {
         const lameErrorEvent = {
-            message: 'i am an old error'
+            message: 'i am an old error',
         };
 
         const logged = formatEventReport(lameErrorEvent, 'location', 'version');

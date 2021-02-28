@@ -4,13 +4,13 @@ const regex = {
     sanitize: /^https:\/\/3speak\.online\/embed\?v=([A-Za-z0-9_\-\/]+)(&.*)?$/,
     main: /(?:https?:\/\/(?:(?:3speak\.online\/watch\?v=)|(?:3speak\.online\/embed\?v=)))([A-Za-z0-9_\-\/]+)(&.*)?/i,
     htmlReplacement: /<a href="(https?:\/\/3speak\.online\/watch\?v=([A-Za-z0-9_\-\/]+))".*<img.*?><\/a>/i,
-    embedShorthand: /~~~ embed:(.*?)\/(.*?) threespeak ~~~/
+    embedShorthand: /~~~ embed:(.*?)\/(.*?) threespeak ~~~/,
 };
 
 export default regex;
 export const sandboxConfig = {
     useSandbox: true,
-    sandboxAttributes: ['allow-scripts', 'allow-same-origin', 'allow-popups']
+    sandboxAttributes: ['allow-scripts', 'allow-same-origin', 'allow-popups'],
 };
 
 export function genIframeMd(idx, threespeakId, w, h) {
@@ -28,8 +28,8 @@ export function genIframeMd(idx, threespeakId, w, h) {
                 sandbox={
                     sandboxConfig.useSandbox
                         ? sandboxConfig.sandboxAttributes
-                          ? sandboxConfig.sandboxAttributes.join(' ')
-                          : true
+                            ? sandboxConfig.sandboxAttributes.join(' ')
+                            : true
                         : ''
                 }
             />
@@ -70,7 +70,7 @@ export function extractMetadata(data) {
         id,
         fullId,
         url,
-        thumbnail: `https://img.3speakcontent.online/${id}/post.png`
+        thumbnail: `https://img.3speakcontent.online/${id}/post.png`,
     };
 }
 
@@ -98,9 +98,7 @@ export function embedNode(child, links, images) {
             // So we are handling thumbnail URL extraction differently.
             const match = data.match(regex.embedShorthand);
             if (match && images) {
-                const imageUrl = `https://img.3speakcontent.online/${
-                    match[2]
-                }/post.png`;
+                const imageUrl = `https://img.3speakcontent.online/${match[2]}/post.png`;
                 images.add(imageUrl);
             }
         }

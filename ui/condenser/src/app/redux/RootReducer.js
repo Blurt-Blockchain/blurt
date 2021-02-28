@@ -19,7 +19,7 @@ function initReducer(reducer, type) {
                 state = fromJS(state);
             }
             if (type === 'global') {
-                const content = state.get('content').withMutations(c => {
+                const content = state.get('content').withMutations((c) => {
                     c.forEach((cc, key) => {
                         if (!c.getIn([key, 'stats'])) {
                             // This may have already been set in UniversalRender; if so, then
@@ -51,5 +51,5 @@ export default combineReducers({
     discussion: initReducer((state = {}) => state),
     routing: initReducer(routerReducer),
     app: initReducer(appReducer),
-    form: formReducer
+    form: formReducer,
 });

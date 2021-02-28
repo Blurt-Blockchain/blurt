@@ -13,5 +13,5 @@ global.$STM_Config = { img_proxy_prefix: 'https://images.blurt.world/' };
 storiesOf('Elements', module)
     .addDecorator(withKnobs)
     .addDecorator(Center)
-    .addDecorator(getStory => <Provider store={store}>{getStory()}</Provider>)
-    .add('Userpic', () => <Userpic account={'maitland'} />);
+    .addDecorator((getStory) => <Provider store={store}>{getStory()}</Provider>)
+    .add('Userpic', () => <Userpic account="maitland" />);

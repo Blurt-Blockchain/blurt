@@ -6,9 +6,7 @@ const sg = sendgrid(config.get('sendgrid.key'));
 export default function sendEmail(template, to, params, from = null) {
     if (process.env.NODE_ENV !== 'production') {
         console.log(
-            `mail: to <${to}>, from <${from}>, template ${
-                template
-            } (not sent due to not production env)`
+            `mail: to <${to}>, from <${from}>, template ${template} (not sent due to not production env)`
         );
         return;
     }
@@ -30,15 +28,14 @@ export default function sendEmail(template, to, params, from = null) {
         },
     });
 
-    sg
-        .API(request)
-        .then(response => {
+    sg.API(request)
+        .then((response) => {
             console.log(
                 `sent '${template}' email to '${to}'`,
                 response.statusCode
             );
         })
-        .catch(error => {
+        .catch((error) => {
             console.error(
                 `failed to send '${template}' email to '${to}'`,
                 error

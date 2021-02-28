@@ -3,13 +3,13 @@ import React from 'react';
 const regex = {
     sanitize: /^(https?:)?\/\/player.vimeo.com\/video\/([0-9]*)/i,
     main: /https?:\/\/(?:vimeo.com\/|player.vimeo.com\/video\/)([0-9]+)\/?(#t=((\d+)s?))?\/?/,
-    contentId: /(?:vimeo.com\/|player.vimeo.com\/video\/)([0-9]+)/
+    contentId: /(?:vimeo.com\/|player.vimeo.com\/video\/)([0-9]+)/,
 };
 
 export default regex;
 export const sandboxConfig = {
     useSandbox: false,
-    sandboxAttributes: []
+    sandboxAttributes: [],
 };
 
 // <iframe src="https://player.vimeo.com/video/179213493" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
@@ -44,12 +44,12 @@ function extractMetadata(data) {
         id: m[1],
         url: m[0],
         startTime: startTime ? startTime[1] : 0,
-        canonical: `https://player.vimeo.com/video/${m[1]}`
+        canonical: `https://player.vimeo.com/video/${m[1]}`,
         // thumbnail: requires a callback - http://stackoverflow.com/questions/1361149/get-img-thumbnails-from-vimeo
     };
 }
 
-export function embedNode(child, links /*images*/) {
+export function embedNode(child, links /* images */) {
     try {
         const { data } = child;
         const vimeo = extractMetadata(data);
@@ -92,8 +92,8 @@ export function genIframeMd(idx, id, w, h, startTime) {
                 sandbox={
                     sandboxConfig.useSandbox
                         ? sandboxConfig.sandboxAttributes
-                          ? sandboxConfig.sandboxAttributes.join(' ')
-                          : true
+                            ? sandboxConfig.sandboxAttributes.join(' ')
+                            : true
                         : ''
                 }
             />

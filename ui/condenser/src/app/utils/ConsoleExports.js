@@ -2,7 +2,7 @@ import {
     PrivateKey,
     PublicKey,
     Aes,
-    key_utils
+    key_utils,
 } from '@blurtfoundation/blurtjs/lib/auth/ecc';
 
 // import secureRandom from 'secure-random'
@@ -40,12 +40,12 @@ module.exports = {
         }
         return new Promise((resolve, reject) => {
             object
-                .then(result => {
+                .then((result) => {
                     console.log(result);
                     resolve(result);
                     window[atty] = result;
                 })
-                .catch(error => {
+                .catch((error) => {
                     console.error(error);
                     reject(error);
                     window[atty] = error;
@@ -53,13 +53,13 @@ module.exports = {
         });
     },
 
-    init: context => {
+    init: (context) => {
         if (!context) return;
         for (const obj in module.exports) {
             if (obj === 'init') continue;
             context[obj] = module.exports[obj];
         }
-    }
+    },
 
     // retest: () => {
     //     const largeData = secureRandom.randomBuffer(1024 * 10).toString('hex')

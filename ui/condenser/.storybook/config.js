@@ -38,14 +38,14 @@ tt.registerTranslations('pl', require('app/locales/counterpart/pl'));
 tt.registerTranslations('pl', require('app/locales/pl.json'));
 
 const getMessages = (locale) => {
-    tt.setLocale(locale)
-    return tt('g')
-}
+    tt.setLocale(locale);
+    return tt('g');
+};
 
 setIntlConfig({
     locales: ['en', 'es', 'ru', 'fr', 'it', 'ko', 'zh', 'pl'],
     defaultLocale: 'en',
-    getMessages
+    getMessages,
 });
 
 addDecorator(withIntl);
@@ -53,7 +53,7 @@ addDecorator(withIntl);
 const req = require.context('../src/app/components', true, /story\.jsx$/);
 
 function loadStories() {
-  req.keys().forEach(req);
+    req.keys().forEach(req);
 }
 
 configure(loadStories, module);

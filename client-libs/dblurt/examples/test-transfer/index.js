@@ -4,7 +4,7 @@ const tx = {
   amount: "0.001 HIVE",
   from: "petertag",
   to: "mahdiyari",
-  memo: "test dhive hivekings"
+  memo: "test dhive hivekings",
 };
 const privkey = "KEY HERE";
 
@@ -15,5 +15,5 @@ const op = ["transfer", tx];
 console.log(op);
 client.broadcast
   .sendOperations([op], key)
-  .then(res => console.log(res))
-  .catch(err => console.log(err));
+  .then((res) => console.log(res))
+  .catch((err) => console.log(err));

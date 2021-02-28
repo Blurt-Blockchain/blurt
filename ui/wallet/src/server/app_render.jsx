@@ -37,8 +37,10 @@ async function appRender(ctx, locales = false, resolvedAssets = false) {
         if (!userPreferences.locale) {
             let locale = ctx.getLocaleFromHeader();
             if (locale) locale = locale.substring(0, 2);
-            const supportedLocales = locales ? locales : getSupportedLocales();
-            const localeIsSupported = supportedLocales.find(l => l === locale);
+            const supportedLocales = locales || getSupportedLocales();
+            const localeIsSupported = supportedLocales.find(
+                (l) => l === locale
+            );
             if (!localeIsSupported) locale = 'en';
             userPreferences.locale = locale;
         }

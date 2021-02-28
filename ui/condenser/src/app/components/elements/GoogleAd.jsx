@@ -18,7 +18,7 @@ class GoogleAd extends React.Component {
         const style = Object.assign(
             {
                 display: 'inline-block',
-                width: '100%'
+                width: '100%',
             },
             this.props.style || {}
         );

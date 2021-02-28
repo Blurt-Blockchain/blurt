@@ -40,6 +40,6 @@ export function formatEventReport(event, href, version) {
         trace,
         message: event.message,
         href,
-        version
+        version,
     };
 }

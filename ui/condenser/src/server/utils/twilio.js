@@ -35,7 +35,7 @@ function checkEligibility(phone) {
         '65',
         '90',
         '852',
-        '972'
+        '972',
     ]) {
         if (phone.startsWith(prefix)) return true;
     }
@@ -44,7 +44,7 @@ function checkEligibility(phone) {
 
 export default function verify(phone) {
     if (!client) client = new twilio.LookupsClient(accountSid, authToken);
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
         if (!checkEligibility(phone)) {
             resolve('na');
             return;
@@ -52,7 +52,7 @@ export default function verify(phone) {
         client.phoneNumbers(phone).get(
             {
                 type: 'carrier',
-                addOns: 'whitepages_pro_phone_rep'
+                addOns: 'whitepages_pro_phone_rep',
             },
             (error, result) => {
                 if (error) {

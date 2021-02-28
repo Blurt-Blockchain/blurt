@@ -43,7 +43,7 @@ describe('Links', () => {
         const locals = [
             'https://localhost/',
             'http://blurt.world',
-            'http://blurt.world/group'
+            'http://blurt.world/group',
         ];
         match(linksRe.local(), locals);
         matchNot(linksRe.remote(), locals);
@@ -78,7 +78,7 @@ describe('Links', () => {
         );
         matchNot(linksRe.image(), [
             'http://imgur.com/iznWRVq',
-            'https://openmerchantaccount.com/'
+            'https://openmerchantaccount.com/',
         ]);
     });
 });
@@ -277,8 +277,9 @@ const match = (...args) => compare(true, ...args);
 const matchNot = (...args) => compare(false, ...args);
 const compare = (matching, re, input, output = input, pos = 0) => {
     if (Array.isArray(input)) {
-        for (let i = 0; i < input.length; i++)
+        for (let i = 0; i < input.length; i++) {
             compare(matching, re, input[i], output[i]);
+        }
         return;
     }
     // console.log('compare, input', input)
@@ -287,24 +288,20 @@ const compare = (matching, re, input, output = input, pos = 0) => {
     if (matching) {
         assert(
             m,
-            `No match --> ${input} --> output ${
-                output
-            } --> using ${re.toString()}`
+            `No match --> ${input} --> output ${output} --> using ${re.toString()}`
         );
         // console.log('m', m)
         assert.equal(
             m[pos],
             output,
-            `Unmatched ${m[pos]} --> input ${input} --> output ${
-                output
-            } --> using ${re.toString()}`
+            `Unmatched ${
+                m[pos]
+            } --> input ${input} --> output ${output} --> using ${re.toString()}`
         );
     } else {
         assert(
             !m,
-            `False match --> input ${input} --> output ${
-                output
-            } --> using ${re.toString()}`
+            `False match --> input ${input} --> output ${output} --> using ${re.toString()}`
         );
     }
 };

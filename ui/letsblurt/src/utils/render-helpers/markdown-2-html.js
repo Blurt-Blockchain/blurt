@@ -29,13 +29,13 @@ const md = new Remarkable({
   typographer: false,
   linkify: true,
 });
-//import {Remarkable} from 'remarkable';
-//import {linkify} from 'remarkable/linkify';
-//const md = new Remarkable('full', {
+// import {Remarkable} from 'remarkable';
+// import {linkify} from 'remarkable/linkify';
+// const md = new Remarkable('full', {
 //  html: true,
 //  breaks: true,
-//});
-//md.use(linkify);
+// });
+// md.use(linkify);
 
 const noop = () => {};
 
@@ -804,7 +804,7 @@ export default (body, forApp = true, webp = false) => {
   const key = `${makeEntryCacheKey(obj)}-md${webp ? '-webp' : ''}`;
 
   const item = cacheGet(key);
-  
+
   if (item) {
     console.log('[markdown2html] export default key, item', key, item);
 

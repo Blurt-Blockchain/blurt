@@ -1,38 +1,37 @@
-
 .icon-button__svg {
     display: block;
     transition: all 0.3s ease-in-out;
     &.icon-button__svg--small {
-      width: 32px;
-      height: 32px;
-      @include MQ(M) {
-          width: 32px;
-          height: 32px;
-      }
+        width: 32px;
+        height: 32px;
+        @include MQ(M) {
+            width: 32px;
+            height: 32px;
+        }
     }
     &.icon-button__svg--medium {
-      width: 36px;
-      height: 36px;
-      @include MQ(M) {
-          width: 42px;
-          height: 42px;
-      }
+        width: 36px;
+        height: 36px;
+        @include MQ(M) {
+            width: 42px;
+            height: 42px;
+        }
     }
     &.icon-button__svg--large {
-      width: 42px;
-      height: 42px;
-      @include MQ(M) {
-          width: 48px;
-          height: 48px;
-      }
+        width: 42px;
+        height: 42px;
+        @include MQ(M) {
+            width: 48px;
+            height: 48px;
+        }
     }
     &.icon-button__svg--green {
-      fill: $color-blurt-red;
+        fill: $color-blurt-red;
     }
     &.icon-button__svg--transparent {
-      fill: transparent;
+        fill: transparent;
     }
-    .icon-button{
+    .icon-button {
         transition: all 0.3s ease-in-out;
         stroke-width: 0.5;
         &.icon-button__border--transparent {
@@ -40,7 +39,7 @@
                 stroke: themed('iconColorSecondary');
             }
         }
-        &.icon-button__border--green{
+        &.icon-button__border--green {
             @include themify($themes) {
                 stroke: $color-blurt-red;
             }
@@ -50,9 +49,9 @@
             @include themify($themes) {
                 fill: themed('colorAccentReverse');
             }
-            &.icon-button__magnifyingGlass{
-              fill: transparent;
-              stroke-width: 1;
+            &.icon-button__magnifyingGlass {
+                fill: transparent;
+                stroke-width: 1;
                 @include themify($themes) {
                     stroke: themed('colorAccentReverse');
                 }
@@ -70,7 +69,7 @@
         stroke-width: 0.5;
         cursor: pointer;
         @include themify($themes) {
-          fill: themed('buttonBackground');
+            fill: themed('buttonBackground');
         }
         .icon-button {
             &.icon-button__border {
@@ -81,25 +80,25 @@
             }
             &.icon-button__svg {
                 @include themify($themes) {
-                  fill: themed('buttonBackground');
-              }
+                    fill: themed('buttonBackground');
+                }
             }
             &.icon-button--transparent {
                 @include themify($themes) {
                     fill: themed('buttonText');
                 }
-                &.icon-button__magnifyingGlass{
-                  fill: transparent;
-                  stroke-width: 1;
+                &.icon-button__magnifyingGlass {
+                    fill: transparent;
+                    stroke-width: 1;
                     @include themify($themes) {
                         stroke: themed('buttonText');
                     }
                 }
             }
-            &.icon-button--green{
-            @include themify($themes) {
-                fill: themed('buttonText');
-            }
+            &.icon-button--green {
+                @include themify($themes) {
+                    fill: themed('buttonText');
+                }
             }
         }
     }

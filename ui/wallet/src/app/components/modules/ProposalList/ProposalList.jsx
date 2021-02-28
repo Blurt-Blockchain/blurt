@@ -51,7 +51,7 @@ export default function ProposalList(props) {
                     {tt('proposals.amount')}
                 </div>
             </div>
-            {proposals.map(proposal => (
+            {proposals.map((proposal) => (
                 <ProposalContainer
                     key={proposal.id}
                     voteOnProposal={voteOnProposal}
@@ -63,7 +63,7 @@ export default function ProposalList(props) {
 }
 
 ProposalList.propTypes = {
-    proposals: PropTypes.array.isRequired, //TODO: Specify Shape
+    proposals: PropTypes.array.isRequired, // TODO: Specify Shape
     voteOnProposal: PropTypes.func.isRequired,
     loading: PropTypes.bool.isRequired,
 };

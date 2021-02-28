@@ -1,5 +1,5 @@
-import HttpTransport from './http';
-import WsTransport from './ws';
+import HttpTransport from "./http";
+import WsTransport from "./ws";
 
 export default {
   http: HttpTransport,

@@ -8,7 +8,8 @@ export default ({ type, text, isPrivate, onClose }) => {
             <h3>
                 {isPrivate
                     ? tt('userkeys_jsx.private_something_key', { key: type })
-                    : tt('userkeys_jsx.public_something_key', { key: type })}:
+                    : tt('userkeys_jsx.public_something_key', { key: type })}
+                :
             </h3>
             <br />
             <QRCode text={text} />

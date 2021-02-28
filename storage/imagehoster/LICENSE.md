@@ -1,6 +1,4 @@
-
-The MIT License (MIT)
-=====================
+# The MIT License (MIT)
 
 Copyright © 2018 Steemit Inc.
 

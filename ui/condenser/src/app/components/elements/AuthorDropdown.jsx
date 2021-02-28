@@ -5,7 +5,7 @@ import Userpic from 'app/components/elements/Userpic';
 import Follow from 'app/components/elements/Follow';
 // import Reputation from 'app/components/elements/Reputation';
 
-const AuthorDropdown = props => {
+const AuthorDropdown = (props) => {
     const author_link = (
         <span
             className="author"

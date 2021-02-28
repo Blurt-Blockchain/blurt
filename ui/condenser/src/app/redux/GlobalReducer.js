@@ -7,7 +7,7 @@ import constants from './constants';
 export const emptyContentMap = Map(emptyContent);
 
 export const defaultState = Map({
-    status: {}
+    status: {},
 });
 
 // Action constants
@@ -40,7 +40,7 @@ const RECEIVE_UNREAD_NOTIFICATIONS = 'global/RECEIVE_UNREAD_NOTIFICATIONS';
  * @param {Object} account
  */
 
-const transformAccount = account =>
+const transformAccount = (account) =>
     fromJS(account, (key, value) => {
         if (key === 'witness_votes') return value.toSet();
         const isIndexed = Iterable.isIndexed(value);
@@ -56,7 +56,7 @@ const transformAccount = account =>
  */
 
 const mergeAccounts = (state, account) => {
-    return state.updateIn(['accounts', account.get('name')], Map(), a =>
+    return state.updateIn(['accounts', account.get('name')], Map(), (a) =>
         a.mergeDeep(account)
     );
 };
@@ -76,8 +76,8 @@ export default function reducer(state = defaultState, action = {}) {
 
     switch (action.type) {
         case SET_COLLAPSED: {
-            return state.withMutations(map => {
-                map.updateIn(['content', payload.post], value =>
+            return state.withMutations((map) => {
+                map.updateIn(['content', payload.post], (value) =>
                     value.merge(Map({ collapsed: payload.collapsed }))
                 );
             });
@@ -86,7 +86,7 @@ export default function reducer(state = defaultState, action = {}) {
         case RECEIVE_STATE: {
             let new_state = fromJS(payload);
             if (new_state.has('content')) {
-                const content = new_state.get('content').withMutations(c => {
+                const content = new_state.get('content').withMutations((c) => {
                     c.forEach((cc, key) => {
                         cc = emptyContentMap.mergeDeep(cc);
                         const stats = fromJS(contentStats(cc));
@@ -98,10 +98,10 @@ export default function reducer(state = defaultState, action = {}) {
             return state.mergeDeep(new_state);
         }
         case RECEIVE_NOTIFICATIONS: {
-            //Need to figure out why two sets are not merged
-            return state.updateIn(['notifications', payload.name], Map(), n =>
-                n.withMutations(nmut =>
-                    nmut.update('notifications', List(), a =>
+            // Need to figure out why two sets are not merged
+            return state.updateIn(['notifications', payload.name], Map(), (n) =>
+                n.withMutations((nmut) =>
+                    nmut.update('notifications', List(), (a) =>
                         a.concat(fromJS(payload.notifications))
                     )
                 )
@@ -113,9 +113,9 @@ export default function reducer(state = defaultState, action = {}) {
             return state.updateIn(
                 ['unread_notifications', payload.name],
                 Map(),
-                n =>
-                    n.withMutations(nmut =>
-                        nmut.update('unread_notifications', List(), a =>
+                (n) =>
+                    n.withMutations((nmut) =>
+                        nmut.update('unread_notifications', List(), (a) =>
                             a.concat(fromJS(payload.notifications))
                         )
                     )
@@ -143,7 +143,7 @@ export default function reducer(state = defaultState, action = {}) {
                     return acc.updateIn(
                         ['content', `${author}/${permlink}`],
                         Map(),
-                        p => p.mergeDeep(specialPost)
+                        (p) => p.mergeDeep(specialPost)
                     );
                 }, state);
         }
@@ -151,7 +151,7 @@ export default function reducer(state = defaultState, action = {}) {
         case RECEIVE_CONTENT: {
             const content = fromJS(payload.content);
             const key = content.get('author') + '/' + content.get('permlink');
-            return state.updateIn(['content', key], Map(), c => {
+            return state.updateIn(['content', key], Map(), (c) => {
                 c = emptyContentMap.mergeDeep(c);
                 c = c.delete('active_votes');
                 c = c.mergeDeep(content);
@@ -165,7 +165,7 @@ export default function reducer(state = defaultState, action = {}) {
                 author,
                 permlink,
                 parent_author = '',
-                parent_permlink = ''
+                parent_permlink = '',
             } = payload;
             if (parent_author === '' || parent_permlink === '') return state;
             const key = author + '/' + permlink;
@@ -174,7 +174,7 @@ export default function reducer(state = defaultState, action = {}) {
             let updatedState = state.updateIn(
                 ['content', parent_key, 'replies'],
                 List(),
-                l => (l.findIndex(i => i === key) === -1 ? l.push(key) : l)
+                (l) => (l.findIndex((i) => i === key) === -1 ? l.push(key) : l)
             );
             const children = updatedState.getIn(
                 ['content', parent_key, 'replies'],
@@ -200,7 +200,7 @@ export default function reducer(state = defaultState, action = {}) {
                 updatedState = updatedState.updateIn(
                     ['content', parent_key, 'replies'],
                     List(),
-                    r => r.filter(i => i !== key)
+                    (r) => r.filter((i) => i !== key)
                 );
             }
             return updatedState;
@@ -211,7 +211,7 @@ export default function reducer(state = defaultState, action = {}) {
             const key = ['content', author + '/' + permlink, 'active_votes'];
             let active_votes = state.getIn(key, List());
             const idx = active_votes.findIndex(
-                v => v.get('voter') === username
+                (v) => v.get('voter') === username
             );
             // steemd flips weight into percent
             if (idx === -1) {
@@ -246,7 +246,7 @@ export default function reducer(state = defaultState, action = {}) {
                 category,
                 accountname,
                 fetching,
-                endOfData
+                endOfData,
             } = payload;
             let new_state;
 
@@ -259,9 +259,9 @@ export default function reducer(state = defaultState, action = {}) {
             ) {
                 // category is either "blog", "feed", "comments", or "recent_replies" (respectively) -- and all posts are keyed under current profile
                 const key = ['accounts', accountname, category];
-                new_state = state.updateIn(key, List(), list => {
-                    return list.withMutations(posts => {
-                        data.forEach(value => {
+                new_state = state.updateIn(key, List(), (list) => {
+                    return list.withMutations((posts) => {
+                        data.forEach((value) => {
                             const key = `${value.author}/${value.permlink}`;
                             if (!posts.includes(key)) posts.push(key);
                         });
@@ -270,9 +270,9 @@ export default function reducer(state = defaultState, action = {}) {
             } else {
                 new_state = state.updateIn(
                     ['discussion_idx', category || '', order],
-                    list => {
-                        return list.withMutations(posts => {
-                            data.forEach(value => {
+                    (list) => {
+                        return list.withMutations((posts) => {
+                            data.forEach((value) => {
                                 const key = `${value.author}/${value.permlink}`;
                                 if (!posts.includes(key)) posts.push(key);
                             });
@@ -282,9 +282,9 @@ export default function reducer(state = defaultState, action = {}) {
             }
 
             // append content stats data to each post
-            new_state = new_state.updateIn(['content'], content => {
-                return content.withMutations(map => {
-                    data.forEach(value => {
+            new_state = new_state.updateIn(['content'], (content) => {
+                return content.withMutations((map) => {
+                    data.forEach((value) => {
                         const key = `${value.author}/${value.permlink}`;
                         value = fromJS(value);
                         value = value.set('stats', fromJS(contentStats(value)));
@@ -334,13 +334,15 @@ export default function reducer(state = defaultState, action = {}) {
 
         case SHOW_DIALOG: {
             const { name, params = {} } = payload;
-            return state.update('active_dialogs', Map(), d =>
+            return state.update('active_dialogs', Map(), (d) =>
                 d.set(name, fromJS({ params }))
             );
         }
 
         case HIDE_DIALOG: {
-            return state.update('active_dialogs', d => d.delete(payload.name));
+            return state.update('active_dialogs', (d) =>
+                d.delete(payload.name)
+            );
         }
 
         default:
@@ -350,107 +352,107 @@ export default function reducer(state = defaultState, action = {}) {
 
 // Action creators
 
-export const setCollapsed = payload => ({
+export const setCollapsed = (payload) => ({
     type: SET_COLLAPSED,
-    payload
+    payload,
 });
 
-export const receiveState = payload => ({
+export const receiveState = (payload) => ({
     type: RECEIVE_STATE,
-    payload
+    payload,
 });
 
-export const receiveAccount = payload => ({
+export const receiveAccount = (payload) => ({
     type: RECEIVE_ACCOUNT,
-    payload
+    payload,
 });
 
-export const receiveAccounts = payload => ({
+export const receiveAccounts = (payload) => ({
     type: RECEIVE_ACCOUNTS,
-    payload
+    payload,
 });
 
-export const syncSpecialPosts = payload => ({
+export const syncSpecialPosts = (payload) => ({
     type: SYNC_SPECIAL_POSTS,
-    payload
+    payload,
 });
 
-export const receiveContent = payload => ({
+export const receiveContent = (payload) => ({
     type: RECEIVE_CONTENT,
-    payload
+    payload,
 });
 
-export const linkReply = payload => ({
+export const linkReply = (payload) => ({
     type: LINK_REPLY,
-    payload
+    payload,
 });
 
-export const deleteContent = payload => ({
+export const deleteContent = (payload) => ({
     type: DELETE_CONTENT,
-    payload
+    payload,
 });
 
-export const voted = payload => ({
+export const voted = (payload) => ({
     type: VOTED,
-    payload
+    payload,
 });
 
-export const fetchingData = payload => ({
+export const fetchingData = (payload) => ({
     type: FETCHING_DATA,
-    payload
+    payload,
 });
 
-export const receiveData = payload => ({
+export const receiveData = (payload) => ({
     type: RECEIVE_DATA,
-    payload
+    payload,
 });
 
 // TODO: Find a better name for this
-export const set = payload => ({
+export const set = (payload) => ({
     type: SET,
-    payload
+    payload,
 });
 
-export const remove = payload => ({
+export const remove = (payload) => ({
     type: REMOVE,
-    payload
+    payload,
 });
 
-export const update = payload => ({
+export const update = (payload) => ({
     type: UPDATE,
-    payload
+    payload,
 });
 
-export const fetchJson = payload => ({
+export const fetchJson = (payload) => ({
     type: FETCH_JSON,
-    payload
+    payload,
 });
 
-export const fetchJsonResult = payload => ({
+export const fetchJsonResult = (payload) => ({
     type: FETCH_JSON_RESULT,
-    payload
+    payload,
 });
 
-export const showDialog = payload => ({
+export const showDialog = (payload) => ({
     type: SHOW_DIALOG,
-    payload
+    payload,
 });
 
-export const hideDialog = payload => ({
+export const hideDialog = (payload) => ({
     type: HIDE_DIALOG,
-    payload
+    payload,
 });
 
-export const getState = payload => ({
+export const getState = (payload) => ({
     type: GET_STATE,
-    payload
+    payload,
 });
-export const receiveNotifications = payload => ({
+export const receiveNotifications = (payload) => ({
     type: RECEIVE_NOTIFICATIONS,
-    payload
+    payload,
 });
 
-export const receiveUnreadNotifications = payload => ({
+export const receiveUnreadNotifications = (payload) => ({
     type: RECEIVE_UNREAD_NOTIFICATIONS,
-    payload
+    payload,
 });

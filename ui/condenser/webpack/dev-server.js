@@ -1,6 +1,5 @@
-var fs = require('fs');
-if(!fs.existsSync('tmp'))
-    fs.mkdirSync('tmp');
+const fs = require('fs');
+if (!fs.existsSync('tmp')) fs.mkdirSync('tmp');
 
 process.env.BABEL_ENV = 'browser';
 process.env.NODE_ENV = 'development';
@@ -13,20 +12,20 @@ const webpackDevConfig = require('./dev.config');
 const app = new Koa();
 const compiler = webpack(webpackDevConfig);
 
-const PORT = process.env.PORT ? parseInt(process.env.PORT)+1 : 8081;
+const PORT = process.env.PORT ? parseInt(process.env.PORT) + 1 : 8081;
 
 const server_options = {
     publicPath: '/assets/',
     hot: true,
     stats: {
-    assets: true,
+        assets: true,
         colors: true,
         version: false,
         hash: false,
         timings: true,
         chunks: false,
-        chunkModules: false
-    }
+        chunkModules: false,
+    },
 };
 
 app.use(require('koa-webpack-dev-middleware')(compiler, server_options));

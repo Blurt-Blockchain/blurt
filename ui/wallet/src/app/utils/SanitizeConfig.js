@@ -40,7 +40,7 @@ const iframeWhitelist = [
     {
         re: /^(https?:)?\/\/player.twitch.tv\/.*/i,
         fn: (src) => {
-            //<iframe src="https://player.twitch.tv/?channel=ninja" frameborder="0" allowfullscreen="true" scrolling="no" height="378" width="620">
+            // <iframe src="https://player.twitch.tv/?channel=ninja" frameborder="0" allowfullscreen="true" scrolling="no" height="378" width="620">
             return src;
         },
     },
@@ -93,7 +93,7 @@ export default ({
     transformTags: {
         iframe: (tagName, attribs) => {
             const srcAtty = attribs.src;
-            for (const item of iframeWhitelist)
+            for (const item of iframeWhitelist) {
                 if (item.re.test(srcAtty)) {
                     const src =
                         typeof item.fn === 'function'
@@ -113,6 +113,7 @@ export default ({
                         },
                     };
                 }
+            }
             console.log(
                 'Blocked, did not match iframe "src" white list urls:',
                 tagName,
@@ -123,7 +124,7 @@ export default ({
         },
         img: (tagName, attribs) => {
             if (noImage) return { tagName: 'div', text: noImageText };
-            //See https://github.com/punkave/sanitize-html/issues/117
+            // See https://github.com/punkave/sanitize-html/issues/117
             let { src, alt } = attribs;
             if (!/^(https?:)?\/\//i.test(src)) {
                 console.log(
@@ -139,7 +140,7 @@ export default ({
 
             // replace http:// with // to force https when needed
             src = src.replace(/^http:\/\//i, '//');
-            let atts = { src };
+            const atts = { src };
             if (alt && alt !== '') atts.alt = alt;
             return { tagName, attribs: atts };
         },
@@ -160,8 +161,9 @@ export default ({
             if (
                 validClass === 'phishy' &&
                 attribs.title === getPhishingWarningMessage()
-            )
+            ) {
                 attys.title = attribs.title;
+            }
             return {
                 tagName,
                 attribs: attys,
@@ -169,8 +171,9 @@ export default ({
         },
         td: (tagName, attribs) => {
             const attys = {};
-            if (attribs.style === 'text-align:right')
+            if (attribs.style === 'text-align:right') {
                 attys.style = 'text-align:right';
+            }
             return {
                 tagName,
                 attribs: attys,

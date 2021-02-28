@@ -1,6 +1,6 @@
 'use strict';
-module.exports = function(sequelize, DataTypes) {
-    var web_events = sequelize.define(
+module.exports = function (sequelize, DataTypes) {
+    const web_events = sequelize.define(
         'web_events',
         {
             event_type: DataTypes.STRING,
@@ -8,7 +8,7 @@ module.exports = function(sequelize, DataTypes) {
         },
         {
             classMethods: {
-                associate: function(models) {
+                associate: function (models) {
                     // associations can be defined here
                 },
             },

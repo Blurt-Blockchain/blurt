@@ -3,19 +3,21 @@ const path = require('path');
 const ROOT = path.join(__dirname, '..');
 
 module.exports = {
-    webpack_assets_file_path: ROOT + (process.env.NODE_ENV === 'production' ? '/tmp/webpack-isotools-assets-prod.json' : '/tmp/webpack-isotools-assets-dev.json'),
+    webpack_assets_file_path:
+        ROOT +
+        (process.env.NODE_ENV === 'production'
+            ? '/tmp/webpack-isotools-assets-prod.json'
+            : '/tmp/webpack-isotools-assets-dev.json'),
     webpack_stats_file_path: './tmp/webpack-stats.json',
     alias: {
-        assets: path.join(__dirname, '../src/app/assets')
+        assets: path.join(__dirname, '../src/app/assets'),
     },
     assets: {
-        images:
-        {
-            extensions: ['png', 'jpg', 'svg']
+        images: {
+            extensions: ['png', 'jpg', 'svg'],
         },
-        fonts:
-        {
-            extensions: ['woff', 'ttf']
+        fonts: {
+            extensions: ['woff', 'ttf'],
         },
         styles: {
             extensions: ['css', 'scss'],
@@ -32,7 +34,12 @@ module.exports = {
                     //
                     // Therefore using a non-default `filter` function here.
                     //
-                    return webpack_isomorphic_tools_plugin.style_loader_filter(module, regular_expression, options, log);
+                    return webpack_isomorphic_tools_plugin.style_loader_filter(
+                        module,
+                        regular_expression,
+                        options,
+                        log
+                    );
                 }
 
                 // In production mode there will be no CSS text at all
@@ -49,7 +56,7 @@ module.exports = {
 
             // How to extract these Webpack `module`s' javascript `source` code.
             // basically takes `module.source` and modifies `module.exports` a little.
-            parser: webpack_isomorphic_tools_plugin.css_loader_parser
+            parser: webpack_isomorphic_tools_plugin.css_loader_parser,
         },
         // svg: {
         //     extension: 'svg',
@@ -68,5 +75,5 @@ module.exports = {
         //     //    return m.source.replace(/&quot;/g, "'");
         //     //}
         // }
-    }
+    },
 };

@@ -6,7 +6,7 @@ import Flag from 'app/components/modules/Flag';
 const mapStateToProps = (state, ownProps) => {
     return {
         flagged: appSelectors.getFeatureFlag(state.app, ownProps.flag),
-        ...ownProps
+        ...ownProps,
     };
 };
 

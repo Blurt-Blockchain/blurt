@@ -16,10 +16,10 @@ export class BeneficiarySelector extends React.Component {
         tabIndex: React.PropTypes.number,
 
         // redux connect
-        following: React.PropTypes.array.isRequired
+        following: React.PropTypes.array.isRequired,
     };
     static defaultProps = {
-        id: 'BeneficiarySelectorId'
+        id: 'BeneficiarySelectorId',
     };
     constructor() {
         super();
@@ -33,7 +33,7 @@ export class BeneficiarySelector extends React.Component {
         return item.toLowerCase().indexOf(value.toLowerCase()) > -1;
     }
 
-    handleAddBeneficiary = e => {
+    handleAddBeneficiary = (e) => {
         e.preventDefault();
         const beneficiaries = this.props.value;
         if (beneficiaries.length < 8) {
@@ -43,13 +43,13 @@ export class BeneficiarySelector extends React.Component {
         }
     };
 
-    handleRemoveBeneficiary = idx => e => {
+    handleRemoveBeneficiary = (idx) => (e) => {
         e.preventDefault();
         const beneficiaries = this.props.value;
         this.props.onChange(beneficiaries.filter((s, bidx) => idx != bidx));
     };
 
-    handleBeneficiaryUserChange = idx => e => {
+    handleBeneficiaryUserChange = (idx) => (e) => {
         e.preventDefault();
         const beneficiaries = this.props.value;
         const newBeneficiaries = beneficiaries.map((beneficiary, bidx) => {
@@ -59,7 +59,7 @@ export class BeneficiarySelector extends React.Component {
         this.props.onChange(newBeneficiaries);
     };
 
-    handleBeneficiaryUserSelect = idx => val => {
+    handleBeneficiaryUserSelect = (idx) => (val) => {
         const beneficiaries = this.props.value;
         const newBeneficiaries = beneficiaries.map((beneficiary, bidx) => {
             if (idx != bidx) return beneficiary;
@@ -68,7 +68,7 @@ export class BeneficiarySelector extends React.Component {
         this.props.onChange(newBeneficiaries);
     };
 
-    handleBeneficiaryPercentChange = idx => e => {
+    handleBeneficiaryPercentChange = (idx) => (e) => {
         e.preventDefault();
         const beneficiaries = this.props.value;
         const newBeneficiaries = beneficiaries.map((beneficiary, bidx) => {
@@ -84,7 +84,7 @@ export class BeneficiarySelector extends React.Component {
         const remainingPercent =
             100 -
             beneficiaries
-                .map(b => (b.percent ? parseInt(b.percent) : 0))
+                .map((b) => (b.percent ? parseInt(b.percent) : 0))
                 .reduce((sum, elt) => sum + elt, 0);
 
         return (
@@ -142,7 +142,7 @@ export class BeneficiarySelector extends React.Component {
                                 <Autocomplete
                                     wrapperStyle={{
                                         display: 'inline-block',
-                                        width: '100%'
+                                        width: '100%',
                                     }}
                                     inputProps={{
                                         id: 'user',
@@ -151,15 +151,15 @@ export class BeneficiarySelector extends React.Component {
                                         autoComplete: 'off',
                                         autoCorrect: 'off',
                                         autoCapitalize: 'off',
-                                        spellCheck: 'false'
+                                        spellCheck: 'false',
                                     }}
-                                    renderMenu={items => (
+                                    renderMenu={(items) => (
                                         <div
                                             className="react-autocomplete-input"
                                             children={items}
                                         />
                                     )}
-                                    getItemValue={item => item}
+                                    getItemValue={(item) => item}
                                     items={this.props.following}
                                     shouldItemRender={
                                         this.matchAutocompleteUser
@@ -261,13 +261,13 @@ export default connect((state, ownProps) => {
         const followingData = follow.getIn([
             'getFollowingAsync',
             username,
-            'blog_result'
+            'blog_result',
         ]);
         if (followingData) following = followingData.sort();
     }
     return {
         ...ownProps,
         username,
-        following: following.toJS()
+        following: following.toJS(),
     };
 })(BeneficiarySelector);

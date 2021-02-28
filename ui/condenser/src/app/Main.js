@@ -32,8 +32,8 @@ try {
 ReactGA.initialize('UA-179023138-1', {
     titleCase: false,
     gaOptions: {
-        siteSpeedSampleRate: 100
-    }
+        siteSpeedSampleRate: 100,
+    },
 });
 ReactGA.pageview(window.location.pathname + window.location.search);
 
@@ -42,10 +42,10 @@ function runApp(initial_state) {
 
     const konami = {
         code: 'xyzzy',
-        enabled: false
+        enabled: false,
     };
     const buff = konami.code.split('');
-    const cmd = command => {
+    const cmd = (command) => {
         console.log('got command:' + command);
         switch (command) {
             case CMD_LOG_O:
@@ -62,19 +62,19 @@ function runApp(initial_state) {
             default:
                 return 'That command is not supported.';
         }
-        //return 'done';
+        // return 'done';
     };
 
     const enableKonami = () => {
         if (!window.s) {
             console.log('The cupie doll is yours.');
-            window.s = command => {
+            window.s = (command) => {
                 return cmd.call(this, command);
             };
         }
     };
 
-    window.document.body.onkeypress = e => {
+    window.document.body.onkeypress = (e) => {
         buff.shift();
         buff.push(e.key);
         if (buff.join('') === konami.code) {
@@ -100,7 +100,7 @@ function runApp(initial_state) {
         retry: true,
         useAppbaseApi: !!config.blurtd_use_appbase,
         alternative_api_endpoints: alternativeApiEndpoints,
-        failover_threshold: config.failover_threshold
+        failover_threshold: config.failover_threshold,
     });
     blurtjs.config.set('address_prefix', config.address_prefix);
     blurtjs.config.set('chain_id', config.chain_id);
@@ -124,13 +124,11 @@ function runApp(initial_state) {
             .toString()
             .split('\t')[0];
         initial_state.user.current = {
-            username
+            username,
         };
     }
 
-    const location = `${window.location.pathname}${window.location.search}${
-        window.location.hash
-    }`;
+    const location = `${window.location.pathname}${window.location.search}${window.location.hash}`;
 
     try {
         clientRender(initial_state);
@@ -143,7 +141,7 @@ function runApp(initial_state) {
 if (!window.Intl) {
     require.ensure(
         ['intl/dist/Intl'],
-        require => {
+        (require) => {
             window.IntlPolyfill = window.Intl = require('intl/dist/Intl');
             require('intl/locale-data/jsonp/en-US.js');
             require('intl/locale-data/jsonp/es.js');

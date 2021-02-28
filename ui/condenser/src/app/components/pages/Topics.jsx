@@ -1,7 +1,7 @@
 import React from 'react';
-import { Link } from 'react-router';
+import { Link, browserHistory } from 'react-router';
 import { connect } from 'react-redux';
-import { browserHistory } from 'react-router';
+
 import tt from 'counterpart';
 import PropTypes from 'prop-types';
 import NativeSelect from 'app/components/elements/NativeSelect';
@@ -12,9 +12,9 @@ const Topics = ({
     compact,
     className,
     username,
-    categories
+    categories,
 }) => {
-    const handleChange = selectedOption => {
+    const handleChange = (selectedOption) => {
         browserHistory.push(selectedOption.value);
     };
 
@@ -24,26 +24,26 @@ const Topics = ({
             tagOnly: `/trending/${currentTag}`,
             orderOnly: `/${currentOrder}`,
             tagWithOrder: `/${currentOrder}/${currentTag}`,
-            default: `/trending`
+            default: '/trending',
         };
-        if (currentTag === 'feed') return opts['feed'];
-        if (currentTag && currentOrder) return opts['tagWithOrder'];
-        if (!currentTag && currentOrder) return opts['orderOnly'];
-        if (currentTag && !currentOrder) return opts['tagOnly'];
-        return opts['default'];
+        if (currentTag === 'feed') return opts.feed;
+        if (currentTag && currentOrder) return opts.tagWithOrder;
+        if (!currentTag && currentOrder) return opts.orderOnly;
+        if (currentTag && !currentOrder) return opts.tagOnly;
+        return opts.default;
     };
 
     if (compact) {
-        const extras = username => {
+        const extras = (username) => {
             const ex = {
-                allTags: order => ({
+                allTags: (order) => ({
                     value: `/${order}`,
-                    label: `${tt('g.all_tags_mobile')}`
+                    label: `${tt('g.all_tags_mobile')}`,
                 }),
-                myFeed: name => ({
+                myFeed: (name) => ({
                     value: `/@${name}/feed`,
-                    label: `${tt('g.my_feed')}`
-                })
+                    label: `${tt('g.my_feed')}`,
+                }),
             };
             return username
                 ? [ex.allTags(order), ex.myFeed(username)]
@@ -52,7 +52,7 @@ const Topics = ({
 
         const opts = extras(username).concat(
             categories
-                .map(cat => {
+                .map((cat) => {
                     const link = order ? `/${order}/${cat}` : `/${cat}`;
                     return { value: link, label: cat };
                 })
@@ -67,7 +67,7 @@ const Topics = ({
             />
         );
     } else {
-        const categoriesLinks = categories.map(cat => {
+        const categoriesLinks = categories.map((cat) => {
             const link = order ? `/${order}/${cat}` : `/hot/${cat}`;
             return (
                 <li className="c-sidebar__list-item" key={cat}>
@@ -100,7 +100,7 @@ const Topics = ({
                         <li className="c-sidebar__link">
                             <Link
                                 className="c-sidebar__link c-sidebar__link--emphasis"
-                                to={`/tags`}
+                                to="/tags"
                             >
                                 {tt('g.show_more_topics')}&hellip;
                             </Link>
@@ -116,11 +116,11 @@ Topics.propTypes = {
     categories: PropTypes.object.isRequired,
     order: PropTypes.string.isRequired,
     current: PropTypes.string,
-    compact: PropTypes.bool.isRequired
+    compact: PropTypes.bool.isRequired,
 };
 
 Topics.defaultProps = {
-    current: ''
+    current: '',
 };
 
 export default Topics;

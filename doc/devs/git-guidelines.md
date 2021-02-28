@@ -1,7 +1,8 @@
 ## Branches
+
 - `stable`: Points to the latest version of code that is production-ready, and has been tested in production. This is the branch we recommend for exchanges.
-- `0.21.x`: This is the current release branch and will always point to the most recent release. Witnesses and seed node operators may want to run this branch. `stable` and `0.21.x` may diverge if there are minor bug fixes or witness only security fixes that does not need exchanges to update for. 
-- `master`: The active development branch. We will strive to keep `master` in a working state. All PRs must pass automated tests before being merged. While this is not a guarantee that `master` is bug-free, it will guarantee that the branch is buildable in our standard build configuration and passes the current suite of tests. That being said, running a node from `master` has risks.  We recommend that any block producing node build from `stable` or `0.21.x`. If you want to test new features, `master` is the correct branch.
+- `0.21.x`: This is the current release branch and will always point to the most recent release. Witnesses and seed node operators may want to run this branch. `stable` and `0.21.x` may diverge if there are minor bug fixes or witness only security fixes that does not need exchanges to update for.
+- `master`: The active development branch. We will strive to keep `master` in a working state. All PRs must pass automated tests before being merged. While this is not a guarantee that `master` is bug-free, it will guarantee that the branch is buildable in our standard build configuration and passes the current suite of tests. That being said, running a node from `master` has risks. We recommend that any block producing node build from `stable` or `0.21.x`. If you want to test new features, `master` is the correct branch.
 
 ### Releases
 
@@ -13,9 +14,9 @@ All changes should be developed in their own branch. These branches should base 
 
 ### Non-Issue Branches
 
-Some changes are so minor as to not require an issue, e.g. changes to logging. Because the requirement of automated testing, create an issue for them. We err on the side of over-documentation rather than under-documentation.  Branch from `master`, make your fix, and create a pull request into `master`.
+Some changes are so minor as to not require an issue, e.g. changes to logging. Because the requirement of automated testing, create an issue for them. We err on the side of over-documentation rather than under-documentation. Branch from `master`, make your fix, and create a pull request into `master`.
 
-Suggested formatting for such branches missing an issue is `YYYYMMDD-shortname`, e.g. `20160913-documentation-update`.  (The date in the branch is so that we can prune old/defunct ones periodically to keep the repo tidy.)
+Suggested formatting for such branches missing an issue is `YYYYMMDD-shortname`, e.g. `20160913-documentation-update`. (The date in the branch is so that we can prune old/defunct ones periodically to keep the repo tidy.)
 
 ## Pull Requests
 
@@ -51,15 +52,16 @@ The community PR runs through our same CI testing as our code once it has been m
 
 ### Code Review Policy / PR Merge Process
 
-- Two developers *must* review *every* change before it moves into `master` or `0.21.x`, enforced through pull requests. Seemingly benign changes can have profound impacts on consensus. Every change should be treated as a potential consensus breaking change.
+- Two developers _must_ review _every_ change before it moves into `master` or `0.21.x`, enforced through pull requests. Seemingly benign changes can have profound impacts on consensus. Every change should be treated as a potential consensus breaking change.
 - One of the reviewers may be the author of the change.
-- This policy is designed to encourage you to take off your "writer hat" and put on your "critic/reviewer hat."  If this were a patch from an unfamiliar community contributor, would you accept it?  Can you understand what the patch does and check its correctness based only on its commit message and diff? Does it break any existing tests, or need new tests to be written? Is it stylistically sloppy -- trailing whitespace, multiple unrelated changes in a single patch, mixing bug fixes and features, or overly verbose debug logging?
+- This policy is designed to encourage you to take off your "writer hat" and put on your "critic/reviewer hat." If this were a patch from an unfamiliar community contributor, would you accept it? Can you understand what the patch does and check its correctness based only on its commit message and diff? Does it break any existing tests, or need new tests to be written? Is it stylistically sloppy -- trailing whitespace, multiple unrelated changes in a single patch, mixing bug fixes and features, or overly verbose debug logging?
 - Having multiple people look at a patch reduces the probability it will contain uncaught bugs.
 - Community developers are encouraged to leave reviews on PRs but are not required to, nor must their suggestions be followed. However, we have had community developers catch bugs for us during review. These reviews are not law, but are often helpful and should not be ignored.
 
-## Example Release Branch Management 
+## Example Release Branch Management
 
 1. New development is done on master
+
 ```
 master
      *
@@ -69,6 +71,7 @@ master
 ```
 
 2. A release is made
+
 ```
 master/v0.21.0
      *
@@ -78,6 +81,7 @@ master/v0.21.0
 ```
 
 3. New development continues
+
 ```
 master
      *
@@ -88,6 +92,7 @@ master
 ```
 
 4. A minor patch is required on 0.21.0
+
 ```
 master
      *
@@ -100,6 +105,7 @@ master
 ```
 
 5. Keep master updated with fixes
+
 ```
 master
      *
@@ -114,6 +120,7 @@ master
 ```
 
 6. And so on...
+
 ```
                    master
 fixes merged->     *

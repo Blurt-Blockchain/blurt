@@ -88,7 +88,7 @@ class PostFull extends React.Component {
         unlock: PropTypes.func.isRequired,
         deletePost: PropTypes.func.isRequired,
         showPromotePost: PropTypes.func.isRequired,
-        showExplorePost: PropTypes.func.isRequired
+        showExplorePost: PropTypes.func.isRequired,
     };
 
     constructor() {
@@ -100,17 +100,23 @@ class PostFull extends React.Component {
         this.linkedInShare = this.linkedInShare.bind(this);
         this.showExplorePost = this.showExplorePost.bind(this);
         this.onShowReply = () => {
-            const { state: { showReply, formId } } = this;
+            const {
+                state: { showReply, formId },
+            } = this;
             this.setState({ showReply: !showReply, showEdit: false });
             saveOnShow(formId, !showReply ? 'reply' : null);
         };
         this.onShowEdit = () => {
-            const { state: { showEdit, formId } } = this;
+            const {
+                state: { showEdit, formId },
+            } = this;
             this.setState({ showEdit: !showEdit, showReply: false });
             saveOnShow(formId, !showEdit ? 'edit' : null);
         };
         this.onDeletePost = () => {
-            const { props: { deletePost } } = this;
+            const {
+                props: { deletePost },
+            } = this;
             const content = this.props.cont.get(this.props.post);
             deletePost(
                 content.get('author'),
@@ -127,7 +133,7 @@ class PostFull extends React.Component {
         this.setState({
             formId,
             PostFullReplyEditor: ReplyEditor(formId + '-reply'),
-            PostFullEditEditor: ReplyEditor(formId + '-edit')
+            PostFullEditEditor: ReplyEditor(formId + '-edit'),
         });
         if (process.env.BROWSER) {
             let showEditor = localStorage.getItem('showEditor-' + formId);
@@ -146,7 +152,7 @@ class PostFull extends React.Component {
     shouldComponentUpdate(nextProps, nextState) {
         const names = 'cont, post, username'.split(', ');
         return (
-            names.findIndex(name => this.props[name] !== nextProps[name]) !==
+            names.findIndex((name) => this.props[name] !== nextProps[name]) !==
                 -1 || this.state !== nextState
         );
     }
@@ -251,11 +257,11 @@ class PostFull extends React.Component {
                 PostFullEditEditor,
                 formId,
                 showReply,
-                showEdit
+                showEdit,
             },
             onShowReply,
             onShowEdit,
-            onDeletePost
+            onDeletePost,
         } = this;
         const post_content = this.props.cont.get(this.props.post);
         if (!post_content) return null;
@@ -300,7 +306,7 @@ class PostFull extends React.Component {
             parent_permlink,
             category,
             title,
-            body
+            body,
         };
 
         this.share_params = {
@@ -308,7 +314,7 @@ class PostFull extends React.Component {
             url: 'https://' + APP_DOMAIN + link,
             rawtitle: title,
             title: title + ' — ' + APP_NAME,
-            desc: p.desc
+            desc: p.desc,
         };
 
         const share_menu = [
@@ -317,22 +323,22 @@ class PostFull extends React.Component {
                 onClick: this.fbShare,
                 value: 'Facebook',
                 title: tt('postfull_jsx.share_on_facebook'),
-                icon: 'facebook'
+                icon: 'facebook',
             },
             {
                 link: '#',
                 onClick: this.twitterShare,
                 value: 'Twitter',
                 title: tt('postfull_jsx.share_on_twitter'),
-                icon: 'twitter'
+                icon: 'twitter',
             },
             {
                 link: '#',
                 onClick: this.redditShare,
                 value: 'Reddit',
                 title: tt('postfull_jsx.share_on_reddit'),
-                icon: 'reddit'
-            }
+                icon: 'reddit',
+            },
         ];
 
         const Editor = this.state.showReply
@@ -348,14 +354,14 @@ class PostFull extends React.Component {
                         successCallback={() => {
                             this.setState({
                                 showReply: false,
-                                showEdit: false
+                                showEdit: false,
                             });
                             saveOnShow(formId, null);
                         }}
                         onCancel={() => {
                             this.setState({
                                 showReply: false,
-                                showEdit: false
+                                showEdit: false,
                             });
                             saveOnShow(formId, null);
                         }}
@@ -370,9 +376,7 @@ class PostFull extends React.Component {
 
         let post_header = <h1 className="entry-title">{content.title}</h1>;
         if (content.depth > 0) {
-            const parent_link = `/${content.category}/@${
-                content.parent_author
-            }/${content.parent_permlink}`;
+            const parent_link = `/${content.category}/@${content.parent_author}/${content.parent_permlink}`;
             let direct_parent_link;
             if (content.depth > 1) {
                 direct_parent_link = (
@@ -391,7 +395,8 @@ class PostFull extends React.Component {
                     <h5>
                         {tt(
                             'postfull_jsx.you_are_viewing_a_single_comments_thread_from'
-                        )}:
+                        )}
+                        :
                     </h5>
                     <p>{content.root_title}</p>
                     <ul>
@@ -488,22 +493,18 @@ class PostFull extends React.Component {
                             {showReplyOption && (
                                 <a onClick={onShowReply}>{tt('g.reply')}</a>
                             )}{' '}
-                            {showEditOption &&
-                                !showEdit && (
-                                    <a onClick={onShowEdit}>{tt('g.edit')}</a>
-                                )}{' '}
-                            {showDeleteOption &&
-                                !showReply && (
-                                    <a onClick={onDeletePost}>
-                                        {tt('g.delete')}
-                                    </a>
-                                )}
+                            {showEditOption && !showEdit && (
+                                <a onClick={onShowEdit}>{tt('g.edit')}</a>
+                            )}{' '}
+                            {showDeleteOption && !showReply && (
+                                <a onClick={onDeletePost}>{tt('g.delete')}</a>
+                            )}
                         </span>
                         <span className="PostFull__responses">
                             <Link
                                 to={link}
                                 title={tt('g.responses', {
-                                    count: content.children
+                                    count: content.children,
                                 })}
                             >
                                 <Icon
@@ -544,13 +545,13 @@ export default connect(
         operation_flat_fee: state.global.getIn(['props', 'operation_flat_fee']),
         bandwidth_kbytes_fee: state.global.getIn([
             'props',
-            'bandwidth_kbytes_fee'
-        ])
+            'bandwidth_kbytes_fee',
+        ]),
     }),
 
     // mapDispatchToProps
-    dispatch => ({
-        dispatchSubmit: data => {
+    (dispatch) => ({
+        dispatchSubmit: (data) => {
             dispatch(userActions.usernamePasswordLogin({ ...data }));
         },
         clearError: () => {
@@ -570,14 +571,14 @@ export default connect(
                 .length;
             let bw_fee = Math.max(
                 0.001,
-                (size / 1024 * bandwidthKbytesFee).toFixed(3)
+                ((size / 1024) * bandwidthKbytesFee).toFixed(3)
             );
             let fee = (operationFlatFee + bw_fee).toFixed(3);
             dispatch(
                 transactionActions.broadcastOperation({
                     type: 'delete_comment',
                     operation,
-                    confirm: tt('g.operation_cost', { fee })
+                    confirm: tt('g.operation_cost', { fee }),
                 })
             );
         },
@@ -585,7 +586,7 @@ export default connect(
             dispatch(
                 globalActions.showDialog({
                     name: 'promotePost',
-                    params: { author, permlink }
+                    params: { author, permlink },
                 })
             );
         },
@@ -593,10 +594,10 @@ export default connect(
             dispatch(
                 globalActions.showDialog({
                     name: 'explorePost',
-                    params: { permlink, title }
+                    params: { permlink, title },
                 })
             );
-        }
+        },
     })
 )(PostFull);
 

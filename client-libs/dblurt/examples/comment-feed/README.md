@@ -1,12 +1,8 @@
-
-dhive comment feed example
-===========================
+# dhive comment feed example
 
 Running on: <https://comments.esteem.app>
 
-
-Developing
-----------
+## Developing
 
 Download and install [node.js](https://nodejs.org).
 
@@ -24,9 +20,7 @@ npm run preview
 
 Now a local version is running on http://localhost:8080
 
-
-Deploying
----------
+## Deploying
 
 ```
 npm run build
@@ -35,6 +29,5 @@ npm run build
 Static output will be in the `build/` folder ready to be copied to a webserver.
 
 ---
-
 
 Built with [Wintersmith](https://github.com/jnordberg/wintersmith).

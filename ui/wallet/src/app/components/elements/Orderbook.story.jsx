@@ -25,7 +25,7 @@ storiesOf('Elements', module)
     .addDecorator(withKnobs)
     .add('Orderbook', () => (
         <Orderbook
-            side={'bids'}
+            side="bids"
             orders={[mockOrder, mockOrder2]}
             onClick={(price) => {
                 setFormPrice(price);

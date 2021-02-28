@@ -1,4 +1,4 @@
-/*global describe, global, before:false, it*/
+/* global describe, global, before:false, it */
 import assert from 'assert';
 import proxifyImageUrl from './ProxifyUrl';
 
@@ -82,7 +82,7 @@ describe('ProxifyUrl', () => {
         );
     });
     it('preserve dimensions - single-proxied URL', () => {
-        //simple preservation
+        // simple preservation
         testCase(
             'https://steemitdevimages.com/100x200/https://example.com/img.png',
             true,
@@ -95,8 +95,8 @@ describe('ProxifyUrl', () => {
         );
     });
     it('preserve dimensions - double-proxied URL', () => {
-        //simple preservation at a 2 nesting level
-        //foreign domain
+        // simple preservation at a 2 nesting level
+        // foreign domain
         testCase(
             'https://steemitimages.com/100x200/https://steemitimages.com/0x0/https://example.com/img.png',
             true,
@@ -107,7 +107,7 @@ describe('ProxifyUrl', () => {
             true,
             'https://steemitimages.com/1001x2001/https://example.com/img.png'
         );
-        //steemit domain
+        // steemit domain
         testCase(
             'https://steemitdevimages.com/1001x2001/https://steemitimages.com/0x0/https://steemitimages.com/DQmaJe2Tt5kmVUaFhse1KTEr4N1g9piMgD3YjPEQhkZi3HR/30day-positivity-challenge.jpg',
             true,
@@ -115,26 +115,26 @@ describe('ProxifyUrl', () => {
         );
     });
     it('preserve dimensions - strip proxies & dimensions when appropriate', () => {
-        //simple preservation at a 2 nesting level
-        //steemit domain
+        // simple preservation at a 2 nesting level
+        // steemit domain
         testCase(
             'https://steemitimages.com/0x0/https://steemitimages.com/DQmaJe2Tt5kmVUaFhse1KTEr4N1g9piMgD3YjPEQhkZi3HR/30day-positivity-challenge.jpg',
             true,
             'https://steemitimages.com/DQmaJe2Tt5kmVUaFhse1KTEr4N1g9piMgD3YjPEQhkZi3HR/30day-positivity-challenge.jpg'
         );
-        //foreign domain
+        // foreign domain
         testCase(
             'https://steemitimages.com/0x0/https://example.com/img.png',
             true,
             'https://steemitimages.com/640x0/https://example.com/img.png'
         );
-        //case where last is natural sizing, assumes natural sizing - straight to direct steemit file url
+        // case where last is natural sizing, assumes natural sizing - straight to direct steemit file url
         testCase(
             'https://steemitimages.com/0x0/https://steemitimages.com/100x100/https://steemitimages.com/DQmaJe2Tt5kmVUaFhse1KTEr4N1g9piMgD3YjPEQhkZi3HR/30day-positivity-challenge.jpg',
             true,
             'https://steemitimages.com/DQmaJe2Tt5kmVUaFhse1KTEr4N1g9piMgD3YjPEQhkZi3HR/30day-positivity-challenge.jpg'
         );
-        //case where last is natural sizing, assumes natural sizing - straight to direct steemit /0x0/ domain host url
+        // case where last is natural sizing, assumes natural sizing - straight to direct steemit /0x0/ domain host url
         testCase(
             'https://steemitimages.com/0x0/https://steemitimages.com/100x100/https://example.com/img.png',
             true,
@@ -148,8 +148,6 @@ const testCase = (inputUrl, outputDims, expectedUrl) => {
     assert.equal(
         outputUrl,
         expectedUrl,
-        `(${inputUrl}, ${outputDims}) should return ${
-            expectedUrl
-        }. output was ${outputUrl}`
+        `(${inputUrl}, ${outputDims}) should return ${expectedUrl}. output was ${outputUrl}`
     );
 };

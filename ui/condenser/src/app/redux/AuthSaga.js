@@ -8,28 +8,28 @@ import * as userActions from 'app/redux/UserReducer';
 
 // operations that require only posting authority
 export const postingOps = Set(
-    `vote, comment, delete_comment, custom_json, claim_reward_balance`
+    'vote, comment, delete_comment, custom_json, claim_reward_balance'
         .trim()
         .split(/,\s*/)
 );
 
 export const authWatches = [
-    takeEvery('user/ACCOUNT_AUTH_LOOKUP', accountAuthLookup)
+    takeEvery('user/ACCOUNT_AUTH_LOOKUP', accountAuthLookup),
 ];
 
 export function* accountAuthLookup({
-    payload: { account, private_keys, login_owner_pubkey }
+    payload: { account, private_keys, login_owner_pubkey },
 }) {
     account = fromJS(account);
     private_keys = fromJS(private_keys);
     // console.log('accountAuthLookup', account.name)
-    const stateUser = yield select(state => state.user);
+    const stateUser = yield select((state) => state.user);
     let keys;
     if (private_keys) keys = private_keys;
     else keys = stateUser.getIn(['current', 'private_keys']);
 
     if (!keys || !keys.has('posting_private')) return;
-    const toPub = k => (k ? k.toPublicKey().toString() : '-');
+    const toPub = (k) => (k ? k.toPublicKey().toString() : '-');
     const posting = keys.get('posting_private');
     const active = keys.get('active_private');
     const owner = keys.get('active_private');
@@ -39,30 +39,30 @@ export function* accountAuthLookup({
             ? yield authorityLookup({
                   pubkeys: Set([toPub(posting)]),
                   authority: account.get('posting'),
-                  authType: 'posting'
+                  authType: 'posting',
               })
             : 'none',
         active: active
             ? yield authorityLookup({
                   pubkeys: Set([toPub(active)]),
                   authority: account.get('active'),
-                  authType: 'active'
+                  authType: 'active',
               })
             : 'none',
         owner: owner
             ? yield authorityLookup({
                   pubkeys: Set([toPub(active)]),
                   authority: account.get('owner'),
-                  authType: 'owner'
+                  authType: 'owner',
               })
             : 'none',
-        memo: account.get('memo_key') === toPub(memo) ? 'full' : 'none'
+        memo: account.get('memo_key') === toPub(memo) ? 'full' : 'none',
     };
     const accountName = account.get('name');
     const pub_keys_used = {
         posting: toPub(posting),
         active: toPub(active),
-        owner: login_owner_pubkey
+        owner: login_owner_pubkey,
     };
     yield put(userActions.setAuthority({ accountName, auth, pub_keys_used }));
 }
@@ -87,21 +87,21 @@ export function* threshold({ pubkeys, authority, authType, recurse = 1 }) {
     if (!pubkeys.size) return 0;
     let t = pubkeyThreshold({ pubkeys, authority });
     const account_auths = authority.get('account_auths');
-    const aaNames = account_auths.map(v => v.get(0), List());
+    const aaNames = account_auths.map((v) => v.get(0), List());
     if (aaNames.size) {
         const aaAccounts = yield api.getAccountsAsync(aaNames);
-        const aaThreshes = account_auths.map(v => v.get(1), List());
+        const aaThreshes = account_auths.map((v) => v.get(1), List());
         for (let i = 0; i < aaAccounts.size; i++) {
             const aaAccount = aaAccounts.get(i);
             t += pubkeyThreshold({
                 authority: aaAccount.get(authType),
-                pubkeys
+                pubkeys,
             });
             if (recurse <= 2) {
                 const auth = yield call(authStr, {
                     authority: aaAccount,
                     pubkeys,
-                    recurse: ++recurse
+                    recurse: ++recurse,
                 });
                 if (auth === 'full') {
                     const aaThresh = aaThreshes.get(i);
@@ -116,7 +116,7 @@ export function* threshold({ pubkeys, authority, authType, recurse = 1 }) {
 function pubkeyThreshold({ pubkeys, authority }) {
     let available = 0;
     const key_auths = authority.get('key_auths');
-    key_auths.forEach(k => {
+    key_auths.forEach((k) => {
         if (pubkeys.has(k.get(0))) {
             available += k.get(1);
         }
@@ -130,7 +130,7 @@ export function* findSigningKey({ opType, username, password }) {
     else authTypes = 'active, owner';
     authTypes = authTypes.split(', ');
 
-    const currentUser = yield select(state => state.user.get('current'));
+    const currentUser = yield select((state) => state.user.get('current'));
     const currentUsername = currentUser && currentUser.get('username');
 
     username = username || currentUsername;
@@ -158,8 +158,9 @@ export function* findSigningKey({ opType, username, password }) {
                 );
             }
         } else {
-            if (private_keys)
+            if (private_keys) {
                 private_key = private_keys.get(authType + '_private');
+            }
         }
         if (private_key) {
             const pubkey = private_key.toPublicKey().toString();
@@ -168,7 +169,7 @@ export function* findSigningKey({ opType, username, password }) {
             const auth = yield call(authorityLookup, {
                 pubkeys,
                 authority,
-                authType
+                authType,
             });
             if (auth === 'full') return private_key;
         }

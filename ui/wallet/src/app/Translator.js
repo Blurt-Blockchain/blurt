@@ -43,7 +43,7 @@ tt.registerTranslations('ja', require('app/locales/counterpart/ja'));
 tt.registerTranslations('ja', require('app/locales/ja.json'));
 
 // if (process.env.NODE_ENV === 'production') {
-    tt.setFallbackLocale('en');
+tt.setFallbackLocale('en');
 // }
 
 class Translator extends React.Component {

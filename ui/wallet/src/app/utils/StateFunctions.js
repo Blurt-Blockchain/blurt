@@ -183,7 +183,7 @@ export function contentStats(content) {
     let tags = [];
     try {
         tags = (json && JSON.parse(json).tags) || [];
-        if (typeof tags == 'string') {
+        if (typeof tags === 'string') {
             tags = [tags];
         }
         if (!Array.isArray(tags)) {
@@ -216,6 +216,6 @@ export function filterTags(tags) {
 }
 
 export function pricePerBlurt(state) {
-    let price = state.global.get('blurt_price');
+    const price = state.global.get('blurt_price');
     return price;
 }

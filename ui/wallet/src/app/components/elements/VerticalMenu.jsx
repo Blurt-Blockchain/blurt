@@ -11,7 +11,7 @@ export default class VerticalMenu extends React.Component {
         hideValue: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
     };
 
-    closeMenu = e => {
+    closeMenu = (e) => {
         // If this was not a left click, or if CTRL or CMD were held, do not close the menu.
         if (e.button !== 0 || e.ctrlKey || e.metaKey) return;
 
@@ -29,7 +29,7 @@ export default class VerticalMenu extends React.Component {
                 }
             >
                 {title && <li className="title">{title}</li>}
-                {items.map(i => {
+                {items.map((i) => {
                     if (i.value === hideValue) return null;
                     return (
                         <li key={i.value} onClick={this.closeMenu}>

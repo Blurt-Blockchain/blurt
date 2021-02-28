@@ -17,7 +17,7 @@ export default function ServerHTML({ body, assets, locale, title, meta }) {
                             page_title = m.title;
                             return null;
                         }
-                        if (m.canonical)
+                        if (m.canonical) {
                             return (
                                 <link
                                     key="canonical"
@@ -25,7 +25,8 @@ export default function ServerHTML({ body, assets, locale, title, meta }) {
                                     href={m.canonical}
                                 />
                             );
-                        if (m.name && m.content)
+                        }
+                        if (m.name && m.content) {
                             return (
                                 <meta
                                     key={m.name}
@@ -33,7 +34,8 @@ export default function ServerHTML({ body, assets, locale, title, meta }) {
                                     content={m.content}
                                 />
                             );
-                        if (m.property && m.content)
+                        }
+                        if (m.property && m.content) {
                             return (
                                 <meta
                                     key={m.property}
@@ -41,6 +43,7 @@ export default function ServerHTML({ body, assets, locale, title, meta }) {
                                     content={m.content}
                                 />
                             );
+                        }
                         return null;
                     })}
                 <link rel="manifest" href="/static/manifest.json" />

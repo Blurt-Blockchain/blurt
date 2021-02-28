@@ -25,7 +25,7 @@ module.exports = {
             '/~witnesses',
             '/submit.html',
             '/proposals',
-        ].forEach(path => testHttpGet('localhost', 8080, path, browser));
+        ].forEach((path) => testHttpGet('localhost', 8080, path, browser));
     },
 };
 

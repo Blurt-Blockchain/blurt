@@ -11,7 +11,7 @@ class Settings extends React.Component {
         super(props);
         this.state = {
             errorMessage: '',
-            successMessage: ''
+            successMessage: '',
         };
         this.onNsfwPrefChange = this.onNsfwPrefChange.bind(this);
     }
@@ -19,25 +19,25 @@ class Settings extends React.Component {
     onNsfwPrefChange(e) {
         this.props.setUserPreferences({
             ...this.props.user_preferences,
-            nsfwPref: e.currentTarget.value
+            nsfwPref: e.currentTarget.value,
         });
     }
 
-    handleDefaultBlogPayoutChange = event => {
+    handleDefaultBlogPayoutChange = (event) => {
         this.props.setUserPreferences({
             ...this.props.user_preferences,
-            defaultBlogPayout: event.target.value
+            defaultBlogPayout: event.target.value,
         });
     };
 
-    handleDefaultCommentPayoutChange = event => {
+    handleDefaultCommentPayoutChange = (event) => {
         this.props.setUserPreferences({
             ...this.props.user_preferences,
-            defaultCommentPayout: event.target.value
+            defaultCommentPayout: event.target.value,
         });
     };
 
-    handleLanguageChange = event => {
+    handleLanguageChange = (event) => {
         const locale = event.target.value;
         const userPreferences = { ...this.props.user_preferences, locale };
         this.props.setUserPreferences(userPreferences);
@@ -82,7 +82,7 @@ class Settings extends React.Component {
         }
         return entries;
     };
-    handlePreferredAPIEndpointChange = event => {
+    handlePreferredAPIEndpointChange = (event) => {
         if (typeof window !== 'undefined') {
             localStorage.setItem(
                 'user_preferred_api_endpoint',
@@ -99,7 +99,7 @@ class Settings extends React.Component {
             ignores,
             account,
             isOwnAccount,
-            user_preferences
+            user_preferences,
         } = this.props;
         const preferred_api_endpoint = this.getPreferredApiEndpoint();
 
@@ -119,7 +119,8 @@ class Settings extends React.Component {
                                     }
                                 >
                                     blurtwallet.com
-                                </a>.
+                                </a>
+                                .
                             </p>
                         </div>
                         <hr />
@@ -228,19 +229,18 @@ class Settings extends React.Component {
                         </div>
                     </div>
                 )}
-                {ignores &&
-                    ignores.size > 0 && (
-                        <div className="row">
-                            <div className="small-12 medium-6 large-6 columns">
-                                <br />
-                                <br />
-                                <UserList
-                                    title={tt('settings_jsx.muted_users')}
-                                    users={ignores}
-                                />
-                            </div>
+                {ignores && ignores.size > 0 && (
+                    <div className="row">
+                        <div className="small-12 medium-6 large-6 columns">
+                            <br />
+                            <br />
+                            <UserList
+                                title={tt('settings_jsx.muted_users')}
+                                users={ignores}
+                            />
                         </div>
-                    )}
+                    </div>
+                )}
             </div>
         );
     }
@@ -258,7 +258,7 @@ export default connect(
                 'follow',
                 'getFollowingAsync',
                 accountname,
-                'ignore_result'
+                'ignore_result',
             ]);
 
         return {
@@ -268,15 +268,15 @@ export default connect(
             account: state.global.getIn(['accounts', accountname]).toJS(),
             user_preferences: state.app.get('user_preferences').toJS(),
             walletUrl: state.app.get('walletUrl'),
-            ...ownProps
+            ...ownProps,
         };
     },
-    dispatch => ({
-        changeLanguage: language => {
+    (dispatch) => ({
+        changeLanguage: (language) => {
             dispatch(userActions.changeLanguage(language));
         },
-        setUserPreferences: payload => {
+        setUserPreferences: (payload) => {
             dispatch(appActions.setUserPreferences(payload));
-        }
+        },
     })
 )(Settings);

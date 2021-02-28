@@ -2,7 +2,7 @@ import { Map } from 'immutable';
 import reducer from './OffchainReducer';
 
 const mockAction = {
-    type: 'user/SAVE_LOGIN_CONFIRM'
+    type: 'user/SAVE_LOGIN_CONFIRM',
 };
 
 const mockActionWithPayload = { ...mockAction, payload: 'Foo Barman' };

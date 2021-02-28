@@ -1,8 +1,8 @@
 /* eslint react/prop-types: 0 */
 import React from 'react';
-import { Link } from 'react-router';
+import { Link, browserHistory } from 'react-router';
 import { connect } from 'react-redux';
-import { browserHistory } from 'react-router';
+
 import classnames from 'classnames';
 import * as globalActions from 'app/redux/GlobalReducer';
 import * as transactionActions from 'app/redux/TransactionReducer';
@@ -72,7 +72,7 @@ export default class UserProfile extends React.Component {
         const username = currentUser ? currentUser.get('username') : null;
 
         // Redirect user homepage to transfers page
-        let { section } = this.props.routeParams;
+        const { section } = this.props.routeParams;
         if (!section) {
             if (process.env.BROWSER) {
                 browserHistory.replace(`/@${accountname}/transfers`);
@@ -87,7 +87,7 @@ export default class UserProfile extends React.Component {
         const fetching = (status && status.fetching) || this.props.loading;
 
         let account;
-        let accountImm = this.props.account;
+        const accountImm = this.props.account;
         if (accountImm) {
             account = accountImm.toJS();
         } else if (fetching) {
@@ -106,8 +106,8 @@ export default class UserProfile extends React.Component {
 
         let tab_content = null;
 
-        let rewardsClass = '',
-            walletClass = '';
+        let rewardsClass = '';
+        let walletClass = '';
         if (section === 'transfers') {
             walletClass = 'active';
             tab_content = (
@@ -209,14 +209,14 @@ export default class UserProfile extends React.Component {
                     <div>
                         <a className="float-right noPrint" onClick={onPrint}>
                             <Icon name="printer" />
-                            &nbsp;{tt('g.print')}&nbsp;&nbsp;
+                            {tt('g.print')}&nbsp;&nbsp;
                         </a>
                     </div>
                 );
             }
         }
 
-        let rewardsMenu = [
+        const rewardsMenu = [
             {
                 link: `/@${accountname}/curation-rewards`,
                 label: tt('g.curation_rewards'),
@@ -351,7 +351,7 @@ module.exports = {
             const currentUser = state.user.get('current');
             const socialUrl = state.app.get('socialUrl');
             const accountname = ownProps.routeParams.accountname.toLowerCase();
-            let isMyAccount =
+            const isMyAccount =
                 currentUser && currentUser.get('username') === accountname;
 
             return {

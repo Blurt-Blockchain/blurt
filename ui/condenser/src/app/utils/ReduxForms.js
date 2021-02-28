@@ -1,4 +1,4 @@
-export const cleanReduxInput = i => {
+export const cleanReduxInput = (i) => {
     // Remove all props that don't belong.  Triggers React warnings.
     const {
         name,
@@ -8,7 +8,7 @@ export const cleanReduxInput = i => {
         checked,
         onChange,
         onBlur,
-        onFocus
+        onFocus,
     } = i;
     const ret = {
         name,
@@ -18,7 +18,7 @@ export const cleanReduxInput = i => {
         checked,
         onChange,
         onBlur,
-        onFocus
+        onFocus,
     };
     if (ret.value == null) delete ret.value;
     if (ret.label == null) delete ret.label;

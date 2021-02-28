@@ -358,7 +358,8 @@ class UserKeys extends Component {
                                         account.get('name')
                                     }
                                 >
-                                    blocks.blurtwallet.com/#/@{account.get('name')}
+                                    blocks.blurtwallet.com/#/@
+                                    {account.get('name')}
                                 </a>
                             </p>
                         </div>

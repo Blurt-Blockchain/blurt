@@ -1,5 +1,4 @@
 form.search-input {
-
     height: 42px;
 
     svg.search-input__icon {
@@ -26,9 +25,9 @@ form.search-input {
         cursor: pointer;
         font-family: $font-primary;
         border: 1px solid rgba(202, 202, 202, 0.6);
-        
+
         &::placeholder {
-            color: transparent
+            color: transparent;
         }
         &:hover {
             background-color: $color-blurt-red;
@@ -57,12 +56,10 @@ form.search-input {
 
     /* small */
     input.search-input__inner.search-input__inner--small {
-
     }
 }
 
 form.search-input--expanded {
-
     height: 42px;
 
     svg.search-input__icon {
@@ -92,13 +89,12 @@ form.search-input--expanded {
         color: transparent;
         font-family: $font-primary;
         width: 100%;
-        
+
         border-color: $color-blurt-red;
         // box-shadow: 0 0 5px rgba(109,207,246,.5);
         padding-left: 2.5rem;
         cursor: auto;
         border: 1px solid rgba(202, 202, 202, 0.6);
-        
 
         @include themify($themes) {
             color: themed('textColorPrimary');
@@ -119,6 +115,5 @@ form.search-input--expanded {
 
     /* small */
     input.search-input__inner.search-input__inner--small {
-
     }
 }

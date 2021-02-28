@@ -9,8 +9,8 @@ storiesOf('Elements', module)
     .addDecorator(Center)
     .add('SortOrder', () => (
         <SortOrder
-            sortOrder={'promoted'}
-            topic={'life'}
+            sortOrder="promoted"
+            topic="life"
             horizontal={boolean('dropdown mode?', false)}
         />
     ));

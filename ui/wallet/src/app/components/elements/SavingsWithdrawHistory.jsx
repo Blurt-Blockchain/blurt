@@ -10,6 +10,8 @@ import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
 import Memo from 'app/components/elements/Memo';
 
+import { connect } from 'react-redux';
+
 class SavingsWithdrawHistory extends React.Component {
     constructor() {
         super();
@@ -36,7 +38,7 @@ class SavingsWithdrawHistory extends React.Component {
 
     initActions(props = this.props) {
         const { savings_withdraws } = props;
-        savings_withdraws.forEach(withdraw => {
+        savings_withdraws.forEach((withdraw) => {
             const fro = withdraw.get('from');
             const request_id = withdraw.get('request_id');
             this['cancel_' + request_id] = () => {
@@ -59,7 +61,7 @@ class SavingsWithdrawHistory extends React.Component {
         if (!savings_withdraws || !savings_withdraws.count()) return null;
         this.initActions();
         let idx = 0;
-        const rows = savings_withdraws.map(withdraw => {
+        const rows = savings_withdraws.map((withdraw) => {
             const {
                 complete,
                 amount,
@@ -85,9 +87,11 @@ class SavingsWithdrawHistory extends React.Component {
                         {/* A cancel link puts the action very close to the info stating what is being canceled */}
                         {!loading && (
                             <span>
-                                (<a onClick={this['cancel_' + request_id]}>
+                                (
+                                <a onClick={this['cancel_' + request_id]}>
                                     {tt('g.cancel')}
-                                </a>)
+                                </a>
+                                )
                             </span>
                         )}
                         {loading && (
@@ -121,8 +125,6 @@ class SavingsWithdrawHistory extends React.Component {
     }
 }
 
-import { connect } from 'react-redux';
-
 export default connect(
     (state, ownProps) => {
         const username = state.user.getIn(['current', 'username']);
@@ -133,7 +135,7 @@ export default connect(
             savings_withdraws,
         };
     },
-    dispatch => ({
+    (dispatch) => ({
         loadHistory: () => dispatch(userActions.loadSavingsWithdraw({})),
         cancelWithdraw: (fro, request_id, success, errorCallback) => {
             const confirm = tt(

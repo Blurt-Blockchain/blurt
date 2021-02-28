@@ -10,7 +10,7 @@ export const CloseButton = ({ className, ...restProps }) => {
 };
 
 CloseButton.propTypes = {
-    className: PropTypes.string
+    className: PropTypes.string,
 };
 
 export default CloseButton;

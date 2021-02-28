@@ -23,7 +23,7 @@ const mockAccount = Map({
 storiesOf('Elements', module)
     .addDecorator(withKnobs)
     .addDecorator(Center)
-    .addDecorator(getStory => <Provider store={store}>{getStory()}</Provider>)
+    .addDecorator((getStory) => <Provider store={store}>{getStory()}</Provider>)
     .add('Keys', () => (
         <Keys account={mockAccount} authType="posting" onKey={() => {}} />
     ));

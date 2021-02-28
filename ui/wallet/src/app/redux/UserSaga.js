@@ -74,7 +74,7 @@ function* getVestingDelegationsSaga(action) {
             100,
             action.payload.successCallback
         );
-    } catch (error) { }
+    } catch (error) {}
 }
 
 function* loadSavingsWithdraw() {
@@ -128,7 +128,7 @@ function* usernamePasswordLogin({
         password,
         useKeychain,
         saveLogin,
-        operationType /*high security*/,
+        operationType /* high security */,
     },
 }) {
     const current = yield select((state) => state.user.get('current'));
@@ -249,11 +249,12 @@ function* usernamePasswordLogin({
                 memo_private: PrivateKey.fromSeed(username + 'memo' + password),
             });
         }
-        if (memoWif)
+        if (memoWif) {
             private_keys = private_keys.set(
                 'memo_private',
                 PrivateKey.fromWif(memoWif)
             );
+        }
 
         yield call(accountAuthLookup, {
             payload: {
@@ -262,7 +263,7 @@ function* usernamePasswordLogin({
                 login_owner_pubkey,
             },
         });
-        let authority = yield select((state) =>
+        const authority = yield select((state) =>
             state.user.getIn(['authority', username])
         );
 
@@ -288,14 +289,18 @@ function* usernamePasswordLogin({
             return;
         }
 
-        if (authority.get('posting') !== 'full')
+        if (authority.get('posting') !== 'full') {
             private_keys = private_keys.remove('posting_private');
-        if (authority.get('active') !== 'full')
+        }
+        if (authority.get('active') !== 'full') {
             private_keys = private_keys.remove('active_private');
-        if (authority.get('owner') !== 'full')
+        }
+        if (authority.get('owner') !== 'full') {
             private_keys = private_keys.remove('owner_private');
-        if (authority.get('memo') !== 'full')
+        }
+        if (authority.get('memo') !== 'full') {
             private_keys = private_keys.remove('memo_private');
+        }
 
         // If user is signing operation by operaion and has no saved login, don't save to RAM
         if (!operationType || saveLogin) {
@@ -354,7 +359,7 @@ function* usernamePasswordLogin({
                     );
                 });
                 if (response.success) {
-                    signatures['posting'] = response.result;
+                    signatures.posting = response.result;
                 } else {
                     yield put(
                         userActions.loginError({ error: response.message })
@@ -500,12 +505,14 @@ function* saveLogin_localStorage() {
         : 'none';
     try {
         account.getIn(['active', 'key_auths']).forEach((auth) => {
-            if (auth.get(0) === postingPubkey)
+            if (auth.get(0) === postingPubkey) {
                 throw 'Login will not be saved, posting key is the same as active key';
+            }
         });
         account.getIn(['owner', 'key_auths']).forEach((auth) => {
-            if (auth.get(0) === postingPubkey)
+            if (auth.get(0) === postingPubkey) {
                 throw 'Login will not be saved, posting key is the same as owner key';
+            }
         });
     } catch (e) {
         console.error(e);
@@ -546,7 +553,7 @@ function* logout(action) {
 
 function* loginError({
     payload: {
-        /*error*/
+        /* error */
     },
 }) {
     serverApiLogout();
@@ -555,7 +562,7 @@ function* loginError({
 /**
     If the owner key was changed after the login owner key, this function will find the next owner key history record after the change and store it under user.previous_owner_authority.
 */
-function* lookupPreviousOwnerAuthority({ payload: { } }) {
+function* lookupPreviousOwnerAuthority({ payload: {} }) {
     const current = yield select((state) => state.user.getIn(['current']));
     if (!current) return;
 
@@ -579,7 +586,7 @@ function* lookupPreviousOwnerAuthority({ payload: { } }) {
     );
     if (owner_history.count() === 0) return;
     owner_history = owner_history.sort((b, a) => {
-        //sort decending
+        // sort decending
         const aa = a.get('last_valid_time');
         const bb = b.get('last_valid_time');
         return aa < bb ? -1 : aa > bb ? 1 : 0;
@@ -639,7 +646,6 @@ function* uploadImage({
             reader.addEventListener('load', () => {
                 const result = new Buffer(reader.result, 'binary');
                 resolve(result);
-
             });
             reader.readAsBinaryString(file);
         });
@@ -648,7 +654,6 @@ function* uploadImage({
         const commaIdx = dataUrl.indexOf(',');
         dataBs64 = dataUrl.substring(commaIdx + 1);
         data = new Buffer(dataBs64, 'base64');
-
     }
     // The challenge needs to be prefixed with a constant (both on the server and checked on the client) to make sure the server can't easily make the client sign a transaction doing something else.
     const prefix = new Buffer('ImageSigningChallenge');
@@ -662,7 +667,6 @@ function* uploadImage({
         throw new Error('could not find index of [,]');
         formData.append('filename', filename);
         formData.append('filebase64', dataBs64);
-
     }
 
     let sig;

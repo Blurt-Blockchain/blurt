@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 const ConfirmTransfer = ({ operation, fee }) => {
     const info = Object.keys(operation).map((k, i) => {
-        if (k !== '')
+        if (k !== '') {
             return (
                 <div key={`transaction-group-${i}`} className="input-group">
                     <span
@@ -17,11 +17,12 @@ const ConfirmTransfer = ({ operation, fee }) => {
                         type="text"
                         required
                         value={operation[k]}
-                        disabled={true}
+                        disabled
                         key={`transaction-input-${i}`}
                     />
                 </div>
             );
+        }
     });
     return (
         <div className="info">
