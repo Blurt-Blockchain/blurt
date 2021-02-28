@@ -335,27 +335,27 @@ copyright@blurt.blog
 
 Please send our Copyright Agent the following information:
 
-1.                                                                                                                                          The electronic or physical signature of the owner of the copyright or
+1.                                                                                                                                            The electronic or physical signature of the owner of the copyright or
 
     the person authorized to act on the owner's behalf;
 
-2.                                                                                                                                          Identification of the copyrighted work claimed to have been
+2.                                                                                                                                            Identification of the copyrighted work claimed to have been
 
     infringed, or a representative list of such works;
 
-3.                                                                                                                                          The URL or Internet location of the materials claimed to be
+3.                                                                                                                                            The URL or Internet location of the materials claimed to be
 
     infringing or to be the subject of infringing activity, or information
     reasonably sufficient to permit us to locate the material;
 
-4.                                                                                                                                          Your name, address, telephone number, and email address;
+4.                                                                                                                                            Your name, address, telephone number, and email address;
 
-5.                                                                                                                                          A statement by you that you have a good faith belief that the
+5.                                                                                                                                            A statement by you that you have a good faith belief that the
 
     disputed use of the material is not authorized by the copyright owner, its
     agent, or the law; and
 
-6.                                                                                                                                          A statement by you, made under penalty of perjury, that the above
+6.                                                                                                                                            A statement by you, made under penalty of perjury, that the above
 
     information in your notice is accurate and that you are the copyright owner or
     are authorized to act on the copyright owner's behalf.
@@ -365,14 +365,14 @@ Please send our Copyright Agent the following information:
     end a counter-notice to our Copyright Agent (contact information provided above)
     that includes the following:
 
-7.                                                                                                                                          Your physical or electronic signature;
+7.                                                                                                                                            Your physical or electronic signature;
 
-8.                                                                                                                                          Identification of the material that has been removed or to which
+8.                                                                                                                                            Identification of the material that has been removed or to which
 
     access has been disabled and where the material was located online before it
     was removed or access to it was disabled;
 
-9.                                                                                                                                          A statement by you, under penalty of perjury, that you have a good
+9.                                                                                                                                            A statement by you, under penalty of perjury, that you have a good
 
     faith belief that the material was removed or disabled because of mistake or
     misidentification of the material to be removed or disabled; and
