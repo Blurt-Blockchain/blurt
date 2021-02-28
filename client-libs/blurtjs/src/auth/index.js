@@ -62,7 +62,7 @@ Auth.getPrivateKeys = function (
   const privKeys = {};
   roles.forEach((role) => {
     privKeys[role] = this.toWif(name, password, role);
-    privKeys[`${role  }Pubkey`] = this.wifToPublic(privKeys[role]);
+    privKeys[`${role}Pubkey`] = this.wifToPublic(privKeys[role]);
   });
   return privKeys;
 };

@@ -31,7 +31,7 @@ module.exports = function enforce(type, value) {
     }
   }
 
-  throw new TypeError(`Expected ${  getName(type) || type  }, got ${  value}`);
+  throw new TypeError(`Expected ${getName(type) || type}, got ${value}`);
 };
 
 function getName(fn) {

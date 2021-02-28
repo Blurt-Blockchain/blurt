@@ -113,7 +113,7 @@ module.exports = _my = {
 
     _my.no_overflow64(value, field_name);
     if (typeof value === "number") {
-      value = `${  value}`;
+      value = `${value}`;
     }
     return Long.fromString(value);
   },
@@ -127,7 +127,7 @@ module.exports = _my = {
     }
     if (typeof value === "number") {
       _my.no_overflow53(value, field_name);
-      return `${  value}`;
+      return `${value}`;
     }
     if (Long.isLong(value)) {
       return value.toString();
