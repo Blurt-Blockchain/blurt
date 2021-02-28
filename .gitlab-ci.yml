@@ -6,6 +6,7 @@ stages:
   - devices
   - staging
   - production
+  - deploy
 
 
 
