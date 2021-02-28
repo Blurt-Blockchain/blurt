@@ -55,7 +55,7 @@ module.exports = {
                     type: Sequelize.DATE,
                 },
             })
-            .then(function () {
+            .then(() => {
                 queryInterface.addIndex('accounts', ['name'], {
                     indicesType: 'UNIQUE',
                 });

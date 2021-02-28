@@ -50,7 +50,7 @@ module.exports = {
                     type: Sequelize.DATE,
                 },
             })
-            .then(function () {
+            .then(() => {
                 queryInterface.addIndex('identities', ['email']);
                 queryInterface.addIndex('identities', ['phone']);
                 queryInterface.addIndex('identities', ['confirmation_code']);

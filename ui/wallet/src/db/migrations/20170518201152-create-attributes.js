@@ -28,7 +28,7 @@ module.exports = {
                     type: Sequelize.DATE,
                 },
             })
-            .then(function () {
+            .then(() => {
                 queryInterface.addIndex('user_attributes', ['user_id']);
                 queryInterface.addIndex('user_attributes', ['type_of']);
             });

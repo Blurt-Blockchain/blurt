@@ -9,7 +9,7 @@ blurt.broadcast.vote(
   "yamadapc",
   "test-post-bop-1-2-3-4-5-6",
   1,
-  function (err, result) {
+  (err, result) => {
     console.log(err, result);
   }
 );
