@@ -7,8 +7,8 @@ const hash = require("./hash");
 const config = require("../../../config");
 const assert = require("assert");
 
-const G = secp256k1.G;
-const n = secp256k1.n;
+const { G } = secp256k1;
+const { n } = secp256k1;
 
 class PublicKey {
   /** @param {ecurve.Point} public key */

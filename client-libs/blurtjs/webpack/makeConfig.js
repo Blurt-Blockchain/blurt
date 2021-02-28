@@ -10,7 +10,7 @@ const DEFAULTS = {
 };
 
 function makePlugins(options) {
-  const isDevelopment = options.isDevelopment;
+  const { isDevelopment } = options;
 
   let plugins = [
     new Visualizer({
@@ -67,7 +67,7 @@ function makeConfig(options) {
   if (!options) options = {};
   _.defaults(options, DEFAULTS);
 
-  const isDevelopment = options.isDevelopment;
+  const { isDevelopment } = options;
 
   return {
     devtool: isDevelopment ? "cheap-eval-source-map" : "source-map",

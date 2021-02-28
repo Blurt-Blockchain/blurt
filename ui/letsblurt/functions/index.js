@@ -19,8 +19,8 @@ exports.searchRequest = functions.https.onCall(async (data, res) => {
   //  console.log('input data', data);
   const {query, startAt = 1, num = 10, sort = ''} = data;
 
-  const key = functions.config().search.key;
-  const cx = functions.config().search.cx;
+  const {key} = functions.config().search;
+  const {cx} = functions.config().search;
   const search = `https://www.googleapis.com/customsearch/v1?key=${key}&cx=${cx}&q=${query}&num=${num}&start=${startAt}&sort=${sort}`;
 
   //    const response = await axios.get(search);
@@ -38,7 +38,7 @@ exports.searchRequest = functions.https.onCall(async (data, res) => {
 
 // proxy for getting supported languages for google translation
 exports.getTranslationLanguagesRequest = functions.https.onCall(async () => {
-  const key = functions.config().translation.key;
+  const {key} = functions.config().translation;
   const url = `https://translation.googleapis.com/language/translate/v2/languages?key=${key}`;
 
   let result = null;
@@ -63,7 +63,7 @@ exports.translationRequest = functions.https.onCall(async (data, context) => {
     format,
   };
 
-  const key = functions.config().translation.key;
+  const {key} = functions.config().translation;
   const url = `https://translation.googleapis.com/language/translate/v2?key=${key}`;
 
   let result = null;

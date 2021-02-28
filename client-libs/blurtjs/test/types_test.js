@@ -1,5 +1,5 @@
 const Convert = require("../src/auth/serializer/src/convert");
-const Long = require("bytebuffer").Long;
+const { Long } = require("bytebuffer");
 
 const assert = require("assert");
 const type = require("../src/auth/serializer/src/types");

@@ -27,7 +27,7 @@ function prod_logger() {
             log(this, start, null, err, false);
             throw err;
         }
-        const length = this.response.length;
+        const { length } = this.response;
         log(this, start, length, null, asset);
     };
 }
