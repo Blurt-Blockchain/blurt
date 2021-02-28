@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = {
-    up: function (queryInterface, Sequelize) {
+    up(queryInterface, Sequelize) {
         return queryInterface.addColumn(
             'users',
             'creation_hash',
@@ -9,7 +9,7 @@ module.exports = {
         );
     },
 
-    down: function (queryInterface, Sequelize) {
+    down(queryInterface, Sequelize) {
         return queryInterface.removeColumn('users', 'creation_hash');
     },
 };

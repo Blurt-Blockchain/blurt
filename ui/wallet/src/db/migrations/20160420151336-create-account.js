@@ -1,5 +1,5 @@
 module.exports = {
-    up: function (queryInterface, Sequelize) {
+    up(queryInterface, Sequelize) {
         return queryInterface
             .createTable('accounts', {
                 id: {
@@ -65,7 +65,7 @@ module.exports = {
                 queryInterface.addIndex('accounts', ['memo_key']);
             });
     },
-    down: function (queryInterface, Sequelize) {
+    down(queryInterface, Sequelize) {
         return queryInterface.dropTable('accounts');
     },
 };

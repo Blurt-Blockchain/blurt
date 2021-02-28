@@ -126,9 +126,7 @@ Auth.signTransaction = function (trx, keys) {
     signatures.push(sig.toBuffer());
   }
 
-  return signed_transaction.toObject(
-    Object.assign(trx, { signatures: signatures })
-  );
+  return signed_transaction.toObject(Object.assign(trx, { signatures }));
 };
 
 module.exports = Auth;

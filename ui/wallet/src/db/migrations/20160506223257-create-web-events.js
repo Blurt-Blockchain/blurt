@@ -1,6 +1,6 @@
 'use strict';
 module.exports = {
-    up: function (queryInterface, Sequelize) {
+    up(queryInterface, Sequelize) {
         return queryInterface
             .createTable('web_events', {
                 id: {
@@ -43,7 +43,7 @@ module.exports = {
                 queryInterface.addIndex('web_events', ['account_name']);
             });
     },
-    down: function (queryInterface, Sequelize) {
+    down(queryInterface, Sequelize) {
         return queryInterface.dropTable('web_events');
     },
 };

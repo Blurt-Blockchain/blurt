@@ -283,7 +283,7 @@ module.exports = function (config) {
       connectOptions: { tunnelDomains: "localhost,127.0.0.1" },
     },
     concurrency: 5,
-    customLaunchers: customLaunchers,
+    customLaunchers,
     browsers: shuffle(Object.keys(customLaunchers)),
     reporters: ["mocha", "saucelabs"],
     singleRun: true,
