@@ -1,24 +1,23 @@
 # How Blurt is [made](https://www.facebook.com/watch/?v=845703122288697)
 
-Use Clion when working on Blurt.  It will make your life far easier.  
+Use Clion when working on Blurt. It will make your life far easier.
 
 ## Clion - Macos
 
-MAC!  IT BUILDS ON MAC!
+MAC! IT BUILDS ON MAC!
 You'll need some things:
-* Make sure that you did not install Boost using homebrew.  That'll override conan's built version of Boost, and Blurt will not build.
-* [IPFS](https://ipfs.io):  Install it and do like `mkdir ~/.blurtd && ipfs get -o ~/.blurtd/snapshot.json QmPrwVpwe4Ya46CN9LXNnrUdWvaDLMwFetMUdpcdpjFbyu`
-* Blurt source code: `git clone https://gitlab.com/blurt/blurt`
-* Xcode:  `xcode-select --install`
-* Rosary: Three hail marys, please
-* [conan](https://conan.io): `brew install conan`
-* Ccache: `brew install ccache`
 
+- Make sure that you did not install Boost using homebrew. That'll override conan's built version of Boost, and Blurt will not build.
+- [IPFS](https://ipfs.io): Install it and do like `mkdir ~/.blurtd && ipfs get -o ~/.blurtd/snapshot.json QmPrwVpwe4Ya46CN9LXNnrUdWvaDLMwFetMUdpcdpjFbyu`
+- Blurt source code: `git clone https://gitlab.com/blurt/blurt`
+- Xcode: `xcode-select --install`
+- Rosary: Three hail marys, please
+- [conan](https://conan.io): `brew install conan`
+- Ccache: `brew install ccache`
 
-OK so what's going to happen here is Conan will be a package manager kind of like npm.  It'll install a ton of stuff, and likely, blurt will build!
+OK so what's going to happen here is Conan will be a package manager kind of like npm. It'll install a ton of stuff, and likely, blurt will build!
 
 How cool is that?
-
 
 ```
 
@@ -93,11 +92,6 @@ make blurtd cli_wallet
 6974* rm -rf ~/.conan/data
 6975* conan install .. -pr=default --build=missing
 ```
-
- 
-
-
-
 
 ## Clion - Linux
 

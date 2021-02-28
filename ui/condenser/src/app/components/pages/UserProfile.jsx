@@ -48,7 +48,7 @@ export default class UserProfile extends React.Component {
             follow_count,
             account,
             accountname,
-            notifications
+            notifications,
         } = this.props;
 
         let followersLoading = false,
@@ -124,7 +124,7 @@ export default class UserProfile extends React.Component {
 
         const postFilter = showResteem
             ? null
-            : value => value.author === accountname;
+            : (value) => value.author === accountname;
         const [author, permlink] = last_post.split('/');
         this.props.requestData({
             author,
@@ -132,11 +132,11 @@ export default class UserProfile extends React.Component {
             order,
             category,
             accountname,
-            postFilter
+            postFilter,
         });
     }
 
-    toggleShowResteem = e => {
+    toggleShowResteem = (e) => {
         e.preventDefault();
         const newShowResteem = !this.state.showResteem;
         this.setState({ showResteem: newShowResteem });
@@ -151,9 +151,9 @@ export default class UserProfile extends React.Component {
                 follow,
                 accountname,
                 walletUrl,
-                notifications
+                notifications,
             },
-            onPrint
+            onPrint,
         } = this;
         const username = current_user ? current_user.get('username') : null;
 
@@ -243,11 +243,11 @@ export default class UserProfile extends React.Component {
         } else if (section === 'comments') {
             if (account.comments) {
                 let posts = accountImm.get('comments');
-                if (!fetching && (posts && !posts.size)) {
+                if (!fetching && posts && !posts.size) {
                     tab_content = (
                         <Callout>
                             {tt('user_profile.user_hasnt_made_any_posts_yet', {
-                                name: accountname
+                                name: accountname,
                             })}
                         </Callout>
                     );
@@ -299,11 +299,11 @@ export default class UserProfile extends React.Component {
                     </div>
                 ) : (
                     tt('user_profile.user_hasnt_started_bloggin_yet', {
-                        name: accountname
+                        name: accountname,
                     })
                 );
 
-                if (!fetching && (posts && !posts.size)) {
+                if (!fetching && posts && !posts.size) {
                     tab_content = <Callout>{emptyText}</Callout>;
                 } else {
                     tab_content = (
@@ -336,11 +336,11 @@ export default class UserProfile extends React.Component {
         } else if (section === 'recent-replies') {
             if (account.recent_replies) {
                 let posts = accountImm.get('recent_replies');
-                if (!fetching && (posts && !posts.size)) {
+                if (!fetching && posts && !posts.size) {
                     tab_content = (
                         <Callout>
                             {tt('user_profile.user_hasnt_had_any_replies_yet', {
-                                name: accountname
+                                name: accountname,
                             }) + '.'}
                         </Callout>
                     );
@@ -457,13 +457,13 @@ export default class UserProfile extends React.Component {
             {
                 link: `${walletUrl}/@${accountname}/curation-rewards`,
                 label: tt('g.curation_rewards'),
-                value: tt('g.curation_rewards')
+                value: tt('g.curation_rewards'),
             },
             {
                 link: `${walletUrl}/@${accountname}/author-rewards`,
                 label: tt('g.author_rewards'),
-                value: tt('g.author_rewards')
-            }
+                value: tt('g.author_rewards'),
+            },
         ];
 
         const top_menu = (
@@ -495,16 +495,16 @@ export default class UserProfile extends React.Component {
                             </Link>
                         </li>
                         {(username === accountname) &
-                            (
-                                <li>
-                                    <Link
-                                        to={`/@${accountname}/notifications`}
-                                        activeClassName="active"
-                                    >
-                                        {tt('g.notifications')}
-                                    </Link>
-                                </li>
-                            )}
+                        (
+                            <li>
+                                <Link
+                                    to={`/@${accountname}/notifications`}
+                                    activeClassName="active"
+                                >
+                                    {tt('g.notifications')}
+                                </Link>
+                            </li>
+                        )}
                         <DropdownMenu
                             items={rewardsMenu}
                             el="li"
@@ -544,7 +544,7 @@ export default class UserProfile extends React.Component {
             location,
             about,
             website,
-            cover_image
+            cover_image,
         } = normalizeProfile(account);
         const website_label = website
             ? website.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '')
@@ -554,12 +554,12 @@ export default class UserProfile extends React.Component {
         if (cover_image) {
             if (cover_image.match(/\.(gif)$/) !== null) {
                 cover_image_style = {
-                    backgroundImage: 'url(' + cover_image + ')'
+                    backgroundImage: 'url(' + cover_image + ')',
                 };
             } else {
                 cover_image_style = {
                     backgroundImage:
-                        'url(' + proxifyImageUrl(cover_image, '2048x512') + ')'
+                        'url(' + proxifyImageUrl(cover_image, '2048x512') + ')',
                 };
             }
         }
@@ -615,21 +615,21 @@ export default class UserProfile extends React.Component {
                                 <span>
                                     <Link to={`/@${accountname}/followers`}>
                                         {tt('user_profile.follower_count', {
-                                            count: followerCount
+                                            count: followerCount,
                                         })}
                                     </Link>
                                 </span>
                                 <span>
                                     <Link to={`/@${accountname}`}>
                                         {tt('user_profile.post_count', {
-                                            count: account.post_count || 0
+                                            count: account.post_count || 0,
                                         })}
                                     </Link>
                                 </span>
                                 <span>
                                     <Link to={`/@${accountname}/followed`}>
                                         {tt('user_profile.followed_count', {
-                                            count: followingCount
+                                            count: followingCount,
                                         })}
                                     </Link>
                                 </span>
@@ -706,15 +706,15 @@ module.exports = {
                     undefined
                         ? true
                         : state.app.getIn(['user_preferences', 'blogmode']),
-                walletUrl
+                walletUrl,
             };
         },
-        dispatch => ({
+        (dispatch) => ({
             login: () => {
                 dispatch(userActions.showLogin());
             },
-            requestData: args =>
-                dispatch(fetchDataSagaActions.requestData(args))
+            requestData: (args) =>
+                dispatch(fetchDataSagaActions.requestData(args)),
         })
-    )(UserProfile)
+    )(UserProfile),
 };

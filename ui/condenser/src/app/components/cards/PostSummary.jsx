@@ -32,7 +32,7 @@ class PostSummary extends React.Component {
         promoted: PropTypes.bool,
         onClose: PropTypes.func,
         thumbSize: PropTypes.string,
-        nsfwPref: PropTypes.string
+        nsfwPref: PropTypes.string,
     };
 
     constructor() {
@@ -155,7 +155,8 @@ class PostSummary extends React.Component {
                     follow={false}
                     mute={false}
                 />
-                {} {tt('g.in')} <TagList post={p} single />&nbsp;•&nbsp;
+                {} {tt('g.in')} <TagList post={p} single />
+                &nbsp;•&nbsp;
                 <Link to={post_url}>
                     <TimeAgoWrapper date={p.created} className="updated" />
                 </Link>
@@ -187,7 +188,9 @@ class PostSummary extends React.Component {
                         </span>
 
                         <span className="articles__tag-link">
-                            {tt('g.in')}&nbsp;<TagList post={p} single />&nbsp;•&nbsp;
+                            {tt('g.in')}&nbsp;
+                            <TagList post={p} single />
+                            &nbsp;•&nbsp;
                         </span>
                         <Link className="timestamp__link" to={post_url}>
                             <span className="timestamp__time">
@@ -258,9 +261,8 @@ class PostSummary extends React.Component {
                     >
                         <div className="PostSummary__nsfw-warning">
                             {summary_header}
-                            <span className="nsfw-flag">
-                                nsfw
-                            </span>&nbsp;&nbsp;<span
+                            <span className="nsfw-flag">nsfw</span>&nbsp;&nbsp;
+                            <span
                                 className="ptc"
                                 role="button"
                                 onClick={this.onRevealNsfw}
@@ -275,7 +277,8 @@ class PostSummary extends React.Component {
                                         {tt(
                                             'postsummary_jsx.display_preferences'
                                         )}
-                                    </Link>.
+                                    </Link>
+                                    .
                                 </span>
                             ) : (
                                 <span>
@@ -286,7 +289,8 @@ class PostSummary extends React.Component {
                                     </a>{' '}
                                     {tt(
                                         'postsummary_jsx.to_save_your_preferences'
-                                    )}.
+                                    )}
+                                    .
                                 </span>
                             )}
                             {summary_footer}
@@ -396,16 +400,16 @@ export default connect(
             blogmode:
                 state.app.getIn(['user_preferences', 'blogmode']) === undefined
                     ? true
-                    : state.app.getIn(['user_preferences', 'blogmode'])
+                    : state.app.getIn(['user_preferences', 'blogmode']),
         };
     },
 
-    dispatch => ({
-        dispatchSubmit: data => {
+    (dispatch) => ({
+        dispatchSubmit: (data) => {
             dispatch(userActions.usernamePasswordLogin({ ...data }));
         },
         clearError: () => {
             dispatch(userActions.loginError({ error: null }));
-        }
+        },
     })
 )(PostSummary);

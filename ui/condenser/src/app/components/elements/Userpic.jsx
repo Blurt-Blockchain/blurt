@@ -13,7 +13,7 @@ const sizeList = [SIZE_SMALL, SIZE_MED, SIZE_LARGE];
 export const avatarSize = {
     small: SIZE_SMALL,
     medium: SIZE_MED,
-    large: SIZE_LARGE
+    large: SIZE_LARGE,
 };
 
 class Userpic extends Component {
@@ -39,7 +39,7 @@ class Userpic extends Component {
 
         const style = {
             backgroundImage:
-                'url(' + imageProxy() + `u/${account}/avatar/small)`
+                'url(' + imageProxy() + `u/${account}/avatar/small)`,
         };
 
         return <div className="Userpic" style={style} />;
@@ -47,7 +47,7 @@ class Userpic extends Component {
 }
 
 Userpic.propTypes = {
-    account: PropTypes.string.isRequired
+    account: PropTypes.string.isRequired,
 };
 
 export default connect((state, ownProps) => {
@@ -57,8 +57,8 @@ export default connect((state, ownProps) => {
         json_metadata: state.global.getIn([
             'accounts',
             account,
-            'json_metadata'
+            'json_metadata',
         ]),
-        hideIfDefault
+        hideIfDefault,
     };
 })(Userpic);

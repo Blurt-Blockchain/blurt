@@ -8,7 +8,7 @@ export default class FoundationDropdown extends React.Component {
         show: PropTypes.bool.isRequired,
         className: PropTypes.string,
         children: PropTypes.any,
-        onHide: PropTypes.func
+        onHide: PropTypes.func,
     };
 
     constructor(props) {

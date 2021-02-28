@@ -1,9 +1,9 @@
-var assert = require('assert') // from https://github.com/bitcoinjs/bitcoinjs-lib
-var enforceType = require('./enforce_types')
+const assert = require('assert') // from https://github.com/bitcoinjs/bitcoinjs-lib
+const enforceType = require('./enforce_types')
 
-var BigInteger = require('bigi')
+const BigInteger = require('bigi')
 
-function ECSignature(r, s) {
+function ECSignature (r, s) {
   enforceType(BigInteger, r)
   enforceType(BigInteger, s)
 
@@ -12,19 +12,19 @@ function ECSignature(r, s) {
 }
 
 // Import operations
-ECSignature.parseCompact = function(buffer) {
+ECSignature.parseCompact = function (buffer) {
   assert.equal(buffer.length, 65, 'Invalid signature length')
-  var i = buffer.readUInt8(0) - 27
+  let i = buffer.readUInt8(0) - 27
 
   // At most 3 bits
   assert.equal(i, i & 7, 'Invalid signature parameter')
-  var compressed = !!(i & 4)
+  const compressed = !!(i & 4)
 
   // Recovery param only
   i = i & 3
 
-  var r = BigInteger.fromBuffer(buffer.slice(1, 33))
-  var s = BigInteger.fromBuffer(buffer.slice(33))
+  const r = BigInteger.fromBuffer(buffer.slice(1, 33))
+  const s = BigInteger.fromBuffer(buffer.slice(33))
 
   return {
     compressed: compressed,
@@ -33,22 +33,26 @@ ECSignature.parseCompact = function(buffer) {
   }
 }
 
-ECSignature.fromDER = function(buffer) {
+ECSignature.fromDER = function (buffer) {
   assert.equal(buffer.readUInt8(0), 0x30, 'Not a DER sequence')
-  assert.equal(buffer.readUInt8(1), buffer.length - 2, 'Invalid sequence length')
+  assert.equal(
+    buffer.readUInt8(1),
+    buffer.length - 2,
+    'Invalid sequence length'
+  )
   assert.equal(buffer.readUInt8(2), 0x02, 'Expected a DER integer')
 
-  var rLen = buffer.readUInt8(3)
+  const rLen = buffer.readUInt8(3)
   assert(rLen > 0, 'R length is zero')
 
-  var offset = 4 + rLen
+  let offset = 4 + rLen
   assert.equal(buffer.readUInt8(offset), 0x02, 'Expected a DER integer (2)')
 
-  var sLen = buffer.readUInt8(offset + 1)
+  const sLen = buffer.readUInt8(offset + 1)
   assert(sLen > 0, 'S length is zero')
 
-  var rB = buffer.slice(4, offset)
-  var sB = buffer.slice(offset + 2)
+  const rB = buffer.slice(4, offset)
+  const sB = buffer.slice(offset + 2)
   offset += 2 + sLen
 
   if (rLen > 1 && rB.readUInt8(0) === 0x00) {
@@ -60,8 +64,8 @@ ECSignature.fromDER = function(buffer) {
   }
 
   assert.equal(offset, buffer.length, 'Invalid DER encoding')
-  var r = BigInteger.fromDERInteger(rB)
-  var s = BigInteger.fromDERInteger(sB)
+  const r = BigInteger.fromDERInteger(rB)
+  const s = BigInteger.fromDERInteger(sB)
 
   assert(r.signum() >= 0, 'R value is negative')
   assert(s.signum() >= 0, 'S value is negative')
@@ -70,9 +74,9 @@ ECSignature.fromDER = function(buffer) {
 }
 
 // FIXME: 0x00, 0x04, 0x80 are SIGHASH_* boundary constants, importing Transaction causes a circular dependency
-ECSignature.parseScriptSignature = function(buffer) {
-  var hashType = buffer.readUInt8(buffer.length - 1)
-  var hashTypeMod = hashType & ~0x80
+ECSignature.parseScriptSignature = function (buffer) {
+  const hashType = buffer.readUInt8(buffer.length - 1)
+  const hashTypeMod = hashType & ~0x80
 
   assert(hashTypeMod > 0x00 && hashTypeMod < 0x04, 'Invalid hashType')
 
@@ -83,11 +87,11 @@ ECSignature.parseScriptSignature = function(buffer) {
 }
 
 // Export operations
-ECSignature.prototype.toCompact = function(i, compressed) {
+ECSignature.prototype.toCompact = function (i, compressed) {
   if (compressed) i += 4
   i += 27
 
-  var buffer = new Buffer(65)
+  const buffer = new Buffer(65)
   buffer.writeUInt8(i, 0)
 
   this.r.toBuffer(32).copy(buffer, 1)
@@ -96,11 +100,11 @@ ECSignature.prototype.toCompact = function(i, compressed) {
   return buffer
 }
 
-ECSignature.prototype.toDER = function() {
-  var rBa = this.r.toDERInteger()
-  var sBa = this.s.toDERInteger()
+ECSignature.prototype.toDER = function () {
+  const rBa = this.r.toDERInteger()
+  const sBa = this.s.toDERInteger()
 
-  var sequence = []
+  let sequence = []
 
   // INTEGER
   sequence.push(0x02, rBa.length)
@@ -116,8 +120,8 @@ ECSignature.prototype.toDER = function() {
   return new Buffer(sequence)
 }
 
-ECSignature.prototype.toScriptSignature = function(hashType) {
-  var hashTypeBuffer = new Buffer(1)
+ECSignature.prototype.toScriptSignature = function (hashType) {
+  const hashTypeBuffer = new Buffer(1)
   hashTypeBuffer.writeUInt8(hashType, 0)
 
   return Buffer.concat([this.toDER(), hashTypeBuffer])

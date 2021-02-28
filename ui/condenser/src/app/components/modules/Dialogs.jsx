@@ -14,12 +14,12 @@ import ExplorePost from 'app/components/modules/ExplorePost';
 class Dialogs extends React.Component {
     static propTypes = {
         active_dialogs: PropTypes.object,
-        hide: PropTypes.func.isRequired
+        hide: PropTypes.func.isRequired,
     };
     constructor() {
         super();
         this.shouldComponentUpdate = shouldComponentUpdate(this, 'Dialogs');
-        this.hide = name => {
+        this.hide = (name) => {
             this.props.hide(name);
         };
     }
@@ -83,14 +83,14 @@ class Dialogs extends React.Component {
 const emptyMap = Map();
 
 export default connect(
-    state => {
+    (state) => {
         return {
-            active_dialogs: state.global.get('active_dialogs') || emptyMap
+            active_dialogs: state.global.get('active_dialogs') || emptyMap,
         };
     },
-    dispatch => ({
-        hide: name => {
+    (dispatch) => ({
+        hide: (name) => {
             dispatch(globalActions.hideDialog({ name }));
-        }
+        },
     })
 )(Dialogs);

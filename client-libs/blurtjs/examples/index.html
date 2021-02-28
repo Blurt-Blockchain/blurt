@@ -1,23 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Blurt.js</title>
-</head>
-<body>
-
-<script src="../dist/blurt.min.js"></script>
-<script>
-blurt.api.getConfig(function(err, response){
-  console.log(err, response);
-});
-blurt.api.getAccounts(['hiveio', 'mahdiyari'], function(err, response){
-  console.log(err, response);
-});
-blurt.api.getAccountCount(function(err, response){
-  console.log(err, response);
-});
-</script>
-
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Blurt.js</title>
+  </head>
+  <body>
+    <script src="../dist/blurt.min.js"></script>
+    <script>
+      blurt.api.getConfig(function (err, response) {
+        console.log(err, response);
+      });
+      blurt.api.getAccounts(["hiveio", "mahdiyari"], function (err, response) {
+        console.log(err, response);
+      });
+      blurt.api.getAccountCount(function (err, response) {
+        console.log(err, response);
+      });
+    </script>
+  </body>
 </html>

@@ -31,12 +31,12 @@ class Author extends React.Component {
         follow: bool,
         mute: bool,
         authorRepLog10: number,
-        showAffiliation: bool
+        showAffiliation: bool,
     };
     static defaultProps = {
         follow: true,
         mute: true,
-        showAffiliation: false
+        showAffiliation: false,
     };
 
     constructor(...args) {
@@ -70,7 +70,7 @@ class Author extends React.Component {
         }
     }
 
-    toggle = e => {
+    toggle = (e) => {
         if (!(e.metaKey || e.ctrlKey)) {
             e.preventDefault();
             e.stopPropagation();
@@ -85,7 +85,7 @@ class Author extends React.Component {
 
     close = () => {
         this.setState({
-            show: false
+            show: false,
         });
     };
 
@@ -96,7 +96,7 @@ class Author extends React.Component {
             follow,
             mute,
             authorRepLog10,
-            showAffiliation
+            showAffiliation,
         } = this.props; // html
         const { username } = this.props; // redux
         const { name, about } = this.props.account
@@ -134,7 +134,7 @@ class Author extends React.Component {
                     <strong>
                         <Link
                             className="ptc"
-                            ref={link => {
+                            ref={(link) => {
                                 this.authorProfileLink = link;
                             }}
                             to={'/@' + author}
@@ -188,6 +188,6 @@ export default connect((state, ownProps) => {
         mute,
         authorRepLog10,
         username,
-        account
+        account,
     };
 })(Author);

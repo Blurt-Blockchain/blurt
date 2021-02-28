@@ -9,14 +9,14 @@ import Icon from 'app/components/elements/Icon';
 import {
     DEBT_TOKEN_SHORT,
     LIQUID_TOKEN_UPPERCASE,
-    INVEST_TOKEN_SHORT
+    INVEST_TOKEN_SHORT,
 } from 'app/client_config';
 import FormattedAsset from 'app/components/elements/FormattedAsset';
 import { pricePerSteem } from 'app/utils/StateFunctions';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import {
     formatDecimal,
-    parsePayoutAmount
+    parsePayoutAmount,
 } from 'app/utils/ParsersAndFormatters';
 import DropdownMenu from 'app/components/elements/DropdownMenu';
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
@@ -59,13 +59,13 @@ class Voting extends React.Component {
         post_obj: PropTypes.object,
         current_account: PropTypes.object,
         enable_slider: PropTypes.bool,
-        voting: PropTypes.bool
+        voting: PropTypes.bool,
         // price_per_blurt: PropTypes.number,
         // sbd_print_rate: PropTypes.number,
     };
 
     static defaultProps = {
-        showList: true
+        showList: true,
     };
 
     constructor(props) {
@@ -75,19 +75,19 @@ class Voting extends React.Component {
             myVote: null,
             sliderWeight: {
                 up: MAX_WEIGHT,
-                down: MAX_WEIGHT
-            }
+                down: MAX_WEIGHT,
+            },
         };
 
-        this.voteUp = e => {
+        this.voteUp = (e) => {
             e && e.preventDefault();
             this.voteUpOrDown(true);
         };
-        this.voteDown = e => {
+        this.voteDown = (e) => {
             e && e.preventDefault();
             this.voteUpOrDown(false);
         };
-        this.voteUpOrDown = up => {
+        this.voteUpOrDown = (up) => {
             if (this.props.voting) return;
             this.setState({ votingUp: up });
             if (this.state.showWeight) this.setState({ showWeight: false });
@@ -114,27 +114,27 @@ class Voting extends React.Component {
                 permlink,
                 username,
                 myVote,
-                isFlag
+                isFlag,
             });
         };
 
-        this.handleWeightChange = up => weight => {
+        this.handleWeightChange = (up) => (weight) => {
             let w;
             if (up) {
                 w = {
                     up: weight,
-                    down: this.state.sliderWeight.down
+                    down: this.state.sliderWeight.down,
                 };
             } else {
                 w = {
                     up: this.state.sliderWeight.up,
-                    down: weight
+                    down: weight,
                 };
             }
             this.setState({ sliderWeight: w });
         };
 
-        this.storeSliderWeight = up => () => {
+        this.storeSliderWeight = (up) => () => {
             const { username, is_comment } = this.props;
             const weight = up
                 ? this.state.sliderWeight.up
@@ -171,26 +171,26 @@ class Voting extends React.Component {
                 this.setState({
                     sliderWeight: {
                         up: sliderWeightUp ? sliderWeightUp : MAX_WEIGHT,
-                        down: sliderWeightDown ? sliderWeightDown : MAX_WEIGHT
-                    }
+                        down: sliderWeightDown ? sliderWeightDown : MAX_WEIGHT,
+                    },
                 });
             }
         };
 
-        this.toggleWeightUp = e => {
+        this.toggleWeightUp = (e) => {
             e.preventDefault();
             this.toggleWeightUpOrDown(true);
         };
 
-        this.toggleWeightDown = e => {
+        this.toggleWeightDown = (e) => {
             e && e.preventDefault();
             this.toggleWeightUpOrDown(false);
         };
 
-        this.toggleWeightUpOrDown = up => {
+        this.toggleWeightUpOrDown = (up) => {
             this.setState({
                 showWeight: !this.state.showWeight,
-                showWeightDir: up ? 'up' : 'down'
+                showWeightDir: up ? 'up' : 'down',
             });
         };
         this.shouldComponentUpdate = shouldComponentUpdate(this, 'Voting');
@@ -208,11 +208,13 @@ class Voting extends React.Component {
 
     _checkMyVote(username, active_votes) {
         if (username && active_votes) {
-            const vote = active_votes.find(el => el.get('voter') === username);
+            const vote = active_votes.find(
+                (el) => el.get('voter') === username
+            );
             // weight warning, the API may send a string or a number (when zero)
             if (vote)
                 this.setState({
-                    myVote: parseInt(vote.get('percent') || 0, 10)
+                    myVote: parseInt(vote.get('percent') || 0, 10),
                 });
         }
     }
@@ -235,7 +237,7 @@ class Voting extends React.Component {
             permlink,
             blacklist,
             rewardBalance,
-            recentClaims
+            recentClaims,
         } = this.props;
 
         const voting_manabar = current_account
@@ -257,8 +259,8 @@ class Voting extends React.Component {
 
         const vesting_withdraw_rate = current_account
             ? current_account.get('vesting_withdraw_rate')
-              ? current_account.get('vesting_withdraw_rate').split(' ')[0]
-              : 0.0
+                ? current_account.get('vesting_withdraw_rate').split(' ')[0]
+                : 0.0
             : 0.0;
 
         const received_vesting_shares = current_account
@@ -273,36 +275,36 @@ class Voting extends React.Component {
 
         let elapsed = new Date() / 1000 - last_update_time;
         let maxMana = net_vesting_shares * 1000000;
-        let currentMana = parseFloat(current_mana) + elapsed * maxMana / 432000;
+        let currentMana =
+            parseFloat(current_mana) + (elapsed * maxMana) / 432000;
         if (currentMana > maxMana) {
             currentMana = maxMana;
         }
-        let currentVp = currentMana * 100 / maxMana;
+        let currentVp = (currentMana * 100) / maxMana;
         let operation = {
             voter: username,
             author,
             permlink,
-            weight: 10000
+            weight: 10000,
         };
         let size = JSON.stringify(operation).replace(/[\[\]\,\"]/g, '').length;
         let bw_fee = Math.max(
             0.001,
-            (size / 1024 * bandwidthKbytesFee).toFixed(3)
+            ((size / 1024) * bandwidthKbytesFee).toFixed(3)
         );
         let fee = (operationFlatFee + bw_fee).toFixed(3);
         let rshares = currentVp * 100 * parseInt(net_vesting_shares * 1e6, 10);
         let voteValue =
-            rshares *
-            (rshares + 2 * 2e12) /
-            (rshares + 4 * 2e12) /
-            recentClaims *
-            parseFloat(rewardBalance) /
+            (((rshares * (rshares + 2 * 2e12)) /
+                (rshares + 4 * 2e12) /
+                recentClaims) *
+                parseFloat(rewardBalance)) /
             1000000;
         const { votingUp, showWeight, showWeightDir, myVote } = this.state;
 
         const votingUpActive = voting && votingUp;
-        voteValue = voteValue * this.state.sliderWeight.up / 10000;
-        const slider = up => {
+        voteValue = (voteValue * this.state.sliderWeight.up) / 10000;
+        const slider = (up) => {
             const b = up
                 ? this.state.sliderWeight.up
                 : this.state.sliderWeight.down;
@@ -391,17 +393,17 @@ class Voting extends React.Component {
                 </span>
             );
         };
-        this.handleButtonWeightChange = (up, weight) => e => {
+        this.handleButtonWeightChange = (up, weight) => (e) => {
             let w;
             if (up) {
                 w = {
                     up: weight,
-                    down: this.state.sliderWeight.down
+                    down: this.state.sliderWeight.down,
                 };
             } else {
                 w = {
                     up: this.state.sliderWeight.up,
-                    down: weight
+                    down: weight,
                 };
             }
             this.setState({ sliderWeight: w });
@@ -476,31 +478,31 @@ class Voting extends React.Component {
             );
             payoutItems.push({
                 value: tt('voting_jsx.pending_payout', {
-                    value: formatDecimal(pending_payout).join('')
-                })
+                    value: formatDecimal(pending_payout).join(''),
+                }),
             });
             if (max_payout > 0) {
                 payoutItems.push({
-                    value: tt('voting_jsx.breakdown') + ': '
+                    value: tt('voting_jsx.breakdown') + ': ',
                 });
                 payoutItems.push({
                     value: tt('voting_jsx.pending_payouts_author', {
-                        value: formatDecimal(pending_payout / 2).join('')
-                    })
+                        value: formatDecimal(pending_payout / 2).join(''),
+                    }),
                 });
                 payoutItems.push({
                     value: tt('voting_jsx.pending_payouts_curators', {
-                        value: formatDecimal(pending_payout / 2).join('')
-                    })
+                        value: formatDecimal(pending_payout / 2).join(''),
+                    }),
                 });
             }
             // add beneficiary info.
             const beneficiaries = post_obj.get('beneficiaries');
             if (beneficiaries.size > 0) {
                 payoutItems.push({
-                    value: 'Beneficiaries:'
+                    value: 'Beneficiaries:',
                 });
-                beneficiaries.forEach(function(key) {
+                beneficiaries.forEach(function (key) {
                     payoutItems.push({
                         value:
                             '- ' +
@@ -508,7 +510,7 @@ class Voting extends React.Component {
                             ': ' +
                             (parseFloat(key.get('weight')) / 100).toFixed(2) +
                             '%',
-                        link: '/@' + key.get('account')
+                        link: '/@' + key.get('account'),
                     });
                 });
             }
@@ -524,15 +526,15 @@ class Voting extends React.Component {
         } else if (max_payout < 1000000) {
             payoutItems.push({
                 value: tt('voting_jsx.max_accepted_payout', {
-                    value: formatDecimal(max_payout).join('')
-                })
+                    value: formatDecimal(max_payout).join(''),
+                }),
             });
         }
         if (promoted > 0) {
             payoutItems.push({
                 value: tt('voting_jsx.promotion_cost', {
-                    value: formatDecimal(promoted).join('')
-                })
+                    value: formatDecimal(promoted).join(''),
+                }),
             });
         }
         // - payout instead of total_author_payout: total_author_payout can be zero with 100% beneficiary
@@ -542,18 +544,18 @@ class Voting extends React.Component {
                 value: tt('voting_jsx.past_payouts', {
                     value: formatDecimal(
                         total_author_payout + total_curator_payout
-                    ).join('')
-                })
+                    ).join(''),
+                }),
             });
             payoutItems.push({
                 value: tt('voting_jsx.past_payouts_author', {
-                    value: formatDecimal(total_author_payout).join('')
-                })
+                    value: formatDecimal(total_author_payout).join(''),
+                }),
             });
             payoutItems.push({
                 value: tt('voting_jsx.past_payouts_curators', {
-                    value: formatDecimal(total_curator_payout).join('')
-                })
+                    value: formatDecimal(total_curator_payout).join(''),
+                }),
             });
         }
         const payoutEl = (
@@ -578,12 +580,10 @@ class Voting extends React.Component {
                 const { rshares } = avotes[v];
                 total_rshares += Number(rshares);
             }
-            avotes.sort(
-                (a, b) =>
-                    Math.abs(parseInt(a.rshares)) >
-                    Math.abs(parseInt(b.rshares))
-                        ? -1
-                        : 1
+            avotes.sort((a, b) =>
+                Math.abs(parseInt(a.rshares)) > Math.abs(parseInt(b.rshares))
+                    ? -1
+                    : 1
             );
             let voters = [];
             for (
@@ -599,11 +599,11 @@ class Voting extends React.Component {
                         (sign > 0 ? '+ ' : '- ') +
                         voter +
                         ': ' +
-                        (payout * rshares / total_rshares).toFixed(3) +
+                        ((payout * rshares) / total_rshares).toFixed(3) +
                         ' BLURT (' +
                         percent / 100 +
                         '%)',
-                    link: '/@' + voter
+                    link: '/@' + voter,
                 });
             }
             if (total_votes > voters.length) {
@@ -612,16 +612,16 @@ class Voting extends React.Component {
                         <span>
                             &hellip;{' '}
                             {tt('voting_jsx.and_more', {
-                                count: total_votes - voters.length
+                                count: total_votes - voters.length,
                             })}
                         </span>
-                    )
+                    ),
                 });
             }
             voters_list = (
                 <DropdownMenu
                     selected={tt('voting_jsx.votes_plural', {
-                        count: total_votes
+                        count: total_votes,
                     })}
                     className="Voting__voters_list"
                     items={voters}
@@ -655,7 +655,7 @@ class Voting extends React.Component {
                     onShow={() => {
                         this.setState({
                             showWeight: true,
-                            showWeightDir: 'up'
+                            showWeightDir: 'up',
                         });
                         this.readSliderWeight();
                     }}
@@ -674,11 +674,10 @@ class Voting extends React.Component {
         return (
             <span className="Voting">
                 <span className="Voting__inner">
-
-                        <span className={classUp}>
-                            {voteChevron}
-                            {dropdown}
-                        </span>
+                    <span className={classUp}>
+                        {voteChevron}
+                        {dropdown}
+                    </span>
 
                     {payoutEl}
                 </span>
@@ -687,7 +686,6 @@ class Voting extends React.Component {
         );
     }
 }
-
 
 export default connect(
     // mapStateToProps
@@ -721,19 +719,19 @@ export default connect(
         // const sbd_print_rate = state.global.getIn(['props', 'sbd_print_rate']);
         const recentClaims = state.global.getIn([
             'reward_fund',
-            'recent_claims'
+            'recent_claims',
         ]);
         const rewardBalance = state.global.getIn([
             'reward_fund',
-            'reward_balance'
+            'reward_balance',
         ]);
         const operationFlatFee = state.global.getIn([
             'props',
-            'operation_flat_fee'
+            'operation_flat_fee',
         ]);
         const bandwidthKbytesFee = state.global.getIn([
             'props',
-            'bandwidth_kbytes_fee'
+            'bandwidth_kbytes_fee',
         ]);
         const blacklist = state.global.get('blacklist');
         const enable_slider =
@@ -755,14 +753,14 @@ export default connect(
             bandwidthKbytesFee,
             blacklist,
             recentClaims,
-            rewardBalance
+            rewardBalance,
             // price_per_blurt,
             // sbd_print_rate,
         };
     },
 
     // mapDispatchToProps
-    dispatch => ({
+    (dispatch) => ({
         vote: (weight, { author, permlink, username, myVote, isFlag }) => {
             const confirm = () => {
                 if (myVote == null) return null;
@@ -795,15 +793,15 @@ export default connect(
                         permlink,
                         weight,
                         __config: {
-                            title: weight < 0 ? 'Confirm Downvote' : null
-                        }
+                            title: weight < 0 ? 'Confirm Downvote' : null,
+                        },
                     },
                     confirm,
-                    errorCallback: errorKey => {
+                    errorCallback: (errorKey) => {
                         console.log('Transaction Error:' + errorKey);
-                    }
+                    },
                 })
             );
-        }
+        },
     })
 )(Voting);

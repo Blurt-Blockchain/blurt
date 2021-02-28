@@ -1,16 +1,16 @@
 .Witnesses {
-	.extlink path {
-		transition: 0.2s all ease-in-out;
-	     @include themify($themes) {
-	       fill: themed('textColorAccent');
-	    }
-	}
-	a:hover .extlink path {
-		transition: 0.2s all ease-in-out;
-	     @include themify($themes) {
-	       fill: themed('textColorAccentHover');
-	    }
-	}
+    .extlink path {
+        transition: 0.2s all ease-in-out;
+        @include themify($themes) {
+            fill: themed('textColorAccent');
+        }
+    }
+    a:hover .extlink path {
+        transition: 0.2s all ease-in-out;
+        @include themify($themes) {
+            fill: themed('textColorAccentHover');
+        }
+    }
     table tbody tr.Witnesses__highlight {
         background-color: pink;
     }
@@ -32,14 +32,14 @@
     td.Witnesses__info .Userpic.disabled {
         opacity: 0.4;
     }
-	.button {
-		background-color: $color-text-blurt-red;
-		text-shadow: 0 1px 0 rgba(0,0,0,0.20);
-		transition: 0.2s all ease-in-out;
-		&:hover {
-			background-color: $color-blurt-red;
-		}
-	}
+    .button {
+        background-color: $color-text-blurt-red;
+        text-shadow: 0 1px 0 rgba(0, 0, 0, 0.2);
+        transition: 0.2s all ease-in-out;
+        &:hover {
+            background-color: $color-blurt-red;
+        }
+    }
     div.Witnesses__info {
         display: flex;
         flex-direction: column;
@@ -77,5 +77,3 @@
         margin-left: 10px;
     }
 }
-
-

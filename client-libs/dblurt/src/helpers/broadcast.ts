@@ -33,10 +33,10 @@
  * in the design, construction, operation or maintenance of any military facility.
  */
 
-import * as assert from 'assert';
+import * as assert from "assert";
 
-import { Authority, AuthorityType } from '../chain/account';
-import { Asset } from '../chain/asset';
+import { Authority, AuthorityType } from "../chain/account";
+import { Asset } from "../chain/asset";
 import {
   AccountUpdateOperation,
   ClaimAccountOperation,
@@ -48,14 +48,14 @@ import {
   Operation,
   TransferOperation,
   VoteOperation,
-} from '../chain/operation';
+} from "../chain/operation";
 import {
   SignedTransaction,
   Transaction,
   TransactionConfirmation,
-} from '../chain/transaction';
-import { Client } from './../client';
-import { cryptoUtils, PrivateKey, PublicKey } from './../crypto';
+} from "../chain/transaction";
+import { Client } from "./../client";
+import { cryptoUtils, PrivateKey, PublicKey } from "./../crypto";
 
 export interface CreateAccountOptions {
   /**
@@ -112,7 +112,7 @@ export class BroadcastAPI {
    * @param key Private posting key of comment author.
    */
   public async comment(comment: CommentOperation[1], key: PrivateKey) {
-    const op: Operation = ['comment', comment];
+    const op: Operation = ["comment", comment];
     return this.sendOperations([op], key);
   }
 
@@ -128,8 +128,8 @@ export class BroadcastAPI {
     key: PrivateKey
   ) {
     const ops: Operation[] = [
-      ['comment', comment],
-      ['comment_options', options],
+      ["comment", comment],
+      ["comment_options", options],
     ];
     return this.sendOperations(ops, key);
   }
@@ -140,7 +140,7 @@ export class BroadcastAPI {
    * @param key Private posting key of the voter.
    */
   public async vote(vote: VoteOperation[1], key: PrivateKey) {
-    const op: Operation = ['vote', vote];
+    const op: Operation = ["vote", vote];
     return this.sendOperations([op], key);
   }
 
@@ -150,7 +150,7 @@ export class BroadcastAPI {
    * @param key Private active key of sender.
    */
   public async transfer(data: TransferOperation[1], key: PrivateKey) {
-    const op: Operation = ['transfer', data];
+    const op: Operation = ["transfer", data];
     return this.sendOperations([op], key);
   }
 
@@ -160,7 +160,7 @@ export class BroadcastAPI {
    * @param key Private posting or active key.
    */
   public async json(data: CustomJsonOperation[1], key: PrivateKey) {
-    const op: Operation = ['custom_json', data];
+    const op: Operation = ["custom_json", data];
     return this.sendOperations([op], key);
   }
 
@@ -174,8 +174,8 @@ export class BroadcastAPI {
     key: PrivateKey
   ) {
     assert(
-      global.hasOwnProperty('it'),
-      'helper to be used only for mocha tests'
+      global.hasOwnProperty("it"),
+      "helper to be used only for mocha tests"
     );
 
     const { username, metadata, creator } = options;
@@ -189,25 +189,25 @@ export class BroadcastAPI {
       const ownerKey = PrivateKey.fromLogin(
         username,
         options.password,
-        'owner'
+        "owner"
       ).createPublic(prefix);
       owner = Authority.from(ownerKey);
       const activeKey = PrivateKey.fromLogin(
         username,
         options.password,
-        'active'
+        "active"
       ).createPublic(prefix);
       active = Authority.from(activeKey);
       const postingKey = PrivateKey.fromLogin(
         username,
         options.password,
-        'posting'
+        "posting"
       ).createPublic(prefix);
       posting = Authority.from(postingKey);
       memo_key = PrivateKey.fromLogin(
         username,
         options.password,
-        'memo'
+        "memo"
       ).createPublic(prefix);
     } else if (options.auths) {
       owner = Authority.from(options.auths.owner);
@@ -215,24 +215,24 @@ export class BroadcastAPI {
       posting = Authority.from(options.auths.posting);
       memo_key = PublicKey.from(options.auths.memoKey);
     } else {
-      throw new Error('Must specify either password or auths');
+      throw new Error("Must specify either password or auths");
     }
 
     let { fee, delegation } = options;
 
-    delegation = Asset.from(delegation || 0, 'VESTS');
-    fee = Asset.from(fee || 0, 'TESTS');
+    delegation = Asset.from(delegation || 0, "VESTS");
+    fee = Asset.from(fee || 0, "TESTS");
 
     if (fee.amount > 0) {
       const chainProps = await this.client.database.getChainProperties();
       const creationFee = Asset.from(chainProps.account_creation_fee);
       if (fee.amount !== creationFee.amount) {
-        throw new Error('Fee must be exactly ' + creationFee.toString());
+        throw new Error("Fee must be exactly " + creationFee.toString());
       }
     }
 
     const claim_op: ClaimAccountOperation = [
-      'claim_account',
+      "claim_account",
       {
         creator,
         extensions: [],
@@ -241,12 +241,12 @@ export class BroadcastAPI {
     ];
 
     const create_op: CreateClaimedAccountOperation = [
-      'create_claimed_account',
+      "create_claimed_account",
       {
         active,
         creator,
         extensions: [],
-        json_metadata: metadata ? JSON.stringify(metadata) : '',
+        json_metadata: metadata ? JSON.stringify(metadata) : "",
         memo_key,
         new_account_name: username,
         owner,
@@ -258,7 +258,7 @@ export class BroadcastAPI {
 
     if (delegation.amount > 0) {
       const delegate_op: DelegateVestingSharesOperation = [
-        'delegate_vesting_shares',
+        "delegate_vesting_shares",
         {
           delegatee: username,
           delegator: creator,
@@ -278,7 +278,7 @@ export class BroadcastAPI {
    *            key level or higher for updating account authorities.
    */
   public async updateAccount(data: AccountUpdateOperation[1], key: PrivateKey) {
-    const op: Operation = ['account_update', data];
+    const op: Operation = ["account_update", data];
     return this.sendOperations([op], key);
   }
 
@@ -298,7 +298,7 @@ export class BroadcastAPI {
     options: DelegateVestingSharesOperation[1],
     key: PrivateKey
   ) {
-    const op: Operation = ['delegate_vesting_shares', options];
+    const op: Operation = ["delegate_vesting_shares", options];
     return this.sendOperations([op], key);
   }
 
@@ -317,10 +317,10 @@ export class BroadcastAPI {
 
     const ref_block_prefix = Buffer.from(
       props.head_block_id,
-      'hex'
+      "hex"
     ).readUInt32LE(4);
     const expiration = new Date(
-      new Date(props.time + 'Z').getTime() + this.expireTime
+      new Date(props.time + "Z").getTime() + this.expireTime
     )
       .toISOString()
       .slice(0, -5);
@@ -335,7 +335,7 @@ export class BroadcastAPI {
     };
 
     const result = await this.send(this.sign(tx, key));
-    assert(result.expired === false, 'transaction expired');
+    assert(result.expired === false, "transaction expired");
 
     return result;
   }
@@ -356,13 +356,13 @@ export class BroadcastAPI {
   public async send(
     transaction: SignedTransaction
   ): Promise<TransactionConfirmation> {
-    return this.call('broadcast_transaction_synchronous', [transaction]);
+    return this.call("broadcast_transaction_synchronous", [transaction]);
   }
 
   /**
    * Convenience for calling `condenser_api`.
    */
   public call(method: string, params?: any[]) {
-    return this.client.call('condenser_api', method, params);
+    return this.client.call("condenser_api", method, params);
   }
 }

@@ -33,16 +33,16 @@
  * in the design, construction, operation or maintenance of any military facility.
  */
 
-import * as assert from 'assert';
-import { VError } from 'verror';
-import packageVersion from './version';
+import * as assert from "assert";
+import { VError } from "verror";
+import packageVersion from "./version";
 
-import { Blockchain } from './helpers/blockchain';
-import { BroadcastAPI } from './helpers/broadcast';
-import { DatabaseAPI } from './helpers/database';
-import { HivemindAPI } from './helpers/hivemind';
-import { RCAPI } from './helpers/rc';
-import { copy, retryingFetch, waitForEvent } from './utils';
+import { Blockchain } from "./helpers/blockchain";
+import { BroadcastAPI } from "./helpers/broadcast";
+import { DatabaseAPI } from "./helpers/database";
+import { HivemindAPI } from "./helpers/hivemind";
+import { RCAPI } from "./helpers/rc";
+import { copy, retryingFetch, waitForEvent } from "./utils";
 
 /**
  * Library version.
@@ -53,14 +53,14 @@ export const VERSION = packageVersion;
  * Main Blurt network chain id.
  */
 export const DEFAULT_CHAIN_ID = Buffer.from(
-  'cd8d90f29ae273abec3eaa7731e25934c63eb654d55080caff2ebb7f5df6381f',
-  'hex'
+  "cd8d90f29ae273abec3eaa7731e25934c63eb654d55080caff2ebb7f5df6381f",
+  "hex"
 );
 
 /**
  * Main Blurt network address prefix.
  */
-export const DEFAULT_ADDRESS_PREFIX = 'BLT';
+export const DEFAULT_ADDRESS_PREFIX = "BLT";
 
 interface RPCRequest {
   /**
@@ -70,16 +70,16 @@ interface RPCRequest {
   /**
    * RPC method.
    */
-  method: 'call' | 'notice' | 'callback';
+  method: "call" | "notice" | "callback";
   /**
    * Array of parameters to pass to the method.
    */
-  jsonrpc: '2.0';
+  jsonrpc: "2.0";
   params: any[];
 }
 
 interface RPCCall extends RPCRequest {
-  method: 'call' | any;
+  method: "call" | any;
   /**
    * 1. API to call, you can pass either the numerical id of the API you get
    *    from calling 'get_api_by_name' or the name directly as a string.
@@ -236,7 +236,7 @@ export class Client {
     if (options.rebrandedApi) {
       // tslint:disable-next-line: no-console
       console.log(
-        'Warning: rebrandedApi is deprecated and safely can be removed from client options'
+        "Warning: rebrandedApi is deprecated and safely can be removed from client options"
       );
     }
     this.currentAddress = Array.isArray(address) ? address[0] : address;
@@ -244,9 +244,9 @@ export class Client {
     this.options = options;
 
     this.chainId = options.chainId
-      ? Buffer.from(options.chainId, 'hex')
+      ? Buffer.from(options.chainId, "hex")
       : DEFAULT_CHAIN_ID;
-    assert.equal(this.chainId.length, 32, 'invalid chain id');
+    assert.equal(this.chainId.length, 32, "invalid chain id");
     this.addressPrefix = options.addressPrefix || DEFAULT_ADDRESS_PREFIX;
 
     this.timeout = options.timeout || 60 * 1000;
@@ -272,10 +272,10 @@ export class Client {
     }
 
     // Testnet details: https://gitlab.syncad.com/hive/hive/-/issues/36
-    opts.addressPrefix = 'BLT';
+    opts.addressPrefix = "BLT";
     opts.chainId =
-      'cd8d90f29ae273abec3eaa7731e25934c63eb654d55080caff2ebb7f5df6381f';
-    return new Client('https://hive-test-beeabode.roelandp.nl', opts);
+      "cd8d90f29ae273abec3eaa7731e25934c63eb654d55080caff2ebb7f5df6381f";
+    return new Client("https://hive-test-beeabode.roelandp.nl", opts);
   }
 
   /**
@@ -292,40 +292,40 @@ export class Client {
     params: any = []
   ): Promise<any> {
     let request: RPCCall;
-    if (api === 'bridge') {
+    if (api === "bridge") {
       request = {
         id: 0,
-        jsonrpc: '2.0',
-        method: api + '.' + method,
+        jsonrpc: "2.0",
+        method: api + "." + method,
         params,
       };
     } else {
       request = {
-        id: '0',
-        jsonrpc: '2.0',
-        method: 'call',
+        id: "0",
+        jsonrpc: "2.0",
+        method: "call",
         params: [api, method, params],
       };
     }
     const body = JSON.stringify(request, (key, value) => {
       // encode Buffers as hex strings instead of an array of bytes
-      if (value && typeof value === 'object' && value.type === 'Buffer') {
-        return Buffer.from(value.data).toString('hex');
+      if (value && typeof value === "object" && value.type === "Buffer") {
+        return Buffer.from(value.data).toString("hex");
       }
       return value;
     });
     const opts: any = {
       body,
-      cache: 'no-cache',
-      method: 'POST',
-      mode: 'cors',
+      cache: "no-cache",
+      method: "POST",
+      mode: "cors",
     };
 
     // Self is not defined within Node environments
     // This check is needed because the user agent cannot be set in a browser
     if (typeof self === undefined) {
       opts.headers = {
-        'User-Agent': `dhive/${packageVersion}`,
+        "User-Agent": `dhive/${packageVersion}`,
       };
     }
 
@@ -334,8 +334,8 @@ export class Client {
     }
     let fetchTimeout: any;
     if (
-      api !== 'network_broadcast_api' &&
-      !method.startsWith('broadcast_transaction')
+      api !== "network_broadcast_api" &&
+      !method.startsWith("broadcast_transaction")
     ) {
       // bit of a hack to work around some nodes high error rates
       // only effective in node.js (until timeout spec lands in browsers)
@@ -364,7 +364,7 @@ export class Client {
     if (response.error) {
       const formatValue = (value: any) => {
         switch (typeof value) {
-          case 'object':
+          case "object":
             return JSON.stringify(value);
           default:
             return String(value);
@@ -390,19 +390,19 @@ export class Client {
           .map((key) => ({ key, value: formatValue(topData[key]) }))
           .map((item) => `${item.key}=${item.value}`);
         if (unformattedData.length > 0) {
-          message += ' ' + unformattedData.join(' ');
+          message += " " + unformattedData.join(" ");
         }
       }
-      throw new VError({ info: data, name: 'RPCError' }, message);
+      throw new VError({ info: data, name: "RPCError" }, message);
     }
-    assert.equal(response.id, request.id, 'got invalid response id');
+    assert.equal(response.id, request.id, "got invalid response id");
     return response.result;
   }
 
   public updateOperations(rebrandedApi) {
     // tslint:disable-next-line: no-console
     console.log(
-      'Warning: call to updateOperations() is deprecated and can safely be removed'
+      "Warning: call to updateOperations() is deprecated and can safely be removed"
     );
   }
 }

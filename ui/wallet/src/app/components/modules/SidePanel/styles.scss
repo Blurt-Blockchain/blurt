@@ -1,98 +1,100 @@
 $menu-width: 250px;
 
 .SidePanel {
-  display: block;
+    display: block;
 
-  &__hide-signup {
-      display: none;
-  }
-
-  .menu > li.last {
-    border-bottom: 1px solid $color-border-dark;
-    color: $color-text-gray-light;
-  }
-
-  > div {
-    background-color: $color-blurt-black-darkest;
-    color: $color-white;
-    padding-top: 3rem;
-    .close-button {
-      color: $color-white;
+    &__hide-signup {
+        display: none;
     }
-    .menu > li {
-      > a {
-        transition: 0.2s all ease-in-out;
-        border-top: 1px solid $color-blurt-black;
-        color: $color-white;
-        border-bottom: 1px solid $color-blurt-black-darkest;
-      }
-      > a:hover, &:focus {
-        background-color:  $color-blurt-black;
-        border-bottom: 1px solid $color-blurt-red;
 
-        path {
-          fill: $color-blurt-red;
-        }
-      }
-      path {
-        fill: $color-text-gray-light;
-      }
-      a.menu-section {
+    .menu > li.last {
+        border-bottom: 1px solid $color-border-dark;
         color: $color-text-gray-light;
-      }
-      a.menu-section:hover, a.menu-section:focus {
-        cursor: default;
-        background-color: inherit;
-        border-bottom: 1px solid $color-blurt-black-darkest;
-      }
-    }
-    ul:nth-of-type(n+3) {
-      margin-top: 2rem;
     }
 
-    position: fixed;
-    z-index: 1000;
-    top: 0;
-    width: $menu-width;
-    height: 100%;
-    min-height: 100vh;
-    box-sizing: border-box;
-    transition: visibility 250ms, transform ease 250ms;
+    > div {
+        background-color: $color-blurt-black-darkest;
+        color: $color-white;
+        padding-top: 3rem;
+        .close-button {
+            color: $color-white;
+        }
+        .menu > li {
+            > a {
+                transition: 0.2s all ease-in-out;
+                border-top: 1px solid $color-blurt-black;
+                color: $color-white;
+                border-bottom: 1px solid $color-blurt-black-darkest;
+            }
+            > a:hover,
+            &:focus {
+                background-color: $color-blurt-black;
+                border-bottom: 1px solid $color-blurt-red;
 
-    &.left {
-      left: -$menu-width;
-    }
+                path {
+                    fill: $color-blurt-red;
+                }
+            }
+            path {
+                fill: $color-text-gray-light;
+            }
+            a.menu-section {
+                color: $color-text-gray-light;
+            }
+            a.menu-section:hover,
+            a.menu-section:focus {
+                cursor: default;
+                background-color: inherit;
+                border-bottom: 1px solid $color-blurt-black-darkest;
+            }
+        }
+        ul:nth-of-type(n + 3) {
+            margin-top: 2rem;
+        }
 
-    &.visible.left {
-      transform: translate3d($menu-width, 0, 0);
-    }
+        position: fixed;
+        z-index: 1000;
+        top: 0;
+        width: $menu-width;
+        height: 100%;
+        min-height: 100vh;
+        box-sizing: border-box;
+        transition: visibility 250ms, transform ease 250ms;
 
-    &.right {
-      right: -$menu-width;
-      visibility: hidden;
-      overflow-y: auto;
-    }
+        &.left {
+            left: -$menu-width;
+        }
 
-    &.visible.right {
-      transform: translate3d(-$menu-width, 0, 0);
-      visibility: visible;
+        &.visible.left {
+            transform: translate3d($menu-width, 0, 0);
+        }
+
+        &.right {
+            right: -$menu-width;
+            visibility: hidden;
+            overflow-y: auto;
+        }
+
+        &.visible.right {
+            transform: translate3d(-$menu-width, 0, 0);
+            visibility: visible;
+        }
     }
-  }
-  .Icon.extlink {
-    position: relative;
-    top: 3px;
-    left: 2px;
-  }
+    .Icon.extlink {
+        position: relative;
+        top: 3px;
+        left: 2px;
+    }
 }
 
 /* Small only */
 @media screen and (max-width: 39.9375em) {
-  .SidePanel {
-    div ul:nth-of-type(n+2) {
-      margin-top: 2rem;
+    .SidePanel {
+        div ul:nth-of-type(n + 2) {
+            margin-top: 2rem;
+        }
+        > div > .menu > li > a {
+            padding: 0.3rem 1rem;
+        }
     }
-    > div > .menu > li > a {
-      padding: 0.3rem 1rem;
-    }
-}
 }

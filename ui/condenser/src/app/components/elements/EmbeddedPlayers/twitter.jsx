@@ -1,48 +1,48 @@
-import React from 'react';
-import _ from 'lodash';
+import React from 'react'
+import _ from 'lodash'
 
 /**
  * Regular expressions for detecting and validating provider URLs
  * @type {{htmlReplacement: RegExp, main: RegExp, sanitize: RegExp}}
  */
 const regex = {
-    main: /(?:https?:\/\/(?:(?:twitter\.com\/(.*?)\/status\/(.*))))/i,
-    sanitize: /(?:https?:\/\/(?:(?:twitter\.com\/(.*?)\/status\/(.*))))/i,
-    htmlReplacement: /<blockquote[^>]*?><p[^>]*?>(.*?)<\/p>.*?mdash; (.*)<a href="(https:\/\/twitter.com\/.*?(.*?\/status\/(.*?))\?.*?)">(.*?)<\/a><\/blockquote>/i
-};
+  main: /(?:https?:\/\/(?:(?:twitter\.com\/(.*?)\/status\/(.*))))/i,
+  sanitize: /(?:https?:\/\/(?:(?:twitter\.com\/(.*?)\/status\/(.*))))/i,
+  htmlReplacement: /<blockquote[^>]*?><p[^>]*?>(.*?)<\/p>.*?mdash; (.*)<a href="(https:\/\/twitter.com\/.*?(.*?\/status\/(.*?))\?.*?)">(.*?)<\/a><\/blockquote>/i
+}
 
-export default regex;
+export default regex
 
 /**
  * Extract the content ID and other metadata from the URL
  * @param data
  * @returns {null|{id: *, canonical: string, url: *}}
  */
-export function extractMetadataFromEmbedCode(data) {
-    if (!data) return null;
+export function extractMetadataFromEmbedCode (data) {
+  if (!data) return null
 
-    const match = data.match(regex.htmlReplacement);
-    if (match) {
-        const description = match[1];
-        const author = match[2];
-        const url = match[3];
-        const fullId = match[4];
-        const id = match[5];
-        const date = match[5];
+  const match = data.match(regex.htmlReplacement)
+  if (match) {
+    const description = match[1]
+    const author = match[2]
+    const url = match[3]
+    const fullId = match[4]
+    const id = match[5]
+    const date = match[5]
 
-        return {
-            id,
-            fullId,
-            url,
-            canonical: url,
-            thumbnail: null,
-            date,
-            author,
-            description
-        };
+    return {
+      id,
+      fullId,
+      url,
+      canonical: url,
+      thumbnail: null,
+      date,
+      author,
+      description
     }
+  }
 
-    return null;
+  return null
 }
 
 /**
@@ -50,28 +50,28 @@ export function extractMetadataFromEmbedCode(data) {
  * @param data
  * @returns {null|{id: *, canonical: string, url: *}}
  */
-export function extractMetadata(data) {
-    if (!data) return null;
+export function extractMetadata (data) {
+  if (!data) return null
 
-    const match = data.match(regex.main);
-    if (match) {
-        const url = match[0];
-        const author = match[1];
-        const id = match[2];
+  const match = data.match(regex.main)
+  if (match) {
+    const url = match[0]
+    const author = match[1]
+    const id = match[2]
 
-        return {
-            id,
-            fullId: id,
-            url,
-            canonical: null,
-            thumbnail: null,
-            date: '',
-            author,
-            description: ''
-        };
+    return {
+      id,
+      fullId: id,
+      url,
+      canonical: null,
+      thumbnail: null,
+      date: '',
+      author,
+      description: ''
     }
+  }
 
-    return null;
+  return null
 }
 
 /**
@@ -79,14 +79,14 @@ export function extractMetadata(data) {
  * @param url
  * @returns {boolean|*}
  */
-export function validateIframeUrl(url) {
-    const match = url.match(regex.sanitize);
+export function validateIframeUrl (url) {
+  const match = url.match(regex.sanitize)
 
-    if (match) {
-        return url;
-    }
+  if (match) {
+    return url
+  }
 
-    return false;
+  return false
 }
 
 /**
@@ -94,47 +94,47 @@ export function validateIframeUrl(url) {
  * @param url
  * @returns {string|boolean}
  */
-export function normalizeEmbedUrl(url) {
-    const match = url.match(regex.main);
+export function normalizeEmbedUrl (url) {
+  const match = url.match(regex.main)
 
-    if (match && match.length >= 2) {
-        const tweetId = match[2].split('?').shift();
-        return `https://twitter.com/${match[1]}/status/${tweetId}`;
-    }
+  if (match && match.length >= 2) {
+    const tweetId = match[2].split('?').shift()
+    return `https://twitter.com/${match[1]}/status/${tweetId}`
+  }
 
-    return false;
+  return false
 }
 
-function generateTwitterCode(metadata) {
-    let twitterCode =
-        '<blockquote className="twitter-tweet"><p lang="en" dir="ltr"></p>&mdash; <a href=""></a></blockquote>';
-    if (metadata) {
-        let [author, date, url, description] = atob(metadata).split('|');
+function generateTwitterCode (metadata) {
+  let twitterCode =
+        '<blockquote className="twitter-tweet"><p lang="en" dir="ltr"></p>&mdash; <a href=""></a></blockquote>'
+  if (metadata) {
+    let [author, date, url, description] = atob(metadata).split('|')
 
-        // Sanitizing input
-        author = author.replace(/(<([^>]+)>)/gi, '');
-        date = date.replace(/(<([^>]+)>)/gi, '');
-        url = url.replace(/(<([^>]+)>)/gi, '');
-        description = description.replace(/(<([^>]+)>)/gi, '');
-        if (description === '') {
-            description = url;
-        }
+    // Sanitizing input
+    author = author.replace(/(<([^>]+)>)/gi, '')
+    date = date.replace(/(<([^>]+)>)/gi, '')
+    url = url.replace(/(<([^>]+)>)/gi, '')
+    description = description.replace(/(<([^>]+)>)/gi, '')
+    if (description === '') {
+      description = url
+    }
 
-        twitterCode =
+    twitterCode =
             '<blockquote class="twitter-tweet">' +
             `<p lang="en" dir="ltr">${description}</p>` +
             `&mdash; ${author} <a href="${url}">${date}</a>` +
-            '</blockquote>';
+            '</blockquote>'
 
-        const twttr = _.get(window, 'twttr');
-        if (twttr && twttr.widgets) {
-            twttr.widgets.load();
-        }
+    const twttr = _.get(window, 'twttr')
+    if (twttr && twttr.widgets) {
+      twttr.widgets.load()
     }
+  }
 
-    return {
-        __html: twitterCode
-    };
+  return {
+    __html: twitterCode
+  }
 }
 
 /**
@@ -145,18 +145,18 @@ function generateTwitterCode(metadata) {
  * @param h
  * @returns {*}
  */
-export function genIframeMd(idx, twitterId, w, h, metadata) {
-    if (typeof window !== 'undefined') {
-        return (
-            <div
-                key={`twitter-${twitterId}-${idx}`}
-                className="tweetWrapper"
-                dangerouslySetInnerHTML={generateTwitterCode(metadata)}
-            />
-        );
-    }
+export function genIframeMd (idx, twitterId, w, h, metadata) {
+  if (typeof window !== 'undefined') {
+    return (
+      <div
+        key={`twitter-${twitterId}-${idx}`}
+        className='tweetWrapper'
+        dangerouslySetInnerHTML={generateTwitterCode(metadata)}
+      />
+    )
+  }
 
-    return null;
+  return null
 }
 
 /**
@@ -165,27 +165,25 @@ export function genIframeMd(idx, twitterId, w, h, metadata) {
  * @param links
  * @returns {*}
  */
-export function embedNode(child) {
-    try {
-        const { data } = child;
-        const twitter = extractMetadata(data);
+export function embedNode (child) {
+  try {
+    const { data } = child
+    const twitter = extractMetadata(data)
 
-        if (twitter) {
-            const metadata = btoa(
-                `${twitter.author}|${twitter.date}|${twitter.url}|${
-                    twitter.description
-                }`
-            );
-            child.data = data.replace(
-                regex.main,
+    if (twitter) {
+      const metadata = btoa(
+                `${twitter.author}|${twitter.date}|${twitter.url}|${twitter.description}`
+      )
+      child.data = data.replace(
+        regex.main,
                 `~~~ embed:${twitter.id} twitter metadata:${metadata} ~~~`
-            );
-        }
-    } catch (error) {
-        console.log(error);
+      )
     }
+  } catch (error) {
+    console.log(error)
+  }
 
-    return child;
+  return child
 }
 
 /**
@@ -193,27 +191,25 @@ export function embedNode(child) {
  * @param child
  * @returns {string}
  */
-export function preprocessHtml(child) {
-    try {
-        if (typeof child === 'string') {
-            // If typeof child is a string, this means we are trying to process the HTML
-            // to replace the image/anchor tag created by 3Speak dApp
-            const twitter = extractMetadataFromEmbedCode(child);
-            if (twitter) {
-                const metadata = btoa(
-                    `${twitter.author}|${twitter.date}|${twitter.url}|${
-                        twitter.description
-                    }`
-                );
-                child = child.replace(
-                    regex.htmlReplacement,
+export function preprocessHtml (child) {
+  try {
+    if (typeof child === 'string') {
+      // If typeof child is a string, this means we are trying to process the HTML
+      // to replace the image/anchor tag created by 3Speak dApp
+      const twitter = extractMetadataFromEmbedCode(child)
+      if (twitter) {
+        const metadata = btoa(
+                    `${twitter.author}|${twitter.date}|${twitter.url}|${twitter.description}`
+        )
+        child = child.replace(
+          regex.htmlReplacement,
                     `~~~ embed:${twitter.id} twitter metadata:${metadata} ~~~`
-                );
-            }
-        }
-    } catch (error) {
-        console.log(error);
+        )
+      }
     }
+  } catch (error) {
+    console.log(error)
+  }
 
-    return child;
+  return child
 }

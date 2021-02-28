@@ -2,7 +2,7 @@ import React from 'react';
 import linksRe from 'app/utils/Links';
 
 export default class Iframe extends React.Component {
-    normalizeEmbedUrl = url => {
+    normalizeEmbedUrl = (url) => {
         let match;
 
         // Detect youtube URLs
@@ -36,7 +36,7 @@ export default class Iframe extends React.Component {
         return null;
     };
 
-    onChange = e => {
+    onChange = (e) => {
         const { node, state, editor } = this.props;
         const value = e.target.value;
 
@@ -51,7 +51,7 @@ export default class Iframe extends React.Component {
         editor.onChange(next);
     };
 
-    onClick = e => {
+    onClick = (e) => {
         // stop propagation so that the void node itself isn't focused, since that would unfocus the input.
         e.stopPropagation();
     };

@@ -12,7 +12,8 @@ li.nav__block-list-item {
     a {
         @extend .link;
         @extend .link--primary;
-        font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, sans-serif;
+        font-family: 'Source Sans Pro', 'Helvetica Neue', Helvetica, Arial,
+            sans-serif;
     }
     &--active {
         box-shadow: 0px 5px 0px -2px $color-orange;
@@ -20,7 +21,8 @@ li.nav__block-list-item {
             color: $color-orange;
         }
     }
-    &:hover, &:focus {
+    &:hover,
+    &:focus {
         box-shadow: 0px 5px 0px -2px $color-orange;
         a {
             color: $color-orange;

@@ -57,7 +57,7 @@ class CheckLoginOwner extends React.Component {
         this.hide();
         browserHistory.push('/recover_account_step_1');
     };
-    onUnderstood = e => {
+    onUnderstood = (e) => {
         const understood = e.target.checked;
         console.log('understood', understood);
         this.setState({ understood });
@@ -88,7 +88,8 @@ class CheckLoginOwner extends React.Component {
                         ) + ' '}
                         <a onClick={this.recover}>
                             {tt('g.recover_your_account')}
-                        </a>.
+                        </a>
+                        .
                     </p>
                     <p>
                         {tt('checkloginowner_jsx.ownership_changed_on')}{' '}
@@ -98,10 +99,12 @@ class CheckLoginOwner extends React.Component {
                         {tt('checkloginowner_jsx.deadline_for_recovery_is')}{' '}
                         <b>
                             <TimeAgoWrapper date={deadline} />
-                        </b>.
+                        </b>
+                        .
                     </p>
                     <p>
-                        <input type="checkbox" onChange={this.onUnderstood} />&nbsp;&nbsp;
+                        <input type="checkbox" onChange={this.onUnderstood} />
+                        &nbsp;&nbsp;
                         {tt('checkloginowner_jsx.i_understand_dont_show_again')}
                     </p>
                     <div className="button" onClick={this.hide}>
@@ -123,16 +126,16 @@ export default connect(
         return {
             ...ownProps,
             login_owner_pubkey,
-            previous_owner_authority
+            previous_owner_authority,
         };
     },
     // mapDispatchToProps
-    dispatch => ({
+    (dispatch) => ({
         lookupPreviousOwnerAuthority: () => {
             dispatch({
                 type: 'user/lookupPreviousOwnerAuthority',
-                payload: {}
+                payload: {},
             });
-        }
+        },
     })
 )(CheckLoginOwner);

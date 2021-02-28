@@ -9,14 +9,14 @@ import tt from 'counterpart';
 class ExplorePost extends Component {
     static propTypes = {
         permlink: PropTypes.string.isRequired,
-        title: PropTypes.string.isRequired
+        title: PropTypes.string.isRequired,
     };
 
     constructor(props) {
         super(props);
         this.state = {
             copied: false,
-            copiedMD: false
+            copiedMD: false,
         };
         this.onCopy = this.onCopy.bind(this);
         this.onCopyMD = this.onCopyMD.bind(this);
@@ -39,13 +39,13 @@ class ExplorePost extends Component {
 
     onCopy() {
         this.setState({
-            copied: true
+            copied: true,
         });
     }
 
     onCopyMD() {
         this.setState({
-            copiedMD: true
+            copiedMD: true,
         });
     }
 
@@ -74,7 +74,7 @@ class ExplorePost extends Component {
                         className="input-group-field share-box"
                         type="text"
                         value={blurt_world}
-                        onChange={e => e.preventDefault()}
+                        onChange={(e) => e.preventDefault()}
                     />
                     <CopyToClipboard
                         text={blurt_world}
@@ -89,7 +89,7 @@ class ExplorePost extends Component {
                         className="input-group-field share-box"
                         type="text"
                         value={blurtmd}
-                        onChange={e => e.preventDefault()}
+                        onChange={(e) => e.preventDefault()}
                     />
                     <CopyToClipboard
                         text={blurtmd}

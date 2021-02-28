@@ -28,7 +28,7 @@ function hasPositivePayout(postmap, post_url) {
     if (parseFloat(post.get('net_rshares')) > 0) {
         return true;
     }
-    if (post.get('replies').find(url => hasPositivePayout(postmap, url))) {
+    if (post.get('replies').find((url) => hasPositivePayout(postmap, url))) {
         return true;
     }
     return false;
@@ -49,7 +49,7 @@ export function sortComments(cont, comments, sort_order) {
         return Long.fromString(String(a.get('net_rshares')));
     }
     function countUpvotes(a) {
-        return a.get('active_votes').filter(vote => vote.get('percent') > 0)
+        return a.get('active_votes').filter((vote) => vote.get('percent') > 0)
             .size;
     }
     function authorReputation(a) {
@@ -95,7 +95,7 @@ export function sortComments(cont, comments, sort_order) {
             return (
                 authorReputation(cont.get(b)) - authorReputation(cont.get(a))
             );
-        }
+        },
     };
     comments.sort(sort_orders[sort_order]);
 }
@@ -109,7 +109,7 @@ class CommentImpl extends React.Component {
             'votes',
             'new',
             'trending',
-            'author_reputation'
+            'author_reputation',
         ]).isRequired,
         root: PropTypes.bool,
         showNegativeComments: PropTypes.bool,
@@ -123,10 +123,10 @@ class CommentImpl extends React.Component {
         username: PropTypes.string,
         rootComment: PropTypes.string,
         anchor_link: PropTypes.string.isRequired,
-        deletePost: PropTypes.func.isRequired
+        deletePost: PropTypes.func.isRequired,
     };
     static defaultProps = {
-        depth: 1
+        depth: 1,
     };
 
     constructor() {
@@ -144,7 +144,7 @@ class CommentImpl extends React.Component {
             this.setState({ showEdit: !showEdit, showReply: false });
             this.saveOnShow(!showEdit ? 'edit' : null);
         };
-        this.saveOnShow = type => {
+        this.saveOnShow = (type) => {
             if (process.env.BROWSER) {
                 const { cont } = this.props;
                 const content = cont.get(this.props.content);
@@ -168,7 +168,9 @@ class CommentImpl extends React.Component {
         };
         this.saveOnShow = this.saveOnShow.bind(this);
         this.onDeletePost = () => {
-            const { props: { deletePost } } = this;
+            const {
+                props: { deletePost },
+            } = this;
             const content = this.props.cont.get(this.props.content);
             deletePost(
                 content.get('author'),
@@ -274,7 +276,7 @@ class CommentImpl extends React.Component {
             anchor_link,
             showNegativeComments,
             ignore_list,
-            noImage
+            noImage,
         } = this.props;
         const { onShowReply, onShowEdit, onDeletePost } = this;
         const post = comment.author + '/' + comment.permlink;
@@ -284,7 +286,7 @@ class CommentImpl extends React.Component {
             showReply,
             showEdit,
             hide,
-            hide_body
+            hide_body,
         } = this.state;
         const Editor = showReply ? PostReplyEditor : PostEditEditor;
 
@@ -292,9 +294,7 @@ class CommentImpl extends React.Component {
         if (!rootComment && depth === 1) {
             rootComment = comment.parent_author + '/' + comment.parent_permlink;
         }
-        const comment_link = `/${comment.category}/@${rootComment}#@${
-            comment.author
-        }/${comment.permlink}`;
+        const comment_link = `/${comment.category}/@${rootComment}#@${comment.author}/${comment.permlink}`;
         const ignore = ignore_list && ignore_list.has(comment.author);
 
         if (!showNegativeComments && (hide || ignore)) {
@@ -351,9 +351,7 @@ class CommentImpl extends React.Component {
         let replies = null;
         if (!this.state.collapsed && comment.children > 0) {
             if (depth > 7) {
-                const comment_permlink = `/${comment.category}/@${
-                    comment.author
-                }/${comment.permlink}`;
+                const comment_permlink = `/${comment.category}/@${comment.author}/${comment.permlink}`;
                 replies = (
                     <Link to={comment_permlink}>
                         Show {comment.children} more{' '}
@@ -405,14 +403,14 @@ class CommentImpl extends React.Component {
                         successCallback={() => {
                             this.setState({
                                 showReply: false,
-                                showEdit: false
+                                showEdit: false,
                             });
                             this.saveOnShow(null);
                         }}
                         onCancel={() => {
                             this.setState({
                                 showReply: false,
-                                showEdit: false
+                                showEdit: false,
                             });
                             this.saveOnShow(null);
                         }}
@@ -464,23 +462,21 @@ class CommentImpl extends React.Component {
                         {(this.state.collapsed || hide_body) && (
                             <Voting post={post} showList={false} />
                         )}
-                        {this.state.collapsed &&
-                            comment.children > 0 && (
-                                <span className="marginLeft1rem">
-                                    {tt('g.reply_count', {
-                                        count: comment.children
-                                    })}
-                                </span>
-                            )}
-                        {!this.state.collapsed &&
-                            hide_body && (
-                                <a
-                                    className="marginLeft1rem"
-                                    onClick={this.revealBody}
-                                >
-                                    {tt('g.reveal_comment')}
-                                </a>
-                            )}
+                        {this.state.collapsed && comment.children > 0 && (
+                            <span className="marginLeft1rem">
+                                {tt('g.reply_count', {
+                                    count: comment.children,
+                                })}
+                            </span>
+                        )}
+                        {!this.state.collapsed && hide_body && (
+                            <a
+                                className="marginLeft1rem"
+                                onClick={this.revealBody}
+                            >
+                                {tt('g.reveal_comment')}
+                            </a>
+                        )}
                         {!this.state.collapsed &&
                             !hide_body &&
                             (ignore || gray) && (
@@ -516,7 +512,7 @@ const Comment = connect(
                   'follow',
                   'getFollowingAsync',
                   username,
-                  'ignore_result'
+                  'ignore_result',
               ])
             : null;
 
@@ -527,17 +523,17 @@ const Comment = connect(
             ignore_list,
             operation_flat_fee: state.global.getIn([
                 'props',
-                'operation_flat_fee'
+                'operation_flat_fee',
             ]),
             bandwidth_kbytes_fee: state.global.getIn([
                 'props',
-                'bandwidth_kbytes_fee'
-            ])
+                'bandwidth_kbytes_fee',
+            ]),
         };
     },
 
     // mapDispatchToProps
-    dispatch => ({
+    (dispatch) => ({
         unlock: () => {
             dispatch(userActions.showLogin());
         },
@@ -552,17 +548,17 @@ const Comment = connect(
                 .length;
             let bw_fee = Math.max(
                 0.001,
-                (size / 1024 * bandwidthKbytesFee).toFixed(3)
+                ((size / 1024) * bandwidthKbytesFee).toFixed(3)
             );
             let fee = (operationFlatFee + bw_fee).toFixed(3);
             dispatch(
                 transactionActions.broadcastOperation({
                     type: 'delete_comment',
                     operation,
-                    confirm: tt('g.operation_cost', { fee })
+                    confirm: tt('g.operation_cost', { fee }),
                 })
             );
-        }
+        },
     })
 )(CommentImpl);
 export default Comment;

@@ -5,8 +5,8 @@ import { VError } from "verror";
 
 import { utils } from "./../src";
 
-describe("misc", function() {
-  describe("iteratorStream", function() {
+describe("misc", function () {
+  describe("iteratorStream", function () {
     async function* counter(to: number) {
       for (var i = 0; i < to; i++) {
         yield { i };
@@ -22,12 +22,12 @@ describe("misc", function() {
       }
     }
 
-    it("should handle backpressure", async function() {
+    it("should handle backpressure", async function () {
       this.slow(500);
       await new Promise((resolve, reject) => {
         const s1 = new stream.PassThrough({
           highWaterMark: 10,
-          objectMode: true
+          objectMode: true,
         });
         const s2 = utils.iteratorStream(counter(100));
         s2.pipe(s1);
@@ -44,15 +44,15 @@ describe("misc", function() {
       });
     });
 
-    it("should handle errors", async function() {
-      await new Promise(resolve => {
+    it("should handle errors", async function () {
+      await new Promise((resolve) => {
         const s = utils.iteratorStream(errorCounter(10, 2));
         let last = 0;
         let sawError = false;
-        s.on("data", d => {
+        s.on("data", (d) => {
           last = d.i;
         });
-        s.on("error", error => {
+        s.on("error", (error) => {
           assert.equal(last, 2);
           sawError = true;
         });

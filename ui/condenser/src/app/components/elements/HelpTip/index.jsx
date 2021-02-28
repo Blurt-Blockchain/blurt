@@ -6,22 +6,22 @@ export default class HelpTip extends React.Component {
     static propTypes = {
         children: PropTypes.any.isRequired,
         content: PropTypes.oneOfType([PropTypes.string, PropTypes.array])
-            .isRequired
+            .isRequired,
     };
 
     constructor(props) {
         super(props);
         this.state = {
-            visible: false
+            visible: false,
         };
     }
 
     show = () => this.setVisibility(true);
     hide = () => this.setVisibility(false);
 
-    setVisibility = visible => {
+    setVisibility = (visible) => {
         this.setState({
-            visible
+            visible,
         });
     };
 
@@ -31,7 +31,7 @@ export default class HelpTip extends React.Component {
     };
 
     assignOutsideTouchHandler = () => {
-        const handler = e => {
+        const handler = (e) => {
             let currentNode = e.target;
             const componentNode = ReactDOM.findDOMNode(this.refs.instance);
             while (currentNode.parentNode) {

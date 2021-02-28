@@ -1,4 +1,5 @@
-module.exports = function enforce(type, value) { // Copied from https://github.com/bitcoinjs/bitcoinjs-lib
+module.exports = function enforce (type, value) {
+  // Copied from https://github.com/bitcoinjs/bitcoinjs-lib
   switch (type) {
     case 'Array': {
       if (Array.isArray(value)) return
@@ -33,8 +34,8 @@ module.exports = function enforce(type, value) { // Copied from https://github.c
   throw new TypeError('Expected ' + (getName(type) || type) + ', got ' + value)
 }
 
-function getName(fn) {
+function getName (fn) {
   // Why not fn.name: https://kangax.github.io/compat-table/es6/#function_name_property
-  var match = fn.toString().match(/function (.*?)\(/)
+  const match = fn.toString().match(/function (.*?)\(/)
   return match ? match[1] : null
 }

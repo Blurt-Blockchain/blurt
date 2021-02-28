@@ -18,7 +18,7 @@ class TransactionError extends React.Component {
         addListener: func.isRequired,
         removeListener: func.isRequired,
         errorKey: string,
-        exception: string
+        exception: string,
     };
     componentWillMount() {
         const { opType, addListener } = this.props;
@@ -59,28 +59,28 @@ export default connect(
         return {
             ...ownProps,
             errorKey: key,
-            exception
+            exception,
         };
     },
     // mapDispatchToProps
-    dispatch => ({
-        addListener: opType => {
+    (dispatch) => ({
+        addListener: (opType) => {
             dispatch(
                 transactionActions.set({
                     key: ['TransactionError', opType + '_listener'],
-                    value: true
+                    value: true,
                 })
             );
         },
-        removeListener: opType => {
+        removeListener: (opType) => {
             dispatch(
                 transactionActions.remove({ key: ['TransactionError', opType] })
             );
             dispatch(
                 transactionActions.remove({
-                    key: ['TransactionError', opType + '_listener']
+                    key: ['TransactionError', opType + '_listener'],
                 })
             );
-        }
+        },
     })
 )(TransactionError);

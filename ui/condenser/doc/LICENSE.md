@@ -1,6 +1,5 @@
 Copyright (c) 2020 Blurt Foundation and contributors.
 
-
 =========
 
 Copyright (c) 2016 Blurt Foundation, and contributors.

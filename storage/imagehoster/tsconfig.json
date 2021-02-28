@@ -6,10 +6,7 @@
     "outDir": "lib",
     "strict": true,
     "target": "esnext",
-    "typeRoots" : ["./node_modules/@types", "./src/types"]
+    "typeRoots": ["./node_modules/@types", "./src/types"]
   },
-  "include": [
-    "src/**/*.ts",
-    "src/types/*.ts.d"
-  ]
+  "include": ["src/**/*.ts", "src/types/*.ts.d"]
 }

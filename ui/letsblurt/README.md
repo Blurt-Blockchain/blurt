@@ -1,3 +1,3 @@
 # Lets Blurt
 
-Let's Blurt Mobile App Repo 
+Let's Blurt Mobile App Repo

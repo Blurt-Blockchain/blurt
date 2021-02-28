@@ -59,7 +59,7 @@ export const icons = [
     'notification',
     'transfer',
     'witness',
-    'alert'
+    'alert',
 ];
 const icons_map = {};
 for (const i of icons) icons_map[i] = require(`assets/icons/${i}.svg`);
@@ -71,7 +71,7 @@ const rem_sizes = {
     '3x': '3.45',
     '4x': '4.60',
     '5x': '5.75',
-    '10x': '10.0'
+    '10x': '10.0',
 };
 
 export default class Icon extends React.Component {
@@ -79,7 +79,7 @@ export default class Icon extends React.Component {
         name: PropTypes.string.isRequired,
         size: PropTypes.oneOf(['1x', '1_5x', '2x', '3x', '4x', '5x', '10x']),
         inverse: PropTypes.bool,
-        className: PropTypes.string
+        className: PropTypes.string,
     };
 
     render() {
@@ -88,14 +88,14 @@ export default class Icon extends React.Component {
         let style = {
             display: 'inline-block',
             width: `${rem_sizes['1x']}rem`,
-            height: `${rem_sizes['1x']}rem`
+            height: `${rem_sizes['1x']}rem`,
         };
         if (size) {
             classes += ' Icon_' + size;
             style = {
                 display: 'inline-block',
                 width: `${rem_sizes[size]}rem`,
-                height: `${rem_sizes[size]}rem`
+                height: `${rem_sizes[size]}rem`,
             };
         }
         if (className) {

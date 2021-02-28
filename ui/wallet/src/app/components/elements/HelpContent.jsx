@@ -10,7 +10,7 @@ if (!process.env.BROWSER) {
     const path = require('path');
     const fs = require('fs');
     function getFolderContents(folder, recursive) {
-        return fs.readdirSync(folder).reduce(function(list, file) {
+        return fs.readdirSync(folder).reduce(function (list, file) {
             var name = path.resolve(folder, file);
             var isDir = fs.statSync(name).isDirectory();
             return list.concat(
@@ -25,14 +25,14 @@ if (!process.env.BROWSER) {
         );
         var folderContents = (cache[folder] = cache[folder]
             ? cache[folder]
-            : getFolderContents(normalizedFolder, recursive).filter(function(
+            : getFolderContents(normalizedFolder, recursive).filter(function (
                   item
               ) {
                   if (item === module.filename) return false;
                   return pattern.test(item);
               }));
 
-        var keys = function() {
+        var keys = function () {
             return folderContents;
         };
         var returnContext = function returnContext(item) {
@@ -81,12 +81,11 @@ export default class HelpContent extends React.Component {
 
     componentWillMount() {
         const md_file_path_regexp = new RegExp(`\/${this.locale}\/(.+)\.md$`);
-        req
-            .keys()
-            .filter(a => {
+        req.keys()
+            .filter((a) => {
                 return a.indexOf(`/${this.locale}/`) !== -1;
             })
-            .forEach(filename => {
+            .forEach((filename) => {
                 var res = filename.match(md_file_path_regexp);
                 let key = res[1];
                 let help_locale = HelpData[this.locale];
@@ -112,26 +111,20 @@ export default class HelpContent extends React.Component {
         let value = HelpData[this.locale][this.props.path];
         if (!value && this.locale !== 'en') {
             console.warn(
-                `missing path '${this.props.path}' for locale '${
-                    this.locale
-                }' help files, rolling back to 'en'`
+                `missing path '${this.props.path}' for locale '${this.locale}' help files, rolling back to 'en'`
             );
             value = HelpData['en'][this.props.path];
         }
         if (!value) {
             console.error(
-                `help file not found '${this.props.path}' for locale '${
-                    this.locale
-                }'`
+                `help file not found '${this.props.path}' for locale '${this.locale}'`
             );
             return null;
         }
         if (this.props.section) value = value[this.props.section];
         if (!value) {
             console.error(
-                `help section not found ${this.props.path}#${
-                    this.props.section
-                }`
+                `help section not found ${this.props.path}#${this.props.section}`
             );
             return null;
         }

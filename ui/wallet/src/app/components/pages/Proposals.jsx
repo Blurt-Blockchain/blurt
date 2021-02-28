@@ -73,7 +73,7 @@ class Proposals extends React.Component {
         );
     };
 
-    onClickLoadMoreProposals = e => {
+    onClickLoadMoreProposals = (e) => {
         e.preventDefault();
         this.load();
     };
@@ -115,7 +115,7 @@ Proposals.propTypes = {
 module.exports = {
     path: 'proposals',
     component: connect(
-        state => {
+        (state) => {
             const user = state.user.get('current');
             const currentUser = user && user.get('username');
             const proposals = state.proposal.get('proposals', List());
@@ -131,7 +131,7 @@ module.exports = {
                 last_id,
             };
         },
-        dispatch => {
+        (dispatch) => {
             return {
                 voteOnProposal: (
                     voter,
@@ -195,7 +195,7 @@ module.exports = {
                         })
                     );
                 },
-                listProposals: payload => {
+                listProposals: (payload) => {
                     return new Promise((resolve, reject) => {
                         dispatch(
                             proposalActions.listProposals({

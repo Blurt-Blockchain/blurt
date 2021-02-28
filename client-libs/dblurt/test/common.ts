@@ -2,18 +2,17 @@ import * as fs from "fs";
 import * as https from "https";
 import { randomBytes } from "crypto";
 import fetch from "cross-fetch";
-import { Client, PrivateKey } from './../src'
+import { Client, PrivateKey } from "./../src";
 
 export const NUM_TEST_ACCOUNTS = 2;
 export const IS_BROWSER = global["isBrowser"] === true;
-export const TEST_NODE =
-  process.env["TEST_NODE"] || "https://api.hive.blog";
+export const TEST_NODE = process.env["TEST_NODE"] || "https://api.hive.blog";
 
 export const agent = IS_BROWSER
   ? undefined
   : new https.Agent({ keepAlive: true });
 
-let testAccounts
+let testAccounts;
 
 async function readFile(filename: string) {
   return new Promise<Buffer>((resolve, reject) => {
@@ -29,7 +28,7 @@ async function readFile(filename: string) {
 
 async function writeFile(filename: string, data: Buffer) {
   return new Promise<void>((resolve, reject) => {
-    fs.writeFile(filename, data, error => {
+    fs.writeFile(filename, data, (error) => {
       if (error) {
         reject(error);
       } else {
@@ -57,32 +56,45 @@ export async function createAccount(): Promise<{
   // Create testnet account and delegate to it
   const client = Client.testnet({ agent });
   const ops = {
-    creator: 'initminer',
+    creator: "initminer",
     username,
-    password
-  }
-  const key = PrivateKey.from('5JNHfZYKGaomSFvd4NUdQ9qMcEAC43kujbfjueTHpVapX1Kzq2n')
-  await client.broadcast.createTestAccount(ops, key)
-  await client.broadcast.sendOperations([[
-    'transfer_to_vesting',
+    password,
+  };
+  const key = PrivateKey.from(
+    "5JNHfZYKGaomSFvd4NUdQ9qMcEAC43kujbfjueTHpVapX1Kzq2n"
+  );
+  await client.broadcast.createTestAccount(ops, key);
+  await client.broadcast.sendOperations(
+    [
+      [
+        "transfer_to_vesting",
+        {
+          amount: "100000.000 TESTS",
+          from: "initminer",
+          to: username,
+        },
+      ],
+    ],
+    key
+  );
+  await client.broadcast.transfer(
     {
-      amount: '100000.000 TESTS',
-      from: 'initminer',
-      to: username
-    }
-  ]], key)
-  await client.broadcast.transfer({
-    from: 'initminer',
-    to: username,
-    amount: '1000.000 TESTS',
-    memo: 'test acc'
-  }, key)
-  await client.broadcast.transfer({
-    from: 'initminer',
-    to: username,
-    amount: '1000.000 TBD',
-    memo: 'test acc'
-  }, key)
+      from: "initminer",
+      to: username,
+      amount: "1000.000 TESTS",
+      memo: "test acc",
+    },
+    key
+  );
+  await client.broadcast.transfer(
+    {
+      from: "initminer",
+      to: username,
+      amount: "1000.000 TBD",
+      memo: "test acc",
+    },
+    key
+  );
   // TESTNET URL NEEDED
   // const response = await fetch("https://hive-test-beeabode.roelandp.nl", {
   //   method: "POST",
@@ -112,15 +124,15 @@ export async function getTestnetAccounts(): Promise<
   //   return global["__testnet_accounts"];
   // }
   if (testAccounts) {
-    return testAccounts
+    return testAccounts;
   }
   let rv: { username: string; password: string }[] = [];
   while (rv.length < NUM_TEST_ACCOUNTS) {
     rv.push(await createAccount());
   }
-  testAccounts = rv
+  testAccounts = rv;
   if (console && console.log) {
-    console.log(`CREATED TESTNET ACCOUNTS: ${rv.map(i => i.username)}`);
+    console.log(`CREATED TESTNET ACCOUNTS: ${rv.map((i) => i.username)}`);
   }
   // if (!IS_BROWSER) {
   //   await writeFile(".testnetrc", Buffer.from(JSON.stringify(rv)));

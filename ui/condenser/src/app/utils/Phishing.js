@@ -1,4 +1,4 @@
-const domains = [];
+const domains = []
 
 /**
  * Does this URL look like a phishing attempt?
@@ -6,11 +6,12 @@ const domains = [];
  * @param {string} questionableUrl
  * @returns {boolean}
  */
-export const looksPhishy = questionableUrl => {
-    for (let domain of domains) {
-        if (questionableUrl.toLocaleLowerCase().indexOf(domain) > -1)
-            return true;
+export const looksPhishy = (questionableUrl) => {
+  for (const domain of domains) {
+    if (questionableUrl.toLocaleLowerCase().indexOf(domain) > -1) {
+      return true
     }
+  }
 
-    return false;
-};
+  return false
+}

@@ -6,11 +6,11 @@ class LoadingIndicator extends React.Component {
         // html component attributes
         type: PropTypes.oneOf(['dots', 'circle', 'circle-strong']),
         inline: PropTypes.bool,
-        style: PropTypes.object
+        style: PropTypes.object,
     };
 
     static defaultProps = {
-        style: {}
+        style: {},
     };
 
     constructor(props) {

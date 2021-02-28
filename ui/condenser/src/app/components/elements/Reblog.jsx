@@ -15,7 +15,7 @@ export default class Reblog extends React.Component {
         author: string,
         parent_author: string,
         permlink: string,
-        reblog: func
+        reblog: func,
     };
     constructor(props) {
         super(props);
@@ -36,7 +36,7 @@ export default class Reblog extends React.Component {
         }
     }
 
-    reblog = e => {
+    reblog = (e) => {
         e.preventDefault();
         if (this.state.active) return;
         this.setState({ loading: true });
@@ -47,7 +47,7 @@ export default class Reblog extends React.Component {
             parent_author,
             permlink,
             bandwidth_kbytes_fee,
-            operation_flat_fee
+            operation_flat_fee,
         } = this.props;
         reblog(
             account,
@@ -107,15 +107,15 @@ module.exports = connect(
             account,
             operation_flat_fee: state.global.getIn([
                 'props',
-                'operation_flat_fee'
+                'operation_flat_fee',
             ]),
             bandwidth_kbytes_fee: state.global.getIn([
                 'props',
-                'bandwidth_kbytes_fee'
-            ])
+                'bandwidth_kbytes_fee',
+            ]),
         };
     },
-    dispatch => ({
+    (dispatch) => ({
         reblog: (
             account,
             author,
@@ -130,13 +130,13 @@ module.exports = connect(
                 id: 'follow',
                 required_posting_auths: [account],
                 json: JSON.stringify(json),
-                __config: { title: tt('g.resteem_this_post') }
+                __config: { title: tt('g.resteem_this_post') },
             };
             let size = JSON.stringify(operation).replace(/[\[\]\,\"]/g, '')
                 .length;
             let bw_fee = Math.max(
                 0.001,
-                (size / 1024 * bandwidthKbytesFee).toFixed(3)
+                ((size / 1024) * bandwidthKbytesFee).toFixed(3)
             );
             let fee = (operationFlatFee + bw_fee).toFixed(3);
             dispatch(
@@ -145,10 +145,10 @@ module.exports = connect(
                     confirm: tt('g.operation_cost', { fee }),
                     operation,
                     successCallback,
-                    errorCallback
+                    errorCallback,
                 })
             );
-        }
+        },
     })
 )(Reblog);
 

@@ -8,7 +8,7 @@ import tt from 'counterpart';
 
 export default class TagsIndex extends React.Component {
     static propTypes = {
-        tagsAll: PropTypes.object.isRequired
+        tagsAll: PropTypes.object.isRequired,
     };
 
     constructor(props) {
@@ -60,12 +60,12 @@ export default class TagsIndex extends React.Component {
         const rows = tags
             .filter(
                 // there is a blank tag present, as well as some starting with #. filter them out.
-                tag => /^[a-z]/.test(tag.get('name'))
+                (tag) => /^[a-z]/.test(tag.get('name'))
             )
             .sort((a, b) => {
                 return this.compareTags(a, b, order);
             })
-            .map(tag => {
+            .map((tag) => {
                 const name = tag.get('name');
                 const link = `/trending/${name}`;
                 return (
@@ -91,8 +91,8 @@ export default class TagsIndex extends React.Component {
             ['name', tt('g.tag')],
             ['posts', tt('g.posts')],
             ['comments', tt('g.comments')],
-            ['payouts', tt('g.payouts')]
-        ].map(col => {
+            ['payouts', tt('g.payouts')],
+        ].map((col) => {
             return (
                 <th key={col[0]}>
                     {order === col[0] ? (
@@ -100,7 +100,7 @@ export default class TagsIndex extends React.Component {
                     ) : (
                         <Link
                             to="#"
-                            onClick={e => this.onChangeSort(e, col[0])}
+                            onClick={(e) => this.onChangeSort(e, col[0])}
                         >
                             {col[1]}
                         </Link>
@@ -128,7 +128,7 @@ export default class TagsIndex extends React.Component {
 
 module.exports = {
     path: 'tags(/:order)',
-    component: connect(state => ({
-        tagsAll: state.global.get('tags')
-    }))(TagsIndex)
+    component: connect((state) => ({
+        tagsAll: state.global.get('tags'),
+    }))(TagsIndex),
 };

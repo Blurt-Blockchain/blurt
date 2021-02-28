@@ -20,12 +20,12 @@ class CategorySelector extends React.Component {
         tabIndex: PropTypes.number,
 
         // redux connect (overwrite in HTML)
-        trending: PropTypes.object.isRequired // Immutable.List
+        trending: PropTypes.object.isRequired, // Immutable.List
     };
     static defaultProps = {
         autoComplete: 'on',
         id: 'CategorySelectorId',
-        isEdit: false
+        isEdit: false,
     };
     constructor() {
         super();
@@ -34,13 +34,13 @@ class CategorySelector extends React.Component {
             this,
             'CategorySelector'
         );
-        this.categoryCreateToggle = e => {
+        this.categoryCreateToggle = (e) => {
             e.preventDefault();
             this.props.onChange();
             this.setState({ createCategory: !this.state.createCategory });
             setTimeout(() => this.refs.categoryRef.focus(), 300);
         };
-        this.categorySelectOnChange = e => {
+        this.categorySelectOnChange = (e) => {
             e.preventDefault();
             const { value } = e.target;
             const { onBlur } = this.props; // call onBlur to trigger validation immediately
@@ -127,33 +127,28 @@ class CategorySelector extends React.Component {
 export function validateCategory(category, required = true) {
     if (!category || category.split(':')[0].trim() === '')
         return required ? tt('g.required') : null;
-    const cats = category
-        .split(':')[0]
-        .trim()
-        .split(' ');
+    const cats = category.split(':')[0].trim().split(' ');
     return (
         // !category || category.trim() === '' ? 'Required' :
         cats.length > 5
             ? tt('category_selector_jsx.use_limited_amount_of_categories', {
-                  amount: 5
+                  amount: 5,
               })
-            : cats.find(c => c.length > 24)
-              ? tt('category_selector_jsx.maximum_tag_length_is_24_characters')
-              : cats.find(c => c.split('-').length > 2)
-                ? tt('category_selector_jsx.use_one_dash')
-                : cats.find(c => c.indexOf(',') >= 0)
-                  ? tt('category_selector_jsx.use_spaces_to_separate_tags')
-                  : cats.find(c => /[A-Z]/.test(c))
-                    ? tt('category_selector_jsx.use_only_lowercase_letters')
-                    : cats.find(c => !/^[a-z0-9-#]+$/.test(c))
-                      ? tt('category_selector_jsx.use_only_allowed_characters')
-                      : cats.find(c => !/^[a-z-#]/.test(c))
-                        ? tt('category_selector_jsx.must_start_with_a_letter')
-                        : cats.find(c => !/[a-z0-9]$/.test(c))
-                          ? tt(
-                                'category_selector_jsx.must_end_with_a_letter_or_number'
-                            )
-                          : null
+            : cats.find((c) => c.length > 24)
+            ? tt('category_selector_jsx.maximum_tag_length_is_24_characters')
+            : cats.find((c) => c.split('-').length > 2)
+            ? tt('category_selector_jsx.use_one_dash')
+            : cats.find((c) => c.indexOf(',') >= 0)
+            ? tt('category_selector_jsx.use_spaces_to_separate_tags')
+            : cats.find((c) => /[A-Z]/.test(c))
+            ? tt('category_selector_jsx.use_only_lowercase_letters')
+            : cats.find((c) => !/^[a-z0-9-#]+$/.test(c))
+            ? tt('category_selector_jsx.use_only_allowed_characters')
+            : cats.find((c) => !/^[a-z-#]/.test(c))
+            ? tt('category_selector_jsx.must_start_with_a_letter')
+            : cats.find((c) => !/[a-z0-9]$/.test(c))
+            ? tt('category_selector_jsx.must_end_with_a_letter_or_number')
+            : null
     );
 }
 export default connect((state, ownProps) => {

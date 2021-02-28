@@ -4,15 +4,15 @@ import PropTypes from 'prop-types';
 export default class Qr extends React.Component {
     static propTypes = {
         handleScan: PropTypes.func.isRequired,
-        onClose: PropTypes.func
+        onClose: PropTypes.func,
     };
     constructor(props) {
         super();
-        this.handleError = error => {
+        this.handleError = (error) => {
             console.error(error);
         };
         const { onClose, handleScan } = props;
-        this.handleScan = data => {
+        this.handleScan = (data) => {
             handleScan(data);
             if (onClose) onClose();
         };

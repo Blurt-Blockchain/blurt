@@ -1,27 +1,27 @@
-import assert from "assert"
-import Promise from 'bluebird';
-import should from 'should';
-import steem from '../src';
+import assert from 'assert'
+import Promise from 'bluebird'
+import should from 'should'
+import steem from '../src'
 
-const username = process.env.BLURT_USERNAME || 'guest123';
-const password = process.env.BLURT_PASSWORD;
-const activeWif = steem.auth.toWif(username, password, 'active');
+const username = process.env.BLURT_USERNAME || 'guest123'
+const password = process.env.BLURT_PASSWORD
+const activeWif = steem.auth.toWif(username, password, 'active')
 
 describe('steem.hf21-accounts:', () => {
   it('has generated methods', () => {
-    should.exist(steem.broadcast.createProposal);
-    should.exist(steem.broadcast.updateProposalVotes);
-    should.exist(steem.broadcast.removeProposal);
-  });
+    should.exist(steem.broadcast.createProposal)
+    should.exist(steem.broadcast.updateProposalVotes)
+    should.exist(steem.broadcast.removeProposal)
+  })
 
   it('has promise methods', () => {
-    should.exist(steem.broadcast.createProposalAsync);
-    should.exist(steem.broadcast.updateProposalVotesAsync);
-    should.exist(steem.broadcast.removeProposalAsync);
-  });
+    should.exist(steem.broadcast.createProposalAsync)
+    should.exist(steem.broadcast.updateProposalVotesAsync)
+    should.exist(steem.broadcast.removeProposalAsync)
+  })
 
   describe('create proposal ops', () => {
-/*  Skip these tests. Steem-js test infrastructure not set up for testing active auths
+    /*  Skip these tests. Steem-js test infrastructure not set up for testing active auths
     Blocked by Steem issue #3546
     it('signs and verifies create_proposal', function(done) {
       let permlink = 'test';
@@ -74,5 +74,5 @@ describe('steem.hf21-accounts:', () => {
       });
     })
 */
-  });
-});
+  })
+})

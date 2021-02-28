@@ -7,20 +7,20 @@ import { Client, PrivateKey, utils } from "./../src";
 
 import { getTestnetAccounts, randomString, agent } from "./common";
 
-describe("broadcast", function() {
+describe("broadcast", function () {
   this.slow(10 * 1000);
   this.timeout(60 * 1000);
 
   const client = Client.testnet({ agent });
 
   let acc1, acc2: { username: string; password: string };
-  before(async function() {
+  before(async function () {
     [acc1, acc2] = await getTestnetAccounts();
   });
 
   const postPermlink = `dhive-test-${randomString(7)}`;
 
-  it("should broadcast", async function() {
+  it("should broadcast", async function () {
     const key = PrivateKey.fromLogin(acc1.username, acc1.password, "posting");
     const body = [
       `![picture](https://unsplash.it/1200/800?image=${~~(
@@ -28,7 +28,7 @@ describe("broadcast", function() {
       )})`,
       "\n---\n",
       lorem({ count: ~~(1 + Math.random() * 10), units: "paragraphs" }),
-      "\n\n🐢"
+      "\n\n🐢",
     ].join("\n");
     const result = await client.broadcast.comment(
       {
@@ -38,7 +38,7 @@ describe("broadcast", function() {
         permlink: postPermlink,
         title: `Picture of the day #${~~(Math.random() * 1e8)}`,
         body,
-        json_metadata: JSON.stringify({ foo: "bar", tags: ["test"] })
+        json_metadata: JSON.stringify({ foo: "bar", tags: ["test"] }),
       },
       key
     );
@@ -46,7 +46,7 @@ describe("broadcast", function() {
     assert(block.transaction_ids.indexOf(result.id) !== -1);
   });
 
-  it("should handle concurrent broadcasts", async function() {
+  it("should handle concurrent broadcasts", async function () {
     const key = PrivateKey.fromLogin(acc2.username, acc2.password, "posting");
     const commentPromise = client.broadcast.comment(
       {
@@ -56,7 +56,7 @@ describe("broadcast", function() {
         permlink: `${postPermlink}-botcomment-1`,
         title: "Comments has titles?",
         body: `Amazing post! Revoted upsteemed and trailing! @${acc2.username}`,
-        json_metadata: ""
+        json_metadata: "",
       },
       key
     );
@@ -65,11 +65,11 @@ describe("broadcast", function() {
         voter: acc2.username,
         author: acc1.username,
         permlink: postPermlink,
-        weight: 10000
+        weight: 10000,
       },
       key
     );
     const result = await Promise.all([commentPromise, votePromise]);
-    assert(result.every(r => r.expired === false));
+    assert(result.every((r) => r.expired === false));
   });
 });

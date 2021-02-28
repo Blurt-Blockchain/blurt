@@ -2,9 +2,9 @@
 
 After MIRAs initial development efforts we released the [Basic MIRA Configuration Guide](https://github.com/steemit/steem/blob/master/doc/mira.md) to help bootstrap users attempting to use MIRA enabled `blurtd`. There is actually much more fine tuning that can be done to improve MIRA's performance. We will break up this process into three phases:
 
-* Phase 1: Gathering statistics
-* Phase 2: Analyzing statistics
-* Phase 3: Applying performance recommendations
+- Phase 1: Gathering statistics
+- Phase 2: Analyzing statistics
+- Phase 3: Applying performance recommendations
 
 # Phase 1: Gathering statistics
 
@@ -79,7 +79,7 @@ You may notice that you will get different recommendations for different objects
 
 ## Configuration overlays
 
-A configuration overlay is a set of options overriding the base configuration to be applied to a specified database. In our default configuration, you may notice that one of the objects is called `base`. These settings are applied to every database unless a *configuration overlay* overrides them. A configuration overlay takes the same options as `base`. As an example, we will override `bits_per_key` for the `account_authority_object`.
+A configuration overlay is a set of options overriding the base configuration to be applied to a specified database. In our default configuration, you may notice that one of the objects is called `base`. These settings are applied to every database unless a _configuration overlay_ overrides them. A configuration overlay takes the same options as `base`. As an example, we will override `bits_per_key` for the `account_authority_object`.
 
 ```
 {
@@ -129,4 +129,3 @@ Not every RocksDB option is made available to MIRA configurations. It is very po
 # Conclusion
 
 You may need to repeat this process to achieve optimal results. There is no guarantee that you will see performance improvements as this is experimental in nature. When you are benchmarking your configuration or you have completed your performance tuning, remember to set `statistics` to `false`.
-

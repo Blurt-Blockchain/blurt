@@ -1,4 +1,4 @@
-global['isBrowser'] = true
+global.isBrowser = true
 require('../src/index-browser')
 require('./asset.ts')
 require('./blockchain.ts')

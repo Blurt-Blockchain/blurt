@@ -7,6 +7,9 @@
   "stage_uri": "https://test.blurt.world/rpc",
   "address_prefix": "BLT",
   "chain_id": "cd8d90f29ae273abec3eaa7731e25934c63eb654d55080caff2ebb7f5df6381f",
-  "alternative_api_endpoints": ["https://rpc.blurt.world", "https://rpc.blurt.world"],
+  "alternative_api_endpoints": [
+    "https://rpc.blurt.world",
+    "https://rpc.blurt.world"
+  ],
   "failover_threshold": 3
 }

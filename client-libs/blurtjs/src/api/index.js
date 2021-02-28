@@ -1,413 +1,440 @@
-import EventEmitter from 'events';
-import Promise from 'bluebird';
-import config from '../config';
-import methods from './methods';
-import transports from './transports';
-import {RPCError} from './transports/http'
-import {
-    camelCase
-} from '../utils';
-import {
-    hash
-} from '../auth/ecc';
-import {
-    ops
-} from '../auth/serializer';
-import {
-    jsonRpc
-} from './transports/http';
-import {
-    sign as signRequest
-} from '@steemit/rpc-auth';
+import EventEmitter from 'events'
+import Promise from 'bluebird'
+import config from '../config'
+import methods from './methods'
+import transports from './transports'
+import { RPCError, jsonRpc } from './transports/http'
+import { camelCase } from '../utils'
+import { hash } from '../auth/ecc'
+import { ops } from '../auth/serializer'
+
+import { sign as signRequest } from '@steemit/rpc-auth'
 
 class Steem extends EventEmitter {
-    constructor(options = {}) {
-        super(options);
-        this._setTransport(options);
-        this._setLogger(options);
-        this.options = options;
-        this.seqNo = 0; // used for rpc calls
-        this.error_count = 0;
-        this.api_index = 0;
-        this.error_threshold = 3;
-        this.alternative_api_endpoints = ['https://rpc.blurt.world', 'https://rpc.blurt.world'];
-        methods.forEach(method => {
-            const methodName = method.method_name || camelCase(method.method);
-            const methodParams = method.params || [];
+  constructor (options = {}) {
+    super(options)
+    this._setTransport(options)
+    this._setLogger(options)
+    this.options = options
+    this.seqNo = 0 // used for rpc calls
+    this.error_count = 0
+    this.api_index = 0
+    this.error_threshold = 3
+    this.alternative_api_endpoints = [
+      'https://rpc.blurt.world',
+      'https://rpc.blurt.world'
+    ]
+    methods.forEach((method) => {
+      const methodName = method.method_name || camelCase(method.method)
+      const methodParams = method.params || []
 
-            this[`${methodName}With`] = (options, callback) => {
-                return this.send(method.api, {
-                    method: method.method,
-                    params: methodParams.map(param => options[param])
-                }, callback);
-            };
+      this[`${methodName}With`] = (options, callback) => {
+        return this.send(
+          method.api,
+          {
+            method: method.method,
+            params: methodParams.map((param) => options[param])
+          },
+          callback
+        )
+      }
 
-            this[methodName] = (...args) => {
-                const options = methodParams.reduce((memo, param, i) => {
-                    memo[param] = args[i]; // eslint-disable-line no-param-reassign
-                    return memo;
-                }, {});
-                const callback = args[methodParams.length];
-                return this[`${methodName}With`](options, callback);
-            };
+      this[methodName] = (...args) => {
+        const options = methodParams.reduce((memo, param, i) => {
+          memo[param] = args[i] // eslint-disable-line no-param-reassign
+          return memo
+        }, {})
+        const callback = args[methodParams.length]
+        return this[`${methodName}With`](options, callback)
+      }
 
-	          this[`${methodName}WithAsync`] = Promise.promisify(this[`${methodName}With`]);
-            this[`${methodName}Async`] = Promise.promisify(this[methodName]);
-        });
-        this.callAsync = Promise.promisify(this.call);
-        this.signedCallAsync = Promise.promisify(this.signedCall);
-        console.log("Alternate endpoints: ", this.options.alternative_api_endpoints);
-        console.log("Failover Threshold (errors): ", this.options.failover_threshold);
-        this.notifyError = this.notifyError.bind(this);
+      this[`${methodName}WithAsync`] = Promise.promisify(
+        this[`${methodName}With`]
+      )
+      this[`${methodName}Async`] = Promise.promisify(this[methodName])
+    })
+    this.callAsync = Promise.promisify(this.call)
+    this.signedCallAsync = Promise.promisify(this.signedCall)
+    console.log(
+      'Alternate endpoints: ',
+      this.options.alternative_api_endpoints
+    )
+    console.log(
+      'Failover Threshold (errors): ',
+      this.options.failover_threshold
+    )
+    this.notifyError = this.notifyError.bind(this)
+  }
+
+  _setTransport (options) {
+    if (options.url && options.url.match('^((http|https)?://)')) {
+      options.uri = options.url
+      options.transport = 'http'
+      this._transportType = options.transport
+      this.options = options
+      this.transport = new transports.http(options)
+    } else if (options.url && options.url.match('^((ws|wss)?://)')) {
+      options.websocket = options.url
+      options.transport = 'ws'
+      this._transportType = options.transport
+      this.options = options
+      this.transport = new transports.ws(options)
+    } else if (options.transport) {
+      if (this.transport && this._transportType !== options.transport) {
+        this.transport.stop()
+      }
+
+      this._transportType = options.transport
+
+      if (typeof options.transport === 'string') {
+        if (!transports[options.transport]) {
+          throw new TypeError(
+            'Invalid `transport`, valid values are `http`, `ws` or a class'
+          )
+        }
+        this.transport = new transports[options.transport](options)
+      } else {
+        this.transport = new options.transport(options)
+      }
+    } else {
+      this.transport = new transports.ws(options)
     }
+  }
 
-    _setTransport(options) {
-        if (options.url && options.url.match('^((http|https)?:\/\/)')) {
-            options.uri = options.url;
-            options.transport = 'http';
-            this._transportType = options.transport;
-            this.options = options;
-            this.transport = new transports.http(options);
-        } else if (options.url && options.url.match('^((ws|wss)?:\/\/)')) {
-            options.websocket = options.url;
-            options.transport = 'ws';
-            this._transportType = options.transport;
-            this.options = options;
-            this.transport = new transports.ws(options);
-        } else if (options.transport) {
-            if (this.transport && this._transportType !== options.transport) {
-                this.transport.stop();
-            }
+  _setLogger (options) {
+    if (options.hasOwnProperty('logger')) {
+      switch (typeof options.logger) {
+        case 'function':
+          this.__logger = {
+            log: options.logger
+          }
+          break
+        case 'object':
+          if (typeof options.logger.log !== 'function') {
+            throw new Error(
+              'setOptions({logger:{}}) must have a property .log of type function'
+            )
+          }
+          this.__logger = options.logger
+          break
+        case 'undefined':
+          if (this.__logger) break
+        default:
+          this.__logger = false
+      }
+    }
+  }
 
-            this._transportType = options.transport;
+  log (logLevel) {
+    if (this.__logger) {
+      if (
+        arguments.length > 1 &&
+        typeof this.__logger[logLevel] === 'function'
+      ) {
+        const args = Array.prototype.slice.call(arguments, 1)
+        this.__logger[logLevel].apply(this.__logger, args)
+      } else {
+        this.__logger.log.apply(this.__logger, arguments)
+      }
+    }
+  }
 
-            if (typeof options.transport === 'string') {
-                if (!transports[options.transport]) {
-                    throw new TypeError(
-                        'Invalid `transport`, valid values are `http`, `ws` or a class',
-                    );
-                }
-                this.transport = new transports[options.transport](options);
-            } else {
-                this.transport = new options.transport(options);
-            }
+  start () {
+    return this.transport.start()
+  }
+
+  stop () {
+    return this.transport.stop()
+  }
+
+  send (api, data, callback) {
+    let cb = callback
+    if (this.__logger) {
+      const id = Math.random()
+      const self = this
+      this.log('xmit:' + id + ':', data)
+      cb = function (e, d) {
+        if (e) {
+          self.log('error', 'rsp:' + id + ':\n\n', e, d)
         } else {
-            this.transport = new transports.ws(options);
+          self.log('rsp:' + id + ':', d)
         }
+        if (callback) {
+          callback.apply(self, arguments)
+        }
+      }
+    }
+    return this.transport.send(api, data, cb)
+  }
+
+  call (method, params, callback) {
+    if (this._transportType !== 'http') {
+      callback(
+        new Error('RPC methods can only be called when using http transport')
+      )
+      return
+    }
+    const id = ++this.seqNo
+    jsonRpc(this.options.uri, { method, params, id }).then(
+      (res) => {
+        callback(null, res)
+      },
+      (err) => {
+        this.notifyError(err, err instanceof RPCError)
+        callback(err)
+      }
+    )
+  }
+
+  signedCall (method, params, account, key, callback) {
+    if (this._transportType !== 'http') {
+      callback(
+        new Error('RPC methods can only be called when using http transport')
+      )
+      return
+    }
+    const id = ++this.seqNo
+    let request
+    try {
+      request = signRequest({ method, params, id }, account, [key])
+    } catch (error) {
+      callback(error)
+      return
+    }
+    jsonRpc(this.options.uri, request).then(
+      (res) => {
+        callback(null, res)
+      },
+      (err) => {
+        callback(err)
+        this.notifyError(err)
+      }
+    )
+  }
+
+  setOptions (options) {
+    Object.assign(this.options, options)
+
+    if (options.hasOwnProperty('failover_threshold')) {
+      this.failover_threshold = options.failover_threshold
+    }
+    if (options.hasOwnProperty('alternative_api_endpoints')) {
+      this.alternative_api_endpoints = options.alternative_api_endpoints
     }
 
-    _setLogger(options) {
-        if (options.hasOwnProperty('logger')) {
-            switch (typeof options.logger) {
-                case 'function':
-                    this.__logger = {
-                        log: options.logger
-                    };
-                    break;
-                case 'object':
-                    if (typeof options.logger.log !== 'function') {
-                        throw new Error('setOptions({logger:{}}) must have a property .log of type function')
-                    }
-                    this.__logger = options.logger;
-                    break;
-                case 'undefined':
-                    if (this.__logger) break;
-                default:
-                    this.__logger = false;
-            }
-        }
+    this._setLogger(options)
+    this._setTransport(options)
+    this.transport.setOptions(options)
+    if (options.hasOwnProperty('useTestNet')) {
+      config.set('address_prefix', options.useTestNet ? 'TST' : 'BLT')
     }
 
-    log(logLevel) {
-        if (this.__logger) {
-            if ((arguments.length > 1) && typeof this.__logger[logLevel] === 'function') {
-                let args = Array.prototype.slice.call(arguments, 1);
-                this.__logger[logLevel].apply(this.__logger, args);
+    if (options.hasOwnProperty('url')) {
+      let new_index = 0
+      for (let i = 0; i < this.alternative_api_endpoints.length; i++) {
+        const temp_endpoint = this.alternative_api_endpoints[i]
+        if (temp_endpoint === options.url) {
+          new_index = i
+          break
+        }
+      }
+      this.api_index = new_index
+      const new_endpoint = this.alternative_api_endpoints[this.api_index]
+    }
+  }
+
+  setWebSocket (url) {
+    this.setOptions({
+      websocket: url
+    })
+  }
+
+  setUri (url) {
+    this.setOptions({
+      uri: url
+    })
+  }
+
+  streamBlockNumber (mode = 'head', callback, ts = 200) {
+    if (typeof mode === 'function') {
+      callback = mode
+      mode = 'head'
+    }
+    let current = ''
+    let running = true
+
+    const update = () => {
+      if (!running) return
+
+      this.getDynamicGlobalPropertiesAsync().then(
+        (result) => {
+          const blockId =
+            mode === 'irreversible'
+              ? result.last_irreversible_block_num
+              : result.head_block_number
+
+          if (blockId !== current) {
+            if (current) {
+              for (let i = current; i < blockId; i++) {
+                if (i !== current) {
+                  callback(null, i)
+                }
+                current = i
+              }
             } else {
-                this.__logger.log.apply(this.__logger, arguments);
+              current = blockId
+              callback(null, blockId)
             }
+          }
+
+          Promise.delay(ts).then(() => {
+            update()
+          })
+        },
+        (err) => {
+          callback(err)
         }
+      )
     }
 
-    start() {
-        return this.transport.start();
+    update()
+
+    return () => {
+      running = false
+    }
+  }
+
+  streamBlock (mode = 'head', callback) {
+    if (typeof mode === 'function') {
+      callback = mode
+      mode = 'head'
     }
 
-    stop() {
-        return this.transport.stop();
+    let current = ''
+    let last = ''
+
+    const release = this.streamBlockNumber(mode, (err, id) => {
+      if (err) {
+        release()
+        callback(err)
+        return
+      }
+
+      current = id
+      if (current !== last) {
+        last = current
+        this.getBlock(current, callback)
+      }
+    })
+
+    return release
+  }
+
+  streamTransactions (mode = 'head', callback) {
+    if (typeof mode === 'function') {
+      callback = mode
+      mode = 'head'
     }
 
-    send(api, data, callback) {
-        var cb = callback;
-        if (this.__logger) {
-            let id = Math.random();
-            let self = this;
-            this.log('xmit:' + id + ':', data)
-            cb = function(e, d) {
-                if (e) {
-                    self.log('error', 'rsp:' + id + ':\n\n', e, d)
-                } else {
-                    self.log('rsp:' + id + ':', d)
-                }
-                if (callback) {
-                    callback.apply(self, arguments)
-                }
-            }
-        }
-        return this.transport.send(api, data, cb);
+    const release = this.streamBlock(mode, (err, result) => {
+      if (err) {
+        release()
+        callback(err)
+        return
+      }
+
+      if (result && result.transactions) {
+        result.transactions.forEach((transaction) => {
+          callback(null, transaction)
+        })
+      }
+    })
+
+    return release
+  }
+
+  streamOperations (mode = 'head', callback) {
+    if (typeof mode === 'function') {
+      callback = mode
+      mode = 'head'
     }
 
-    call(method, params, callback) {
-        if (this._transportType !== 'http') {
-            callback(new Error('RPC methods can only be called when using http transport'));
-            return
-        }
-        const id = ++this.seqNo;
-        jsonRpc(this.options.uri, {method, params, id})
-            .then(res => { callback(null, res) }, err => { this.notifyError(err, err instanceof RPCError); callback(err) });
-    }
+    const release = this.streamTransactions(mode, (err, transaction) => {
+      if (err) {
+        release()
+        callback(err)
+        return
+      }
 
-    signedCall(method, params, account, key, callback) {
-        if (this._transportType !== 'http') {
-            callback(new Error('RPC methods can only be called when using http transport'));
-            return;
-        }
-        const id = ++this.seqNo;
-        let request;
-        try {
-            request = signRequest({method, params, id}, account, [key]);
-        } catch (error) {
-            callback(error);
-            return;
-        }
-        jsonRpc(this.options.uri, request)
-            .then(res => { callback(null, res) }, err => { callback(err); this.notifyError(err) });
-    }
+      transaction.operations.forEach((operation) => {
+        callback(null, operation)
+      })
+    })
 
-    setOptions(options) {
-        Object.assign(this.options, options);
+    return release
+  }
 
-        if (options.hasOwnProperty('failover_threshold'))
-            this.failover_threshold = options.failover_threshold;
-        if (options.hasOwnProperty('alternative_api_endpoints'))
-            this.alternative_api_endpoints = options.alternative_api_endpoints;
-
-        this._setLogger(options);
-        this._setTransport(options);
-        this.transport.setOptions(options);
-        if( options.hasOwnProperty('useTestNet') )
-        {
-          config.set( 'address_prefix', options.useTestNet ? 'TST' : 'BLT' )
-        }
-
-        if (options.hasOwnProperty('url'))
-        {
-            let new_index = 0;
-            for (var i = 0; i < this.alternative_api_endpoints.length; i++)
-            {
-                let temp_endpoint = this.alternative_api_endpoints[i];
-                if (temp_endpoint === options.url)
-                {
-                    new_index = i;
-                    break;
-                }
-            }
-            this.api_index = new_index;
-            let new_endpoint = this.alternative_api_endpoints[this.api_index];
-        }
-    }
-
-    setWebSocket(url) {
-        this.setOptions({
-            websocket: url
-        });
-    }
-
-    setUri(url) {
-        this.setOptions({
-            uri: url
-        });
-    }
-
-    streamBlockNumber(mode = 'head', callback, ts = 200) {
-        if (typeof mode === 'function') {
-            callback = mode;
-            mode = 'head';
-        }
-        let current = '';
-        let running = true;
-
-        const update = () => {
-            if (!running) return;
-
-            this.getDynamicGlobalPropertiesAsync().then(
-                result => {
-                    const blockId = mode === 'irreversible' ?
-                        result.last_irreversible_block_num :
-                        result.head_block_number;
-
-                    if (blockId !== current) {
-                        if (current) {
-                            for (let i = current; i < blockId; i++) {
-                                if (i !== current) {
-                                    callback(null, i);
-                                }
-                                current = i;
-                            }
-                        } else {
-                            current = blockId;
-                            callback(null, blockId);
-                        }
-                    }
-
-                    Promise.delay(ts).then(() => {
-                        update();
-                    });
-                },
-                err => {
-                    callback(err);
-                },
-            );
-        };
-
-        update();
-
-        return () => {
-            running = false;
-        };
-    }
-
-    streamBlock(mode = 'head', callback) {
-        if (typeof mode === 'function') {
-            callback = mode;
-            mode = 'head';
-        }
-
-        let current = '';
-        let last = '';
-
-        const release = this.streamBlockNumber(mode, (err, id) => {
-            if (err) {
-                release();
-                callback(err);
-                return;
-            }
-
-            current = id;
-            if (current !== last) {
-                last = current;
-                this.getBlock(current, callback);
-            }
-        });
-
-        return release;
-    }
-
-    streamTransactions(mode = 'head', callback) {
-        if (typeof mode === 'function') {
-            callback = mode;
-            mode = 'head';
-        }
-
-        const release = this.streamBlock(mode, (err, result) => {
-            if (err) {
-                release();
-                callback(err);
-                return;
-            }
-
-            if (result && result.transactions) {
-                result.transactions.forEach(transaction => {
-                    callback(null, transaction);
-                });
-            }
-        });
-
-        return release;
-    }
-
-    streamOperations(mode = 'head', callback) {
-        if (typeof mode === 'function') {
-            callback = mode;
-            mode = 'head';
-        }
-
-        const release = this.streamTransactions(mode, (err, transaction) => {
-            if (err) {
-                release();
-                callback(err);
-                return;
-            }
-
-            transaction.operations.forEach(operation => {
-                callback(null, operation);
-            });
-        });
-
-        return release;
-    }
-
-    broadcastTransactionSynchronousWith(options, callback) {
-    const trx = options.trx;
+  broadcastTransactionSynchronousWith (options, callback) {
+    const trx = options.trx
     return this.send(
-        'network_broadcast_api', {
-            method: 'broadcast_transaction_synchronous',
-            params: [trx],
-        },
-        (err, result) => {
-            if (err) {
-                const {
-                    signed_transaction
-                } = ops;
-                // console.log('-- broadcastTransactionSynchronous -->', JSON.stringify(signed_transaction.toObject(trx), null, 2));
-                // toObject converts objects into serializable types
-                const trObject = signed_transaction.toObject(trx);
-                const buf = signed_transaction.toBuffer(trx);
-                err.digest = hash.sha256(buf).toString('hex');
-                err.transaction_id = buf.toString('hex');
-                err.transaction = JSON.stringify(trObject);
-                callback(err, '');
-            } else {
-                callback('', result);
-            }
-        },
-    );
+      'network_broadcast_api',
+      {
+        method: 'broadcast_transaction_synchronous',
+        params: [trx]
+      },
+      (err, result) => {
+        if (err) {
+          const { signed_transaction } = ops
+          // console.log('-- broadcastTransactionSynchronous -->', JSON.stringify(signed_transaction.toObject(trx), null, 2));
+          // toObject converts objects into serializable types
+          const trObject = signed_transaction.toObject(trx)
+          const buf = signed_transaction.toBuffer(trx)
+          err.digest = hash.sha256(buf).toString('hex')
+          err.transaction_id = buf.toString('hex')
+          err.transaction = JSON.stringify(trObject)
+          callback(err, '')
+        } else {
+          callback('', result)
+        }
+      }
+    )
+  }
 
+  notifyError (err, ignore = false) {
+    if (ignore) {
+      return
     }
-
-    notifyError(err, ignore=false)
-    {
-        if (ignore)
-        {
-            return;
-        }
-        if (this.failover_threshold === undefined || this.alternative_api_endpoints === undefined)
-        {
-            return;
-        }
-        if (err && err.toString().includes("overseer"))
-        {
-            //overseer was a steem thing, it doesn't exist in hive so don't count this error towards failover
-            return;
-        }
-        this.error_count++;
-        if (this.error_count >= this.failover_threshold)
-        {
-            let current_url = this.options.url;
-            this.error_count = 0;
-            this.api_index++;
-            if (this.api_index >= this.alternative_api_endpoints.length)
-            {
-                this.api_index = 0;
-            }
-            let nextEndpoint = this.alternative_api_endpoints[this.api_index];
-            console.log("failing over. old endpoint was: ", current_url, " new one is: ", nextEndpoint);
-            this.setOptions({url: nextEndpoint});
-        }
+    if (
+      this.failover_threshold === undefined ||
+      this.alternative_api_endpoints === undefined
+    ) {
+      return
     }
+    if (err && err.toString().includes('overseer')) {
+      // overseer was a steem thing, it doesn't exist in hive so don't count this error towards failover
+      return
+    }
+    this.error_count++
+    if (this.error_count >= this.failover_threshold) {
+      const current_url = this.options.url
+      this.error_count = 0
+      this.api_index++
+      if (this.api_index >= this.alternative_api_endpoints.length) {
+        this.api_index = 0
+      }
+      const nextEndpoint = this.alternative_api_endpoints[this.api_index]
+      console.log(
+        'failing over. old endpoint was: ',
+        current_url,
+        ' new one is: ',
+        nextEndpoint
+      )
+      this.setOptions({ url: nextEndpoint })
+    }
+  }
 }
 
 // Export singleton instance
-const steem = new Steem(config);
-exports = module.exports = steem;
-exports.Steem = Steem;
+const steem = new Steem(config)
+exports = module.exports = steem
+exports.Steem = Steem

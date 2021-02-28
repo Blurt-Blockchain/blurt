@@ -1,9 +1,9 @@
 - config:
-  - testset: "Basic blurtd API Smoke Test"
+    - testset: "Basic blurtd API Smoke Test"
 
 - test:
-  - name: "Test ip address"
-  - group: "basic_smoketest"
-  - url: "/rpc"
-  - method: "POST"
-  - body: '{}'
+    - name: "Test ip address"
+    - group: "basic_smoketest"
+    - url: "/rpc"
+    - method: "POST"
+    - body: "{}"

@@ -31,19 +31,19 @@ class PostsList extends React.Component {
         showResteem: PropTypes.bool,
         fetchState: PropTypes.func.isRequired,
         pathname: PropTypes.string,
-        nsfwPref: PropTypes.string.isRequired
+        nsfwPref: PropTypes.string.isRequired,
     };
 
     static defaultProps = {
         showSpam: false,
-        loading: false
+        loading: false,
     };
 
     constructor() {
         super();
         this.state = {
             thumbSize: 'desktop',
-            showNegativeComments: false
+            showNegativeComments: false,
         };
         this.scrollListener = this.scrollListener.bind(this);
         this.onBackButton = this.onBackButton.bind(this);
@@ -96,7 +96,7 @@ class PostsList extends React.Component {
 
     toggleNegativeReplies = () => {
         this.setState({
-            showNegativeComments: !this.state.showNegativeComments
+            showNegativeComments: !this.state.showNegativeComments,
         });
     };
 
@@ -131,11 +131,11 @@ class PostsList extends React.Component {
     attachScrollListener() {
         window.addEventListener('scroll', this.scrollListener, {
             capture: false,
-            passive: true
+            passive: true,
         });
         window.addEventListener('resize', this.scrollListener, {
             capture: false,
-            passive: true
+            passive: true,
         });
         this.scrollListener();
     }
@@ -161,11 +161,11 @@ class PostsList extends React.Component {
             account,
             username,
             nsfwPref,
-            blacklist
+            blacklist,
         } = this.props;
         const { thumbSize } = this.state;
         const postsInfo = [];
-        posts.forEach(item => {
+        posts.forEach((item) => {
             const cont = content.get(item);
             if (!cont) {
                 console.error('PostsList --> Missing cont key', item);
@@ -195,15 +195,15 @@ class PostsList extends React.Component {
         const showFeaturedPosts =
             areFeaturedPostsVisible && areFeaturedPostsReady;
         const featureds = this.props.featured;
-        const renderFeatured = featuredPosts => {
+        const renderFeatured = (featuredPosts) => {
             if (!process.env.BROWSER) return null;
-            return featuredPosts.map(featuredPost => {
+            return featuredPosts.map((featuredPost) => {
                 const id = `${featuredPost.author}/${featuredPost.permlink}`;
                 if (localStorage.getItem(`hidden-featured-post-${id}`))
                     return null;
                 const featuredPostContent = content.get(id);
                 const isSeen = featuredPostContent.get('seen');
-                const close = e => {
+                const close = (e) => {
                     e.preventDefault();
                     localStorage.setItem(`hidden-featured-post-${id}`, true);
                     this.forceUpdate();
@@ -233,15 +233,15 @@ class PostsList extends React.Component {
             arePromotedPostsVisible && arePromotedPostsReady;
 
         const promoteds = this.props.promoted;
-        const renderPromoted = promotedPosts => {
+        const renderPromoted = (promotedPosts) => {
             if (!process.env.BROWSER) return null;
-            return promotedPosts.map(promotedPost => {
+            return promotedPosts.map((promotedPost) => {
                 const id = `${promotedPost.author}/${promotedPost.permlink}`;
                 if (localStorage.getItem(`hidden-promoted-post-${id}`))
                     return null;
                 const promotedPostContent = content.get(id);
                 const isSeen = promotedPostContent.get('seen');
-                const close = e => {
+                const close = (e) => {
                     e.preventDefault();
                     localStorage.setItem(`hidden-promoted-post-${id}`, true);
                     this.forceUpdate();
@@ -261,7 +261,7 @@ class PostsList extends React.Component {
                 );
             });
         };
-        const renderSummary = items =>
+        const renderSummary = (items) =>
             items.map((item, i) => {
                 const every = this.props.adSlots.in_feed_1.every;
                 let author = content.get(item.item).get('author');
@@ -338,7 +338,7 @@ export default connect(
             'follow',
             'getFollowingAsync',
             username,
-            'ignore_result'
+            'ignore_result',
         ]);
         const userPreferences = state.app.get('user_preferences').toJS();
         const nsfwPref = userPreferences.nsfwPref || 'warn';
@@ -365,15 +365,15 @@ export default connect(
             promoted,
             shouldSeeAds,
             adSlots,
-            blacklist
+            blacklist,
         };
     },
-    dispatch => ({
-        fetchState: pathname => {
+    (dispatch) => ({
+        fetchState: (pathname) => {
             dispatch(fetchDataSagaActions.fetchState({ pathname }));
         },
         removeHighSecurityKeys: () => {
             dispatch(userActions.removeHighSecurityKeys());
-        }
+        },
     })
 )(PostsList);

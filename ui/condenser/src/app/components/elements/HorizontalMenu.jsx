@@ -10,7 +10,7 @@ export default class HorizontalMenu extends React.Component {
         title: PropTypes.string,
         className: PropTypes.string,
         hideValue: PropTypes.string,
-        includeSearch: PropTypes.bool
+        includeSearch: PropTypes.bool,
     };
 
     render() {
@@ -19,7 +19,7 @@ export default class HorizontalMenu extends React.Component {
             title,
             className,
             hideValue,
-            includeSearch
+            includeSearch,
         } = this.props;
         return (
             <ul
@@ -28,7 +28,7 @@ export default class HorizontalMenu extends React.Component {
                 }
             >
                 {title && <li className="title">{title}</li>}
-                {items.map(i => {
+                {items.map((i) => {
                     if (i.value === hideValue) return null;
                     return (
                         <li key={i.value} className={i.active ? 'active' : ''}>

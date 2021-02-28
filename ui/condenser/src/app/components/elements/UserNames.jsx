@@ -15,10 +15,10 @@ function userLink(name) {
 class UserNames extends Component {
     static propTypes = {
         names: PropTypes.array,
-        size: PropTypes.number
+        size: PropTypes.number,
     };
     static defaultProps = {
-        size: 2
+        size: 2,
     };
 
     render() {
@@ -57,7 +57,7 @@ class UserNames extends Component {
                     <DropdownMenu
                         key="_others"
                         selected={and_names.length + ' others'}
-                        items={and_names.map(name => {
+                        items={and_names.map((name) => {
                             return { value: name, link: '/@' + name };
                         })}
                         el="div"

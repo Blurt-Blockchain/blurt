@@ -1,15 +1,15 @@
 .Header {
-  position: fixed;
-  backface-visibility: hidden;
-  top: 0;
-  left: 0;
-  width: 100%;
-  z-index: 100;
-  box-shadow: 0 2px 4px 0 rgba(0,0,0,0.05);
-  @include themify($themes) {
-    background-color: themed('navBackgroundColor');
-    border-bottom: themed('border');
-  }
+    position: fixed;
+    backface-visibility: hidden;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 100;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.05);
+    @include themify($themes) {
+        background-color: themed('navBackgroundColor');
+        border-bottom: themed('border');
+    }
 }
 
 .Header__nav {
@@ -24,20 +24,20 @@
 }
 
 .ConnectionError {
-  margin-right: 4rem;
-  color: #ec5840;
+    margin-right: 4rem;
+    color: #ec5840;
 }
 
 .Header__logotype {
-  transition: 0.2s all ease-in-out;
-  height: 37px;
-  display: flex;
-  align-items: baseline;
-  .icon-svg {
-    @include themify($themes) {
-      fill: themed('colorAccent');
+    transition: 0.2s all ease-in-out;
+    height: 37px;
+    display: flex;
+    align-items: baseline;
+    .icon-svg {
+        @include themify($themes) {
+            fill: themed('colorAccent');
+        }
     }
-  }
 }
 
 .Header__sort {
@@ -71,7 +71,7 @@
                 @extend .e-btn;
                 padding: 0.6rem;
                 text-transform: none;
-                margin: 0 0.75rem 0 .5rem;
+                margin: 0 0.75rem 0 0.5rem;
             }
             &.Header__login-link {
                 @extend .link;
@@ -96,16 +96,16 @@
     display: block;
     width: 36px;
     height: 36px;
-  .Userpic {
-    width: 36px !important;
-    height: 36px !important;
-    @include MQ(M) {
-        width: 40px!important;
-        height: 40px !important;
-        position: relative;
-        top: -2px;
+    .Userpic {
+        width: 36px !important;
+        height: 36px !important;
+        @include MQ(M) {
+            width: 40px !important;
+            height: 40px !important;
+            position: relative;
+            top: -2px;
+        }
     }
-  }
 }
 
 span.Header__hamburger.toggle-menu {
@@ -122,43 +122,46 @@ span.Header__hamburger.toggle-menu {
     }
     cursor: pointer;
     &::after {
-      transition: 0.2s all ease-in-out;
-      @include themify($themes) {
-        background: themed('textColorPrimary');
-        box-shadow: 0 7px 0 themed('textColorPrimary'), 0 14px 0 themed('textColorPrimary');
-      }
+        transition: 0.2s all ease-in-out;
+        @include themify($themes) {
+            background: themed('textColorPrimary');
+            box-shadow: 0 7px 0 themed('textColorPrimary'),
+                0 14px 0 themed('textColorPrimary');
+        }
     }
     &:hover {
-      &::after {
-        @include themify($themes) {
-          background: themed('textColorAccent');
-          box-shadow: 0 7px 0 themed('textColorAccent'), 0 14px 0 themed('textColorAccent');
+        &::after {
+            @include themify($themes) {
+                background: themed('textColorAccent');
+                box-shadow: 0 7px 0 themed('textColorAccent'),
+                    0 14px 0 themed('textColorAccent');
+            }
         }
-      }
     }
 }
 
 .annoucement-banner {
-  text-align: left;
-  position: relative;
-  background: #171FC9;
-  color: #fff;
-  @include themify($themes) {
-      border-bottom: themed('borderLight');
-  }  
-  @include MQ(M) {
-    text-align: center;
-  }
-  .close-button {
-    position: absolute;
-    top: 2px;
-    right: 0px;
-    transform: scale(0.85);
+    text-align: left;
+    position: relative;
+    background: #171fc9;
     color: #fff;
-    &:hover, &:focus {
-      color: #ccc;
+    @include themify($themes) {
+        border-bottom: themed('borderLight');
     }
-  }  
+    @include MQ(M) {
+        text-align: center;
+    }
+    .close-button {
+        position: absolute;
+        top: 2px;
+        right: 0px;
+        transform: scale(0.85);
+        color: #fff;
+        &:hover,
+        &:focus {
+            color: #ccc;
+        }
+    }
 }
 
 .announcement-banner__text {
@@ -167,9 +170,9 @@ span.Header__hamburger.toggle-menu {
     font-family: helvetica, sans-serif;
     font-size: 14px;
     line-height: 1.3;
- }
+}
 
 .announcement-banner__link {
-   color: #fafafa !important;
-   text-decoration: underline;
+    color: #fafafa !important;
+    text-decoration: underline;
 }

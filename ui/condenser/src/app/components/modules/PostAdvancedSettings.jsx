@@ -11,7 +11,7 @@ import * as userActions from 'app/redux/UserReducer';
 
 class PostAdvancedSettings extends Component {
     static propTypes = {
-        formId: React.PropTypes.string.isRequired
+        formId: React.PropTypes.string.isRequired,
     };
 
     constructor(props) {
@@ -27,19 +27,19 @@ class PostAdvancedSettings extends Component {
             instance: this,
             name: 'advancedSettings',
             initialValues: props.initialValues,
-            validation: values => {
+            validation: (values) => {
                 return {
                     beneficiaries: validateBeneficiaries(
                         props.username,
                         values.beneficiaries,
                         false
-                    )
+                    ),
                 };
-            }
+            },
         });
     }
 
-    handlePayoutChange = event => {
+    handlePayoutChange = (event) => {
         this.setState({ payoutType: event.target.value });
     };
 
@@ -48,7 +48,7 @@ class PostAdvancedSettings extends Component {
             formId,
             username,
             defaultPayoutType,
-            initialPayoutType
+            initialPayoutType,
         } = this.props;
         const { beneficiaries, payoutType } = this.state;
         const { submitting, valid, handleSubmit } = this.state.advancedSettings;
@@ -126,7 +126,8 @@ class PostAdvancedSettings extends Component {
                 <BeneficiarySelector {...beneficiaries.props} tabIndex={1} />
                 <div className="error">
                     {(beneficiaries.touched || beneficiaries.value) &&
-                        beneficiaries.error}&nbsp;
+                        beneficiaries.error}
+                    &nbsp;
                 </div>
                 <div className="row">
                     <div className="column">
@@ -169,7 +170,7 @@ export default connect(
         const defaultPayoutType = state.app.getIn(
             [
                 'user_preferences',
-                isStory ? 'defaultBlogPayout' : 'defaultCommentPayout'
+                isStory ? 'defaultBlogPayout' : 'defaultCommentPayout',
             ],
             '100%'
         );
@@ -177,13 +178,13 @@ export default connect(
             'current',
             'post',
             formId,
-            'payoutType'
+            'payoutType',
         ]);
         let beneficiaries = state.user.getIn([
             'current',
             'post',
             formId,
-            'beneficiaries'
+            'beneficiaries',
         ]);
         console.log(beneficiaries);
         beneficiaries = beneficiaries ? beneficiaries.toJS() : [];
@@ -193,27 +194,27 @@ export default connect(
             defaultPayoutType,
             initialPayoutType,
             username,
-            initialValues: { beneficiaries }
+            initialValues: { beneficiaries },
         };
     },
 
     // mapDispatchToProps
-    dispatch => ({
+    (dispatch) => ({
         hideAdvancedSettings: () =>
             dispatch(userActions.hidePostAdvancedSettings()),
         setPayoutType: (formId, payoutType) =>
             dispatch(
                 userActions.set({
                     key: ['current', 'post', formId, 'payoutType'],
-                    value: payoutType
+                    value: payoutType,
                 })
             ),
         setBeneficiaries: (formId, beneficiaries) =>
             dispatch(
                 userActions.set({
                     key: ['current', 'post', formId, 'beneficiaries'],
-                    value: fromJS(beneficiaries)
+                    value: fromJS(beneficiaries),
                 })
-            )
+            ),
     })
 )(PostAdvancedSettings);

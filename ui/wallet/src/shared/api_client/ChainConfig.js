@@ -1,12 +1,12 @@
-import * as blurt from '@blurtfoundation/blurtjs';
+import * as blurt from '@blurtfoundation/blurtjs'
 
-blurt.config.set('address_prefix', 'BLT');
+blurt.config.set('address_prefix', 'BLT')
 
-let chain_id = '';
-for (let i = 0; i < 32; i++) chain_id += '00';
+let chain_id = ''
+for (let i = 0; i < 32; i++) chain_id += '00'
 
 module.exports = {
-    address_prefix: 'BLT',
-    expire_in_secs: 15,
-    chain_id,
-};
+  address_prefix: 'BLT',
+  expire_in_secs: 15,
+  chain_id
+}

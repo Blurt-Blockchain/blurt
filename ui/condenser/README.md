@@ -2,10 +2,9 @@
 
 Condenser is the react.js web interface to [Blurt](https://gitlab.com/blurt/blurt).
 
-
 ### Changelog
 
-Please update the changelog with every change that you make to condenser. 
+Please update the changelog with every change that you make to condenser.
 
 #### Quick Start: Run your own Blurt front end
 
@@ -17,9 +16,7 @@ echo $CHICKEN
 docker run -it -p 8080:8080 -e SDC_SESSION_SECRETKEY=$CHICKEN registry.gitlab.com/blurt/openblurt/condenser
 ```
 
-NB: Make sure that you record $CHICKEN somewhere safe.  It should remain consistent.
-
-
+NB: Make sure that you record $CHICKEN somewhere safe. It should remain consistent.
 
 If you would like to modify, build, and run condenser using docker, it's as
 simple as pulling in the gitlab repo and issuing one command to build it,
@@ -35,14 +32,14 @@ docker run -it -p 8080:8080 myname/condenser:mybranch
 By default you will be connected to public RPC node. This is actually on the real blockchain and
 you would use your regular account name and credentials to login - there is
 not an official separate testnet at this time. If you intend to run a
-full-fledged site relying on your own, we recommend running 
+full-fledged site relying on your own, we recommend running
 `blurtd` locally instead
 [https://gitlab.com/blurt/blurt](https://gitlab.com/blurt/blurt).
-
 
 ## Geting Set Up
 
 #### NVM
+
 ```bash
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.37.2/install.sh | bash
 export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
@@ -52,6 +49,7 @@ npm i -g yarn
 ```
 
 #### Install and build
+
 ```bash
 git clone https://gitlab.com/blurt/openblurt/condenser
 cd condenser
@@ -62,10 +60,7 @@ yarn run
 yarn start
 ```
 
-
-After you've done your dev work, push to a branch.  CI will test the build.  If it builds, merge to master and you'll have a docker container at registry.gitlab.com/blurt/openblurt/condenser containing your latest work.
-
-
+After you've done your dev work, push to a branch. CI will test the build. If it builds, merge to master and you'll have a docker container at registry.gitlab.com/blurt/openblurt/condenser containing your latest work.
 
 #### Debugging SSR code
 
@@ -105,33 +100,32 @@ base64 --wrap=0 /dev/urandom | head -c 32
 
 ### File naming and location
 
-- Prefer CamelCase js and jsx file names
-- Prefer lower case one word directory names
-- Keep stylesheet files close to components
-- Component's stylesheet file name should match component name
+-   Prefer CamelCase js and jsx file names
+-   Prefer lower case one word directory names
+-   Keep stylesheet files close to components
+-   Component's stylesheet file name should match component name
 
 #### Js & Jsx
 
 We use [prettier](https://github.com/prettier/prettier) to autofromat the
 code, with [this configuration](.prettierrc). Run `yarn run fmt` to format
-everything in `src/`, or `yarn exec -- prettier --config .prettierrc
---write src/whatever/file.js` for a specific file.
+everything in `src/`, or `yarn exec -- prettier --config .prettierrc --write src/whatever/file.js` for a specific file.
 
 #### CSS & SCSS
 
 If a component requires a css rule, please use its uppercase name for the
-class, e.g. "Header" class for the header's root div.  We adhere to BEM
+class, e.g. "Header" class for the header's root div. We adhere to BEM
 methodology with exception for Foundation classes, here is an example for
 the Header component:
 
 ```html
 <!-- Block -->
 <ul class="Header">
-  ...
-  <!-- Element -->
-  <li class="Header__menu-item">Menu Item 1</li>
-  <!-- Element with modifier -->
-  <li class="Header__menu-item--selected">Element with modifier</li>
+    ...
+    <!-- Element -->
+    <li class="Header__menu-item">Menu Item 1</li>
+    <!-- Element with modifier -->
+    <li class="Header__menu-item--selected">Element with modifier</li>
 </ul>
 ```
 

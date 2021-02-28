@@ -1,27 +1,27 @@
 # Building Blurt
 
-Blurt is designed to be compiled on GitLab.  By using `ccache` in our build process, we have been able to reduce compile times for Blurt from as high as 3 hours when using shared GitLab Runners to as little as 3 minutes when using our own runners with the following spec:
+Blurt is designed to be compiled on GitLab. By using `ccache` in our build process, we have been able to reduce compile times for Blurt from as high as 3 hours when using shared GitLab Runners to as little as 3 minutes when using our own runners with the following spec:
 
-* AMD Ryzen 9 3900 12 Cores "Matisse" (Zen2)
-* 128 GB DDR4 ECC RAM
-* 2 x 1.92 TB NVMe SSD Datacenter Edition (Software-RAID 1)
-* 1 Gbit/s bandwidth
+- AMD Ryzen 9 3900 12 Cores "Matisse" (Zen2)
+- 128 GB DDR4 ECC RAM
+- 2 x 1.92 TB NVMe SSD Datacenter Edition (Software-RAID 1)
+- 1 Gbit/s bandwidth
 
-If you're working on Blurt and you'd like to use our infrastructure to compile your builds, please just e-mail info@blurt.foundation or create an issue, and we will get you set up on a branch.  
+If you're working on Blurt and you'd like to use our infrastructure to compile your builds, please just e-mail info@blurt.foundation or create an issue, and we will get you set up on a branch.
 
-We're shooting for 1-2 minute compile times in the end, so that we can achieve the highest level of developer productivity.  We are mainly taking advice from these  articles:
+We're shooting for 1-2 minute compile times in the end, so that we can achieve the highest level of developer productivity. We are mainly taking advice from these articles:
 
 [Ccache for Gitlab CI](https://gould.cx/ted/blog/2017/06/10/ccache-for-Gitlab-CI/)
 [Faster C Builds](https://www.bitsnbites.eu/faster-c-builds/)
 [12 Steps to Better Code](https://www.joelonsoftware.com/2000/08/09/the-joel-test-12-steps-to-better-code/)
 
-If you would like to compile Blurt locally, you can do that as well!  Our .gitlab-ci.yml file provides a clear description of how to set up a Blurt devleopment environment on Debian 10.  
+If you would like to compile Blurt locally, you can do that as well! Our .gitlab-ci.yml file provides a clear description of how to set up a Blurt devleopment environment on Debian 10.
 
-If you fork Blurt into another GitLab repository, the build system is complete and will be reasonably fast after the first build, even on shared GitLab runners.   Note that you may need to extend the timeout to 3 hours for the first build if using shared GitLab runners. 
+If you fork Blurt into another GitLab repository, the build system is complete and will be reasonably fast after the first build, even on shared GitLab runners. Note that you may need to extend the timeout to 3 hours for the first build if using shared GitLab runners.
 
 **Please upstream changes!**
 
-_______
+---
 
 ## Compile-Time Options (cmake)
 
@@ -34,7 +34,7 @@ running tests, it is recommended to build as release.
 ### LOW_MEMORY_NODE=[OFF/ON]
 
 Builds blurtd to be a consensus-only low memory node. Data and fields not
-needed for consensus are not stored in the object database.  This option is
+needed for consensus are not stored in the object database. This option is
 recommended for witnesses and seed-nodes.
 
 ### CLEAR_VOTES=[ON/OFF]
@@ -47,15 +47,15 @@ Builds blurt for use in a private testnet. Also required for building unit tests
 
 ### SKIP_BY_TX_ID=[OFF/ON]
 
-By default this is off. Enabling will prevent the account history plugin querying transactions 
+By default this is off. Enabling will prevent the account history plugin querying transactions
 by id, but saving around 65% of CPU time when reindexing. Enabling this option is a
 huge gain if you do not need this functionality.
 
 ## Building under Docker
 
-We ship a [Dockerfile](https://gitlab.com/blurt/docker).  This builds both common node type binaries.
+We ship a [Dockerfile](https://gitlab.com/blurt/docker). This builds both common node type binaries.
 
-_____________
+---
 
 ## Building on Linux
 
@@ -71,7 +71,7 @@ swapon /swapfile
 ### Install build dependencies
 
 ```
-sudo apt install curl git build-essential libtool autotools-dev automake pkg-config bsdmainutils python3 software-properties-common libssl-dev libevent-dev librocksdb-dev libwebsocketpp-dev cmake doxygen 
+sudo apt install curl git build-essential libtool autotools-dev automake pkg-config bsdmainutils python3 software-properties-common libssl-dev libevent-dev librocksdb-dev libwebsocketpp-dev cmake doxygen
 ```
 
 ### Clone the Repository
@@ -82,7 +82,8 @@ cd blurt
 ```
 
 ### Compile
-This works on the very latest and most shiny Mac OSX 10.15.6.  
+
+This works on the very latest and most shiny Mac OSX 10.15.6.
 
 ```
     git checkout dev
@@ -90,7 +91,7 @@ This works on the very latest and most shiny Mac OSX 10.15.6.
     mkdir build && cd build
     cmake -DBLURT_STATIC_BUILD=ON -DLOW_MEMORY_NODE=OFF -DCLEAR_VOTES=OFF -DBUILD_BLURT_TESTNET=OFF -DSKIP_BY_TX_ID=OFF -DBLURT_LINT_LEVEL=OFF -DENABLE_MIRA=OFF -DCMAKE_BUILD_TYPE=Release ..
     make -j$(sysctl -n hw.logicalcpu)
-```  
+```
 
 Also, some useful build targets for `make` are:
 
@@ -104,12 +105,12 @@ e.g.:
 
 This will only build `blurtd`.
 
-_________
+---
 
 ## Building on macOS X
 
 Install Xcode and its command line tools by following the instructions here:
-https://guide.macports.org/#installing.xcode.  In OS X 10.11 (El Capitan)
+https://guide.macports.org/#installing.xcode. In OS X 10.11 (El Capitan)
 and newer, you will be prompted to install developer tools when running a
 developer command in the terminal.
 
@@ -139,7 +140,7 @@ Install Homebrew by following the instructions here: http://brew.sh/
         zlib \
         bzip2 \
         python3
-        
+
     pip3 install --user jinja2
 ```
 
@@ -151,9 +152,10 @@ Install Homebrew by following the instructions here: http://brew.sh/
 ```
 
 ### Compile
-This works on the very latest and most shiny Mac OSX 10.15.6.  
 
-Your mileage may vary on other versions.  If you ever want to know if your code changes will build, probably a good idea to create a new branch and let CI do the work.  
+This works on the very latest and most shiny Mac OSX 10.15.6.
+
+Your mileage may vary on other versions. If you ever want to know if your code changes will build, probably a good idea to create a new branch and let CI do the work.
 
     git checkout dev
     git submodule update --init --recursive
@@ -161,8 +163,8 @@ Your mileage may vary on other versions.  If you ever want to know if your code 
     conan install .. -s compiler=apple-clang -s compiler.version=11.0 -s compiler.libcxx=libc++ -if=. -pr=default --build=missing
     cmake -DBLURT_STATIC_BUILD=ON -DLOW_MEMORY_NODE=OFF -DCLEAR_VOTES=OFF -DBUILD_BLURT_TESTNET=OFF -DSKIP_BY_TX_ID=OFF -DBLURT_LINT_LEVEL=OFF -DENABLE_MIRA=OFF -DCMAKE_BUILD_TYPE=Release ..
     make -j$(sysctl -n hw.logicalcpu)
-    
-.....but this fails.  So, if you know how to make it not-fail, submit an MR right here please!
+
+.....but this fails. So, if you know how to make it not-fail, submit an MR right here please!
 
 Also, some useful build targets for `make` are:
 
@@ -176,7 +178,7 @@ e.g.:
 
 This will only build `blurtd`.
 
-______+___
+**\_\_**+\_\_\_
 
 ## Building on Other Platforms
 

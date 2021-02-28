@@ -26,7 +26,7 @@ class ConfirmTransactionForm extends Component {
     componentWillUnmount() {
         document.body.removeEventListener('click', this.closeOnOutsideClick);
     }
-    closeOnOutsideClick = e => {
+    closeOnOutsideClick = (e) => {
         const inside_dialog = findParent(e.target, 'ConfirmTransactionForm');
         if (!inside_dialog) this.onCancel();
     };
@@ -39,7 +39,7 @@ class ConfirmTransactionForm extends Component {
         const { okClick, confirmBroadcastOperation } = this.props;
         okClick(confirmBroadcastOperation);
     };
-    onCheckbox = e => {
+    onCheckbox = (e) => {
         const checkboxChecked = e.target.checked;
         this.setState({ checkboxChecked });
     };
@@ -99,7 +99,7 @@ class ConfirmTransactionForm extends Component {
         );
     }
 }
-const typeName = confirmBroadcastOperation => {
+const typeName = (confirmBroadcastOperation) => {
     const title = confirmBroadcastOperation.getIn([
         'operation',
         '__config',
@@ -110,14 +110,14 @@ const typeName = confirmBroadcastOperation => {
     return tt('confirmtransactionform_jsx.confirm', {
         transactionType: type
             .split('_')
-            .map(n => n.charAt(0).toUpperCase() + n.substring(1))
+            .map((n) => n.charAt(0).toUpperCase() + n.substring(1))
             .join(' '), // @todo we should translate each potential transaction type!
     });
 };
 
 export default connect(
     // mapStateToProps
-    state => {
+    (state) => {
         const confirmBroadcastOperation = state.transaction.get(
             'confirmBroadcastOperation'
         );
@@ -136,8 +136,8 @@ export default connect(
         };
     },
     // mapDispatchToProps
-    dispatch => ({
-        okClick: confirmBroadcastOperation => {
+    (dispatch) => ({
+        okClick: (confirmBroadcastOperation) => {
             dispatch(transactionActions.hideConfirm());
             dispatch(
                 transactionActions.broadcastOperation({

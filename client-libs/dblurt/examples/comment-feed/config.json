@@ -5,11 +5,7 @@
     "author": "Johan Nordberg",
     "version": "1.0.1"
   },
-  "ignore": [
-    "**/.DS_Store",
-    "styles/**/*",
-    "scripts/**/*"
-  ],
+  "ignore": ["**/.DS_Store", "styles/**/*", "scripts/**/*"],
   "browserify": {
     "debug": true,
     "watchify": false,

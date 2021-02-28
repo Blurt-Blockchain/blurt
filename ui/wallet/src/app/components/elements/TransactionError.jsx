@@ -63,8 +63,8 @@ export default connect(
         };
     },
     // mapDispatchToProps
-    dispatch => ({
-        addListener: opType => {
+    (dispatch) => ({
+        addListener: (opType) => {
             dispatch(
                 transactionActions.set({
                     key: ['TransactionError', opType + '_listener'],
@@ -72,7 +72,7 @@ export default connect(
                 })
             );
         },
-        removeListener: opType => {
+        removeListener: (opType) => {
             dispatch(
                 transactionActions.remove({ key: ['TransactionError', opType] })
             );

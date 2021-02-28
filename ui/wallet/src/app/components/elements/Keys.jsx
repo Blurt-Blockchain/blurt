@@ -21,13 +21,15 @@ class Keys extends Component {
     }
 
     render() {
-        const { props: { account, authType, privateKeys, onKey } } = this;
+        const {
+            props: { account, authType, privateKeys, onKey },
+        } = this;
 
         // normalize public auths as simple lists of keys
         const pubkeys =
             authType === 'memo'
                 ? List([account.get('memo_key')])
-                : account.getIn([authType, 'key_auths']).map(a => a.get(0));
+                : account.getIn([authType, 'key_auths']).map((a) => a.get(0));
 
         const tt_auth_type = {
             owner: tt('g.owner'),
@@ -39,7 +41,7 @@ class Keys extends Component {
         let idx = 0;
         return (
             <span>
-                {pubkeys.map(pubkey => (
+                {pubkeys.map((pubkey) => (
                     <ShowKey
                         key={idx++}
                         pubkey={pubkey}

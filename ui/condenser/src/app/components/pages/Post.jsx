@@ -24,12 +24,12 @@ class Post extends React.Component {
         content: PropTypes.object.isRequired,
         post: PropTypes.string,
         routeParams: PropTypes.object,
-        sortOrder: PropTypes.string
+        sortOrder: PropTypes.string,
     };
     constructor() {
         super();
         this.state = {
-            showNegativeComments: false
+            showNegativeComments: false,
         };
         this.showSignUp = () => {
             serverApiRecordEvent('SignUp', 'Post Promo');
@@ -44,9 +44,9 @@ class Post extends React.Component {
         (window.adsbygoogle = window.adsbygoogle || []).push({});
     }
 
-    toggleNegativeReplies = e => {
+    toggleNegativeReplies = (e) => {
         this.setState({
-            showNegativeComments: !this.state.showNegativeComments
+            showNegativeComments: !this.state.showNegativeComments,
         });
         e.preventDefault();
     };
@@ -89,7 +89,8 @@ class Post extends React.Component {
                             Not to worry. You can head back to{' '}
                             <a style={{ fontWeight: 800 }} href="/">
                                 our homepage
-                            </a>, or check out some great posts.
+                            </a>
+                            , or check out some great posts.
                         </p>
                         <ul className="NotFound__menu">
                             <li>
@@ -131,7 +132,8 @@ class Post extends React.Component {
                                     <p onClick={this.showAnywayClick}>
                                         {tt(
                                             'promote_post_jsx.this_post_was_hidden_due_to_low_ratings'
-                                        )}.{' '}
+                                        )}
+                                        .{' '}
                                         <button
                                             style={{ marginBottom: 0 }}
                                             className="button hollow tiny float-right"
@@ -158,7 +160,7 @@ class Post extends React.Component {
             replies = replies.slice(0, commentLimit);
         }
         let commentCount = 0;
-        const positiveComments = replies.map(reply => {
+        const positiveComments = replies.map((reply) => {
             commentCount++;
             const showAd =
                 commentCount % 5 == 0 &&
@@ -196,10 +198,11 @@ class Post extends React.Component {
                         ? tt('post_jsx.now_showing_comments_with_low_ratings')
                         : tt(
                               'post_jsx.comments_were_hidden_due_to_low_ratings'
-                          )}.{' '}
+                          )}
+                    .{' '}
                     <button
                         className="button hollow tiny float-right"
-                        onClick={e => this.toggleNegativeReplies(e)}
+                        onClick={(e) => this.toggleNegativeReplies(e)}
                     >
                         {showNegativeComments ? tt('g.hide') : tt('g.show')}
                     </button>
@@ -212,7 +215,7 @@ class Post extends React.Component {
             tt('post_jsx.comment_sort_order.trending'),
             tt('post_jsx.comment_sort_order.votes'),
             tt('post_jsx.comment_sort_order.age'),
-            tt('post_jsx.comment_sort_order.reputation')
+            tt('post_jsx.comment_sort_order.reputation'),
         ];
         const sort_menu = [];
         let sort_label;
@@ -222,7 +225,7 @@ class Post extends React.Component {
             sort_menu.push({
                 value: sort_orders[o],
                 label: sort_labels[o],
-                link: selflink + '?sort=' + sort_orders[o] + '#comments'
+                link: selflink + '?sort=' + sort_orders[o] + '#comments',
             });
         }
 
@@ -239,7 +242,8 @@ class Post extends React.Component {
                             <div className="Post__promo">
                                 {tt(
                                     'g.next_7_strings_single_block.authors_get_paid_when_people_like_you_upvote_their_post'
-                                )}.
+                                )}
+                                .
                                 <br />
                                 {tt(
                                     'g.next_7_strings_single_block.if_you_enjoyed_what_you_read_earn_amount'
@@ -337,6 +341,6 @@ export default connect((state, ownProps) => {
         sortOrder:
             ownProps.router.getCurrentLocation().query.sort || 'trending',
         gptEnabled: state.app.getIn(['googleAds', 'gptEnabled']),
-        enabled: state.app.getIn(['googleAds', 'enabled'])
+        enabled: state.app.getIn(['googleAds', 'enabled']),
     };
 })(Post);

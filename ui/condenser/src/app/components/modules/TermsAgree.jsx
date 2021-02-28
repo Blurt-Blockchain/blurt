@@ -13,7 +13,7 @@ class TermsAgree extends Component {
         super();
         this.state = {
             tosChecked: false,
-            privacyChecked: false
+            privacyChecked: false,
         };
         this.termsAgree = this.termsAgree.bind(this);
         this.handleInputChange = this.handleInputChange.bind(this);
@@ -26,7 +26,7 @@ class TermsAgree extends Component {
         const name = target.name;
 
         this.setState({
-            [name]: value
+            [name]: value,
         });
     }
 
@@ -37,7 +37,7 @@ class TermsAgree extends Component {
 
     static propTypes = {
         username: PropTypes.string.isRequired,
-        acceptTerms: PropTypes.func.isRequired
+        acceptTerms: PropTypes.func.isRequired,
     };
 
     render() {
@@ -102,14 +102,14 @@ class TermsAgree extends Component {
 }
 
 export default connect(
-    state => ({
-        username: state.user.getIn(['current', 'username'])
+    (state) => ({
+        username: state.user.getIn(['current', 'username']),
     }),
-    dispatch => ({
-        acceptTerms: e => {
+    (dispatch) => ({
+        acceptTerms: (e) => {
             if (e) e.preventDefault();
             dispatch(userActions.acceptTerms());
-        }
+        },
     })
 )(TermsAgree);
 // mapStateToProps

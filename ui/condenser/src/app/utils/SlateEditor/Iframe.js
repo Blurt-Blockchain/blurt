@@ -2,7 +2,7 @@ import React from 'react';
 import { normalizeEmbedUrl as normalizeEmbbeddedPlayerEmbedUrl } from 'app/components/elements/EmbeddedPlayers';
 
 export default class Iframe extends React.Component {
-    normalizeEmbedUrl = url => {
+    normalizeEmbedUrl = (url) => {
         const validEmbedUrl = normalizeEmbbeddedPlayerEmbedUrl(url);
         if (validEmbedUrl !== false) {
             return validEmbedUrl;
@@ -11,7 +11,7 @@ export default class Iframe extends React.Component {
         return null;
     };
 
-    onChange = e => {
+    onChange = (e) => {
         const { node, editor } = this.props;
         const value = e.target.value;
 
@@ -26,7 +26,7 @@ export default class Iframe extends React.Component {
         editor.onChange(next);
     };
 
-    onClick = e => {
+    onClick = (e) => {
         // stop propagation so that the void node itself isn't focused, since that would unfocus the input.
         e.stopPropagation();
     };
@@ -42,7 +42,7 @@ export default class Iframe extends React.Component {
             left: '0px',
             width: '100%',
             height: '100%',
-            background: 'rgba(0,0,0,0.1)'
+            background: 'rgba(0,0,0,0.1)',
         };
 
         return (
@@ -87,7 +87,7 @@ export default class Iframe extends React.Component {
             display: 'block',
             textAlign: 'center',
             color: 'black',
-            borderRadius: '5px'
+            borderRadius: '5px',
         };
 
         return (

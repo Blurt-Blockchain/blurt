@@ -1,13 +1,14 @@
 # Contributing to Blurt
-There are many ways to contribute to Blurt.  Developers can contribute source code.  Users can comment on issues.
+
+There are many ways to contribute to Blurt. Developers can contribute source code. Users can comment on issues.
 
 ## Blurt Hosting Platform
-We are developing a Kubernetes cluster and offer free application hosting to developers building in our ecosystem whose code has passed our approval.  
 
-You do not need to host code in the https://gitlab.com/blurt organization to use the Kubernetes cluster, though you can, if you'd like to.  
+We are developing a Kubernetes cluster and offer free application hosting to developers building in our ecosystem whose code has passed our approval.
+
+You do not need to host code in the https://gitlab.com/blurt organization to use the Kubernetes cluster, though you can, if you'd like to.
 
 We strive to support each and every developer who would like to contribute to Blurt or build applications in the Blurt software ecosystem, and if you need support, the best place to ask for it is in the [Blurt Discord](https://discord.gg/dxX5DXX).
-
 
 ## Bug Reports
 
@@ -15,7 +16,7 @@ If there is an existing feature that is not working correctly, or a glitch in th
 
 ## Enhancement Suggestions
 
-Use the issue tracker to suggest enhancements or improvements to the platform. 
+Use the issue tracker to suggest enhancements or improvements to the platform.
 
 ## Implementation Discussion
 

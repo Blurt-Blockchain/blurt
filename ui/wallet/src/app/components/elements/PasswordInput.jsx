@@ -134,23 +134,22 @@ export default class PasswordInput extends React.Component {
                         <div className="error">{newPassword.error}</div>
                     </div>
                 )}
-                {inputNewPassword &&
-                    inputConfirmPassword && (
-                        <div>
-                            <label>
-                                {tt('g.confirm_password')}
-                                <input
-                                    type="password"
-                                    name="confirmPassword"
-                                    autoComplete="off"
-                                    onChange={this.confirmPasswordChange}
-                                    value={confirmPassword.value}
-                                    disabled={disabled}
-                                />
-                            </label>
-                            <div className="error">{confirmPassword.error}</div>
-                        </div>
-                    )}
+                {inputNewPassword && inputConfirmPassword && (
+                    <div>
+                        <label>
+                            {tt('g.confirm_password')}
+                            <input
+                                type="password"
+                                name="confirmPassword"
+                                autoComplete="off"
+                                onChange={this.confirmPasswordChange}
+                                value={confirmPassword.value}
+                                disabled={disabled}
+                            />
+                        </label>
+                        <div className="error">{confirmPassword.error}</div>
+                    </div>
+                )}
             </div>
         );
     }

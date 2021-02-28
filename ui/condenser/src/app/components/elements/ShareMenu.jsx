@@ -6,7 +6,7 @@ import Icon from 'app/components/elements/Icon';
 export default class ShareMenu extends React.Component {
     static propTypes = {
         menu: PropTypes.arrayOf(PropTypes.object).isRequired,
-        title: PropTypes.string
+        title: PropTypes.string,
     };
 
     render() {
@@ -16,7 +16,7 @@ export default class ShareMenu extends React.Component {
             <span className={'shareMenu'}>
                 <ul className={'shareItems'}>
                     {title && <li className="title">{title}</li>}
-                    {items.map(i => {
+                    {items.map((i) => {
                         return (
                             <li key={i.value}>
                                 {i.link ? (

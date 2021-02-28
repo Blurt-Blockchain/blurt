@@ -5,8 +5,8 @@ This document is a step by step guide to running a Blurt exchange node manually 
 System Requirements:
 A dedicated server or virtual machine with a minimum of 16GB of RAM, and at least 160GB of SSD storage.
 
-
 #### 1. Install Docker
+
 You can install Docker on most Linux distributions like this:
 
 ```bash
@@ -14,8 +14,8 @@ curl -fsSL https://get.docker.com -o get-docker.sh
 sh get-docker.sh
 ```
 
-
 #### 2. Download
+
 In this step, you will download:
 
 - `snapshot.json` (genesis file)
@@ -89,7 +89,7 @@ To resynch the chain from start, delete the `blockchain` folder then start the n
 
 The cli_wallet is installed at /usr/bin/cli_wallet.
 
-You can run it by simply invoking `cli_wallet` from the user and filesystem location of your choice.  Wallet.json will be stored there.
+You can run it by simply invoking `cli_wallet` from the user and filesystem location of your choice. Wallet.json will be stored there.
 
 #### 5. Import Active Key
 
