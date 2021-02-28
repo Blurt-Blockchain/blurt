@@ -1,5 +1,5 @@
 const ecurve = require("ecurve");
-const {Point} = ecurve;
+const { Point } = ecurve;
 const secp256k1 = ecurve.getCurveByName("secp256k1");
 const BigInteger = require("bigi");
 const base58 = require("bs58");
@@ -7,8 +7,8 @@ const assert = require("assert");
 const hash = require("./hash");
 const PublicKey = require("./key_public");
 
-const {G} = secp256k1;
-const {n} = secp256k1;
+const { G } = secp256k1;
+const { n } = secp256k1;
 
 class PrivateKey {
   /**

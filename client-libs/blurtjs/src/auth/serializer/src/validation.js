@@ -13,7 +13,7 @@ let get_protocol_instance;
 let get_protocol_type;
 let require_implementation_type;
 let get_implementation_instance;
-const {Long} = require("bytebuffer");
+const { Long } = require("bytebuffer");
 // var BigInteger = require('bigi');
 
 const chain_types = require("./ChainTypes");

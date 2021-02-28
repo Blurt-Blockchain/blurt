@@ -62,8 +62,8 @@ function deterministicGenerateK(curve, hash, d, checkSig, nonce) {
 
 function sign(curve, hash, d, nonce) {
   const e = BigInteger.fromBuffer(hash);
-  const {n} = curve;
-  const {G} = curve;
+  const { n } = curve;
+  const { G } = curve;
 
   let r, s;
   const k = deterministicGenerateK(
@@ -101,11 +101,11 @@ function sign(curve, hash, d, nonce) {
 }
 
 function verifyRaw(curve, e, signature, Q) {
-  const {n} = curve;
-  const {G} = curve;
+  const { n } = curve;
+  const { G } = curve;
 
-  const {r} = signature;
-  const {s} = signature;
+  const { r } = signature;
+  const { s } = signature;
 
   // 1.4.1 Enforce r and s are both integers in the interval [1, n − 1]
   if (r.signum() <= 0 || r.compareTo(n) >= 0) return false;
@@ -153,11 +153,11 @@ function verify(curve, hash, signature, Q) {
 function recoverPubKey(curve, e, signature, i) {
   assert.strictEqual(i & 3, i, "Recovery param is more than two bits");
 
-  const {n} = curve;
-  const {G} = curve;
+  const { n } = curve;
+  const { G } = curve;
 
-  const {r} = signature;
-  const {s} = signature;
+  const { r } = signature;
+  const { s } = signature;
 
   assert(r.signum() > 0 && r.compareTo(n) < 0, "Invalid r value");
   assert(s.signum() > 0 && s.compareTo(n) < 0, "Invalid s value");

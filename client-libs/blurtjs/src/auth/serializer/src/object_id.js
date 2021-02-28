@@ -1,4 +1,4 @@
-const {Long} = require("bytebuffer");
+const { Long } = require("bytebuffer");
 
 const v = require("./validation");
 const DB_MAX_INSTANCE_ID = Long.fromNumber(Math.pow(2, 48) - 1);
