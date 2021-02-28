@@ -307,6 +307,7 @@ oroid-c2:
 # Release new versions of blurtjs
 blurtjs:
   image: node:latest
+  needs: []
   stage: deploy
   when: manual
   variables:
@@ -328,6 +329,7 @@ blurtjs:
 # Release changes to dblurt
 dblurt:
   image: node:latest
+  needs: []
   stage: deploy
   when: manual
   variables:
