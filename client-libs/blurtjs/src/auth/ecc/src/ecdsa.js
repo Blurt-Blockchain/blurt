@@ -215,10 +215,10 @@ function calcPubKeyRecoveryParam(curve, e, signature, Q) {
 }
 
 module.exports = {
-  calcPubKeyRecoveryParam: calcPubKeyRecoveryParam,
-  deterministicGenerateK: deterministicGenerateK,
-  recoverPubKey: recoverPubKey,
-  sign: sign,
-  verify: verify,
-  verifyRaw: verifyRaw,
+  calcPubKeyRecoveryParam,
+  deterministicGenerateK,
+  recoverPubKey,
+  sign,
+  verify,
+  verifyRaw,
 };

@@ -123,7 +123,7 @@ exports.createAccountRequest = functions.https.onCall(async (data, context) => {
     'account_create',
     {
       fee: creationFee,
-      creator: creator,
+      creator,
       new_account_name: username,
       owner: ownerAuth,
       active: activeAuth,

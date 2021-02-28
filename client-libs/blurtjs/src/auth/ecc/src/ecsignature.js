@@ -27,8 +27,8 @@ ECSignature.parseCompact = function (buffer) {
   const s = BigInteger.fromBuffer(buffer.slice(33));
 
   return {
-    compressed: compressed,
-    i: i,
+    compressed,
+    i,
     signature: new ECSignature(r, s),
   };
 };
@@ -82,7 +82,7 @@ ECSignature.parseScriptSignature = function (buffer) {
 
   return {
     signature: ECSignature.fromDER(buffer.slice(0, -1)),
-    hashType: hashType,
+    hashType,
   };
 };
 

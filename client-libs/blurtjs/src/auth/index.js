@@ -127,7 +127,7 @@ Auth.signTransaction = function (trx, keys) {
   }
 
   return signed_transaction.toObject(
-    Object.assign(trx, { signatures: signatures })
+    Object.assign(trx, { signatures })
   );
 };
 
