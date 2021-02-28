@@ -13,6 +13,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - integrated condenser into the main repository
 - support and docs for compiling on macos
 - CMakeLists.txt restructured
+- Automated deployment completed
+- Deepsource analysis integrated
+- Letsblurt, blurtjs, dblurt, and image hosting components added
 
 ### Changed
 
