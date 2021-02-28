@@ -10,12 +10,12 @@ function jsonToKeys(keys, prefix, json) {
             return;
         }
         for (const k in json) {
-            const new_prefix = prefix ? prefix + '.' + k : k;
+            const new_prefix = prefix ? `${prefix  }.${  k}` : k;
             jsonToKeys(keys, new_prefix, json[k]);
         }
         return;
     }
-    if (keys[prefix]) throw new Error('Duplicate translation: ' + prefix);
+    if (keys[prefix]) throw new Error(`Duplicate translation: ${  prefix}`);
     keys[prefix] = true;
 }
 
@@ -36,7 +36,7 @@ function loadTranslationFiles(path) {
             const m = filename.match(/([\w-]+)\.json$/);
             if (m) {
                 const lang = m[1];
-                translations[lang] = readTranslationKeys(path + '/' + filename);
+                translations[lang] = readTranslationKeys(`${path  }/${  filename}`);
             }
         }
     }
@@ -58,7 +58,7 @@ function processFile(used_keys, path) {
                         t.match(/id=['"]([.\-_\w]+)['"]/);
                     if (!m) {
                         throw new Error(
-                            'Wrong format: "' + t + '" in "' + l + '"'
+                            `Wrong format: "${  t  }" in "${  l  }"`
                         );
                     }
                     const key = m[1];
@@ -73,7 +73,7 @@ function processFile(used_keys, path) {
 function processDir(path, used_keys = {}) {
     const files = fs.readdirSync(path);
     for (const filename of files) {
-        const newpath = path + '/' + filename;
+        const newpath = `${path  }/${  filename}`;
         const stat = fs.statSync(newpath);
         if (stat.isDirectory()) processDir(newpath, used_keys);
         else if (filename.match(/\.jsx?$/)) {

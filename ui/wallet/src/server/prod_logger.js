@@ -13,12 +13,12 @@ function prod_logger() {
             this.originalUrl.indexOf('/favicon.ico') === 0;
         if (!asset) {
             console.log(
-                '  <-- ' +
-                    this.method +
-                    ' ' +
-                    this.originalUrl +
-                    ' ' +
-                    (this.session.uid || '')
+                `  <-- ${ 
+                    this.method 
+                    } ${ 
+                    this.originalUrl 
+                    } ${ 
+                    this.session.uid || ''}`
             );
         }
         try {
@@ -48,7 +48,7 @@ function log(ctx, start, len, err, asset) {
 
     if (!asset || err || ctx.status > 400) {
         console.log(
-            '  ' + upstream + ' %s %s %s %s %s %s',
+            `  ${  upstream  } %s %s %s %s %s %s`,
             ctx.method,
             ctx.originalUrl,
             status,
@@ -61,6 +61,6 @@ function log(ctx, start, len, err, asset) {
 
 function time(start) {
     let delta = new Date() - start;
-    delta = delta < 10000 ? delta + 'ms' : Math.round(delta / 1000) + 's';
+    delta = delta < 10000 ? `${delta  }ms` : `${Math.round(delta / 1000)  }s`;
     return humanize(delta);
 }

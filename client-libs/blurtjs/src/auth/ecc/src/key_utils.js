@@ -65,35 +65,35 @@ module.exports = {
     let entropyStr = Array(entropyArray).join();
     try {
       entropyStr +=
-        new Date().toString() +
-        " " +
-        window.screen.height +
-        " " +
-        window.screen.width +
-        " " +
-        window.screen.colorDepth +
-        " " +
-        " " +
-        window.screen.availHeight +
-        " " +
-        window.screen.availWidth +
-        " " +
-        window.screen.pixelDepth +
-        navigator.language +
-        " " +
-        window.location +
-        " " +
-        window.history.length;
+        `${new Date().toString() 
+        } ${ 
+        window.screen.height 
+        } ${ 
+        window.screen.width 
+        } ${ 
+        window.screen.colorDepth 
+        } ` +
+        ` ${ 
+        window.screen.availHeight 
+        } ${ 
+        window.screen.availWidth 
+        } ${ 
+        window.screen.pixelDepth 
+        }${navigator.language 
+        } ${ 
+        window.location 
+        } ${ 
+        window.history.length}`;
 
       for (let i = 0, mimeType; i < navigator.mimeTypes.length; i++) {
         mimeType = navigator.mimeTypes[i];
         entropyStr +=
-          mimeType.description +
-          " " +
-          mimeType.type +
-          " " +
-          mimeType.suffixes +
-          " ";
+          `${mimeType.description 
+          } ${ 
+          mimeType.type 
+          } ${ 
+          mimeType.suffixes 
+          } `;
       }
       console.log("INFO\tbrowserEntropy gathered", entropyCount, "events");
     } catch (error) {
@@ -102,7 +102,7 @@ module.exports = {
     }
 
     const b = new Buffer(entropyStr);
-    entropyStr += b.toString("binary") + " " + new Date().toString();
+    entropyStr += `${b.toString("binary")  } ${  new Date().toString()}`;
     return entropyStr;
   },
 };

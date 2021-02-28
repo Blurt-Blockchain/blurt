@@ -155,7 +155,7 @@ serverStart = () => {
   app.use("/", router);
 
   app.listen(port);
-  console.log("serverStart on port " + port);
+  console.log(`serverStart on port ${  port}`);
 };
 
 serverStart();

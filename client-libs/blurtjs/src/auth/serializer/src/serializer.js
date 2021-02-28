@@ -46,7 +46,7 @@ class Serializer {
         }
       }
     } catch (error) {
-      EC.throw(this.operation_name + "." + field, error);
+      EC.throw(`${this.operation_name  }.${  field}`, error);
     }
 
     return object;
@@ -64,17 +64,17 @@ class Serializer {
     } catch (error) {
       try {
         EC.throw(
-          this.operation_name +
-            "." +
-            field +
-            " = " +
-            JSON.stringify(object[field]),
+          `${this.operation_name 
+            }.${ 
+            field 
+            } = ${ 
+            JSON.stringify(object[field])}`,
           error
         );
       } catch (e) {
         // circular ref
         EC.throw(
-          this.operation_name + "." + field + " = " + object[field],
+          `${this.operation_name  }.${  field  } = ${  object[field]}`,
           error
         );
       }
@@ -96,7 +96,7 @@ class Serializer {
         result[field] = object;
       }
     } catch (error) {
-      EC.throw(this.operation_name + "." + field, error);
+      EC.throw(`${this.operation_name  }.${  field}`, error);
     }
 
     return result;
@@ -139,11 +139,11 @@ class Serializer {
             if (value) type.appendByteBuffer(b, value);
           }
           b = b.copy(0, b.offset);
-          console.error(this.operation_name + "." + field, b.toHex());
+          console.error(`${this.operation_name  }.${  field}`, b.toHex());
         }
       }
     } catch (error) {
-      EC.throw(this.operation_name + "." + field, error);
+      EC.throw(`${this.operation_name  }.${  field}`, error);
     }
 
     return result;

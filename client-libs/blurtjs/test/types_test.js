@@ -13,7 +13,7 @@ describe("steem.auth: types", () => {
       return Convert(type.vote_id).toHex(vote);
     };
     assert.equal("ff000000", toHex("255:0"));
-    assert.equal("00ffffff", toHex("0:" + 0xffffff));
+    assert.equal("00ffffff", toHex(`0:${  0xffffff}`));
     const out_of_range = function (id) {
       try {
         toHex(id);
@@ -22,7 +22,7 @@ describe("steem.auth: types", () => {
         return assert(e.message.indexOf("out of range") !== -1);
       }
     };
-    out_of_range("0:" + (0xffffff + 1));
+    out_of_range(`0:${  0xffffff + 1}`);
     out_of_range("256:0");
   });
 
