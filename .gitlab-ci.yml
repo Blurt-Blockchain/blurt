@@ -303,16 +303,25 @@ oroid-c2:
   tags:
     - amd64-shell
 
+blurtjs:
+  image: node:latest
+  stage: deploy
+  script:
+    - cd client-libs/blurtjs
+    - yarn install
+    - yarn build
+    - echo "//gitlab.example.com/api/v4/projects/${CI_PROJECT_ID}/packages/npm/:_authToken=${CI_JOB_TOKEN}">.npmrc
+    - npm publish
+
 # tests the dblurt client library
 dblurt:
-  needs: []
-  image: node
-  stage: test
+  image: node:latest
+  stage: deploy
   script:
     - cd client-libs/dblurt
     - yarn install
-  tags:
-    - metal
+    - echo "//gitlab.example.com/api/v4/projects/${CI_PROJECT_ID}/packages/npm/:_authToken=${CI_JOB_TOKEN}">.npmrc
+    - npm publish
 
 # construct the megadrive arch container
 megadrive-container:
