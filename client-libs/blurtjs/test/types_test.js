@@ -6,8 +6,8 @@ const type = require("../src/auth/serializer/src/types");
 const p = require("../src/auth/serializer/src/precision");
 const th = require("./test_helper");
 
-describe("steem.auth: types", function () {
-  it("vote_id", function () {
+describe("steem.auth: types", () => {
+  it("vote_id", () => {
     const toHex = function (id) {
       const vote = type.vote_id.fromObject(id);
       return Convert(type.vote_id).toHex(vote);
@@ -26,23 +26,23 @@ describe("steem.auth: types", function () {
     out_of_range("256:0");
   });
 
-  it("set sort", function () {
+  it("set sort", () => {
     const bool_set = type.set(type.bool);
     // Note, 1,0 sorts to 0,1
     assert.equal("020001", Convert(bool_set).toHex([1, 0]));
-    th.error("duplicate (set)", function () {
+    th.error("duplicate (set)", () => {
       return Convert(bool_set).toHex([1, 1]);
     });
   });
 
-  it("string sort", function () {
+  it("string sort", () => {
     const setType = type.set(type.string);
     const set = setType.fromObject(["a", "z", "m"]);
     const setObj = setType.toObject(set);
     assert.deepEqual(["a", "m", "z"], setObj, "not sorted");
   });
 
-  it("map sort", function () {
+  it("map sort", () => {
     const bool_map = type.map(type.bool, type.bool);
     // 1,1 0,0   sorts to   0,0  1,1
     assert.equal(
@@ -52,7 +52,7 @@ describe("steem.auth: types", function () {
         [0, 0],
       ])
     );
-    th.error("duplicate (map)", function () {
+    th.error("duplicate (map)", () => {
       return Convert(bool_map).toHex([
         [1, 1],
         [1, 1],
@@ -60,7 +60,7 @@ describe("steem.auth: types", function () {
     });
   });
 
-  it("public_key sort", function () {
+  it("public_key sort", () => {
     const mapType = type.map(type.public_key, type.uint16);
     const map = mapType.fromObject([
       // not sorted
@@ -75,7 +75,7 @@ describe("steem.auth: types", function () {
     ]);
   });
 
-  it("type_id sort", function () {
+  it("type_id sort", () => {
     // map (protocol_id_type "account"), (uint16)
     const t = type.map(type.protocol_id_type("account"), type.uint16);
     assert.deepEqual(
@@ -102,7 +102,7 @@ describe("steem.auth: types", function () {
     );
   });
 
-  it("precision number strings", function () {
+  it("precision number strings", () => {
     const check = function (input_string, precision, output_string) {
       return assert.equal(
         output_string,
@@ -124,19 +124,19 @@ describe("steem.auth: types", function () {
     check("1", 0, "1");
     check("11", 0, "11");
 
-    overflow(function () {
+    overflow(() => {
       return check(".1", 0, "");
     });
-    overflow(function () {
+    overflow(() => {
       return check("-.1", 0, "");
     });
-    overflow(function () {
+    overflow(() => {
       return check("0.1", 0, "");
     });
-    overflow(function () {
+    overflow(() => {
       return check("1.1", 0, "");
     });
-    overflow(function () {
+    overflow(() => {
       return check("1.11", 1, "");
     });
 
@@ -147,7 +147,7 @@ describe("steem.auth: types", function () {
     check("-1.1", 1, "-11");
   });
 
-  return it("precision number long", function () {
+  return it("precision number long", () => {
     let _precision;
     assert.equal(
       Long.MAX_VALUE.toString(),
@@ -157,14 +157,14 @@ describe("steem.auth: types", function () {
 
     // Long.MAX_VALUE.toString() == 9223372036854775807
     // Long.MAX_VALUE.toString() +1 9223372036854775808
-    overflow(function () {
+    overflow(() => {
       return p.to_bigint64("9223372036854775808", (_precision = 0));
     });
 
     assert.equal("0", p.to_string64(Long.ZERO, 0));
     assert.equal("00", p.to_string64(Long.ZERO, 1));
 
-    overflow(function () {
+    overflow(() => {
       return p.to_bigint64("92233720368547758075", (_precision = 1));
     });
   });

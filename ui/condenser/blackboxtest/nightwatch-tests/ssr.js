@@ -31,7 +31,7 @@ const testHttpGet = (host, port, path, browser) => {
             path,
             method: 'GET',
         },
-        function (res) {
+        (res) => {
             browser.assert.equal(
                 res.statusCode,
                 200,
@@ -39,14 +39,14 @@ const testHttpGet = (host, port, path, browser) => {
             );
         }
     )
-        .setTimeout(30000, function () {
+        .setTimeout(30000, () => {
             browser.assert.equal(
                 true,
                 false,
                 `request for ${path} took more than 30 seconds`
             );
         })
-        .on('error', function (err) {
+        .on('error', (err) => {
             browser.assert.equal(true, false, err);
         })
         .end();

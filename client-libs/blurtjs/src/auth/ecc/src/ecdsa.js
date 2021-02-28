@@ -70,7 +70,7 @@ function sign(curve, hash, d, nonce) {
     curve,
     hash,
     d,
-    function (k) {
+    (k) => {
       // find canonically valid signature
       const Q = G.multiply(k);
 

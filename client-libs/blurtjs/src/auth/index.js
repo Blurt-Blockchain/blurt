@@ -21,7 +21,7 @@ Auth.verify = function (name, password, auths) {
     roles.push(role);
   }
   const pubKeys = this.generateKeys(name, password, roles);
-  roles.forEach(function (role) {
+  roles.forEach((role) => {
     if (auths[role][0][0] === pubKeys[role]) {
       hasKey = true;
     }
@@ -31,7 +31,7 @@ Auth.verify = function (name, password, auths) {
 
 Auth.generateKeys = function (name, password, roles) {
   const pubKeys = {};
-  roles.forEach(function (role) {
+  roles.forEach((role) => {
     const seed = name + role + password;
     const brainKey = seed
       .trim()
@@ -61,10 +61,10 @@ Auth.getPrivateKeys = function (
 ) {
   const privKeys = {};
   roles.forEach(
-    function (role) {
+    (role) => {
       privKeys[role] = this.toWif(name, password, role);
       privKeys[role + "Pubkey"] = this.wifToPublic(privKeys[role]);
-    }.bind(this)
+    }
   );
   return privKeys;
 };

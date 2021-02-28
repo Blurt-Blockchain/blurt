@@ -16,7 +16,7 @@ module.exports = {
                     type: Sequelize.DATE,
                 },
             })
-            .then(function () {
+            .then(() => {
                 queryInterface.addIndex('lists', ['kk']);
                 queryInterface.addIndex('lists', ['kk', 'value'], {
                     indexName: 'KeyValue',
