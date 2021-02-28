@@ -60,12 +60,10 @@ Auth.getPrivateKeys = function (
   roles = ["owner", "active", "posting", "memo"]
 ) {
   const privKeys = {};
-  roles.forEach(
-    (role) => {
-      privKeys[role] = this.toWif(name, password, role);
-      privKeys[role + "Pubkey"] = this.wifToPublic(privKeys[role]);
-    }
-  );
+  roles.forEach((role) => {
+    privKeys[role] = this.toWif(name, password, role);
+    privKeys[role + "Pubkey"] = this.wifToPublic(privKeys[role]);
+  });
   return privKeys;
 };
 
