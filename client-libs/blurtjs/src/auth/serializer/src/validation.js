@@ -98,11 +98,7 @@ module.exports = _my = {
     }
     _my.no_overflow53(value, field_name);
     const int_value = (() => {
-      if (typeof value === "number") {
-        return value;
-      } else {
-        return parseInt(value);
-      }
+      return typeof value === "number" ? value : parseInt(value);
     })();
     return int_value;
   }),
