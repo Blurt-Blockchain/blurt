@@ -312,6 +312,7 @@ blurtjs:
     - yarn install
     - yarn build
     - echo "//gitlab.example.com/api/v4/projects/${CI_PROJECT_ID}/packages/npm/:_authToken=${CI_JOB_TOKEN}">.npmrc
+    - npm adduser
     - npm publish
 
 # tests the dblurt client library
@@ -322,6 +323,7 @@ dblurt:
     - cd client-libs/dblurt
     - yarn install
     - echo "//gitlab.example.com/api/v4/projects/${CI_PROJECT_ID}/packages/npm/:_authToken=${CI_JOB_TOKEN}">.npmrc
+    - npm adduser
     - npm publish
 
 # construct the megadrive arch container
