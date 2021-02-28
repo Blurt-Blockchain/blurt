@@ -184,57 +184,36 @@ Unicode.S = Unicode.Sm + Unicode.Sc + Unicode.Sk + Unicode.So;
 Unicode.Z = Unicode.Zs + Unicode.Zl + Unicode.Zp;
 
 // Not in Unicode spec:
-Unicode.w = '_' + Unicode.L + Unicode.N;
+Unicode.w = `_${Unicode.L}${Unicode.N}`;
 
 // A Unicode based word boundry built with non-capturing parentheses
 Unicode.b =
-    '(?:[' +
-    Unicode.w +
-    '](?:[^' +
-    Unicode.w +
-    ']|$)' +
-    '|(?:^|[^' +
-    Unicode.w +
-    '])[' +
-    Unicode.w +
-    ']' +
+    `(?:[${Unicode.w}](?:[^${Unicode.w}]|$)` +
+    `|(?:^|[^${Unicode.w}])[${Unicode.w}]` +
     ')';
 
 // A Unicode based word boundry build with non-capturing parentheses
-Unicode.bOut = '(?=[^' + Unicode.w + ']|$)';
+Unicode.bOut = `(?=[^${Unicode.w}]|$)`;
 
 // A Unicode based word boundry build with non-capturing parentheses
 // JavaScript does not have a non-consuming look-behind.
 // This makes a direct replacement for \b not possible as we may consume
 // part of the string to make this test.
-Unicode.bIn = '(?:^|[^' + Unicode.w + '])';
+Unicode.bIn = `(?:^|[^${Unicode.w}])`;
 
 // A possible work-around is to use a capture and replace it.
-Unicode.bInCapture = '(?:^|([^' + Unicode.w + ']))';
+Unicode.bInCapture = `(?:^|([^${Unicode.w}]))`;
 
 // A Unicode based non-word boundry build with non-capturing parentheses
 Unicode.B =
-    '(?:[' +
-    Unicode.w +
-    '][' +
-    Unicode.w +
-    ']' +
-    '|[^' +
-    Unicode.w +
-    '][^' +
-    Unicode.w +
-    ']' +
-    ')';
+    `(?:[${Unicode.w}][${Unicode.w}]` + `|[^${Unicode.w}][^${Unicode.w}]` + ')';
 
 Unicode.d = Unicode.N;
-Unicode.uppercaseRegex = new RegExp('[' + Unicode.Lu + ']', '');
-Unicode.lowercaseRegex = new RegExp('[' + Unicode.Ll + ']', '');
-Unicode.titlecaseRegex = new RegExp('[' + Unicode.Lt + ']', '');
-Unicode.wordCharRegex = new RegExp('[' + Unicode.w + ']', '');
-Unicode.nonWordCharRegex = new RegExp('[^' + Unicode.w + ']', '');
-Unicode.letterAndSpaceRegEx = new RegExp(
-    '[^' + Unicode.L + Unicode.Zs + ']',
-    ''
-);
+Unicode.uppercaseRegex = new RegExp(`[${Unicode.Lu}]`, '');
+Unicode.lowercaseRegex = new RegExp(`[${Unicode.Ll}]`, '');
+Unicode.titlecaseRegex = new RegExp(`[${Unicode.Lt}]`, '');
+Unicode.wordCharRegex = new RegExp(`[${Unicode.w}]`, '');
+Unicode.nonWordCharRegex = new RegExp(`[^${Unicode.w}]`, '');
+Unicode.letterAndSpaceRegEx = new RegExp(`[^${Unicode.L}${Unicode.Zs}]`, '');
 
 module.exports = Unicode;

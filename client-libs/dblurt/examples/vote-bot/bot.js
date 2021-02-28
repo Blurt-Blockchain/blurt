@@ -60,6 +60,6 @@ stream.on("data", (operation) => {
 });
 
 function die(msg) {
-  process.stderr.write(msg + "\n");
+  process.stderr.write(`${msg}\n`);
   process.exit(1);
 }

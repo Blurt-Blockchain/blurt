@@ -36,8 +36,8 @@ module.exports._internal = _internal =
   // Warning: Long operations may over-flow without detection
   {
     to_long64(number_or_string, precision, error_info = "") {
-      v.required(number_or_string, "number_or_string " + error_info);
-      v.required(precision, "precision " + error_info);
+      v.required(number_or_string, `number_or_string ${error_info}`);
+      v.required(precision, `precision ${error_info}`);
       return v.to_long(
         _internal.decimal_precision_string(
           number_or_string,
@@ -48,8 +48,8 @@ module.exports._internal = _internal =
     },
 
     decimal_precision_string(number, precision, error_info = "") {
-      v.required(number, "number " + error_info);
-      v.required(precision, "precision " + error_info);
+      v.required(number, `number ${error_info}`);
+      v.required(precision, `precision ${error_info}`);
 
       let number_string = v.to_string(number);
       number_string = number_string.trim();

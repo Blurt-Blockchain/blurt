@@ -95,7 +95,7 @@ class Signature {
         break;
       }
       if (nonce % 10 === 0) {
-        console.log("WARN: " + nonce + " attempts to find canonical signature");
+        console.log(`WARN: ${nonce} attempts to find canonical signature`);
       }
     }
     return new Signature(ecsignature.r, ecsignature.s, i);
@@ -119,7 +119,7 @@ class Signature {
     assert.equal(
       hash.length,
       32,
-      "A SHA 256 should be 32 bytes long, instead got " + hash.length
+      `A SHA 256 should be 32 bytes long, instead got ${hash.length}`
     );
     return ecdsa.verify(
       curve,

@@ -5,17 +5,17 @@ class ErrorWithCause {
     if (
       typeof cause !== "undefined" && cause !== null ? cause.message : undefined
     ) {
-      this.message = `cause\t${cause.message}\t` + this.message;
+      this.message = `cause\t${cause.message}\t${this.message}`;
     }
 
     let stack = ""; // (new Error).stack
     if (
       typeof cause !== "undefined" && cause !== null ? cause.stack : undefined
     ) {
-      stack = `caused by\n\t${cause.stack}\t` + stack;
+      stack = `caused by\n\t${cause.stack}\t${stack}`;
     }
 
-    this.stack = this.message + "\n" + stack;
+    this.stack = `${this.message}\n${stack}`;
   }
 
   static throw(message, cause) {
