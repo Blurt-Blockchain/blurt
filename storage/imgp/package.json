@@ -28,6 +28,6 @@
     "needle": "^2.4.0",
     "normalize-url": "^3.3.0",
     "query-string": "^6.2.0",
-    "sharp": "^0.20.8"
+    "sharp": "^0.27.2"
   }
 }
