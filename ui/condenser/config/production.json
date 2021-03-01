@@ -18,11 +18,8 @@
         },
         "reportOnly": false,
         "setAllHeaders": true
-    },
-    "reportOnly": false,
-    "setAllHeaders": true
   },
-  "img_proxy_prefix": "https://images.blurt.world/imgp/",
+  "img_proxy_prefix": false,
   "ipfs_prefix": "https://ipfs.blurt.world/ipfs/",
   "mixpanel": false,
   "notify": {
