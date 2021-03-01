@@ -1,5 +1,10 @@
 version = 1
 
+# marks a folder as containing tests
+test_patterns = [
+  "client-libs/dblurt/test/*"
+]
+
 exclude_patterns = [
     "libraries/**",
     "programs/**",
