@@ -161,7 +161,7 @@ imgp container push:
     - docker buildx build --file storage/imgp/Dockerfile --cache-from $CI_REGISTRY_IMAGE/imgp:cache --cache-to $CI_REGISTRY_IMAGE/imgp:cache --platform linux/arm64 ./storage/imgp
   tags:
     - arm64-shell
-  except:
+  only:
     - dev
 
 
@@ -185,7 +185,7 @@ imageupload container push:
     - docker buildx build --file storage/imageupload/Dockerfile --cache-from $CI_REGISTRY_IMAGE/imageupload:cache --cache-to $CI_REGISTRY_IMAGE/imageupload:cache --platform linux/arm64 ./storage/imageupload
   tags:
     - arm64-shell
-  except:
+  only:
     - dev
 
 
