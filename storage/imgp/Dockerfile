@@ -1,6 +1,6 @@
 FROM lopsided/archlinux
 
-RUN pacman -Syyu --noconfirm npm yarn
+RUN pacman -Syyu --noconfirm npm yarn base-devel
 
 RUN yarn install
 
