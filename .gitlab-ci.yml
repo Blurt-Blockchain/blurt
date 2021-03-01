@@ -141,6 +141,57 @@ condenser-production-blog:
     - dev
 
 
+imgp test build:
+  needs: []
+  stage: build
+  script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker buildx build --file storage/imgp/Dockerfile --cache-from $CI_REGISTRY_IMAGE/imgp:cache --cache-to $CI_REGISTRY_IMAGE/imgp:cache --platform linux/arm64,linux/amd64 ./storage/imgp
+  tags:
+    - arm64-shell
+  except:
+    - dev
+
+
+imgp container push:
+  needs: []
+  stage: build
+  script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker buildx build --file storage/imgp/Dockerfile --cache-from $CI_REGISTRY_IMAGE/imgp:cache --cache-to $CI_REGISTRY_IMAGE/imgp:cache --platform linux/arm64 ./storage/imgp
+  tags:
+    - arm64-shell
+  except:
+    - dev
+
+
+imageupload test build:
+  needs: []
+  stage: build
+  script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker buildx build --file storage/imageupload/Dockerfile --cache-from $CI_REGISTRY_IMAGE/imageupload:cache --cache-to $CI_REGISTRY_IMAGE/imageupload:cache --platform linux/arm64,linux/amd64 ./storage/imageupload
+  tags:
+    - arm64-shell
+  except:
+    - dev
+
+
+imageupload container push:
+  needs: []
+  stage: build
+  script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker buildx build --file storage/imageupload/Dockerfile --cache-from $CI_REGISTRY_IMAGE/imageupload:cache --cache-to $CI_REGISTRY_IMAGE/imageupload:cache --platform linux/arm64 ./storage/imageupload
+  tags:
+    - arm64-shell
+  except:
+    - dev
+
+
+
+
+
 instablurt-amd64:
   needs: []
   when: manual
