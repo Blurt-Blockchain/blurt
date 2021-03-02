@@ -439,6 +439,15 @@ namespace blurt { namespace protocol {
       void get_required_active_authorities( flat_set<account_name_type>& a )const{ a.insert(account); }
    };
 
+   struct account_witness_weight_vote_operation : public base_operation
+   {
+      account_name_type account;
+      account_name_type witness;
+      asset             shares;
+
+      void validate() const;
+      void get_required_active_authorities( flat_set<account_name_type>& a )const{ a.insert(account); }
+   };
 
    struct account_witness_proxy_operation : public base_operation
    {
@@ -735,6 +744,50 @@ namespace blurt { namespace protocol {
       void get_required_active_authorities( flat_set< account_name_type >& a ) const { a.insert( delegator ); }
       void validate() const;
    };
+
+   struct moderator_update_operation : public base_operation
+   {
+      account_name_type name;
+      string            url;
+      asset             fee;
+
+      void validate()const;
+      void get_required_active_authorities( flat_set<account_name_type>& a )const{ a.insert(name); }
+   };
+
+   struct moderator_resign_operation: public base_operation
+   {
+      account_name_type name;
+
+      void validate()const;
+      void get_required_active_authorities( flat_set<account_name_type>& a )const{ a.insert(name); }
+   }
+
+   struct account_moderator_weight_vote_operation : public base_operation
+   {
+      account_name_type account;
+      account_name_type moderator;
+      asset             shares;
+
+      void validate() const;
+      void get_required_active_authorities( flat_set<account_name_type>& a )const{ a.insert(account); }
+   };
+
+   struct account_moderator_proxy_operation : public base_operation
+   {
+      account_name_type account;
+      account_name_type proxy;
+
+      void validate()const;
+      void get_required_active_authorities( flat_set<account_name_type>& a )const{ a.insert(account); }
+   };
+
+   struct moderator_complaint_operation : public base_operation
+   {
+      account_name_type account;
+      account_name_type moderator;
+      bool              ban = true;
+   };
 } } // blurt::protocol
 
 
@@ -777,6 +830,7 @@ FC_REFLECT( blurt::protocol::set_withdraw_vesting_route_operation, (from_account
 FC_REFLECT( blurt::protocol::witness_update_operation, (owner)(url)(block_signing_key)(props)(fee) )
 FC_REFLECT( blurt::protocol::witness_set_properties_operation, (owner)(props)(extensions) )
 FC_REFLECT( blurt::protocol::account_witness_vote_operation, (account)(witness)(approve) )
+FC_REFLECT( blurt::protocol::account_witness_weight_vote_operation, (account)(witness)(shares) )
 FC_REFLECT( blurt::protocol::account_witness_proxy_operation, (account)(proxy) )
 FC_REFLECT( blurt::protocol::comment_operation, (parent_author)(parent_permlink)(author)(permlink)(title)(body)(json_metadata) )
 FC_REFLECT( blurt::protocol::vote_operation, (voter)(author)(permlink)(weight) )
@@ -804,3 +858,9 @@ FC_REFLECT( blurt::protocol::change_recovery_account_operation, (account_to_reco
 FC_REFLECT( blurt::protocol::decline_voting_rights_operation, (account)(decline) );
 FC_REFLECT( blurt::protocol::claim_reward_balance_operation, (account)(reward_blurt)(reward_vests) )
 FC_REFLECT( blurt::protocol::delegate_vesting_shares_operation, (delegator)(delegatee)(vesting_shares) );
+
+FC_REFLECT( blurt::protocol::moderator_update_operation, (name)(url)(fee) );
+FC_REFLECT( blurt::protocol::moderator_resign_operation, (name) );
+FC_REFLECT( blurt::protocol::account_moderator_weight_vote_operation, (account)(moderator)(shares) );
+FC_REFLECT( blurt::protocol::account_moderator_proxy_operation, (account)(proxy) );
+FC_REFLECT( blurt::protocol::moderator_complaint_operation, (account)(moderator)(ban) );

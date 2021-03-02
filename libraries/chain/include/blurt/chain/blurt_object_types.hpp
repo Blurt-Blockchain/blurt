@@ -64,6 +64,7 @@ enum object_type
    comment_content_object_type,
    comment_vote_object_type,
    witness_vote_object_type,
+   witness_weight_vote_object_type,
    operation_object_type,
    account_history_object_type,
    hardfork_property_object_type,
@@ -79,7 +80,10 @@ enum object_type
    vesting_delegation_object_type,
    vesting_delegation_expiration_object_type,
    proposal_object_type,
-   proposal_vote_object_type
+   proposal_vote_object_type,
+   moderator_object_type,
+   moderator_weight_vote_object_type,
+   moderator_complaint_object_type
 };
 
 class dynamic_global_property_object;
@@ -94,6 +98,7 @@ class comment_object;
 class comment_content_object;
 class comment_vote_object;
 class witness_vote_object;
+class witness_weight_vote_object;
 class operation_object;
 class account_history_object;
 class hardfork_property_object;
@@ -110,6 +115,9 @@ class vesting_delegation_object;
 class vesting_delegation_expiration_object;
 class proposal_object;
 class proposal_vote_object;
+class moderator_object;
+class moderator_weight_vote_object;
+class moderator_complaint_object;
 
 typedef oid< dynamic_global_property_object         > dynamic_global_property_id_type;
 typedef oid< account_object                         > account_id_type;
@@ -123,6 +131,7 @@ typedef oid< comment_object                         > comment_id_type;
 typedef oid< comment_content_object                 > comment_content_id_type;
 typedef oid< comment_vote_object                    > comment_vote_id_type;
 typedef oid< witness_vote_object                    > witness_vote_id_type;
+typedef oid< witness_weight_vote_object             > witness_weight_vote_id_type;
 typedef oid< operation_object                       > operation_id_type;
 typedef oid< account_history_object                 > account_history_id_type;
 typedef oid< hardfork_property_object               > hardfork_property_id_type;
@@ -139,6 +148,9 @@ typedef oid< vesting_delegation_object              > vesting_delegation_id_type
 typedef oid< vesting_delegation_expiration_object   > vesting_delegation_expiration_id_type;
 typedef oid< proposal_object > proposal_id_type;
 typedef oid< proposal_vote_object > proposal_vote_id_type;
+typedef oid< moderator_object                       > moderator_id_type;
+typedef oid< moderator_weight_vote_object           > moderator_weight_vote_id_type;
+typedef oid< moderator_complaint_object             > moderator_complaint_id_type
 
 enum bandwidth_type
 {
@@ -316,6 +328,7 @@ FC_REFLECT_ENUM( blurt::chain::object_type,
                  (comment_content_object_type)
                  (comment_vote_object_type)
                  (witness_vote_object_type)
+                 (witness_weight_vote_object_type)
                  (operation_object_type)
                  (account_history_object_type)
                  (hardfork_property_object_type)
@@ -332,6 +345,9 @@ FC_REFLECT_ENUM( blurt::chain::object_type,
                  (vesting_delegation_expiration_object_type)
                  (proposal_object_type)
                  (proposal_vote_object_type)
+                 (moderator_object_type)
+                 (moderator_weight_vote_object_type)
+                 (moderator_complaint_object_type)
                )
 
 #ifndef ENABLE_MIRA

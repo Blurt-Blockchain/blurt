@@ -73,6 +73,8 @@ namespace blurt { namespace chain {
          fc::array<share_type, BLURT_MAX_PROXY_RECURSION_DEPTH> proxied_vsf_votes;// = std::vector<share_type>( BLURT_MAX_PROXY_RECURSION_DEPTH, 0 ); ///< the total VFS votes proxied to this account
 
          uint16_t          witnesses_voted_for = 0;
+         asset             available_witness_vote_shares = asset( 0, VESTS_SYMBOL );
+         asset             available_moderator_vote_shares = asset( 0, VESTS_SYMBOL );
 
          time_point_sec    last_post;
          time_point_sec    last_root_post = fc::time_point_sec::min();
@@ -422,7 +424,7 @@ FC_REFLECT( blurt::chain::account_object,
              (vesting_withdraw_rate)(next_vesting_withdrawal)(withdrawn)(to_withdraw)(withdraw_routes)
              (curation_rewards)
              (posting_rewards)
-             (proxied_vsf_votes)(witnesses_voted_for)
+             (proxied_vsf_votes)(witnesses_voted_for)(available_witness_vote_shares)(available_moderator_vote_shares)
              (last_post)(last_root_post)(last_post_edit)(last_vote_time)(post_bandwidth)
              (pending_claimed_accounts)
           )
