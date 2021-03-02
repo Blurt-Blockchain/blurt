@@ -119,4 +119,11 @@ ui/condenser/tmp/*
 ui/condenser/.vagrant
 ui/condenser/lib
 
+# client-libraries
+client-libs/blurtjs/dist/*
+client-libs/blurtjs/lib/*
+client-libs/dblurt/dist/*
+client-libs/dblurt/lib/*
+client-libs/dblurt/docs/*
+
 
