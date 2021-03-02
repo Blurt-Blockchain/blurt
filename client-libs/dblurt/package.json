@@ -1,6 +1,6 @@
 {
   "name": "dblurt",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Blurt blockchain RPC client library",
   "author": "etainclub",
   "license": "BSD-3-Clause",
@@ -78,5 +78,9 @@
     "typescript": "^3.8.3",
     "uglify-js": "^3.4.9",
     "watchify": "^3.11.0"
-  }
+  },
+    "contributors": [
+    "etainclub (https://github.com/etainclub)",
+    "Jacob Gadikian (https://github.com/faddat)"
+  ]
 }
