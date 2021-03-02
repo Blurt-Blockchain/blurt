@@ -210,7 +210,7 @@
         ]
     },
     "browser": {
-    "ipfs": "ipfs/dist/index.min.js"
+        "ipfs": "ipfs/dist/index.min.js"
     },
     "jest": {
         "testURL": "http://localhost:8080",
