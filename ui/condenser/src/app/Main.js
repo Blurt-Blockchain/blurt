@@ -13,6 +13,8 @@ import * as blurtjs from '@blurtfoundation/blurtjs';
 import { determineViewMode } from 'app/utils/Links';
 import frontendLogger from 'app/utils/FrontendLogger';
 import ReactGA from 'react-ga';
+import "https://cdn.jsdelivr.net/npm/ipfs/dist/index.min.js";
+
 
 window.addEventListener('error', frontendLogger);
 
@@ -28,6 +30,117 @@ try {
 } catch (e) {
     console.error(e);
 }
+
+// IPFS STUFF HERE
+// this bundle maybe non ES-module, but it can import to load as `window.Ipfs`
+// Chat example on js-libp2p in js-ipfs (>= 0.41)
+//import "https://cdn.jsdelivr.net/npm/ipfs@0.44.0/dist/index.min.js";
+console.log(window.Ipfs);
+
+// util1: duplex-stream source from ES iterator
+const iterableSource = async function* (iter) {
+  return yield* iter;
+};
+
+const promisify = func => function (...args) {
+  return new Promise((f, e) => func.call(
+    this, ...args, (err, value) => err ? e(err) : f(value)));
+};
+
+const main = async () => {
+  const node = window.node = await Ipfs.create({
+    repo: `ipfs-${Math.random()}`,
+    relay: {enabled: true, hop: {enabled: true, active: true}},
+  });
+  await node.ready;
+
+  console.log("IPFS version:", (await node.version()).version);
+  console.log(`Peer ID:`, (await node.id()).id);
+
+  const myid = node.libp2p.peerInfo.id.toB58String();
+  console.log("libp2p ID:", myid);
+
+  // receive
+  const protocolId = "chat-example-proto";
+  node.libp2p.handle(protocolId, async ({connection, stream, protocol}) => {
+    // Connection: https://github.com/libp2p/js-libp2p-interfaces/tree/master/src/connection
+    console.log(connection);
+    const id = connection.remotePeer.toB58String(); // PeerId instance
+    //console.log(id);
+    console.log(connection.remoteAddr.toString()); // Multiaddr as "/p2p/Qm..."
+
+    // duplex-stream: https://gist.github.com/alanshaw/591dc7dd54e4f99338a347ef568d6ee9#duplex-it
+    //console.log(stream);
+    const msg = [];
+    for await (const bl of stream.source) {
+      // bl: BufferList; see https://github.com/rvagg/bl
+      //console.log(bl);
+      //console.log(bl.slice()); // as Uint8Array
+      msg.push(new TextDecoder().decode(bl.slice()));
+    }
+    document.querySelector("#log").prepend(`${id}: ${"".concat(msg)}\n`);
+  });
+
+//Make it an arrray
+const validIp1 = new Multiaddr('/ip4/95.217.193.163/tcp/4001/12D3KooWL9ckZMUHGfv9Uw1KQKRddKA4AC9zmyZv9aZsqUTCwsda')
+const validIp2 = new Multiaddr('/ip4/95.217.193.163/udp/4001/quic/12D3KooWL9ckZMUHGfv9Uw1KQKRddKA4AC9zmyZv9aZsqUTCwsda')
+const validIp3 = new Multiaddr('/ip6/2a01:4f9:4a:509c::2/tcp/4001/12D3KooWL9ckZMUHGfv9Uw1KQKRddKA4AC9zmyZv9aZsqUTCwsda')
+const validIp4 = new Multiaddr('/ip6/2a01:4f9:4a:509c::2/udp/4001/quic/12D3KooWL9ckZMUHGfv9Uw1KQKRddKA4AC9zmyZv9aZsqUTCwsda')
+
+ipfs.bootstrap.add(validIp1)
+ipfs.bootstrap.add(validIp2)
+ipfs.bootstrap.add(validIp3)
+ipfs.bootstrap.add(validIp4)
+
+
+  // from js-ipfs-0.41.0, swarm.connect() to p2pid with explicit relay required
+  const connect = async (node, id) => {
+    // swarm connect with relay
+    const addrs = new Set((await node.swarm.addrs()).map(({id}) => id));
+    //console.log(addrs);
+    if (addrs.has(id)) return;
+
+    let relaid = false;
+    for (const relay of addrs) {
+      const relayid = `/p2p/${relay}/p2p-circuit/p2p/${id}`;
+      console.log("relayid", relayid);
+      try {
+        await node.swarm.connect(relayid);
+        relaid = true;
+        break;
+      } catch (error) {
+        //console.log(error);
+      }
+    }
+    if (!relaid) throw Error(`could not relay to ${id}`);
+  };
+
+  // send
+  document.querySelector("#send").addEventListener("click", ev => {
+    (async () => {
+      const id = document.querySelector("#to").value;
+      const msg = document.querySelector("#msg").value;
+      const p2pid = `/p2p/${id}`;
+      console.log("p2pid", p2pid);
+
+      await connect(node, id);
+
+      // p2pid can avaialbe after dialed from the id
+      const {stream, protocol} =
+            await node.libp2p.dialProtocol(p2pid, protocolId);
+      stream.sink(iterableSource([new TextEncoder().encode(msg)]));
+      console.log(`dialed to ${p2pid}`);
+
+      document.querySelector("#msg").value = "";
+      document.querySelector("#log").prepend(`${myid}: ${msg}\n`);
+    })().catch(console.error);
+  });
+
+  document.querySelector("#myid").textContent = myid;
+};
+
+main().catch(console.error);
+
 
 ReactGA.initialize('UA-179023138-1', {
     titleCase: false,

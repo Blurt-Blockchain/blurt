@@ -18,7 +18,7 @@ export const INVEST_TOKEN_SHORT = 'BP';
 export const DEBT_TOKEN = 'BLURT DOLLAR';
 export const DEBT_TOKENS = 'BLURT DOLLARS';
 export const CURRENCY_SIGN = '$';
-export const WIKI_URL = ''; // https://wiki.blurt.world/
+export const WIKI_URL = 'https://blurtfaq.org'; // https://wiki.blurt.world/
 export const LANDING_PAGE_URL = 'https://blurt.world/';
 export const TERMS_OF_SERVICE_URL = 'https://' + APP_DOMAIN + '/tos.html';
 export const PRIVACY_POLICY_URL = 'https://' + APP_DOMAIN + '/privacy.html';
@@ -36,7 +36,7 @@ export const DEFAULT_CURRENCY = 'USD';
 export const ALLOWED_CURRENCIES = ['USD'];
 
 // meta info
-export const TWITTER_HANDLE = '@blurt';
+export const TWITTER_HANDLE = '@blurtoffical';
 export const SHARE_IMAGE =
     'https://' + APP_DOMAIN + '/images/steemit-share.png';
 export const TWITTER_SHARE_IMAGE =
