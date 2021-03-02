@@ -79,7 +79,7 @@
     "uglify-js": "^3.4.9",
     "watchify": "^3.11.0"
   },
-    "contributors": [
+  "contributors": [
     "etainclub (https://github.com/etainclub)",
     "Jacob Gadikian (https://github.com/faddat)"
   ]
