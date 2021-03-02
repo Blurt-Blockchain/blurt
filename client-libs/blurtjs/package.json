@@ -67,6 +67,7 @@
     "mocha-make-stub": "^2.3.2",
     "should": "^11.1.0",
     "webpack": "^1.13.2",
+    "webpack-cli": "^4.5.0",
     "webpack-visualizer-plugin": "^0.1.5"
   },
   "contributors": [
