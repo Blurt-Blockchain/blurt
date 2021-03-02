@@ -13,7 +13,7 @@ import * as blurtjs from '@blurtfoundation/blurtjs';
 import { determineViewMode } from 'app/utils/Links';
 import frontendLogger from 'app/utils/FrontendLogger';
 import ReactGA from 'react-ga';
-import "https://cdn.jsdelivr.net/npm/ipfs/dist/index.min.js";
+import "ipfs";
 
 
 window.addEventListener('error', frontendLogger);
