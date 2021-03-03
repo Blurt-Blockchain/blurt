@@ -1,37 +1,37 @@
 /** Exception nesting.  */
 class ErrorWithCause {
-  constructor(message, cause) {
-    this.message = message;
+  constructor (message, cause) {
+    this.message = message
     if (
-      typeof cause !== "undefined" && cause !== null ? cause.message : undefined
+      typeof cause !== 'undefined' && cause !== null ? cause.message : undefined
     ) {
-      this.message = `cause\t${cause.message}\t${this.message}`;
+      this.message = `cause\t${cause.message}\t${this.message}`
     }
 
-    let stack = ""; // (new Error).stack
+    let stack = '' // (new Error).stack
     if (
-      typeof cause !== "undefined" && cause !== null ? cause.stack : undefined
+      typeof cause !== 'undefined' && cause !== null ? cause.stack : undefined
     ) {
-      stack = `caused by\n\t${cause.stack}\t${stack}`;
+      stack = `caused by\n\t${cause.stack}\t${stack}`
     }
 
-    this.stack = `${this.message}\n${stack}`;
+    this.stack = `${this.message}\n${stack}`
   }
 
-  static throw(message, cause) {
-    let msg = message;
+  static throw (message, cause) {
+    let msg = message
     if (
-      typeof cause !== "undefined" && cause !== null ? cause.message : undefined
+      typeof cause !== 'undefined' && cause !== null ? cause.message : undefined
     ) {
-      msg += `\t cause: ${cause.message} `;
+      msg += `\t cause: ${cause.message} `
     }
     if (
-      typeof cause !== "undefined" && cause !== null ? cause.stack : undefined
+      typeof cause !== 'undefined' && cause !== null ? cause.stack : undefined
     ) {
-      msg += `\n stack: ${cause.stack} `;
+      msg += `\n stack: ${cause.stack} `
     }
-    throw new Error(msg);
+    throw new Error(msg)
   }
 }
 
-module.exports = ErrorWithCause;
+module.exports = ErrorWithCause

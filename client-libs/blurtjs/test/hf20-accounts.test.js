@@ -1,23 +1,23 @@
-import Promise from "bluebird";
-import should from "should";
-import steem from "../src";
+import Promise from 'bluebird'
+import should from 'should'
+import steem from '../src'
 
-const username = process.env.BLURT_USERNAME || "guest123";
-const password = process.env.BLURT_PASSWORD;
-const activeWif = steem.auth.toWif(username, password, "active");
+const username = process.env.BLURT_USERNAME || 'guest123'
+const password = process.env.BLURT_PASSWORD
+const activeWif = steem.auth.toWif(username, password, 'active')
 
-describe("steem.hf20-accounts:", () => {
-  it("has generated methods", () => {
-    should.exist(steem.broadcast.claimAccount);
-    should.exist(steem.broadcast.createClaimedAccount);
-  });
+describe('steem.hf20-accounts:', () => {
+  it('has generated methods', () => {
+    should.exist(steem.broadcast.claimAccount)
+    should.exist(steem.broadcast.createClaimedAccount)
+  })
 
-  it("has promise methods", () => {
-    should.exist(steem.broadcast.claimAccountAsync);
-    should.exist(steem.broadcast.createClaimedAccountAsync);
-  });
+  it('has promise methods', () => {
+    should.exist(steem.broadcast.claimAccountAsync)
+    should.exist(steem.broadcast.createClaimedAccountAsync)
+  })
 
-  describe("claimAccount", () => {
+  describe('claimAccount', () => {
     /*  Skip these tests. Steem-js test infrastructure not set up for testing active auths
     Blocked by Steem issue #3546
     it('signs and verifies auth', function(done) {
@@ -70,5 +70,5 @@ describe("steem.hf20-accounts:", () => {
       });
     });
 */
-  });
-});
+  })
+})

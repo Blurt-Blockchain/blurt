@@ -1,13 +1,13 @@
-import LRU from 'lru-cache';
+import LRU from 'lru-cache'
 
-const cache = new LRU(60);
+const cache = new LRU(60)
 
 export const setCacheSize = (size) => {
-  cache.max = size;
-};
+  cache.max = size
+}
 
-export const cacheGet = (key) => cache.get(key);
+export const cacheGet = (key) => cache.get(key)
 
 export const cacheSet = (key, val) => {
-  cache.set(key, val);
-};
+  cache.set(key, val)
+}

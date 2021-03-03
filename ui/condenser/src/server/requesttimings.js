@@ -1,17 +1,17 @@
-import RequestTimer from './utils/RequestTimer';
+import RequestTimer from './utils/RequestTimer'
 
-function requestTime(statsLoggerClient) {
-    return function* (next) {
-        this.state.requestTimer = new RequestTimer(
-            statsLoggerClient,
-            'request',
+function requestTime (statsLoggerClient) {
+  return function * (next) {
+    this.state.requestTimer = new RequestTimer(
+      statsLoggerClient,
+      'request',
             `method=${this.request.method} path=${this.request.path}`
-        );
+    )
 
-        yield* next;
+    yield * next
 
-        this.state.requestTimer.finish();
-    };
+    this.state.requestTimer.finish()
+  }
 }
 
-module.exports = requestTime;
+module.exports = requestTime

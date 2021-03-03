@@ -1,3 +1,3 @@
-const map = {};
+const map = {}
 
-export default map;
+export default map
