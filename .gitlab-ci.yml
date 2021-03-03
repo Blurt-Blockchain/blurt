@@ -372,7 +372,6 @@ blurtjs:
     - cd client-libs/blurtjs
     - npm install
     - npm build
-    - npm adduser
     - npm publish
 
 
@@ -392,8 +391,6 @@ dblurt:
       } | tee --append .npmrc
     - cd client-libs/dblurt
     - npm install
-    - make
-    - npm adduser
     - npm publish
 
 # construct the megadrive arch container
