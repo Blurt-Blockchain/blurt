@@ -370,8 +370,8 @@ blurtjs:
         echo "${CI_API_V4_URL#https?}/projects/${CI_PROJECT_ID}/packages/npm/:_authToken=\${CI_JOB_TOKEN}"
       } | tee --append .npmrc
     - cd client-libs/blurtjs
-    - yarn install
-    - yarn build
+    - npm install
+    - npm build
     - npm adduser
     - npm run semantic-release
 
@@ -391,7 +391,8 @@ dblurt:
         echo "${CI_API_V4_URL#https?}/projects/${CI_PROJECT_ID}/packages/npm/:_authToken=\${CI_JOB_TOKEN}"
       } | tee --append .npmrc
     - cd client-libs/dblurt
-    - yarn install
+    - npm install
+    - npm build
     - npm adduser
     - npm run semantic-release
 
