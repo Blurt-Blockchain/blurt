@@ -373,7 +373,7 @@ blurtjs:
     - npm install
     - npm build
     - npm adduser
-    - npm run semantic-release
+    - npm publish
 
 
 # Release changes to dblurt
@@ -392,9 +392,9 @@ dblurt:
       } | tee --append .npmrc
     - cd client-libs/dblurt
     - npm install
-    - npm build
+    - npm run build
     - npm adduser
-    - npm run semantic-release
+    - npm publish
 
 # construct the megadrive arch container
 megadrive-container:
