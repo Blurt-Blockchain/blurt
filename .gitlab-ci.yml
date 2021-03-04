@@ -362,7 +362,7 @@ witness:
 witness_test:
   stage: test
   script:
-    - ./build/bin/blurtd --resync-blockchain --replay-blockchain
+    - ./build/bin/blurtd --resync-blockchain
   needs: 
     - witness
   dependencies:
