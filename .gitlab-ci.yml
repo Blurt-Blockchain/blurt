@@ -361,6 +361,7 @@ witness:
 
 witness_test:
   stage: test
+  when: manual
   script:
     - ./build/bin/blurtd --resync-blockchain
   needs: 
