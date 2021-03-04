@@ -271,8 +271,6 @@ megadrive-testnet-ubuntu:
     paths:
       - build/bin
 
-
-
 # construct the light cryptopie device image.  runs blurt on sos-lite as a container.
 raspberrypi4:
   when: manual
@@ -359,6 +357,19 @@ witness:
     paths:
       - build/bin/
   needs: []
+
+
+witness_test:
+  stage: test
+  script:
+    - ./build/bin/blurtd --resync-blockchain --replay-blockchain
+  needs: 
+    - witness
+  dependencies:
+    - witness
+  tags: 
+    - shell-arch
+
 
 mira:
   stage: build
