@@ -86,7 +86,7 @@ async function getRatelimit(account: string) {
 }
 const b64uLookup = {
   "/": "_",
-  _: "/",
+  "_": "/",
   "+": "-",
   "-": "+",
   "=": ".",

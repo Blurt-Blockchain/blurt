@@ -6,9 +6,10 @@
     "test": "make ci-test"
   },
   "engines": {
-    "node": ">=8"
+    "node": ">=10"
   },
   "dependencies": {
+    "@hiveio/dhive": "latest",
     "@koa/cors": "^2.2.1",
     "abstract-blob-store": "^3.3.4",
     "aws-sdk": "^2.188.0",
@@ -55,8 +56,7 @@
     "tslint": "^5.16.0",
     "typescript": "^3.5.1"
   },
-    "resolutions": {
+  "resolutions": {
     "@dhiveio/dhive": "dblurt@latest"
-  }  
-
+  }
 }
