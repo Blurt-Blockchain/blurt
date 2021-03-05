@@ -9,7 +9,7 @@
     "node": ">=8"
   },
   "dependencies": {
-    "@hiveio/dhive": "^0.14.0",
+    "dblurt": "^0.14.0",
     "@koa/cors": "^2.2.1",
     "abstract-blob-store": "^3.3.4",
     "aws-sdk": "^2.188.0",
