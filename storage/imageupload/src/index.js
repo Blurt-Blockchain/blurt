@@ -13,6 +13,10 @@ const { RateLimiterMemory } = require("rate-limiter-flexible");
 const IpfsHttpClient = require('ipfs-http-client')
 const { globSource } = IpfsHttpClient
 const ipfs = IpfsHttpClient()
+console.log(ipfs.stats.bw)
+console.log(ipfs.swarm.localAddrs)
+console.log(ipfs.swarm.peers)
+console.log(ipfs.getEndpointConfig)
 
 
 chainLib.api.setOptions({

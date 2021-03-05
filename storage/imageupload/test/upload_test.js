@@ -20,11 +20,11 @@ const {
 describe("POST /:username/:sig", () => {
   const username = process.env.TEST_ACCOUNT_NAME;
   const datauri = new Datauri("test/test_img.png");
-  /**
-   * console.log(datauri.content); //=> "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA..."
-   * console.log(datauri.mimetype); //=> "image/png"
-   * console.log(datauri.base64); //=> "iVBORw0KGgoAAAANSUhEUgAA..."
-   */
+
+   console.log(datauri.content); //=> "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA..."
+   console.log(datauri.mimetype); //=> "image/png"
+   console.log(datauri.base64); //=> "iVBORw0KGgoAAAANSUhEUgAA..."
+
   // console.log(datauri.content);
 
   let data_sign = Signature.signBuffer(
