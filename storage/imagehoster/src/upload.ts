@@ -3,7 +3,7 @@
 import * as Busboy from "busboy";
 import * as config from "config";
 import { createHash } from "crypto";
-import { Client, Signature } from "@hiveio/dhive";
+import { Client, Signature } from "dblurt";
 import * as http from "http";
 import * as multihash from "multihashes";
 import * as RateLimiter from "ratelimiter";

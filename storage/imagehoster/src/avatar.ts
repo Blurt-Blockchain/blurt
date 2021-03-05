@@ -3,7 +3,7 @@
 import * as config from "config";
 import { base58Enc } from "./utils";
 
-import { Account } from "@hiveio/dhive";
+import { Account } from "dblurt";
 import { KoaContext, rpcClient } from "./common";
 import { APIError } from "./error";
 
