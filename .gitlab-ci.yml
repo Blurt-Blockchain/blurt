@@ -188,10 +188,6 @@ imageupload container push:
   only:
     - dev
 
-
-
-
-
 instablurt-amd64:
   needs: []
   when: manual
@@ -338,7 +334,7 @@ raspberrypi4:
     - mv images/cryptopie.img.xz /static/cryptopie/cryptopie-$(echo $STAMP).img.xz
     - sudo ipfs add -Q /static/cryptopie/cryptopie-$(echo $STAMP).img.xz > /static/cryptopie/cryptopie-$(echo $STAMP).html
   tags:
-    - amd64-shell
+    - shell-arch
 
 # construct the light odroid-c2 device image.  runs blurt on sos-lite as a container.
 oroid-c2:
@@ -353,7 +349,7 @@ oroid-c2:
     - mv images/megadrive-light.img.xz /static/c2-light/c2-light-$(echo $STAMP).img.xz
     - sudo ipfs add -Q /static/c2-light/c2-light-$(echo $STAMP).img.xz > /static/c2-light/c2-light-$(echo $STAMP).html
   tags:
-    - amd64-shell
+    - shell-arch
 
 # Release new versions of blurtjs
 blurtjs:
