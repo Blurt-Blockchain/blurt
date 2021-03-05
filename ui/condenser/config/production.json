@@ -48,7 +48,7 @@
     "account_sid": false,
     "auth_token": false
   },
-  "upload_image": false,
+  "upload_image": "https://images.blurt.world",
   "blurtd_connection_client": "https://rpc.blurt.world",
   "blurtd_connection_server": "https://rpc.blurt.world",
   "blurtd_use_appbase": true,
