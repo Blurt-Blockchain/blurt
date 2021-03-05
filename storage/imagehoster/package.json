@@ -54,7 +54,7 @@
     "onchange": "^6.1.0",
     "ts-node": "^7.0.0",
     "tslint": "^5.16.0",
-    "typescript": "^3.5.1"
+    "typescript": "^4.2.3"
   },
   "resolutions": {
     "@dhiveio/dhive": "dblurt@latest"
