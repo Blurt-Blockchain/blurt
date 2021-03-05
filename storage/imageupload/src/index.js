@@ -10,10 +10,9 @@ const {
 const RIPEMD160 = require("ripemd160");
 const AWS = require("aws-sdk");
 const { RateLimiterMemory } = require("rate-limiter-flexible");
-const IpfsHttpClient = require('ipfs-http-client')
-const { globSource } = IpfsHttpClient
-const ipfs = IpfsHttpClient()
-
+const IpfsHttpClient = require("ipfs-http-client");
+const { globSource } = IpfsHttpClient;
+const ipfs = IpfsHttpClient();
 
 chainLib.api.setOptions({
   url: process.env.JSONRPC_URL,
@@ -129,8 +128,7 @@ hdl_upload_s3 = async (req, res) => {
 
     await rateLimiter.consume(username, 1);
 
-    const { cid } = await client.add(buffer)
-
+    const { cid } = await client.add(buffer);
 
     await s3
       .putObject({
@@ -143,7 +141,7 @@ hdl_upload_s3 = async (req, res) => {
       .promise();
 
     const img_full_path = `${process.env.PREFIX_URL}${process.env.S3_BUCKET}/${s3_file_path}`;
-    const ipfs_full_path = `https://cloudflare-ipfs.com/ipfs/${cid}`
+    const ipfs_full_path = `https://cloudflare-ipfs.com/ipfs/${cid}`;
     // this.body = JSON.stringify({status: 'ok', message: 'success', data: img_full_path});
     res.json({ status: "ok", message: "success", data: ipfs_full_path });
   } catch (e) {
@@ -152,7 +150,7 @@ hdl_upload_s3 = async (req, res) => {
   }
 };
 
-//serverStart starts an express http server
+// serverStart starts an express http server
 serverStart = () => {
   app.use(bodyParser.json({ type: "application/json", limit: "10mb" }));
 
@@ -162,8 +160,8 @@ serverStart = () => {
     res.json({ status: "ok", message: "success", data: null });
   });
   router.get("/", async (req, res) => {
-    res.json("ipfs powered image hosting")
-  })
+    res.json("ipfs powered image hosting");
+  });
 
   app.use("/", router);
 
