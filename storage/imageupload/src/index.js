@@ -10,6 +10,10 @@ const {
 const RIPEMD160 = require("ripemd160");
 const AWS = require("aws-sdk");
 const { RateLimiterMemory } = require("rate-limiter-flexible");
+const IpfsHttpClient = require('ipfs-http-client')
+const { globSource } = IpfsHttpClient
+const ipfs = IpfsHttpClient()
+
 
 chainLib.api.setOptions({
   url: process.env.JSONRPC_URL,
@@ -71,6 +75,7 @@ hdl_upload_s3 = async (req, res) => {
     else if (prefix_data.startsWith("data:image/jpg;")) file_ext = "jpg";
     else if (prefix_data.startsWith("data:image/png;")) file_ext = "png";
     else if (prefix_data.startsWith("data:image/gif;")) file_ext = "gif";
+    else if (prefix_data.startsWith("data:image/webp;")) file_ext = "webp";
     else throw new Error("invalid content type");
 
     const content_type = `image/${file_ext}`;
@@ -124,6 +129,9 @@ hdl_upload_s3 = async (req, res) => {
 
     await rateLimiter.consume(username, 1);
 
+    const { cid } = await client.add(buffer)
+
+
     await s3
       .putObject({
         ACL: "public-read",
@@ -135,14 +143,16 @@ hdl_upload_s3 = async (req, res) => {
       .promise();
 
     const img_full_path = `${process.env.PREFIX_URL}${process.env.S3_BUCKET}/${s3_file_path}`;
+    const ipfs_full_path = `https://cloudflare-ipfs.com/ipfs/${cid}`
     // this.body = JSON.stringify({status: 'ok', message: 'success', data: img_full_path});
-    res.json({ status: "ok", message: "success", data: img_full_path });
+    res.json({ status: "ok", message: "success", data: ipfs_full_path });
   } catch (e) {
     // console.error('Error in /imageupload api call', this.session.uid, error);
     res.json({ status: "error", message: e.message, data: e });
   }
 };
 
+//serverStart starts an express http server
 serverStart = () => {
   app.use(bodyParser.json({ type: "application/json", limit: "10mb" }));
 
@@ -151,6 +161,9 @@ serverStart = () => {
   router.get("/test_cors", async (req, res) => {
     res.json({ status: "ok", message: "success", data: null });
   });
+  router.get("/", async (req, res) => {
+    res.json("ipfs powered image hosting")
+  })
 
   app.use("/", router);
 
