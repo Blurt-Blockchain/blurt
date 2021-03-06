@@ -52,14 +52,18 @@ export function readStream(stream: NodeJS.ReadableStream) {
   });
 }
 
+
+// cast result to any
 /** Return mimetype of data. */
 export function mimeMagic(data: Buffer) {
-  return new Promise<[]string>((resolve, reject) => {
+  return new Promise<string>((resolve, reject) => {
     magic.detect(data, (error, result) => {
       if (error) {
         reject(error);
       } else {
-        resolve(result);
+        var typedresult: any
+        typedresult = result
+        resolve(typedresult);
       }
     });
   });
