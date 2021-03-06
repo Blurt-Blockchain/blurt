@@ -6,6 +6,9 @@ set -exo pipefail
 # Print each command
 set -o xtrace
 
+# Build the system image in docker
+docker buildx build --file contrib/c2/Dockerfile --platform linux/arm64 --tag c2 --load --progress plain .
+
 # Get the 64 bit rpi rootfs for Odroid C2
 wget -N --progress=bar:force:noscroll http://os.archlinuxarm.org/os/ArchLinuxARM-odroid-c2-latest.tar.gz
 
@@ -19,7 +22,7 @@ wget -N --progress=bar:force:noscroll http://os.archlinuxarm.org/os/ArchLinuxARM
 # https://chromium.googlesource.com/external/github.com/docker/containerd/+/refs/tags/v0.2.0/docs/bundle.md
 # create the container with a temp name so that we can export it
 docker rm tempc2 || true
-docker create --name tempc2 c2 /bin/bash
+docker create --name tempc2 --platform linux/arm64 c2 /bin/bash
 
 # export it into the rootfs directory
 sudo rm -rf .tmp/

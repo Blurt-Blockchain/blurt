@@ -6,6 +6,8 @@ set -exo pipefail
 # Print each command
 set -o xtrace
 
+# Build the system image in Docker
+docker buildx build --file contrib/cryptopie/Dockerfile --platform linux/arm64 --tag cryptopie --load --progress plain .
 
 # docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
 
