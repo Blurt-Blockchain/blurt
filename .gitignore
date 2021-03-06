@@ -127,3 +127,10 @@ client-libs/dblurt/lib/*
 client-libs/dblurt/docs/*
 
 
+# imagehoster
+
+storage/imagehoster/node_modules/
+storage/imagehoster/lib/
+storage/imagehoster/reports/
+storage/imagehoster/.nyc_output/
+storage/imagehoster/config/local*
