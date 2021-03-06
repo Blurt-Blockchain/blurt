@@ -54,7 +54,7 @@ export function readStream(stream: NodeJS.ReadableStream) {
 
 /** Return mimetype of data. */
 export function mimeMagic(data: Buffer) {
-  return new Promise<string>((resolve, reject) => {
+  return new Promise<[]string>((resolve, reject) => {
     magic.detect(data, (error, result) => {
       if (error) {
         reject(error);

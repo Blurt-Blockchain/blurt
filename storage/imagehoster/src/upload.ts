@@ -84,7 +84,10 @@ async function getRatelimit(account: string) {
     });
   });
 }
-const b64uLookup = {
+
+
+
+const b64uLookup: any = {
   "/": "_",
   "_": "/",
   "+": "-",
@@ -92,6 +95,8 @@ const b64uLookup = {
   "=": ".",
   ".": "=",
 };
+
+
 function b64uToB64(str: string) {
   const tt = str.replace(/(-|_|\.)/g, function (m) {
     return b64uLookup[m];

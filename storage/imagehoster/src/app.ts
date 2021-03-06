@@ -70,7 +70,7 @@ async function main() {
     }
   } else {
     const port = config.get("port");
-    await listen(port);
+    await listen;
     logger.info("listening on port %d", port);
   }
 
