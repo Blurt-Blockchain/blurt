@@ -4,11 +4,7 @@
       "id": 0,
       "jsonrpc": "2.0",
       "method": "call",
-      "params": [
-        "condenser_api",
-        "get_account_count",
-        []
-      ]
+      "params": ["condenser_api", "get_account_count", []]
     },
     {
       "jsonrpc": "2.0",
@@ -21,15 +17,7 @@
       "id": 1,
       "jsonrpc": "2.0",
       "method": "call",
-      "params": [
-        "condenser_api",
-        "get_account_history",
-        [
-          "steemit",
-          20,
-          10
-        ]
-      ]
+      "params": ["condenser_api", "get_account_history", ["steemit", 20, 10]]
     },
     {
       "jsonrpc": "2.0",
@@ -63,13 +51,7 @@
       "id": 2,
       "jsonrpc": "2.0",
       "method": "call",
-      "params": [
-        "condenser_api",
-        "get_account_votes",
-        [
-          "steemit"
-        ]
-      ]
+      "params": ["condenser_api", "get_account_votes", ["steemit"]]
     },
     {
       "jsonrpc": "2.0",
@@ -90,15 +72,7 @@
       "id": 3,
       "jsonrpc": "2.0",
       "method": "call",
-      "params": [
-        "condenser_api",
-        "get_accounts",
-        [
-          [
-            "steemit"
-          ]
-        ]
-      ]
+      "params": ["condenser_api", "get_accounts", [["steemit"]]]
     },
     {
       "jsonrpc": "2.0",
@@ -110,50 +84,26 @@
             "weight_threshold": 1,
             "account_auths": [],
             "key_auths": [
-              [
-                "STM5tfrdPG1Ycjwa9FuBUueDFFyygndBLXdVEEs2c9eRKScnFk6vM",
-                1
-              ],
-              [
-                "STM71f6yWztimJuREVyyMXNqAVbx1FzPVW6LLXNoQ35dHwKuszmHX",
-                1
-              ],
-              [
-                "STM7U3ymhUTuKME72dpdpQkdQvh722gTLjKBKtmKQPPWgtkr418Nf",
-                1
-              ]
+              ["STM5tfrdPG1Ycjwa9FuBUueDFFyygndBLXdVEEs2c9eRKScnFk6vM", 1],
+              ["STM71f6yWztimJuREVyyMXNqAVbx1FzPVW6LLXNoQ35dHwKuszmHX", 1],
+              ["STM7U3ymhUTuKME72dpdpQkdQvh722gTLjKBKtmKQPPWgtkr418Nf", 1]
             ]
           },
           "active": {
             "weight_threshold": 1,
             "account_auths": [],
             "key_auths": [
-              [
-                "STM5832HKCJzs6K3rRCsZ1PidTKgjF38ZJb718Y3pCW92HEMsCGPf",
-                1
-              ],
-              [
-                "STM7Q2rLBqzPzFeteQZewv9Lu3NLE69fZoLeL6YK59t7UmssCBNTU",
-                1
-              ]
+              ["STM5832HKCJzs6K3rRCsZ1PidTKgjF38ZJb718Y3pCW92HEMsCGPf", 1],
+              ["STM7Q2rLBqzPzFeteQZewv9Lu3NLE69fZoLeL6YK59t7UmssCBNTU", 1]
             ]
           },
           "posting": {
             "weight_threshold": 1,
             "account_auths": [],
             "key_auths": [
-              [
-                "STM5jZtLoV8YbxCxr4imnbWn61zMB24wwonpnVhfXRmv7j6fk3dTH",
-                1
-              ],
-              [
-                "STM7xVFaqi8RxhWKZwuLA2bKrAiQmhnrbgvw4e2ChAsKYQbPjqUq2",
-                1
-              ],
-              [
-                "STM83dmDkQcZU9X8MWcxsTztSyutE6udrb55PvYgu7RLzStaoAt67",
-                1
-              ]
+              ["STM5jZtLoV8YbxCxr4imnbWn61zMB24wwonpnVhfXRmv7j6fk3dTH", 1],
+              ["STM7xVFaqi8RxhWKZwuLA2bKrAiQmhnrbgvw4e2ChAsKYQbPjqUq2", 1],
+              ["STM83dmDkQcZU9X8MWcxsTztSyutE6udrb55PvYgu7RLzStaoAt67", 1]
             ]
           },
           "memo_key": "STM5jZtLoV8YbxCxr4imnbWn61zMB24wwonpnVhfXRmv7j6fk3dTH",
@@ -201,12 +151,7 @@
           "withdraw_routes": 0,
           "curation_rewards": 0,
           "posting_rewards": 3548,
-          "proxied_vsf_votes": [
-            "226411502131",
-            0,
-            0,
-            0
-          ],
+          "proxied_vsf_votes": ["226411502131", 0, 0, 0],
           "witnesses_voted_for": 0,
           "last_post": "2016-03-30T18:30:18",
           "last_root_post": "2016-03-30T18:30:18",
@@ -237,14 +182,7 @@
       "id": 4,
       "jsonrpc": "2.0",
       "method": "call",
-      "params": [
-        "condenser_api",
-        "get_active_votes",
-        [
-          "smooth",
-          "test"
-        ]
-      ]
+      "params": ["condenser_api", "get_active_votes", ["smooth", "test"]]
     },
     {
       "jsonrpc": "2.0",
@@ -602,11 +540,7 @@
       "id": 5,
       "jsonrpc": "2.0",
       "method": "call",
-      "params": [
-        "condenser_api",
-        "get_active_witnesses",
-        []
-      ]
+      "params": ["condenser_api", "get_active_witnesses", []]
     },
     {
       "jsonrpc": "2.0",
@@ -641,13 +575,7 @@
       "id": 6,
       "jsonrpc": "2.0",
       "method": "call",
-      "params": [
-        "condenser_api",
-        "get_block_header",
-        [
-          1000
-        ]
-      ]
+      "params": ["condenser_api", "get_block_header", [1000]]
     },
     {
       "jsonrpc": "2.0",
@@ -666,11 +594,7 @@
       "id": 7,
       "jsonrpc": "2.0",
       "method": "call",
-      "params": [
-        "condenser_api",
-        "get_chain_properties",
-        []
-      ]
+      "params": ["condenser_api", "get_chain_properties", []]
     },
     {
       "jsonrpc": "2.0",
@@ -687,11 +611,7 @@
       "id": 8,
       "jsonrpc": "2.0",
       "method": "call",
-      "params": [
-        "condenser_api",
-        "get_config",
-        []
-      ]
+      "params": ["condenser_api", "get_config", []]
     },
     {
       "jsonrpc": "2.0",
@@ -862,14 +782,7 @@
       "id": 9,
       "jsonrpc": "2.0",
       "method": "call",
-      "params": [
-        "condenser_api",
-        "get_content",
-        [
-          "steemit",
-          "test"
-        ]
-      ]
+      "params": ["condenser_api", "get_content", ["steemit", "test"]]
     },
     {
       "jsonrpc": "2.0",
@@ -928,14 +841,7 @@
       "id": 10,
       "jsonrpc": "2.0",
       "method": "call",
-      "params": [
-        "condenser_api",
-        "get_content_replies",
-        [
-          "steemit",
-          "test"
-        ]
-      ]
+      "params": ["condenser_api", "get_content_replies", ["steemit", "test"]]
     },
     {
       "jsonrpc": "2.0",
@@ -948,13 +854,7 @@
       "id": 11,
       "jsonrpc": "2.0",
       "method": "call",
-      "params": [
-        "condenser_api",
-        "get_conversion_requests",
-        [
-          "steemit"
-        ]
-      ]
+      "params": ["condenser_api", "get_conversion_requests", ["steemit"]]
     },
     {
       "jsonrpc": "2.0",
@@ -967,11 +867,7 @@
       "id": 12,
       "jsonrpc": "2.0",
       "method": "call",
-      "params": [
-        "condenser_api",
-        "get_current_median_history_price",
-        []
-      ]
+      "params": ["condenser_api", "get_current_median_history_price", []]
     },
     {
       "jsonrpc": "2.0",
@@ -1229,12 +1125,7 @@
       "params": [
         "condenser_api",
         "get_discussions_by_author_before_date",
-        [
-          "smooth",
-          "test",
-          "2016-07-23T22:00:06",
-          "1"
-        ]
+        ["smooth", "test", "2016-07-23T22:00:06", "1"]
       ]
     },
     {
@@ -38807,11 +38698,7 @@
       "id": 23,
       "jsonrpc": "2.0",
       "method": "call",
-      "params": [
-        "condenser_api",
-        "get_dynamic_global_properties",
-        []
-      ]
+      "params": ["condenser_api", "get_dynamic_global_properties", []]
     },
     {
       "jsonrpc": "2.0",
@@ -38854,11 +38741,7 @@
       "id": 24,
       "jsonrpc": "2.0",
       "method": "call",
-      "params": [
-        "condenser_api",
-        "get_feed_history",
-        []
-      ]
+      "params": ["condenser_api", "get_feed_history", []]
     },
     {
       "jsonrpc": "2.0",
@@ -39215,11 +39098,7 @@
       "id": 25,
       "jsonrpc": "2.0",
       "method": "call",
-      "params": [
-        "condenser_api",
-        "get_hardfork_version",
-        []
-      ]
+      "params": ["condenser_api", "get_hardfork_version", []]
     },
     {
       "jsonrpc": "2.0",
@@ -39232,13 +39111,7 @@
       "id": 29,
       "jsonrpc": "2.0",
       "method": "call",
-      "params": [
-        "condenser_api",
-        "get_open_orders",
-        [
-          "steemit"
-        ]
-      ]
+      "params": ["condenser_api", "get_open_orders", ["steemit"]]
     },
     {
       "jsonrpc": "2.0",
@@ -39251,13 +39124,7 @@
       "id": 30,
       "jsonrpc": "2.0",
       "method": "call",
-      "params": [
-        "condenser_api",
-        "get_order_book",
-        [
-          10
-        ]
-      ]
+      "params": ["condenser_api", "get_order_book", [10]]
     },
     {
       "jsonrpc": "2.0",
@@ -39475,13 +39342,7 @@
       "id": 31,
       "jsonrpc": "2.0",
       "method": "call",
-      "params": [
-        "condenser_api",
-        "get_owner_history",
-        [
-          "steemit"
-        ]
-      ]
+      "params": ["condenser_api", "get_owner_history", ["steemit"]]
     },
     {
       "jsonrpc": "2.0",
@@ -39494,13 +39355,7 @@
       "id": 32,
       "jsonrpc": "2.0",
       "method": "call",
-      "params": [
-        "condenser_api",
-        "get_recovery_request",
-        [
-          "steemit"
-        ]
-      ]
+      "params": ["condenser_api", "get_recovery_request", ["steemit"]]
     },
     {
       "jsonrpc": "2.0",
@@ -39516,11 +39371,7 @@
       "params": [
         "condenser_api",
         "get_replies_by_last_update",
-        [
-          "smooth",
-          "test",
-          10
-        ]
+        ["smooth", "test", 10]
       ]
     },
     {
@@ -41207,13 +41058,7 @@
       "id": 34,
       "jsonrpc": "2.0",
       "method": "call",
-      "params": [
-        "condenser_api",
-        "get_state",
-        [
-          "/@layz3r"
-        ]
-      ]
+      "params": ["condenser_api", "get_state", ["/@layz3r"]]
     },
     {
       "jsonrpc": "2.0",
@@ -41579,30 +41424,21 @@
               "weight_threshold": 1,
               "account_auths": [],
               "key_auths": [
-                [
-                  "STM5AVVbk6zdMEHAVe643ag3hHde1QDwU3ggMnC2KYEwwyEPRkJwF",
-                  1
-                ]
+                ["STM5AVVbk6zdMEHAVe643ag3hHde1QDwU3ggMnC2KYEwwyEPRkJwF", 1]
               ]
             },
             "active": {
               "weight_threshold": 1,
               "account_auths": [],
               "key_auths": [
-                [
-                  "STM5rvGB5ow8jQpRY8Sy3e44A6wADudi2HNC2BJTZhEzVxdB4D1mV",
-                  1
-                ]
+                ["STM5rvGB5ow8jQpRY8Sy3e44A6wADudi2HNC2BJTZhEzVxdB4D1mV", 1]
               ]
             },
             "posting": {
               "weight_threshold": 1,
               "account_auths": [],
               "key_auths": [
-                [
-                  "STM7pYae31t9avuqJw3XEtcnGdjrbQNdyVVcvC87J3zETtvctGsQv",
-                  1
-                ]
+                ["STM7pYae31t9avuqJw3XEtcnGdjrbQNdyVVcvC87J3zETtvctGsQv", 1]
               ]
             },
             "memo_key": "STM7CxaztfG7wBQMuVuXi9bTzfXr27u9ajZZbcRBHEbNBTa2ubD6s",
@@ -41650,12 +41486,7 @@
             "withdraw_routes": 0,
             "curation_rewards": 9681,
             "posting_rewards": 15195,
-            "proxied_vsf_votes": [
-              0,
-              0,
-              0,
-              0
-            ],
+            "proxied_vsf_votes": [0, 0, 0, 0],
             "witnesses_voted_for": 0,
             "last_post": "2017-10-26T05:13:42",
             "last_root_post": "2017-10-26T05:13:42",
@@ -41676,10 +41507,7 @@
             "witness_votes": [],
             "tags_usage": [],
             "guest_bloggers": [],
-            "blog": [
-              "layz3r/hello-world",
-              "layz3r/the-shinola-of-plungers"
-            ]
+            "blog": ["layz3r/hello-world", "layz3r/the-shinola-of-plungers"]
           }
         },
         "witnesses": {},
@@ -41741,14 +41569,7 @@
       "id": 35,
       "jsonrpc": "2.0",
       "method": "call",
-      "params": [
-        "condenser_api",
-        "get_trending_tags",
-        [
-          "steemit",
-          10
-        ]
-      ]
+      "params": ["condenser_api", "get_trending_tags", ["steemit", 10]]
     },
     {
       "jsonrpc": "2.0",
@@ -41842,13 +41663,7 @@
       "id": 36,
       "jsonrpc": "2.0",
       "method": "call",
-      "params": [
-        "condenser_api",
-        "get_witness_by_account",
-        [
-          "smooth.witness"
-        ]
-      ]
+      "params": ["condenser_api", "get_witness_by_account", ["smooth.witness"]]
     },
     {
       "jsonrpc": "2.0",
@@ -41889,11 +41704,7 @@
       "id": 37,
       "jsonrpc": "2.0",
       "method": "call",
-      "params": [
-        "condenser_api",
-        "get_witness_count",
-        []
-      ]
+      "params": ["condenser_api", "get_witness_count", []]
     },
     {
       "jsonrpc": "2.0",
@@ -41906,11 +41717,7 @@
       "id": 38,
       "jsonrpc": "2.0",
       "method": "call",
-      "params": [
-        "condenser_api",
-        "get_witness_schedule",
-        []
-      ]
+      "params": ["condenser_api", "get_witness_schedule", []]
     },
     {
       "jsonrpc": "2.0",
@@ -41965,15 +41772,7 @@
       "id": 39,
       "jsonrpc": "2.0",
       "method": "call",
-      "params": [
-        "condenser_api",
-        "lookup_account_names",
-        [
-          [
-            "steemit"
-          ]
-        ]
-      ]
+      "params": ["condenser_api", "lookup_account_names", [["steemit"]]]
     },
     {
       "jsonrpc": "2.0",
@@ -41985,50 +41784,26 @@
             "weight_threshold": 1,
             "account_auths": [],
             "key_auths": [
-              [
-                "STM5tfrdPG1Ycjwa9FuBUueDFFyygndBLXdVEEs2c9eRKScnFk6vM",
-                1
-              ],
-              [
-                "STM71f6yWztimJuREVyyMXNqAVbx1FzPVW6LLXNoQ35dHwKuszmHX",
-                1
-              ],
-              [
-                "STM7U3ymhUTuKME72dpdpQkdQvh722gTLjKBKtmKQPPWgtkr418Nf",
-                1
-              ]
+              ["STM5tfrdPG1Ycjwa9FuBUueDFFyygndBLXdVEEs2c9eRKScnFk6vM", 1],
+              ["STM71f6yWztimJuREVyyMXNqAVbx1FzPVW6LLXNoQ35dHwKuszmHX", 1],
+              ["STM7U3ymhUTuKME72dpdpQkdQvh722gTLjKBKtmKQPPWgtkr418Nf", 1]
             ]
           },
           "active": {
             "weight_threshold": 1,
             "account_auths": [],
             "key_auths": [
-              [
-                "STM5832HKCJzs6K3rRCsZ1PidTKgjF38ZJb718Y3pCW92HEMsCGPf",
-                1
-              ],
-              [
-                "STM7Q2rLBqzPzFeteQZewv9Lu3NLE69fZoLeL6YK59t7UmssCBNTU",
-                1
-              ]
+              ["STM5832HKCJzs6K3rRCsZ1PidTKgjF38ZJb718Y3pCW92HEMsCGPf", 1],
+              ["STM7Q2rLBqzPzFeteQZewv9Lu3NLE69fZoLeL6YK59t7UmssCBNTU", 1]
             ]
           },
           "posting": {
             "weight_threshold": 1,
             "account_auths": [],
             "key_auths": [
-              [
-                "STM5jZtLoV8YbxCxr4imnbWn61zMB24wwonpnVhfXRmv7j6fk3dTH",
-                1
-              ],
-              [
-                "STM7xVFaqi8RxhWKZwuLA2bKrAiQmhnrbgvw4e2ChAsKYQbPjqUq2",
-                1
-              ],
-              [
-                "STM83dmDkQcZU9X8MWcxsTztSyutE6udrb55PvYgu7RLzStaoAt67",
-                1
-              ]
+              ["STM5jZtLoV8YbxCxr4imnbWn61zMB24wwonpnVhfXRmv7j6fk3dTH", 1],
+              ["STM7xVFaqi8RxhWKZwuLA2bKrAiQmhnrbgvw4e2ChAsKYQbPjqUq2", 1],
+              ["STM83dmDkQcZU9X8MWcxsTztSyutE6udrb55PvYgu7RLzStaoAt67", 1]
             ]
           },
           "memo_key": "STM5jZtLoV8YbxCxr4imnbWn61zMB24wwonpnVhfXRmv7j6fk3dTH",
@@ -42076,12 +41851,7 @@
           "withdraw_routes": 0,
           "curation_rewards": 0,
           "posting_rewards": 3548,
-          "proxied_vsf_votes": [
-            "226411502131",
-            0,
-            0,
-            0
-          ],
+          "proxied_vsf_votes": ["226411502131", 0, 0, 0],
           "witnesses_voted_for": 0,
           "last_post": "2016-03-30T18:30:18",
           "last_root_post": "2016-03-30T18:30:18",
@@ -42096,13 +41866,7 @@
       "id": 40,
       "jsonrpc": "2.0",
       "method": "call",
-      "params": [
-        "condenser_api",
-        "lookup_accounts",
-        [
-          "steemit"
-        ]
-      ]
+      "params": ["condenser_api", "lookup_accounts", ["steemit"]]
     },
     {
       "jsonrpc": "2.0",
@@ -42115,14 +41879,7 @@
       "id": 41,
       "jsonrpc": "2.0",
       "method": "call",
-      "params": [
-        "condenser_api",
-        "lookup_witness_accounts",
-        [
-          "steemit",
-          10
-        ]
-      ]
+      "params": ["condenser_api", "lookup_witness_accounts", ["steemit", 10]]
     },
     {
       "jsonrpc": "2.0",
@@ -42199,9 +41956,7 @@
       "id": 44,
       "jsonrpc": "2.0",
       "method": "condenser_api.get_account_votes",
-      "params": [
-        "steemit"
-      ]
+      "params": ["steemit"]
     },
     {
       "jsonrpc": "2.0",
@@ -42222,11 +41977,7 @@
       "id": 45,
       "jsonrpc": "2.0",
       "method": "condenser_api.get_accounts",
-      "params": [
-        [
-          "steemit"
-        ]
-      ]
+      "params": [["steemit"]]
     },
     {
       "jsonrpc": "2.0",
@@ -42238,50 +41989,26 @@
             "weight_threshold": 1,
             "account_auths": [],
             "key_auths": [
-              [
-                "STM5tfrdPG1Ycjwa9FuBUueDFFyygndBLXdVEEs2c9eRKScnFk6vM",
-                1
-              ],
-              [
-                "STM71f6yWztimJuREVyyMXNqAVbx1FzPVW6LLXNoQ35dHwKuszmHX",
-                1
-              ],
-              [
-                "STM7U3ymhUTuKME72dpdpQkdQvh722gTLjKBKtmKQPPWgtkr418Nf",
-                1
-              ]
+              ["STM5tfrdPG1Ycjwa9FuBUueDFFyygndBLXdVEEs2c9eRKScnFk6vM", 1],
+              ["STM71f6yWztimJuREVyyMXNqAVbx1FzPVW6LLXNoQ35dHwKuszmHX", 1],
+              ["STM7U3ymhUTuKME72dpdpQkdQvh722gTLjKBKtmKQPPWgtkr418Nf", 1]
             ]
           },
           "active": {
             "weight_threshold": 1,
             "account_auths": [],
             "key_auths": [
-              [
-                "STM5832HKCJzs6K3rRCsZ1PidTKgjF38ZJb718Y3pCW92HEMsCGPf",
-                1
-              ],
-              [
-                "STM7Q2rLBqzPzFeteQZewv9Lu3NLE69fZoLeL6YK59t7UmssCBNTU",
-                1
-              ]
+              ["STM5832HKCJzs6K3rRCsZ1PidTKgjF38ZJb718Y3pCW92HEMsCGPf", 1],
+              ["STM7Q2rLBqzPzFeteQZewv9Lu3NLE69fZoLeL6YK59t7UmssCBNTU", 1]
             ]
           },
           "posting": {
             "weight_threshold": 1,
             "account_auths": [],
             "key_auths": [
-              [
-                "STM5jZtLoV8YbxCxr4imnbWn61zMB24wwonpnVhfXRmv7j6fk3dTH",
-                1
-              ],
-              [
-                "STM7xVFaqi8RxhWKZwuLA2bKrAiQmhnrbgvw4e2ChAsKYQbPjqUq2",
-                1
-              ],
-              [
-                "STM83dmDkQcZU9X8MWcxsTztSyutE6udrb55PvYgu7RLzStaoAt67",
-                1
-              ]
+              ["STM5jZtLoV8YbxCxr4imnbWn61zMB24wwonpnVhfXRmv7j6fk3dTH", 1],
+              ["STM7xVFaqi8RxhWKZwuLA2bKrAiQmhnrbgvw4e2ChAsKYQbPjqUq2", 1],
+              ["STM83dmDkQcZU9X8MWcxsTztSyutE6udrb55PvYgu7RLzStaoAt67", 1]
             ]
           },
           "memo_key": "STM5jZtLoV8YbxCxr4imnbWn61zMB24wwonpnVhfXRmv7j6fk3dTH",
@@ -42329,12 +42056,7 @@
           "withdraw_routes": 0,
           "curation_rewards": 0,
           "posting_rewards": 3548,
-          "proxied_vsf_votes": [
-            "226411502131",
-            0,
-            0,
-            0
-          ],
+          "proxied_vsf_votes": ["226411502131", 0, 0, 0],
           "witnesses_voted_for": 0,
           "last_post": "2016-03-30T18:30:18",
           "last_root_post": "2016-03-30T18:30:18",
@@ -42974,10 +42696,7 @@
       "id": 51,
       "jsonrpc": "2.0",
       "method": "condenser_api.get_content",
-      "params": [
-        "steemit",
-        "test"
-      ]
+      "params": ["steemit", "test"]
     },
     {
       "jsonrpc": "2.0",
@@ -43054,9 +42773,7 @@
       "id": 53,
       "jsonrpc": "2.0",
       "method": "condenser_api.get_conversion_requests",
-      "params": [
-        "steemit"
-      ]
+      "params": ["steemit"]
     },
     {
       "jsonrpc": "2.0",
@@ -81295,9 +81012,7 @@
       "id": 71,
       "jsonrpc": "2.0",
       "method": "condenser_api.get_open_orders",
-      "params": [
-        "steemit"
-      ]
+      "params": ["steemit"]
     },
     {
       "jsonrpc": "2.0",
@@ -81530,9 +81245,7 @@
       "id": 73,
       "jsonrpc": "2.0",
       "method": "condenser_api.get_owner_history",
-      "params": [
-        "steemit"
-      ]
+      "params": ["steemit"]
     },
     {
       "jsonrpc": "2.0",
@@ -81545,9 +81258,7 @@
       "id": 74,
       "jsonrpc": "2.0",
       "method": "condenser_api.get_recovery_request",
-      "params": [
-        "steemit"
-      ]
+      "params": ["steemit"]
     },
     {
       "jsonrpc": "2.0",
@@ -82156,9 +81867,7 @@
       "id": 76,
       "jsonrpc": "2.0",
       "method": "condenser_api.get_state",
-      "params": [
-        "/@layz3r"
-      ]
+      "params": ["/@layz3r"]
     },
     {
       "jsonrpc": "2.0",
@@ -82524,30 +82233,21 @@
               "weight_threshold": 1,
               "account_auths": [],
               "key_auths": [
-                [
-                  "STM5AVVbk6zdMEHAVe643ag3hHde1QDwU3ggMnC2KYEwwyEPRkJwF",
-                  1
-                ]
+                ["STM5AVVbk6zdMEHAVe643ag3hHde1QDwU3ggMnC2KYEwwyEPRkJwF", 1]
               ]
             },
             "active": {
               "weight_threshold": 1,
               "account_auths": [],
               "key_auths": [
-                [
-                  "STM5rvGB5ow8jQpRY8Sy3e44A6wADudi2HNC2BJTZhEzVxdB4D1mV",
-                  1
-                ]
+                ["STM5rvGB5ow8jQpRY8Sy3e44A6wADudi2HNC2BJTZhEzVxdB4D1mV", 1]
               ]
             },
             "posting": {
               "weight_threshold": 1,
               "account_auths": [],
               "key_auths": [
-                [
-                  "STM7pYae31t9avuqJw3XEtcnGdjrbQNdyVVcvC87J3zETtvctGsQv",
-                  1
-                ]
+                ["STM7pYae31t9avuqJw3XEtcnGdjrbQNdyVVcvC87J3zETtvctGsQv", 1]
               ]
             },
             "memo_key": "STM7CxaztfG7wBQMuVuXi9bTzfXr27u9ajZZbcRBHEbNBTa2ubD6s",
@@ -82595,12 +82295,7 @@
             "withdraw_routes": 0,
             "curation_rewards": 9681,
             "posting_rewards": 15195,
-            "proxied_vsf_votes": [
-              0,
-              0,
-              0,
-              0
-            ],
+            "proxied_vsf_votes": [0, 0, 0, 0],
             "witnesses_voted_for": 0,
             "last_post": "2017-10-26T05:13:42",
             "last_root_post": "2017-10-26T05:13:42",
@@ -82621,10 +82316,7 @@
             "witness_votes": [],
             "tags_usage": [],
             "guest_bloggers": [],
-            "blog": [
-              "layz3r/hello-world",
-              "layz3r/the-shinola-of-plungers"
-            ]
+            "blog": ["layz3r/hello-world", "layz3r/the-shinola-of-plungers"]
           }
         },
         "witnesses": {},
@@ -82785,9 +82477,7 @@
       "id": 78,
       "jsonrpc": "2.0",
       "method": "condenser_api.get_witness_by_account",
-      "params": [
-        "smooth.witness"
-      ]
+      "params": ["smooth.witness"]
     },
     {
       "jsonrpc": "2.0",
@@ -82895,11 +82585,7 @@
       "id": 81,
       "jsonrpc": "2.0",
       "method": "condenser_api.lookup_account_names",
-      "params": [
-        [
-          "steemit"
-        ]
-      ]
+      "params": [["steemit"]]
     },
     {
       "jsonrpc": "2.0",
@@ -82911,50 +82597,26 @@
             "weight_threshold": 1,
             "account_auths": [],
             "key_auths": [
-              [
-                "STM5tfrdPG1Ycjwa9FuBUueDFFyygndBLXdVEEs2c9eRKScnFk6vM",
-                1
-              ],
-              [
-                "STM71f6yWztimJuREVyyMXNqAVbx1FzPVW6LLXNoQ35dHwKuszmHX",
-                1
-              ],
-              [
-                "STM7U3ymhUTuKME72dpdpQkdQvh722gTLjKBKtmKQPPWgtkr418Nf",
-                1
-              ]
+              ["STM5tfrdPG1Ycjwa9FuBUueDFFyygndBLXdVEEs2c9eRKScnFk6vM", 1],
+              ["STM71f6yWztimJuREVyyMXNqAVbx1FzPVW6LLXNoQ35dHwKuszmHX", 1],
+              ["STM7U3ymhUTuKME72dpdpQkdQvh722gTLjKBKtmKQPPWgtkr418Nf", 1]
             ]
           },
           "active": {
             "weight_threshold": 1,
             "account_auths": [],
             "key_auths": [
-              [
-                "STM5832HKCJzs6K3rRCsZ1PidTKgjF38ZJb718Y3pCW92HEMsCGPf",
-                1
-              ],
-              [
-                "STM7Q2rLBqzPzFeteQZewv9Lu3NLE69fZoLeL6YK59t7UmssCBNTU",
-                1
-              ]
+              ["STM5832HKCJzs6K3rRCsZ1PidTKgjF38ZJb718Y3pCW92HEMsCGPf", 1],
+              ["STM7Q2rLBqzPzFeteQZewv9Lu3NLE69fZoLeL6YK59t7UmssCBNTU", 1]
             ]
           },
           "posting": {
             "weight_threshold": 1,
             "account_auths": [],
             "key_auths": [
-              [
-                "STM5jZtLoV8YbxCxr4imnbWn61zMB24wwonpnVhfXRmv7j6fk3dTH",
-                1
-              ],
-              [
-                "STM7xVFaqi8RxhWKZwuLA2bKrAiQmhnrbgvw4e2ChAsKYQbPjqUq2",
-                1
-              ],
-              [
-                "STM83dmDkQcZU9X8MWcxsTztSyutE6udrb55PvYgu7RLzStaoAt67",
-                1
-              ]
+              ["STM5jZtLoV8YbxCxr4imnbWn61zMB24wwonpnVhfXRmv7j6fk3dTH", 1],
+              ["STM7xVFaqi8RxhWKZwuLA2bKrAiQmhnrbgvw4e2ChAsKYQbPjqUq2", 1],
+              ["STM83dmDkQcZU9X8MWcxsTztSyutE6udrb55PvYgu7RLzStaoAt67", 1]
             ]
           },
           "memo_key": "STM5jZtLoV8YbxCxr4imnbWn61zMB24wwonpnVhfXRmv7j6fk3dTH",
@@ -83002,12 +82664,7 @@
           "withdraw_routes": 0,
           "curation_rewards": 0,
           "posting_rewards": 3548,
-          "proxied_vsf_votes": [
-            "226411502131",
-            0,
-            0,
-            0
-          ],
+          "proxied_vsf_votes": ["226411502131", 0, 0, 0],
           "witnesses_voted_for": 0,
           "last_post": "2016-03-30T18:30:18",
           "last_root_post": "2016-03-30T18:30:18",
@@ -83022,9 +82679,7 @@
       "id": 82,
       "jsonrpc": "2.0",
       "method": "condenser_api.lookup_accounts",
-      "params": [
-        "steemit"
-      ]
+      "params": ["steemit"]
     },
     {
       "jsonrpc": "2.0",
@@ -83037,10 +82692,7 @@
       "id": 83,
       "jsonrpc": "2.0",
       "method": "condenser_api.lookup_witness_accounts",
-      "params": [
-        "steemit",
-        10
-      ]
+      "params": ["steemit", 10]
     },
     {
       "jsonrpc": "2.0",

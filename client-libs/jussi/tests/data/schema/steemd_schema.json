@@ -138,11 +138,7 @@
     "account_update": {
       "type": "object",
       "title": "account_update",
-      "required": [
-        "account",
-        "json_metadata",
-        "memo_key"
-      ],
+      "required": ["account", "json_metadata", "memo_key"],
       "properties": {
         "memo_key": {
           "$ref": "#/definitions/public_key_type"
@@ -167,10 +163,7 @@
     "account_witness_proxy": {
       "type": "object",
       "title": "account_witness_proxy",
-      "required": [
-        "account",
-        "proxy"
-      ],
+      "required": ["account", "proxy"],
       "properties": {
         "account": {
           "$ref": "#/definitions/account_name_type"
@@ -183,11 +176,7 @@
     "account_witness_vote": {
       "type": "object",
       "title": "account_witness_vote",
-      "required": [
-        "account",
-        "approve",
-        "witness"
-      ],
+      "required": ["account", "approve", "witness"],
       "properties": {
         "approve": {
           "type": "boolean"
@@ -231,10 +220,7 @@
     "cancel_transfer_from_savings": {
       "type": "object",
       "title": "cancel_transfer_from_savings",
-      "required": [
-        "from",
-        "request_id"
-      ],
+      "required": ["from", "request_id"],
       "properties": {
         "request_id": {
           "$ref": "#/definitions/uint32_t"
@@ -247,11 +233,7 @@
     "challenge_authority": {
       "type": "object",
       "title": "challenge_authority",
-      "required": [
-        "challenged",
-        "challenger",
-        "require_owner"
-      ],
+      "required": ["challenged", "challenger", "require_owner"],
       "properties": {
         "require_owner": {
           "type": "boolean"
@@ -267,11 +249,7 @@
     "change_recovery_account": {
       "type": "object",
       "title": "change_recovery_account",
-      "required": [
-        "account_to_recover",
-        "extensions",
-        "new_recovery_account"
-      ],
+      "required": ["account_to_recover", "extensions", "new_recovery_account"],
       "properties": {
         "new_recovery_account": {
           "$ref": "#/definitions/account_name_type",
@@ -290,12 +268,7 @@
     "claim_reward_balance": {
       "type": "object",
       "title": "claim_reward_balance",
-      "required": [
-        "account",
-        "reward_sbd",
-        "reward_steem",
-        "reward_vests"
-      ],
+      "required": ["account", "reward_sbd", "reward_steem", "reward_vests"],
       "properties": {
         "reward_steem": {
           "$ref": "#/definitions/asset"
@@ -391,11 +364,7 @@
     "convert": {
       "type": "object",
       "title": "convert",
-      "required": [
-        "amount",
-        "owner",
-        "requestid"
-      ],
+      "required": ["amount", "owner", "requestid"],
       "properties": {
         "amount": {
           "$ref": "#/definitions/asset"
@@ -412,11 +381,7 @@
     "custom": {
       "type": "object",
       "title": "custom",
-      "required": [
-        "data",
-        "id",
-        "required_auths"
-      ],
+      "required": ["data", "id", "required_auths"],
       "properties": {
         "required_auths": {
           "items": {
@@ -481,12 +446,7 @@
     "custom_json": {
       "type": "object",
       "title": "custom_json",
-      "required": [
-        "id",
-        "json",
-        "required_auths",
-        "required_posting_auths"
-      ],
+      "required": ["id", "json", "required_auths", "required_posting_auths"],
       "properties": {
         "json": {
           "description": "must be less than 32 characters long",
@@ -513,10 +473,7 @@
     "decline_voting_rights": {
       "type": "object",
       "title": "decline_voting_rights",
-      "required": [
-        "account",
-        "decline"
-      ],
+      "required": ["account", "decline"],
       "properties": {
         "account": {
           "$ref": "#/definitions/account_name_type"
@@ -529,11 +486,7 @@
     "delegate_vesting_shares": {
       "type": "object",
       "title": "delegate_vesting_shares",
-      "required": [
-        "delegatee",
-        "delegator",
-        "vesting_shares"
-      ],
+      "required": ["delegatee", "delegator", "vesting_shares"],
       "properties": {
         "delegator": {
           "$ref": "#/definitions/account_name_type"
@@ -552,10 +505,7 @@
     "delete_comment": {
       "type": "object",
       "title": "delete_comment",
-      "required": [
-        "author",
-        "permlink"
-      ],
+      "required": ["author", "permlink"],
       "properties": {
         "permlink": {
           "type": "string"
@@ -568,14 +518,7 @@
     "escrow_approve": {
       "type": "object",
       "title": "escrow_approve",
-      "required": [
-        "agent",
-        "approve",
-        "escrow_id",
-        "from",
-        "to",
-        "who"
-      ],
+      "required": ["agent", "approve", "escrow_id", "from", "to", "who"],
       "properties": {
         "escrow_id": {
           "$ref": "#/definitions/uint32_t"
@@ -601,13 +544,7 @@
     "escrow_dispute": {
       "type": "object",
       "title": "escrow_dispute",
-      "required": [
-        "agent",
-        "escrow_id",
-        "from",
-        "to",
-        "who"
-      ],
+      "required": ["agent", "escrow_id", "from", "to", "who"],
       "properties": {
         "escrow_id": {
           "$ref": "#/definitions/uint32_t"
@@ -727,10 +664,7 @@
     "feed_publish": {
       "type": "object",
       "title": "feed_publish",
-      "required": [
-        "exchange_rate",
-        "publisher"
-      ],
+      "required": ["exchange_rate", "publisher"],
       "properties": {
         "exchange_rate": {
           "$ref": "#/definitions/price"
@@ -760,10 +694,7 @@
     "limit_order_cancel": {
       "type": "object",
       "title": "limit_order_cancel",
-      "required": [
-        "orderid",
-        "owner"
-      ],
+      "required": ["orderid", "owner"],
       "properties": {
         "orderid": {
           "$ref": "#/definitions/uint32_t"
@@ -849,9 +780,7 @@
           "items": [
             {
               "type": "string",
-              "enum": [
-                "account_create"
-              ]
+              "enum": ["account_create"]
             },
             {
               "$ref": "#/definitions/account_create"
@@ -863,9 +792,7 @@
           "items": [
             {
               "type": "string",
-              "enum": [
-                "account_create_with_delegation"
-              ]
+              "enum": ["account_create_with_delegation"]
             },
             {
               "$ref": "#/definitions/account_create_with_delegation"
@@ -877,9 +804,7 @@
           "items": [
             {
               "type": "string",
-              "enum": [
-                "account_update"
-              ]
+              "enum": ["account_update"]
             },
             {
               "$ref": "#/definitions/account_update"
@@ -891,9 +816,7 @@
           "items": [
             {
               "type": "string",
-              "enum": [
-                "account_witness_proxy"
-              ]
+              "enum": ["account_witness_proxy"]
             },
             {
               "$ref": "#/definitions/account_witness_proxy"
@@ -905,9 +828,7 @@
           "items": [
             {
               "type": "string",
-              "enum": [
-                "account_witness_vote"
-              ]
+              "enum": ["account_witness_vote"]
             },
             {
               "$ref": "#/definitions/account_witness_vote"
@@ -919,9 +840,7 @@
           "items": [
             {
               "type": "string",
-              "enum": [
-                "cancel_transfer_from_savings"
-              ]
+              "enum": ["cancel_transfer_from_savings"]
             },
             {
               "$ref": "#/definitions/cancel_transfer_from_savings"
@@ -933,9 +852,7 @@
           "items": [
             {
               "type": "string",
-              "enum": [
-                "challenge_authority"
-              ]
+              "enum": ["challenge_authority"]
             },
             {
               "$ref": "#/definitions/challenge_authority"
@@ -947,9 +864,7 @@
           "items": [
             {
               "type": "string",
-              "enum": [
-                "change_recovery_account"
-              ]
+              "enum": ["change_recovery_account"]
             },
             {
               "$ref": "#/definitions/change_recovery_account"
@@ -961,9 +876,7 @@
           "items": [
             {
               "type": "string",
-              "enum": [
-                "claim_reward_balance"
-              ]
+              "enum": ["claim_reward_balance"]
             },
             {
               "$ref": "#/definitions/claim_reward_balance"
@@ -975,9 +888,7 @@
           "items": [
             {
               "type": "string",
-              "enum": [
-                "comment"
-              ]
+              "enum": ["comment"]
             },
             {
               "$ref": "#/definitions/comment"
@@ -989,9 +900,7 @@
           "items": [
             {
               "type": "string",
-              "enum": [
-                "comment_options"
-              ]
+              "enum": ["comment_options"]
             },
             {
               "$ref": "#/definitions/comment_options"
@@ -1003,9 +912,7 @@
           "items": [
             {
               "type": "string",
-              "enum": [
-                "convert"
-              ]
+              "enum": ["convert"]
             },
             {
               "$ref": "#/definitions/convert"
@@ -1017,9 +924,7 @@
           "items": [
             {
               "type": "string",
-              "enum": [
-                "custom"
-              ]
+              "enum": ["custom"]
             },
             {
               "$ref": "#/definitions/custom"
@@ -1031,9 +936,7 @@
           "items": [
             {
               "type": "string",
-              "enum": [
-                "custom_binary"
-              ]
+              "enum": ["custom_binary"]
             },
             {
               "$ref": "#/definitions/custom_binary"
@@ -1045,9 +948,7 @@
           "items": [
             {
               "type": "string",
-              "enum": [
-                "custom_json"
-              ]
+              "enum": ["custom_json"]
             },
             {
               "$ref": "#/definitions/custom_json"
@@ -1059,9 +960,7 @@
           "items": [
             {
               "type": "string",
-              "enum": [
-                "decline_voting_rights"
-              ]
+              "enum": ["decline_voting_rights"]
             },
             {
               "$ref": "#/definitions/decline_voting_rights"
@@ -1073,9 +972,7 @@
           "items": [
             {
               "type": "string",
-              "enum": [
-                "delegate_vesting_shares"
-              ]
+              "enum": ["delegate_vesting_shares"]
             },
             {
               "$ref": "#/definitions/delegate_vesting_shares"
@@ -1087,9 +984,7 @@
           "items": [
             {
               "type": "string",
-              "enum": [
-                "delete_comment"
-              ]
+              "enum": ["delete_comment"]
             },
             {
               "$ref": "#/definitions/delete_comment"
@@ -1101,9 +996,7 @@
           "items": [
             {
               "type": "string",
-              "enum": [
-                "escrow_approve"
-              ]
+              "enum": ["escrow_approve"]
             },
             {
               "$ref": "#/definitions/escrow_approve"
@@ -1115,9 +1008,7 @@
           "items": [
             {
               "type": "string",
-              "enum": [
-                "escrow_dispute"
-              ]
+              "enum": ["escrow_dispute"]
             },
             {
               "$ref": "#/definitions/escrow_dispute"
@@ -1129,9 +1020,7 @@
           "items": [
             {
               "type": "string",
-              "enum": [
-                "escrow_release"
-              ]
+              "enum": ["escrow_release"]
             },
             {
               "$ref": "#/definitions/escrow_release"
@@ -1143,9 +1032,7 @@
           "items": [
             {
               "type": "string",
-              "enum": [
-                "escrow_transfer"
-              ]
+              "enum": ["escrow_transfer"]
             },
             {
               "$ref": "#/definitions/escrow_transfer"
@@ -1157,9 +1044,7 @@
           "items": [
             {
               "type": "string",
-              "enum": [
-                "feed_publish"
-              ]
+              "enum": ["feed_publish"]
             },
             {
               "$ref": "#/definitions/feed_publish"
@@ -1171,9 +1056,7 @@
           "items": [
             {
               "type": "string",
-              "enum": [
-                "limit_order_cancel"
-              ]
+              "enum": ["limit_order_cancel"]
             },
             {
               "$ref": "#/definitions/limit_order_cancel"
@@ -1185,9 +1068,7 @@
           "items": [
             {
               "type": "string",
-              "enum": [
-                "limit_order_create"
-              ]
+              "enum": ["limit_order_create"]
             },
             {
               "$ref": "#/definitions/limit_order_create"
@@ -1199,9 +1080,7 @@
           "items": [
             {
               "type": "string",
-              "enum": [
-                "limit_order_create2"
-              ]
+              "enum": ["limit_order_create2"]
             },
             {
               "$ref": "#/definitions/limit_order_create2"
@@ -1213,9 +1092,7 @@
           "items": [
             {
               "type": "string",
-              "enum": [
-                "pow"
-              ]
+              "enum": ["pow"]
             },
             {
               "$ref": "#/definitions/pow"
@@ -1227,9 +1104,7 @@
           "items": [
             {
               "type": "string",
-              "enum": [
-                "pow2"
-              ]
+              "enum": ["pow2"]
             },
             {
               "$ref": "#/definitions/pow2"
@@ -1241,9 +1116,7 @@
           "items": [
             {
               "type": "string",
-              "enum": [
-                "prove_authority"
-              ]
+              "enum": ["prove_authority"]
             },
             {
               "$ref": "#/definitions/prove_authority"
@@ -1255,9 +1128,7 @@
           "items": [
             {
               "type": "string",
-              "enum": [
-                "recover_account"
-              ]
+              "enum": ["recover_account"]
             },
             {
               "$ref": "#/definitions/recover_account"
@@ -1269,9 +1140,7 @@
           "items": [
             {
               "type": "string",
-              "enum": [
-                "report_over_production"
-              ]
+              "enum": ["report_over_production"]
             },
             {
               "$ref": "#/definitions/report_over_production"
@@ -1283,9 +1152,7 @@
           "items": [
             {
               "type": "string",
-              "enum": [
-                "request_account_recovery"
-              ]
+              "enum": ["request_account_recovery"]
             },
             {
               "$ref": "#/definitions/request_account_recovery"
@@ -1297,9 +1164,7 @@
           "items": [
             {
               "type": "string",
-              "enum": [
-                "reset_account"
-              ]
+              "enum": ["reset_account"]
             },
             {
               "$ref": "#/definitions/reset_account"
@@ -1311,9 +1176,7 @@
           "items": [
             {
               "type": "string",
-              "enum": [
-                "set_reset_account"
-              ]
+              "enum": ["set_reset_account"]
             },
             {
               "$ref": "#/definitions/set_reset_account"
@@ -1325,9 +1188,7 @@
           "items": [
             {
               "type": "string",
-              "enum": [
-                "set_withdraw_vesting_route"
-              ]
+              "enum": ["set_withdraw_vesting_route"]
             },
             {
               "$ref": "#/definitions/set_withdraw_vesting_route"
@@ -1339,9 +1200,7 @@
           "items": [
             {
               "type": "string",
-              "enum": [
-                "transfer"
-              ]
+              "enum": ["transfer"]
             },
             {
               "$ref": "#/definitions/transfer"
@@ -1353,9 +1212,7 @@
           "items": [
             {
               "type": "string",
-              "enum": [
-                "transfer_from_savings"
-              ]
+              "enum": ["transfer_from_savings"]
             },
             {
               "$ref": "#/definitions/transfer_from_savings"
@@ -1367,9 +1224,7 @@
           "items": [
             {
               "type": "string",
-              "enum": [
-                "transfer_to_savings"
-              ]
+              "enum": ["transfer_to_savings"]
             },
             {
               "$ref": "#/definitions/transfer_to_savings"
@@ -1381,9 +1236,7 @@
           "items": [
             {
               "type": "string",
-              "enum": [
-                "transfer_to_vesting"
-              ]
+              "enum": ["transfer_to_vesting"]
             },
             {
               "$ref": "#/definitions/transfer_to_vesting"
@@ -1395,9 +1248,7 @@
           "items": [
             {
               "type": "string",
-              "enum": [
-                "vote"
-              ]
+              "enum": ["vote"]
             },
             {
               "$ref": "#/definitions/vote"
@@ -1409,9 +1260,7 @@
           "items": [
             {
               "type": "string",
-              "enum": [
-                "withdraw_vesting"
-              ]
+              "enum": ["withdraw_vesting"]
             },
             {
               "$ref": "#/definitions/withdraw_vesting"
@@ -1423,9 +1272,7 @@
           "items": [
             {
               "type": "string",
-              "enum": [
-                "witness_update"
-              ]
+              "enum": ["witness_update"]
             },
             {
               "$ref": "#/definitions/witness_update"
@@ -1484,13 +1331,7 @@
     "pow": {
       "type": "object",
       "title": "pow",
-      "required": [
-        "block_id",
-        "nonce",
-        "props",
-        "work",
-        "worker_account"
-      ],
+      "required": ["block_id", "nonce", "props", "work", "worker_account"],
       "properties": {
         "worker_account": {
           "$ref": "#/definitions/account_name_type"
@@ -1512,10 +1353,7 @@
     "pow2": {
       "type": "object",
       "title": "pow2",
-      "required": [
-        "props",
-        "work"
-      ],
+      "required": ["props", "work"],
       "properties": {
         "new_owner_key": {
           "$ref": "#/definitions/public_key_type"
@@ -1542,10 +1380,7 @@
     "prove_authority": {
       "type": "object",
       "title": "prove_authority",
-      "required": [
-        "challenged",
-        "require_owner"
-      ],
+      "required": ["challenged", "require_owner"],
       "properties": {
         "require_owner": {
           "type": "boolean"
@@ -1591,11 +1426,7 @@
     "report_over_production": {
       "type": "object",
       "title": "report_over_production",
-      "required": [
-        "first_block",
-        "reporter",
-        "second_block"
-      ],
+      "required": ["first_block", "reporter", "second_block"],
       "properties": {
         "reporter": {
           "$ref": "#/definitions/account_name_type"
@@ -1640,11 +1471,7 @@
     "reset_account": {
       "type": "object",
       "title": "reset_account",
-      "required": [
-        "account_to_reset",
-        "new_owner_authority",
-        "reset_account"
-      ],
+      "required": ["account_to_reset", "new_owner_authority", "reset_account"],
       "properties": {
         "account_to_reset": {
           "$ref": "#/definitions/account_name_type"
@@ -1661,11 +1488,7 @@
     "set_reset_account": {
       "type": "object",
       "title": "set_reset_account",
-      "required": [
-        "account",
-        "current_reset_account",
-        "reset_account"
-      ],
+      "required": ["account", "current_reset_account", "reset_account"],
       "properties": {
         "account": {
           "$ref": "#/definitions/account_name_type"
@@ -1682,12 +1505,7 @@
     "set_withdraw_vesting_route": {
       "type": "object",
       "title": "set_withdraw_vesting_route",
-      "required": [
-        "auto_vest",
-        "from_account",
-        "percent",
-        "to_account"
-      ],
+      "required": ["auto_vest", "from_account", "percent", "to_account"],
       "properties": {
         "auto_vest": {
           "type": "boolean"
@@ -1788,12 +1606,7 @@
     "transfer": {
       "type": "object",
       "title": "transfer",
-      "required": [
-        "amount",
-        "from",
-        "memo",
-        "to"
-      ],
+      "required": ["amount", "from", "memo", "to"],
       "properties": {
         "from": {
           "$ref": "#/definitions/account_name_type"
@@ -1816,13 +1629,7 @@
     "transfer_from_savings": {
       "type": "object",
       "title": "transfer_from_savings",
-      "required": [
-        "amount",
-        "from",
-        "memo",
-        "request_id",
-        "to"
-      ],
+      "required": ["amount", "from", "memo", "request_id", "to"],
       "properties": {
         "request_id": {
           "$ref": "#/definitions/uint32_t"
@@ -1844,12 +1651,7 @@
     "transfer_to_savings": {
       "type": "object",
       "title": "transfer_to_savings",
-      "required": [
-        "amount",
-        "from",
-        "memo",
-        "to"
-      ],
+      "required": ["amount", "from", "memo", "to"],
       "properties": {
         "from": {
           "$ref": "#/definitions/account_name_type"
@@ -1868,11 +1670,7 @@
     "transfer_to_vesting": {
       "type": "object",
       "title": "transfer_to_vesting",
-      "required": [
-        "amount",
-        "from",
-        "to"
-      ],
+      "required": ["amount", "from", "to"],
       "properties": {
         "from": {
           "$ref": "#/definitions/account_name_type"
@@ -1904,12 +1702,7 @@
     "vote": {
       "type": "object",
       "title": "vote",
-      "required": [
-        "author",
-        "permlink",
-        "voter",
-        "weight"
-      ],
+      "required": ["author", "permlink", "voter", "weight"],
       "properties": {
         "permlink": {
           "type": "string"
@@ -1928,10 +1721,7 @@
     "withdraw_vesting": {
       "type": "object",
       "title": "withdraw_vesting",
-      "required": [
-        "account",
-        "vesting_shares"
-      ],
+      "required": ["account", "vesting_shares"],
       "properties": {
         "account": {
           "$ref": "#/definitions/account_name_type"
@@ -1945,13 +1735,7 @@
     "witness_update": {
       "type": "object",
       "title": "witness_update",
-      "required": [
-        "block_signing_key",
-        "fee",
-        "owner",
-        "props",
-        "url"
-      ],
+      "required": ["block_signing_key", "fee", "owner", "props", "url"],
       "properties": {
         "url": {
           "type": "string"

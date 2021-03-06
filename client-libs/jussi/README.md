@@ -6,8 +6,9 @@ A reverse proxy that only speaks json-rpc 2.0. Upstream routing is done using js
 
 The easiest way to get up and running with jussi is by running it in a docker container.
 
-1) Copy the example `DEV_config.json` to a local directory and make any necessary edits.
-2) Run this docker command (replace `/path/to/config.json` with the path to your config file): 
+1. Copy the example `DEV_config.json` to a local directory and make any necessary edits.
+2. Run this docker command (replace `/path/to/config.json` with the path to your config file):
+
 ```
 docker run -it --env JUSSI_UPSTREAM_CONFIG_FILE=/app/config.json -v /path/to/config.json:/app/config.json -p 8080:8080 steemit/jussi:latest
 ```
@@ -15,7 +16,9 @@ docker run -it --env JUSSI_UPSTREAM_CONFIG_FILE=/app/config.json -v /path/to/con
 You can build jussi using docker which will run it's full test suite with `docker build -t="myname/jussi:latest" .`
 
 ## Namespaces
+
 A json-rpc method namespace is a json-rpc method prefix joined to the method name with a period, so a method in the "sbds" namespace begins with `sbds.` and will be forwarded to a sbds endpoint:
+
 ```
 POST / HTTP/1.1
 Content-Type: application/json
@@ -29,6 +32,7 @@ Content-Type: application/json
 ```
 
 ### Default Namespace
+
 Any json-rpc method with no period in the method name is presumed to be in the "steemd" namespace and will be forwarded to a steemd endpoint:
 
 ```
@@ -59,6 +63,7 @@ Additional namespaces can be added to the upstreams array:
 ```
 
 Once the above upstream has been added to your local config and jussi, the following curl would work:
+
 ```
 curl -s --data '{"jsonrpc":"2.0", "method":"foo.bar", "params":["baz"], "id":1}' http://localhost:9000
 ```
@@ -111,12 +116,13 @@ Certain features of jussi can be configured using environment variables. If you 
 `LOG_LEVEL` - Everyone likes more logs. If you do too, set this to `INFO`. Otherwise, `WARNING` is ok as well.
 
 ## What jussi does
+
 ### At Startup
+
 1. parse the upstream config and build the routing, caching, timeout data structures
 1. open websocket and/or http connections to upstreams
 1. initialize memory cache and open connections to redis cache
 1. register route and error handlers
-
 
 ### Request/Response Cycle
 
@@ -129,12 +135,12 @@ Certain features of jussi can be configured using environment variables. If you 
 1. if a batch call:
    1. check in-memory cache for all keys
    1. for any misses:
-     1. make a redis `mget` request for any keys not found in memory cache
+   1. make a redis `mget` request for any keys not found in memory cache
 1. if all data loaded from cache:
    1. merge cached data with requests to form response
    1. send response
 1. if any jsonrpc call results aren't in cache:
-  1. determine which upstream url and protocol (websockets or http) to use to fetch them
+1. determine which upstream url and protocol (websockets or http) to use to fetch them
 1. start upsteam request timers
 1. fetch missing jsonrpc calls
 1. end upstream response timers
