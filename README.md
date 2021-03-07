@@ -47,8 +47,8 @@ We use Arch Linux to compile blurt, but that does not mean that you must also us
 ```bash
 git clone https://gitlab.com/blurt/blurt
 cd blurt
-cp contrib/conan-profile/default ~/.conan/profiles/default
-cat ~/.conan/profiles/default #Do this and check that the architecture is right for how you want to build it.  amd64 and arm64 officially supported.  armv5,6,7 should work.
+cp contrib/conan-profile/default-mac ~/.conan/profiles/default
+cat ~/.conan/profiles/default-mac #Do this and check that the architecture is right for how you want to build it.  amd64 and arm64 officially supported.  armv5,6,7 should work.  Should work on apple M1 processors. 
 mkdir build
 cd build
 conan install ..

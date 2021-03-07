@@ -84,7 +84,10 @@ async function getRatelimit(account: string) {
     });
   });
 }
-const b64uLookup = {
+
+
+
+const b64uLookup: any = {
   "/": "_",
   "_": "/",
   "+": "-",
@@ -92,12 +95,15 @@ const b64uLookup = {
   "=": ".",
   ".": "=",
 };
+
+
 function b64uToB64(str: string) {
   const tt = str.replace(/(-|_|\.)/g, function (m) {
     return b64uLookup[m];
   });
   return tt;
 }
+
 export async function uploadHsHandler(ctx: KoaContext) {
   ctx.tag({ handler: "hsupload" });
   let validSignature = false;
@@ -148,7 +154,7 @@ export async function uploadHsHandler(ctx: KoaContext) {
   ) {
     const username = tokenObj.authors[0];
 
-    let account = {
+    let account: any = {
       name: "",
       reputation: 0,
     };
@@ -178,7 +184,7 @@ export async function uploadHsHandler(ctx: KoaContext) {
 
         if (account && account.name) {
           ["posting", "active", "owner"].forEach((type) => {
-            account[type].account_auths.forEach((key: string[]) => {
+           any: account[type].account_auths.forEach((key: string[]) => {
               if (!validSignature && key[0] === UPLOAD_LIMITS.app_account) {
                 validSignature = true;
               }
