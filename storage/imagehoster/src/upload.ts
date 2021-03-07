@@ -85,17 +85,14 @@ async function getRatelimit(account: string) {
   });
 }
 
-
-
 const b64uLookup: any = {
   "/": "_",
-  "_": "/",
+  _: "/",
   "+": "-",
   "-": "+",
   "=": ".",
   ".": "=",
 };
-
 
 function b64uToB64(str: string) {
   const tt = str.replace(/(-|_|\.)/g, function (m) {
@@ -184,7 +181,7 @@ export async function uploadHsHandler(ctx: KoaContext) {
 
         if (account && account.name) {
           ["posting", "active", "owner"].forEach((type) => {
-           any: account[type].account_auths.forEach((key: string[]) => {
+            any: account[type].account_auths.forEach((key: string[]) => {
               if (!validSignature && key[0] === UPLOAD_LIMITS.app_account) {
                 validSignature = true;
               }
