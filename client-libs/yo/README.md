@@ -6,21 +6,21 @@ Yo is a notifications service for the Steem blockchain, it streams events from t
 
 Yo consists of the following components:
 
- 1. ***Database layer***
+1.  **_Database layer_**
 
     By default, Yo makes use of sqlite for development work and provides a simple way to implement standard test data at startup. MySQL support is the intended final use in production. This tracks user preferences and actual notifications (which are flagged as processed, mark_sent, shown and read). Each layer above the DB layer may be run distributed for reliability purposes, so long as the database supports transactions.
 
- 2. ***Blockchain follower***
+2.  **_Blockchain follower_**
 
     This component follows the blockchain operations up to latest irreversible block and checks for events, sending events to the Yo notification sender for processing based on user preferences. This is done by simply inserting into the database as unprocessed and then alerting the notification sender. New event notifications are marked as processed before being dispatched to the notification sender.
 
     The communication between this component and the notification sender is via an internal API that should be treated as a black box by external users.
 
- 3. ***Notification sender***
+3.  **_Notification sender_**
 
     This component handles sending out notifications to end users based on the current configuration in the database. After sending out a notification, the notification sender will mark it as mark_sent at this stage. This is where the actual notification is mark_sent to the user and for applications such as webpush an external endpoint is provided here.
 
- 4. ***API server***
+4.  **_API server_**
 
     This component is used by end users to configure their notification preferences and should be exposed as a public endpoint. API methods are exposed here to end users based on configuration (what components of Yo are in use on the particular installation).
 
@@ -30,15 +30,14 @@ By default, Yo will run a node with ALL components available and will use sqlite
 
 See yo.cfg for details on the environment variables used (when specified, these will override the contents of yo.cfg).
 
-
 A Dockerfile is also provided for building and running yo inside a docker container, as well as a simple tool that creates a docker env file for use with the docker container by pulling values from yo.cfg.
 Copy yo.cfg into my-yo.cfg or similar and then do the following:
+
 ```
 make docker-image
 YO_CONFIG=my-yo.cfg make .env
 docker run -ti steemit/yo:latest
 ```
-
 
 ## # Yo JSON-RPC API
 
@@ -48,18 +47,18 @@ Calls related to notifications via [Jussi](https://github.com/steemit/jussi).
 
 These are the notification types:
 
-* `account_update`
-* `comment_reply`
-* `feed`
-* `follow`
-* `mention`
-* `post_reply`
-* `power_down`
-* `send`
-* `receive`
-* `resteem`
-* `reward`
-* `vote`
+- `account_update`
+- `comment_reply`
+- `feed`
+- `follow`
+- `mention`
+- `post_reply`
+- `power_down`
+- `send`
+- `receive`
+- `resteem`
+- `reward`
+- `vote`
 
 All notification types share the same basic structure:
 
@@ -86,9 +85,10 @@ How are the types different? TODO
 ## JSON-RPC endpoint [/]
 
 ### Get notifications [POST]
+
 Get a user's notifications, with filters & limit.
 
-+ Request (application/json)
+- Request (application/json)
 
 ```js
         {
@@ -111,8 +111,7 @@ Get a user's notifications, with filters & limit.
         }
 ```
 
-+ Response 200 (application/json)
-
+- Response 200 (application/json)
 
 ```js
         {
@@ -333,7 +332,7 @@ Get a user's notifications, with filters & limit.
         }
 ```
 
-+ Response 200 (application/json)
+- Response 200 (application/json)
 
 ```js
         {
@@ -345,7 +344,7 @@ Get a user's notifications, with filters & limit.
 
 ### Mark notifications as unread [POST]
 
-+ Request (application/json)
+- Request (application/json)
 
 ```js
         {
@@ -358,7 +357,7 @@ Get a user's notifications, with filters & limit.
         }
 ```
 
-+ Response 200 (application/json)
+- Response 200 (application/json)
 
 ```js
         {
@@ -370,7 +369,7 @@ Get a user's notifications, with filters & limit.
 
 ### Mark notifications as shown [POST]
 
-+ Request (application/json)
+- Request (application/json)
 
 ```js
         {
@@ -383,7 +382,7 @@ Get a user's notifications, with filters & limit.
         }
 ```
 
-+ Response 200 (application/json)
+- Response 200 (application/json)
 
 ```js
         {
@@ -395,7 +394,7 @@ Get a user's notifications, with filters & limit.
 
 ### Mark notifications as unshown [POST]
 
-+ Request (application/json)
+- Request (application/json)
 
 ```js
         {
@@ -408,7 +407,7 @@ Get a user's notifications, with filters & limit.
         }
 ```
 
-+ Response 200 (application/json)
+- Response 200 (application/json)
 
 ```js
         {
@@ -420,7 +419,7 @@ Get a user's notifications, with filters & limit.
 
 ### Get transport configuration [POST]
 
-+ Request (application/json)
+- Request (application/json)
 
 ```js
         {
@@ -433,7 +432,7 @@ Get a user's notifications, with filters & limit.
         }
 ```
 
-+ Response 200 (application/json)
+- Response 200 (application/json)
 
 ```js
         {
@@ -482,7 +481,7 @@ Get a user's notifications, with filters & limit.
 
 ### Set transport configuration [POST]
 
-+ Request (application/json)
+- Request (application/json)
 
 ```js
         {
@@ -530,7 +529,7 @@ Get a user's notifications, with filters & limit.
         }
 ```
 
-+ Response 200 (application/json)
+- Response 200 (application/json)
 
 ```js
         {
@@ -574,18 +573,18 @@ Get a user's notifications, with filters & limit.
         }
 ```
 
-
 ### Generic error response [POST]
+
 How do errors look, in general? TODO
 
-+ Request (application/json)
+- Request (application/json)
 
 ```js
-        {
-        }
+{
+}
 ```
 
-+ Response 400 (application/json)
+- Response 400 (application/json)
 
 ```js
         {

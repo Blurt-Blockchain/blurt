@@ -10,9 +10,7 @@
       "custom_json",
       {
         "required_auths": [],
-        "required_posting_auths": [
-          "hottopic"
-        ],
+        "required_posting_auths": ["hottopic"],
         "id": "follow",
         "json": "[\"follow\",{\"follower\":\"hottopic\",\"following\":\"aboutlife2017\",\"what\":[\"blog\"]}]"
       }
@@ -29,9 +27,7 @@
       "custom_json",
       {
         "required_auths": [],
-        "required_posting_auths": [
-          "dick.sledge"
-        ],
+        "required_posting_auths": ["dick.sledge"],
         "id": "follow",
         "json": "[\"reblog\", {\"permlink\": \"steem-jam-challenge-9-big-love-lindsey-buckingham-cover-and-more-writing\", \"account\": \"dick.sledge\", \"author\": \"thekeyofh\"}]"
       }
@@ -48,9 +44,7 @@
       "custom_json",
       {
         "required_auths": [],
-        "required_posting_auths": [
-          "sezenke"
-        ],
+        "required_posting_auths": ["sezenke"],
         "id": "follow",
         "json": "[\"follow\", {\"follower\": \"sezenke\", \"following\": \"winningman\", \"what\": [\"blog\"]}]"
       }
@@ -67,9 +61,7 @@
       "custom_json",
       {
         "required_auths": [],
-        "required_posting_auths": [
-          "superpromoter"
-        ],
+        "required_posting_auths": ["superpromoter"],
         "id": "follow",
         "json": "[\"follow\",{\"follower\":\"superpromoter\",\"following\":\"flaversham\",\"what\":[\"blog\"]}]"
       }
@@ -174,9 +166,7 @@
       "custom_json",
       {
         "required_auths": [],
-        "required_posting_auths": [
-          "viniciusoliveira"
-        ],
+        "required_posting_auths": ["viniciusoliveira"],
         "id": "follow",
         "json": "[\"follow\",{\"follower\":\"viniciusoliveira\",\"following\":\"investidorx\",\"what\":[\"blog\"]}]"
       }
@@ -406,9 +396,7 @@
       "custom_json",
       {
         "required_auths": [],
-        "required_posting_auths": [
-          "hugewhale"
-        ],
+        "required_posting_auths": ["hugewhale"],
         "id": "follow",
         "json": "[\"follow\",{\"follower\":\"hugewhale\",\"following\":\"justdentist\",\"what\":[\"blog\"]}]"
       }
@@ -476,9 +464,7 @@
       "custom_json",
       {
         "required_auths": [],
-        "required_posting_auths": [
-          "byresteem"
-        ],
+        "required_posting_auths": ["byresteem"],
         "id": "follow",
         "json": "[\"follow\",{\"follower\":\"byresteem\",\"following\":\"batok22\",\"what\":[\"blog\"]}]"
       }
@@ -681,9 +667,7 @@
       "custom_json",
       {
         "required_auths": [],
-        "required_posting_auths": [
-          "solcross"
-        ],
+        "required_posting_auths": ["solcross"],
         "id": "follow",
         "json": "[\"reblog\",{\"account\":\"solcross\",\"author\":\"originalworks\",\"permlink\":\"370-steem-60-bonuses-sponsored-writing-contest-daostack\"}]"
       }
@@ -717,9 +701,7 @@
       "custom_json",
       {
         "required_auths": [],
-        "required_posting_auths": [
-          "hottopic"
-        ],
+        "required_posting_auths": ["hottopic"],
         "id": "follow",
         "json": "[\"follow\",{\"follower\":\"hottopic\",\"following\":\"gredo11\",\"what\":[\"blog\"]}]"
       }
@@ -753,9 +735,7 @@
       "custom_json",
       {
         "required_auths": [],
-        "required_posting_auths": [
-          "bekirsolak"
-        ],
+        "required_posting_auths": ["bekirsolak"],
         "id": "follow",
         "json": "[\"follow\", {\"follower\": \"bekirsolak\", \"following\": \"jamesvmaxx\", \"what\": []}]"
       }
@@ -772,9 +752,7 @@
       "custom_json",
       {
         "required_auths": [],
-        "required_posting_auths": [
-          "promotedpost"
-        ],
+        "required_posting_auths": ["promotedpost"],
         "id": "follow",
         "json": "[\"follow\",{\"follower\":\"promotedpost\",\"following\":\"leslyfay\",\"what\":[\"blog\"]}]"
       }
@@ -808,9 +786,7 @@
       "custom_json",
       {
         "required_auths": [],
-        "required_posting_auths": [
-          "business.trends"
-        ],
+        "required_posting_auths": ["business.trends"],
         "id": "follow",
         "json": "[\"follow\",{\"follower\":\"business.trends\",\"following\":\"itsart\",\"what\":[\"blog\"]}]"
       }
