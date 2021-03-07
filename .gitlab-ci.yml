@@ -146,7 +146,7 @@ imgp test build:
   stage: build
   script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-    - docker buildx build --file storage/imgp/Dockerfile --cache-from $CI_REGISTRY_IMAGE/imgp:cache --cache-to $CI_REGISTRY_IMAGE/imgp:cache --platform linux/arm64,linux/amd64 ./storage/imgp
+    - docker buildx build --file storage/imgp/Dockerfile --platform linux/arm64,linux/amd64 ./storage/imgp
   tags:
     - amd64-shell
   except:
@@ -158,7 +158,7 @@ imgp container push:
   stage: build
   script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-    - docker buildx build --file storage/imgp/Dockerfile --cache-from $CI_REGISTRY_IMAGE/imgp:cache --cache-to $CI_REGISTRY_IMAGE/imgp:cache --platform linux/arm64,linux/amd64 ./storage/imgp
+    - docker buildx build --file storage/imgp/Dockerfile --platform linux/arm64,linux/amd64 ./storage/imgp
   tags:
     - amd64-shell
   only:
@@ -170,7 +170,7 @@ imageupload test build:
   stage: build
   script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-    - docker buildx build --file storage/imageupload/Dockerfile --cache-from $CI_REGISTRY_IMAGE/imageupload:cache --cache-to $CI_REGISTRY_IMAGE/imageupload:cache --platform linux/arm64,linux/amd64 ./storage/imageupload
+    - docker buildx build --file storage/imageupload/Dockerfile --platform linux/arm64,linux/amd64 ./storage/imageupload
   tags:
     - amd64-shell
   except:
@@ -182,7 +182,7 @@ imageupload container push:
   stage: build
   script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-    - docker buildx build --file storage/imageupload/Dockerfile --cache-from $CI_REGISTRY_IMAGE/imageupload:cache --cache-to $CI_REGISTRY_IMAGE/imageupload:cache --platform linux/arm64,linux/amd64 ./storage/imageupload
+    - docker buildx build --file storage/imageupload/Dockerfile --platform linux/arm64,linux/amd64 ./storage/imageupload
   tags:
     - amd64-shell
   only:
