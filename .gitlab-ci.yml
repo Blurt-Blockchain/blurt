@@ -194,7 +194,7 @@ imagehoster test:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - docker pull --platform linux/arm64 lopsided/archlinux
     - docker pull --platform linux/amd64 lopsided/archlinux
-    - docker buildx build --file storage/imagehoster/Dockerfile --platform linux/arm64,linux/amd64 ./storage/imagehoster
+    - docker buildx build --file storage/imagehoster/Dockerfile --platform linux/amd64 ./storage/imagehoster
   tags:
     - amd64-shell
   except:
@@ -207,7 +207,7 @@ imagehoster push:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - docker pull --platform linux/arm64 lopsided/archlinux
     - docker pull --platform linux/amd64 lopsided/archlinux
-    - docker buildx build --file storage/imagehoster/Dockerfile --platform linux/arm64,linux/amd64 ./storage/imagehoster
+    - docker buildx build --file storage/imagehoster/Dockerfile --platform linux/amd64 ./storage/imagehoster
   tags:
     - amd64-shell
   only:
