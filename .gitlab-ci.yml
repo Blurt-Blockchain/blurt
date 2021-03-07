@@ -146,6 +146,7 @@ imgp test build:
   stage: build
   script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker pull --platform linux/arm64,linux/amd64 lopsided/archlinux
     - docker buildx build --file storage/imgp/Dockerfile --platform linux/arm64,linux/amd64 ./storage/imgp
   tags:
     - amd64-shell
@@ -158,6 +159,7 @@ imgp container push:
   stage: build
   script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker pull --platform linux/arm64,linux/amd64 lopsided/archlinux
     - docker buildx build --file storage/imgp/Dockerfile --platform linux/arm64,linux/amd64 ./storage/imgp
   tags:
     - amd64-shell
@@ -170,6 +172,7 @@ imageupload test build:
   stage: build
   script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker pull --platform linux/arm64,linux/amd64 lopsided/archlinux
     - docker buildx build --file storage/imageupload/Dockerfile --platform linux/arm64,linux/amd64 ./storage/imageupload
   tags:
     - amd64-shell
@@ -182,6 +185,7 @@ imageupload container push:
   stage: build
   script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker pull --platform linux/arm64,linux/amd64 lopsided/archlinux
     - docker buildx build --file storage/imageupload/Dockerfile --platform linux/arm64,linux/amd64 ./storage/imageupload
   tags:
     - amd64-shell
