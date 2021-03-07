@@ -9,12 +9,6 @@ stages:
   - deploy
 
 
-
-
-
-
-
-
 condenser-docker-test:
   needs: []
   stage: build
@@ -207,7 +201,7 @@ imagehoster push:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - docker pull --platform linux/arm64 lopsided/archlinux
     - docker pull --platform linux/amd64 lopsided/archlinux
-    - docker buildx build --file storage/imagehoster/Dockerfile --platform linux/amd64 ./storage/imagehoster
+    - docker buildx build --file storage/imagehoster/Dockerfile --tag $CI_REGISTRY_IMAGE/imagehoster:$CI_BRANCH --push --platform linux/amd64 ./storage/imagehoster
   tags:
     - amd64-shell
   only:
@@ -221,7 +215,7 @@ imageupload container push:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - docker pull --platform linux/arm64 lopsided/archlinux
     - docker pull --platform linux/amd64 lopsided/archlinux
-    - docker buildx build --file storage/imageupload/Dockerfile --platform linux/arm64,linux/amd64 ./storage/imageupload
+    - docker buildx build --file storage/imageupload/Dockerfile --tag $CI_REGISTRY_IMAGE/imageupload:$CI_BRANCH --platform linux/arm64,linux/amd64 ./storage/imageupload
   tags:
     - amd64-shell
   only:
