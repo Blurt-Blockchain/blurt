@@ -187,6 +187,33 @@ imageupload test build:
     - dev
 
 
+imagehoster test:
+  needs: []
+  stage: build
+  script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker pull --platform linux/arm64 lopsided/archlinux
+    - docker pull --platform linux/amd64 lopsided/archlinux
+    - docker buildx build --file storage/imagehoster/Dockerfile --platform linux/arm64,linux/amd64 ./storage/imagehoster
+  tags:
+    - amd64-shell
+  except:
+    - dev
+
+imagehoster push:
+  needs: []
+  stage: build
+  script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker pull --platform linux/arm64 lopsided/archlinux
+    - docker pull --platform linux/amd64 lopsided/archlinux
+    - docker buildx build --file storage/imagehoster/Dockerfile --platform linux/arm64,linux/amd64 ./storage/imagehoster
+  tags:
+    - amd64-shell
+  only:
+    - dev
+
+
 imageupload container push:
   needs: []
   stage: build
