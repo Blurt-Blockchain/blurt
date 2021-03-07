@@ -21,7 +21,7 @@ import {
     serverApiLogin,
     serverApiLogout,
     serverApiRecordEvent,
-    isTosAccepted,
+//    isTosAccepted,
     acceptTos,
 } from 'app/utils/ServerApiClient';
 import { loadFollows } from 'app/redux/FollowSaga';
@@ -499,7 +499,7 @@ function* usernamePasswordLogin2({
         browserHistory.push(feedURL);
     }
 }
-
+/* NO TOS
 function* promptTosAcceptance(username) {
     try {
         const accepted = yield call(isTosAccepted, username);
@@ -510,7 +510,7 @@ function* promptTosAcceptance(username) {
         // TODO: log error to server, conveyor is unavailable
     }
 }
-
+*/
 function* getFeatureFlags(username, posting_private) {
     // try {
     //     let flags;
