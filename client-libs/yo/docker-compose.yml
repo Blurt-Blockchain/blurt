@@ -1,0 +1,25 @@
+version: '3'
+services:
+  postgres:
+    image: postgres:9.6
+    environment:
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: yo
+    ports:
+     - 5432:5432
+  yo:
+    depends_on:
+      - postgres
+    image: steemit/yo
+    build: .
+    environment:
+      YO_DATABASE_URL: postgres://postgres:password@postgres/yo
+      LOG_LEVEL: DEBUG
+    env_file:
+      - .env
+    links:
+      - postgres:db
+    ports:
+      - 8080
+    #volumes:
+    #  - .:/app
