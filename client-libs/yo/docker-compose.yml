@@ -10,7 +10,7 @@ services:
   yo:
     depends_on:
       - postgres
-    image: steemit/yo
+    image: registry.gitlab.com/blurt/blurt/yo
     build: .
     environment:
       YO_DATABASE_URL: postgres://postgres:password@postgres/yo
