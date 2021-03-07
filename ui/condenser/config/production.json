@@ -4,7 +4,7 @@
   "helmet": {
     "directives": {
       "childSrc": "'self' 3speak.online emb.d.tube player.twitch.tv www.youtube.com staticxx.facebook.com w.soundcloud.com player.vimeo.com",
-      "connectSrc": "https://rpc.blurt.world https://blurturl.herokuapp.com blurt.world rpc.blurt.world 'self' https://www.google-analytics.com/ https://stats.g.doubleclick.net/ https://images.blurt.world https://imgp.blurt.world/ https://blurtd.privex.io notifications.blurt.world data:",
+      "connectSrc": "wss://notifications.blurt.world/ https://rpc.blurt.world https://blurturl.herokuapp.com blurt.world rpc.blurt.world 'self' https://www.google-analytics.com/ https://stats.g.doubleclick.net/ https://images.blurt.world https://imgp.blurt.world/ https://blurtd.privex.io notifications.blurt.world data:",
       "defaultSrc": "tpc.googlesyndication.com 'self' emb.d.tube www.youtube.com staticxx.facebook.com player.vimeo.com *.streamrail.com img.3speakcontent.online lbry.tv *.wistia.com",
       "fontSrc": "data: fonts.gstatic.com",
       "frameAncestors": "'none'",
