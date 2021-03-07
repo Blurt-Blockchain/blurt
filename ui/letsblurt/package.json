@@ -11,7 +11,6 @@
   },
   "dependencies": {
     "@busyorg/busyjs": "^1.0.1",
-    "@esteemapp/dhive": "^0.14.15",
     "@react-native-community/async-storage": "^1.12.0",
     "@react-native-community/cameraroll": "^4.0.1",
     "@react-native-community/clipboard": "^1.2.3",
@@ -42,7 +41,7 @@
     "babel-plugin-styled-components": "^1.11.1",
     "buffer": "^5.4.3",
     "crypto-js": "^3.1.47",
-    "dblurt": "gitlab:blurt/openblurt/dblurt",
+    "dblurt": "0.1.2",
     "diff-match-patch": "^1.0.5",
     "galio-framework": "^0.7.1",
     "he": "^1.2.0",
