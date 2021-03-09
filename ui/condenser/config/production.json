@@ -21,7 +21,6 @@
   },
   "img_proxy_prefix": "https://imgp.blurt.world/",
   "ipfs_prefix": "https://ipfs.blurt.world/ipfs/",
-  "mixpanel": false,
   "notify": {
     "gcm_key": "google secret key"
   },

@@ -4,7 +4,6 @@ import koa_body from 'koa-body';
 import config from 'config';
 import { getRemoteIp, rateLimitReq, checkCSRF } from 'server/utils/misc';
 import coBody from 'co-body';
-import Mixpanel from 'mixpanel';
 import {
     PublicKey,
     Signature,
@@ -14,9 +13,6 @@ import { api, broadcast } from '@blurtfoundation/blurtjs';
 
 const ACCEPTED_TOS_TAG = 'accepted_tos_20180614';
 
-const mixpanel = config.get('mixpanel')
-    ? Mixpanel.init(config.get('mixpanel'))
-    : null;
 
 const _stringval = (v) => (typeof v === 'string' ? v : JSON.stringify(v));
 const _parse = (params) => {
@@ -52,7 +48,7 @@ function logRequest(path, ctx, extra) {
         });
     }
     const info = Object.keys(d)
-        .map((k) => `${k}=${_stringval(d[k])}`)
+        .map(k => `${k}=${_stringval(d[k])}`)
         .join(' ');
     console.log(`-- /${path} --> ${info}`);
 }
@@ -146,13 +142,6 @@ export default function useGeneralApi(app) {
                 status: 'ok',
             });
             const remote_ip = getRemoteIp(this.req);
-            if (mixpanel) {
-                mixpanel.people.set(this.session.uid, {
-                    ip: remote_ip,
-                    $ip: remote_ip,
-                });
-                mixpanel.people.increment(this.session.uid, 'Logins', 1);
-            }
         } catch (error) {
             console.error(
                 'Error in /login_account api call',
