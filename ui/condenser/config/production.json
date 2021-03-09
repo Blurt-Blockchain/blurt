@@ -38,7 +38,7 @@
   "server_session_secret": false,
   "session_cookie_key": "blurt-dev",
   "session_key": "blurt_session_key",
-  "site_domain": "rpc.blurt.world",
+  "site_domain": "blurt.world",
   "telesign": {
     "customer_id": false,
     "rest_api_key": false
