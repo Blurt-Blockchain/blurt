@@ -2,7 +2,7 @@ import xmldom from 'xmldom';
 import tt from 'counterpart';
 import linksRe, { any as linksAny } from 'app/utils/Links';
 import { validate_account_name } from 'app/utils/ChainValidation';
-import proxifyImageUrl from 'app/utils/ProxifyUrl';
+import { proxifyImageUrl } from 'app/utils/ProxifyUrl';
 import * as Phishing from 'app/utils/Phishing';
 import {
     embedNode as EmbeddedPlayerEmbedNode,
@@ -59,7 +59,7 @@ const XMLSerializer = new xmldom.XMLSerializer();
  *    - convert naked URLs to images/links
  *    - convert embeddable URLs to <iframe>s
  *    - basic sanitization?
- *  2. blurt.world Rendering - add in proprietary blurt.world functions/links
+ *  2. Steemit.com Rendering - add in proprietary Steemit.com functions/links
  *    - convert <iframe>s to custom objects
  *    - linkify #tags and @mentions
  *    - proxify images
@@ -84,7 +84,7 @@ const XMLSerializer = new xmldom.XMLSerializer();
     If hideImages and mutate is set to true all images will be replaced
     by <pre> elements containing just the image url.
 */
-export default function (html, { mutate = true, hideImages = false } = {}) {
+export default function(html, { mutate = true, hideImages = false } = {}) {
     const state = { mutate };
     state.hashtags = new Set();
     state.usertags = new Set();
@@ -121,7 +121,7 @@ export default function (html, { mutate = true, hideImages = false } = {}) {
         };
     } catch (error) {
         // xmldom error is bad
-        console.log(
+        console.error(
             'rendering error',
             JSON.stringify({ error: error.message, html })
         );
@@ -131,7 +131,7 @@ export default function (html, { mutate = true, hideImages = false } = {}) {
 
 function traverse(node, state, depth = 0) {
     if (!node || !node.childNodes) return;
-    Array(...node.childNodes).forEach((child) => {
+    Array.from(node.childNodes).forEach(child => {
         // console.log(depth, 'child.tag,data', child.tagName, child.data)
         const tag = child.tagName ? child.tagName.toLowerCase() : null;
         if (tag) state.htmltags.add(tag);
@@ -151,15 +151,19 @@ function link(state, child) {
         state.links.add(url);
         if (state.mutate) {
             // If this link is not relative, http, https, steem or esteem -- add https.
-            if (!/^((#)|(\/(?!\/))|(((blurt|https?):)?\/\/))/.test(url)) {
+            if (
+                !/^((#)|(\/(?!\/))|(((steem|esteem|https?):)?\/\/))/.test(url)
+            ) {
                 child.setAttribute('href', 'https://' + url);
             }
 
             // Unlink potential phishing attempts
             if (
                 (url.indexOf('#') !== 0 && // Allow in-page links
-                    child.textContent.match(/(www\.)?blurt\.world/i) &&
-                    !url.match(/https?:\/\/(.*@)?(www\.)?blurt\.world/i)) ||
+                    (child.textContent.match(/(www\.)?steemit\.com/i) &&
+                        !url.match(
+                            /https?:\/\/(.*@)?(www\.)?steemit\.com/i
+                        ))) ||
                 Phishing.looksPhishy(url)
             ) {
                 const phishyDiv = child.ownerDocument.createElement('div');
@@ -175,6 +179,8 @@ function link(state, child) {
 // wrap iframes in div.videoWrapper to control size/aspect ratio
 function iframe(state, child) {
     const url = child.getAttribute('src');
+
+    // @TODO move this into the centralized EmbeddedPlayer code
     if (url) {
         const { images, links } = state;
         const yt = youTubeId(url);
@@ -193,9 +199,8 @@ function iframe(state, child) {
     if (
         tag == 'div' &&
         child.parentNode.getAttribute('class') == 'videoWrapper'
-    ) {
+    )
         return;
-    }
     const html = XMLSerializer.serializeToString(child);
     child.parentNode.replaceChild(
         DOMParser.parseFromString(`<div class="videoWrapper">${html}</div>`),
@@ -220,14 +225,13 @@ function img(state, child) {
     }
 }
 
-// For all img elements with non-local URLs, prepend the proxy URL (e.g. `https://imgp.blurt.world/0x0/`)
+// For all img elements with non-local URLs, prepend the proxy URL (e.g. `https://img0.steemit.com/0x0/`)
 function proxifyImages(doc) {
     if (!doc) return;
-    [...doc.getElementsByTagName('img')].forEach((node) => {
+    Array.from(doc.getElementsByTagName('img')).forEach(node => {
         const url = node.getAttribute('src');
-        if (!linksRe.local.test(url)) {
+        if (!linksRe.local.test(url))
             node.setAttribute('src', proxifyImageUrl(url, true));
-        }
     });
 }
 
@@ -241,7 +245,9 @@ function linkifyNode(child, state) {
 
         const { mutate } = state;
         if (!child.data) return;
+
         child = EmbeddedPlayerEmbedNode(child, state.links, state.images);
+
         const data = XMLSerializer.serializeToString(child);
         const content = linkify(
             data,
@@ -259,20 +265,20 @@ function linkifyNode(child, state) {
             return newChild;
         }
     } catch (error) {
-        console.log(error);
+        console.error('linkify_error', error);
     }
 }
 
 function linkify(content, mutate, hashtags, usertags, images, links) {
     // hashtag
-    content = content.replace(/(^|\s)(#[-a-z\d]+)/gi, (tag) => {
+    content = content.replace(/(^|\s)(#[-a-z\d]+)/gi, tag => {
         if (/#[\d]+$/.test(tag)) return tag; // Don't allow numbers to be tags
         const space = /^\s/.test(tag) ? tag[0] : '';
         const tag2 = tag.trim().substring(1);
         const tagLower = tag2.toLowerCase();
         if (hashtags) hashtags.add(tagLower);
         if (!mutate) return tag;
-        return space + `<a href="/hot/${tagLower}">${tag}</a>`;
+        return space + `<a href="/trending/${tagLower}">${tag}</a>`;
     });
 
     // usertag (mention)
@@ -295,7 +301,7 @@ function linkify(content, mutate, hashtags, usertags, images, links) {
         }
     );
 
-    content = content.replace(linksAny('gi'), (ln) => {
+    content = content.replace(linksAny('gi'), ln => {
         if (linksRe.image.test(ln)) {
             if (images) images.add(ln);
             return `<img src="${ipfsPrefix(ln)}" />`;
@@ -305,9 +311,10 @@ function linkify(content, mutate, hashtags, usertags, images, links) {
         if (/\.(zip|exe)$/i.test(ln)) return ln;
 
         // do not linkify phishy links
-        if (Phishing.looksPhishy(ln)) {
-            return `<div title='${getPhishingWarningMessage()}' class='phishy'>${ln}</div>`;
-        }
+        if (Phishing.looksPhishy(ln))
+            return `<div title='${getPhishingWarningMessage()}' class='phishy'>${
+                ln
+            }</div>`;
 
         if (links) links.add(ln);
         return `<a href="${ipfsPrefix(ln)}">${ln}</a>`;
@@ -317,7 +324,7 @@ function linkify(content, mutate, hashtags, usertags, images, links) {
 
 function ipfsPrefix(url) {
     if ($STM_Config.ipfs_prefix) {
-        // Convert //ipfs/xxx  or /ipfs/xxx  into  https://blurt.world/ipfs/xxxxx
+        // Convert //ipfs/xxx  or /ipfs/xxx  into  https://steemit.com/ipfs/xxxxx
         if (/^\/?\/ipfs\//.test(url)) {
             const slash = url.charAt(1) === '/' ? 1 : 0;
             url = url.substring(slash + '/ipfs/'.length); // start with only 1 /
@@ -326,3 +333,4 @@ function ipfsPrefix(url) {
     }
     return url;
 }
+
