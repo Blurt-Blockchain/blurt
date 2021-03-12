@@ -231,7 +231,7 @@ export default connect(
             showAnnouncement: state.user.get('showAnnouncement'),
         };
     },
-    dispatch => ({
+    (dispatch) => ({
         loginUser: () => dispatch(userActions.usernamePasswordLogin({})),
     })
 )(App);
