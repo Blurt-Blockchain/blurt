@@ -5,29 +5,13 @@ COPY motd /etc/motd
 RUN sed -i -e "s/^CheckSpace/#!!!CheckSpace/g" /etc/pacman.conf && \
         pacman -Syyu --noconfirm net-tools ufw vnstat iftop zerotier-one wget go npm yarn protobuf git && \
         systemctl enable docker && \
-        mkdir starport && \
+        git clone https://github.com/tendermint/starport && \
         cd starport && \
-        wget -O starport_0.14.0_linux_arm64.tar.gz https://github.com/tendermint/starport/releases/download/v0.14.0/starport_0.14.0_linux_arm64.tar.gz && \
-        tar xvf starport_0.14.0_linux_arm64.tar.gz && \
-        mv starport /usr/bin && \
-        chmod +x /usr/bin/starport && \
+        make && \
+        mv build/starport /usr/bin/starport && \
         cd .. && rm -rf starport && \
         systemctl enable zerotier-one && \
         systemctl enable vnstat && \
-        ufw default deny && \
-        ufw default deny outgoing && \
-        ufw allow ssh && \
-        ufw allow 9993/udp && \
-        ufw allow out http && \
-        ufw allow out https && \
-        ufw allow out 9993/udp && \
-        ufw allow in on ztuzesm2fn from 0.0.0.0/0 && \
-        ufw allow out on ztuzesm2fn to 0.0.0.0/0 && \
-        ufw allow in on ztmjfdvu4d from 0.0.0.0/0 && \
-        ufw allow out on ztmjfdvu4d to 0.0.0.0/0 && \
-        ufw deny out on eth0 from any to any port 1776 && \
-        ufw allow out ntp && \
-        ufw allow out 53/udp && \
         mkdir /root/go && \
         echo "export PATH=$PATH:/root/go/bin" > /root/.bash_profile && \
         echo "export GOPATH=/root/go" >> /root/.bash_profile && \
