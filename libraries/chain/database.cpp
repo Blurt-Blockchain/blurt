@@ -3830,7 +3830,7 @@ void database::apply_hardfork( uint32_t hardfork )
       case BLURT_HARDFORK_0_3:
          break;
       case BLURT_HARDFORK_0_4: {
-         for (const std::string &line : hardfork3::get_accounts()) {
+         for (const std::string &line : hardfork4::get_accounts()) {
             account_snapshot ss_account = fc::json::from_string(line).as<account_snapshot>();
             ilog("update account_auth for ${a}", ("a", ss_account.name));
             const auto &account_auth = get<account_authority_object, by_account>(ss_account.name);
