@@ -1,0 +1,62 @@
+{
+  "name": "imagehoster",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "test": "make ci-test"
+  },
+  "engines": {
+    "node": ">=10"
+  },
+  "dependencies": {
+    "@hiveio/dhive": "latest",
+    "@koa/cors": "^2.2.1",
+    "abstract-blob-store": "^3.3.4",
+    "aws-sdk": "^2.188.0",
+    "bunyan": "^2.0.2",
+    "busboy": "^0.2.14",
+    "config": "^1.29.4",
+    "dblurt": "^0.1.2",
+    "dsteem": "^0.11.3",
+    "hivesigner": "latest",
+    "koa": "^2.3.0",
+    "koa-router": "^7.4.0",
+    "mmmagic": "^0.5.0",
+    "multihashes": "^0.4.13",
+    "needle": "^2.1.1",
+    "node-gyp": "^7.1.0",
+    "ratelimiter": "^3.0.3",
+    "redis": "^2.8.0",
+    "s3-blob-store": "^3.2.0",
+    "sharp": "^0.27.1",
+    "stream-head": "^1.1.0",
+    "toml": "^2.3.3"
+  },
+  "devDependencies": {
+    "@types/bunyan": "^1.8.2",
+    "@types/busboy": "^0.2.3",
+    "@types/bytebuffer": "^5.0.36",
+    "@types/config": "0.0.34",
+    "@types/koa": "^2.0.39",
+    "@types/koa__cors": "^2.2.2",
+    "@types/koa-router": "^7.0.23",
+    "@types/mmmagic": "^0.4.29",
+    "@types/mocha": "^5.1.0",
+    "@types/needle": "^2.0.2",
+    "@types/node": "^10.5.2",
+    "@types/ratelimiter": "^2.1.28",
+    "@types/redis": "^2.8.5",
+    "@types/sharp": "^0.21.0",
+    "lodash": "^4.17.12",
+    "mocha": "^8.3.0",
+    "mocha-junit-reporter": "^1.17.0",
+    "nyc": "^14.1.1",
+    "onchange": "^6.1.0",
+    "ts-node": "^7.0.0",
+    "tslint": "^5.16.0",
+    "typescript": "^4.2.3"
+  },
+  "resolutions": {
+    "@dhiveio/dhive": "dblurt@latest"
+  }
+}

@@ -3,7 +3,8 @@
 #include "test_objects.hpp"
 #include "test_templates.hpp"
 
-#include <boost/test/unit_test.hpp>
+#include <boost/test/included/unit_test.hpp>
+
 #include <blurt/utilities/database_configuration.hpp>
 #include <iostream>
 

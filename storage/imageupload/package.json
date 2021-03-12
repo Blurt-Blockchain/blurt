@@ -1,0 +1,31 @@
+{
+  "name": "imageupload",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node $NODE_DEBUG_OPTION src/index.js",
+    "test": "mocha 'test/upload_test.js' --timeout 30s --exit $NODE_DEBUG_OPTION"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@blurtfoundation/blurtjs": "^0.1.1",
+    "aws-sdk": "^2.854.0",
+    "body-parser": "^1.19.0",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "fs": "0.0.1-security",
+    "ipfs-http-client": "^49.0.2",
+    "node-fetch": "^2.6.1",
+    "node-sha1": "^1.0.1",
+    "rate-limiter-flexible": "^2.2.1",
+    "ripemd160": "^2.0.2"
+  },
+  "devDependencies": {
+    "chai": "^4.3.0",
+    "datauri": "^3.0.0",
+    "mocha": "^8.3.0",
+    "supertest": "^6.1.3"
+  }
+}

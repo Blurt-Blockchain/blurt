@@ -95,7 +95,6 @@ programs/build_helpers/cat-parts
 programs/size_checker/size_checker
 programs/util/get_dev_key
 programs/util/inflation_model
-
 tests/app_test
 tests/chain_bench
 tests/chain_test
@@ -105,5 +104,284 @@ tests/performance_test
 
 # Build directories
 build/
-build.*/
-build-*/
+
+
+# Condenser things
+ui/condenser/.DS_Store
+ui/condenser/.coverage
+ui/condenser/node_modules
+ui/condenser/*.log
+ui/condenser/yarn.lock
+ui/condenser/dist
+ui/condenser/.idea/*
+ui/condenser/vendor/*
+ui/condenser/tmp/*
+ui/condenser/.vagrant
+ui/condenser/lib
+
+# client-libraries
+client-libs/blurtjs/dist/*
+client-libs/blurtjs/lib/*
+client-libs/dblurt/dist/*
+client-libs/dblurt/lib/*
+client-libs/dblurt/docs/*
+
+
+# imagehoster
+
+storage/imagehoster/node_modules/
+storage/imagehoster/lib/
+storage/imagehoster/reports/
+storage/imagehoster/.nyc_output/
+storage/imagehoster/config/local*
+
+### YO #######
+# Byte-compiled / optimized / DLL files
+client-libs/jussi/__pycache__/
+client-libs/jussi/*.py[cod]
+client-libs/jussi/*$py.class
+
+# C extensions
+client-libs/jussi/*.so
+
+# Distribution / packaging
+client-libs/jussi/.Python
+client-libs/jussi/env/
+client-libs/jussi/build/
+client-libs/jussi/develop-eggs/
+client-libs/jussi/dist/
+client-libs/jussi/downloads/
+client-libs/jussi/eggs/
+client-libs/jussi/.eggs/
+client-libs/jussi/lib/
+client-libs/jussi/lib64/
+client-libs/jussi/parts/
+client-libs/jussi/sdist/
+client-libs/jussi/var/
+client-libs/jussi/*.egg-info/
+client-libs/jussi/.installed.cfg
+client-libs/jussi/*.egg
+
+# PyInstaller
+#  Usually these files are written by a python script from a template
+#  before PyInstaller builds the exe, so as to inject date/other infos into it.
+client-libs/jussi/*.manifest
+client-libs/jussi/*.spec
+
+# Installer logs
+client-libs/jussi/pip-log.txt
+client-libs/jussi/pip-delete-this-directory.txt
+
+# Unit tests / coverage reports
+client-libs/jussi/htmlcov/
+client-libs/jussi/.tox/
+client-libs/jussi/.coverage
+client-libs/jussi/.coverage.*
+client-libs/jussi/.cache
+client-libs/jussi/nosetests.xml
+client-libs/jussi/coverage.xml
+client-libs/jussi/*,cover
+client-libs/jussi/.hypothesis/
+
+# Translations
+client-libs/jussi/*.mo
+client-libs/jussi/*.pot
+
+# Django stuff:
+client-libs/jussi/*.log
+client-libs/jussi/local_settings.py
+
+# Flask stuff:
+client-libs/jussi/instance/
+client-libs/jussi/.webassets-cache
+
+# Scrapy stuff:
+client-libs/jussi/.scrapy
+
+# Sphinx documentation
+client-libs/jussi/docs/_build/
+
+# PyBuilder
+client-libs/jussi/target/
+
+# IPython Notebook
+client-libs/jussi/.ipynb_checkpoints
+
+# pyenv
+client-libs/jussi/.python-version
+client-libs/jussi/.venv/
+
+# celery beat schedule file
+client-libs/jussi/celerybeat-schedule
+
+# dotenv
+client-libs/jussi/.env
+client-libs/jussi/envfile
+
+# virtualenv
+client-libs/jussi/venv/
+client-libs/jussi/ENV/
+
+# Spyder project settings
+client-libs/jussi/.spyderproject
+
+# Rope project settings
+client-libs/jussi/.ropeproject
+
+# Vim
+client-libs/jussi/Session.vim
+
+# Pycharm
+client-libs/jussi/.idea
+
+# mypy
+client-libs/jussi/.mypy_cache
+
+# sqlite db for testing
+client-libs/jussi/*.db
+client-libs/jussi//tests/fast-test.sh
+client-libs/jussi//tests/fastest-test.sh
+client-libs/jussi//tests/sbds-install.sh
+client-libs/jussi//tests/test.sh
+client-libs/jussi//tests/sync.sh
+client-libs/jussi//tests/failed_blocks/
+client-libs/jussi/tests/failed_blocks/
+client-libs/jussi//envdir/
+client-libs/jussi//sbds.egg-info/
+client-libs/jussi//envd/
+client-libs/jussi//tests/envdir-to-envfile.sh
+client-libs/jussi//deploy/
+client-libs/jussi//tests/async_deco.py
+client-libs/jussi//tests/perf/*.json
+client-libs/jussi/service/*/supervise/
+client-libs/jussi/.elasticbeanstalk/
+client-libs/jussi/upstream_traffic.json
+client-libs/jussi/env
+client-libs/jussi/ALT_config.json
+client-libs/jussi/api_initial_schema.json
+client-libs/jussi/api_signatures.json
+client-libs/jussi/Untitled.ipynb
+client-libs/jussi/.pytest_cache
+client-libs/jussi/*.ipynb
+client-libs/jussi/.ipynb_checkpoints
+client-libs/jussi/build
+client-libs/jussi/prof/
+client-libs/jussi/local/
+
+## YO
+# Security-sensitive local config
+client-libs/yo/yo-with-rds.cfg
+
+# Byte-compiled / optimized / DLL files
+client-libs/yo/__pycache__/
+client-libs/yo/*.py[cod]
+client-libs/yo/*$py.class
+
+# C extensions
+client-libs/yo/*.so
+
+# Distribution / packaging
+client-libs/yo/.Python
+client-libs/yo/env/
+client-libs/yo/build/
+client-libs/yo/develop-eggs/
+client-libs/yo/dist/
+client-libs/yo/downloads/
+client-libs/yo/eggs/
+client-libs/yo/.eggs/
+client-libs/yo/lib/
+client-libs/yo/lib64/
+client-libs/yo/parts/
+client-libs/yo/sdist/
+client-libs/yo/var/
+client-libs/yo/*.egg-info/
+client-libs/yo/.installed.cfg
+client-libs/yo/*.egg
+
+# PyInstaller
+#  Usually these files are written by a python script from a template
+#  before PyInstaller builds the exe, so as to inject date/other infos into it.
+client-libs/yo/*.manifest
+client-libs/yo/*.spec
+
+# Installer logs
+client-libs/yo/pip-log.txt
+client-libs/yo/pip-delete-this-directory.txt
+
+# Unit tests / coverage reports
+client-libs/yo/htmlcov/
+client-libs/yo/.tox/
+client-libs/yo/.coverage
+client-libs/yo/.coverage.*
+client-libs/yo/.cache
+client-libs/yo/nosetests.xml
+client-libs/yo/coverage.xml
+client-libs/yo/*,cover
+client-libs/yo/.hypothesis/
+
+# Translations
+client-libs/yo/*.mo
+client-libs/yo/*.pot
+
+# Django stuff:
+client-libs/yo/*.log
+client-libs/yo/local_settings.py
+
+# Flask stuff:
+client-libs/yo/instance/
+client-libs/yo/.webassets-cache
+
+# Scrapy stuff:
+client-libs/yo/.scrapy
+
+# Sphinx documentation
+client-libs/yo/docs/_build/
+
+# PyBuilder
+client-libs/yo/target/
+
+# IPython Notebook
+client-libs/yo/.ipynb_checkpoints
+
+# pyenv
+client-libs/yo/.python-version
+# celery beat schedule file
+client-libs/yo/celerybeat-schedule
+
+# dotenv
+client-libs/yo/.env
+client-libs/yo/envfile
+
+# virtualenv
+client-libs/yo/venv/
+client-libs/yo/ENV/
+client-libs/yo/.venv
+
+# Spyder project settings
+client-libs/yo/.spyderproject
+
+# Rope project settings
+client-libs/yo/.ropeproject
+
+# Vim
+client-libs/yo/Session.vim
+
+# Pycharm
+client-libs/yo/.idea
+
+# sqlite db for testing
+client-libs/yo/*.db
+client-libs/yo/tests/fast-test.sh
+client-libs/yo/tests/fastest-test.sh
+client-libs/yo/tests/sbds-install.sh
+client-libs/yo/tests/test.sh
+client-libs/yo/tests/sync.sh
+client-libs/yo/tests/failed_blocks/
+client-libs/yo/tests/failed_blocks/
+client-libs/yo/envdir/
+client-libs/yo/sbds.egg-info/
+client-libs/yo/envd/
+client-libs/yo/tests/envdir-to-envfile.sh
+client-libs/yo/deploy/
+client-libs/yo/.DS_Store
+client-libs/yo/.pytest_cache

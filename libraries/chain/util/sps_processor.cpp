@@ -28,7 +28,6 @@ bool sps_processor::is_maintenance_period( const time_point_sec& head_time ) con
 
 void sps_processor::remove_proposals( const time_point_sec& head_time )
 {
-   FC_TODO("implement proposal removal based on automatic actions")
    auto& proposalIndex = db.get_mutable_index< proposal_index >();
    auto& byEndDateIdx = proposalIndex.indices().get< by_end_date >();
 

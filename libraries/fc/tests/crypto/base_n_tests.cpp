@@ -1,4 +1,5 @@
-#include <boost/test/unit_test.hpp>
+#include <boost/test/included/unit_test.hpp>
+
 
 #include <fc/crypto/hex.hpp>
 #include <fc/crypto/base32.hpp>

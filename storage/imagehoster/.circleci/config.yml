@@ -1,0 +1,45 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: docker:17
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run: docker build .
+  test:
+    docker:
+      - image: node:10-alpine
+    steps:
+      - run:
+          >
+            apk add --no-cache
+            bash build-base fftw-dev git make python
+      - run:
+          >
+            apk add --no-cache
+            --repository https://dl-4.alpinelinux.org/alpine/edge/main
+            --repository http://dl-4.alpinelinux.org/alpine/edge/testing
+            vips-dev
+      - checkout
+      - restore_cache:
+          keys:
+          - node10-dependencies-{{ checksum "yarn.lock" }}
+          - node10-dependencies-
+      - run: yarn install --frozen-lockfile
+      - save_cache:
+          paths:
+            - node_modules
+          key: node10-dependencies-{{ checksum "yarn.lock" }}
+      - run: yarn test
+      - store_test_results:
+          path: reports
+      - store_artifacts:
+          path: reports
+          destination: reports
+workflows:
+  version: 2
+  build:
+    jobs:
+      - build
+      - test

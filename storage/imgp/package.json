@@ -1,0 +1,33 @@
+{
+  "name": "imgp",
+  "version": "1.0.0",
+  "description": "image proxy",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "NODE_ENV=development babel-node ./src/server.js",
+    "build": "NODE_ENV=production babel src -d build",
+    "production": "node ./build/server"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@babel/cli": "^7.7.0",
+    "@babel/core": "^7.7.2",
+    "@babel/node": "^7.7.0",
+    "@babel/plugin-transform-modules-commonjs": "^7.7.0",
+    "@babel/plugin-transform-runtime": "^7.6.2",
+    "@babel/preset-env": "^7.7.1",
+    "@babel/register": "^7.7.0",
+    "@babel/runtime": "^7.7.2",
+    "@blurtfoundation/blurtjs": "^0.1.1",
+    "babel-loader": "^8.0.6",
+    "btoa": "^1.2.1",
+    "config.json": "^0.0.4",
+    "express": "^4.16.4",
+    "needle": "^2.4.0",
+    "normalize-url": "^3.3.0",
+    "query-string": "^6.2.0",
+    "sharp": "^0.27.2"
+  }
+}

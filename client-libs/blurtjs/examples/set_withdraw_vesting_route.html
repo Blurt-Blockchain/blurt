@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Blurt.js Stream</title>
+  </head>
+  <body>
+    <script src="https://cdn.jsdelivr.net/npm/@blurtfoundation/blurtjs/dist/blurt.min.js"></script>
+    <script>
+      blurt.api.setOptions({
+        url: "https://rpc.blurt.world",
+        useAppbaseApi: true,
+      });
+
+      /** set withdraw vesting route */
+      blurt.broadcast.setWithdrawVestingRoute(
+        "5J_active_key", // active or owner key
+        "guest123", // from_account
+        "guest321", // to_account
+        10000, // percent (The percent of the withdraw to go to the ‘to’ account.)
+        false, // auto_vest (Set to true if the from account should receive the VESTS as VESTS (BLURT POWER), or false if it should receive them as liquid BLURT)
+        function (err, result) {
+          console.log(err, result);
+        }
+      );
+    </script>
+  </body>
+</html>

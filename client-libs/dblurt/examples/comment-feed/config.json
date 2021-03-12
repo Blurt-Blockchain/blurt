@@ -1,0 +1,27 @@
+{
+  "locals": {
+    "name": "comments.esteem.app",
+    "description": "Watch all comments on the steem blockchain in real time!",
+    "author": "Johan Nordberg",
+    "version": "1.0.1"
+  },
+  "ignore": ["**/.DS_Store", "styles/**/*", "scripts/**/*"],
+  "browserify": {
+    "debug": true,
+    "watchify": false,
+    "extensions": [".ts"],
+    "plugins": ["tsify"],
+    "staticLibs": ["@hiveio/dhive"],
+    "staticLibsBundle": true
+  },
+  "stylus": {
+    "include css": true,
+    "dependencies": ["nib"]
+  },
+  "plugins": [
+    "wintersmith-browserify",
+    "wintersmith-livereload",
+    "wintersmith-nunjucks",
+    "wintersmith-stylus"
+  ]
+}

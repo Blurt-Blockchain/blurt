@@ -2,53 +2,284 @@ stages:
   - build-env
   - build
   - docker
-  - images
-  - pdfs
   - test
+  - devices
+  - staging
+  - production
+  - deploy
 
 
+condenser-docker-test:
+  needs: []
+  stage: build
+  script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker buildx build --file ui/condenser/Dockerfile --cache-from $CI_REGISTRY_IMAGE/condenser:cache --cache-to $CI_REGISTRY_IMAGE/condenser:cache --platform linux/amd64 ./ui/condenser
+  tags:
+    - shell-arch
+  except:
+    - dev
 
+condenser-docker-test-arm:
+  needs: []
+  stage: build
+  script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker buildx build --file ui/condenser/Dockerfile --cache-from $CI_REGISTRY_IMAGE/condenser-arm64:cache --cache-to $CI_REGISTRY_IMAGE/condenser-arm64:cache --platform linux/arm64 ./ui/condenser
+  tags:
+    - arm64-shell
+  except:
+    - dev
+
+condenser-docker-push:
+  needs: []
+  stage: build
+  script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker buildx build --file ui/condenser/Dockerfile --tag $CI_REGISTRY_IMAGE/condenser:$CI_COMMIT_BRANCH --cache-from $CI_REGISTRY_IMAGE/condenser:cache --cache-to $CI_REGISTRY_IMAGE/condenser:cache --push --platform linux/amd64 ./ui/condenser
+  tags:
+    - shell-arch
+  only:
+    - dev
+
+
+condenser-docker-push-arm:
+  needs: []
+  stage: build
+  script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker buildx build --file ui/condenser/Dockerfile --tag $CI_REGISTRY_IMAGE/condenser-arm64:$CI_COMMIT_BRANCH --cache-from $CI_REGISTRY_IMAGE/condenser-arm64:cache --cache-to $CI_REGISTRY_IMAGE/condenser-arm64:cache --push --platform linux/arm64 ./ui/condenser
+  tags:
+    - arm64-shell
+  only:
+    - dev
+
+# This happens at each commit to "dev", so we don't need to pull when going to production, though we may want to consider a tagging system or something. 
+# For now, let the build ruh, check staging.blurt.world and then if it looks OK, use the others. 
+condenser-staging:
+  needs: 
+    - condenser-docker-push
+  stage: staging
+  script: 
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker pull $CI_REGISTRY_IMAGE/condenser:$CI_COMMIT_BRANCH
+    - docker stop staging || true
+    - docker rm staging || true
+    - docker run -d --name staging --env NODE_ENV=production -p 6969:6969 --env PORT=6969 --env SDC_SITE_DOMAIN=staging.blurt.world --env SDC_SESSION_SECRETKEY="$SDC_SESSION_SECRETKEY" $CI_REGISTRY_IMAGE/condenser:$CI_COMMIT_BRANCH
+  tags:
+    - shell-arch
+  only:
+    - dev
+
+condenser-production-world:
+  needs: 
+    - condenser-docker-push
+  when: manual
+  stage: production
+  script: 
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker stop world || true
+    - docker rm world || true
+    - docker run -d --name world --env NODE_ENV=production -p 69:69 --env PORT=69 --env SDC_SITE_DOMAIN=blurt.world --env SDC_UPLOAD_IMAGE_URL=https://blurt.world/imagesup/ --env SDC_IMAGE_PROXY_PREFIX=https://blurt.world/imagesup/ --env SDC_SESSION_SECRETKEY="$SDC_SESSION_SECRETKEY" $CI_REGISTRY_IMAGE/condenser:$CI_COMMIT_BRANCH
+  tags:
+    - shell-arch
+  only:
+    - dev
+
+condenser-staging-latam:
+  needs: 
+    - condenser-docker-push
+  stage: staging
+  script: 
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker stop world || true
+    - docker rm world || true
+    - docker run -d --name world --env NODE_ENV=production -p 69:69 --env PORT=69 --env SDC_SITE_DOMAIN=staging.blurtlatam.com --env SDC_SESSION_SECRETKEY="$SDC_SESSION_SECRETKEY" $CI_REGISTRY_IMAGE/condenser:$CI_COMMIT_BRANCH
+  tags:
+    - blurtlatam
+  only:
+    - dev
+
+condenser-production-latam:
+  needs: 
+    - condenser-docker-push
+  when: manual
+  stage: production
+  script: 
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker stop world || true
+    - docker rm world || true
+    - docker run -d --name world --env NODE_ENV=production -p 69:6969 --env PORT=6969 --env SDC_SITE_DOMAIN=blurtlatam.com --env SDC_UPLOAD_IMAGE_URL=https://blurt.blog/imagesup --env SDC_SESSION_SECRETKEY="$SDC_SESSION_SECRETKEY" $CI_REGISTRY_IMAGE/condenser:$CI_COMMIT_BRANCH
+  tags:
+    - blurtlatam
+  only:
+    - dev
+
+# Caddy can be automated so that people who buy servers will only need to click to deploy.
+#caddy-latam:
+#  when: manual
+#  stage: production
+#  script:
+#    - docker run -d --name caddy caddy caddy reverse-proxy --from :2016 --to 127.0.0.1:9000    
+
+
+condenser-production-blog:
+  needs: 
+    - condenser-docker-push
+  when: manual
+  stage: production
+  script: 
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker stop blog || true
+    - docker rm blog || true
+    - docker run -d --name blog --env NODE_ENV=production -p 569:569 --env PORT=569 --env SDC_SITE_DOMAIN=blurt.blog --env SDC_UPLOAD_IMAGE_URL=https://blurt.blog/imagesup --env SDC_IMAGE_PROXY_PREFIX=https://blurt.world/imagesup --env SDC_SESSION_SECRETKEY="$SDC_SESSION_SECRETKEY" $CI_REGISTRY_IMAGE/condenser:$CI_COMMIT_BRANCH
+  tags:
+    - shell-arch
+  only:
+    - dev
+
+
+imgp test build:
+  needs: []
+  stage: build
+  script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker pull --platform linux/arm64 lopsided/archlinux
+    - docker pull --platform linux/amd64 lopsided/archlinux
+    - docker buildx build --file storage/imgp/Dockerfile --platform linux/arm64,linux/amd64 ./storage/imgp
+  tags:
+    - amd64-shell
+  except:
+    - dev
+
+
+imgp container push:
+  needs: []
+  stage: build
+  script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker pull --platform linux/arm64 lopsided/archlinux
+    - docker pull --platform linux/amd64 lopsided/archlinux
+    - docker buildx build --file storage/imgp/Dockerfile --tag $CI_REGISTRY_IMAGE/imgp:$CI_COMMIT_BRANCH --push --platform linux/arm64,linux/amd64 ./storage/imgp
+  tags:
+    - amd64-shell
+  only:
+    - dev
+
+
+imageupload test build:
+  needs: []
+  stage: build
+  script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker pull --platform linux/arm64 lopsided/archlinux
+    - docker pull --platform linux/amd64 lopsided/archlinux
+    - docker buildx build --file storage/imageupload/Dockerfile --platform linux/arm64,linux/amd64 ./storage/imageupload
+  tags:
+    - amd64-shell
+  except:
+    - dev
+
+
+imagehoster test:
+  needs: []
+  stage: build
+  script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker pull --platform linux/arm64 lopsided/archlinux
+    - docker pull --platform linux/amd64 lopsided/archlinux
+    - docker buildx build --file storage/imagehoster/Dockerfile --platform linux/amd64 ./storage/imagehoster
+  tags:
+    - amd64-shell
+  except:
+    - dev
+
+imagehoster push:
+  needs: []
+  stage: build
+  script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker pull --platform linux/arm64 lopsided/archlinux
+    - docker pull --platform linux/amd64 lopsided/archlinux
+    - docker buildx build --file storage/imagehoster/Dockerfile --tag $CI_REGISTRY_IMAGE/imagehoster:$CI_COMMIT_BRANCH --push --platform linux/amd64 ./storage/imagehoster
+  tags:
+    - amd64-shell
+  only:
+    - dev
+
+
+imageupload container push:
+  needs: []
+  stage: build
+  script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker pull --platform linux/arm64 lopsided/archlinux
+    - docker pull --platform linux/amd64 lopsided/archlinux
+    - docker buildx build --file storage/imageupload/Dockerfile --tag $CI_REGISTRY_IMAGE/imageupload:$CI_COMMIT_BRANCH --push --platform linux/arm64,linux/amd64 ./storage/imageupload
+  tags:
+    - amd64-shell
+  only:
+    - dev
+
+instablurt-amd64:
+  needs: []
+  when: manual
+  stage: docker
+  script:
+    - docker rm instablurt-amd64
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker run -d --name instablurt-amd64 $CI_REGISTRY_IMAGE/witness:dev
+    - sleep 9000
+    - docker commit instablurt-amd64
+    - tocker tag instablurt-amd64 $CI_REGISTRY/instablurt-amd64
+  tags: 
+    - shell-arch
+
+
+instablurt-arm64:
+  needs: []
+  when: manual
+  stage: docker
+  script:
+    - docker rm instablurt-arm64
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker run -d --net=host --restart=unless-stopped --name instablurt-arm64 faddat/arm-blurt-presync /usr/bin/blurtd --data-dir /blurtd --plugin "witness account_by_key account_by_key_api condenser_api database_api network_broadcast_api transaction_status transaction_status_api rc_api" --p2p-seed-node 172.26.41.78:1776 --p2p-seed-node 172.26.179.68:1776 --p2p-seed-node 172.26.116.111:1776 --p2p-seed-node 172.26.71.157:1776 --p2p-seed-node 172.26.215.48:1776 --p2p-seed-node 172.26.210.82:1776 --p2p-seed-node 172.26.84.164:1776 --p2p-seed-node 172.26.106.151:1776
+    - sleep 3000
+    - docker commit instablurt-arm64
+    - tocker tag instablurt-amd64 $CI_REGISTRY_IMAGE/instablurt-arm64
+  tags: 
+    - arm64-shell
+
+
+# Hard Fork 3
 testnet:
-    image: conanio/clang11
-    before_script:
-    - sudo apt-get update -qq
-    - sudo apt-get install -qq doxygen
-    - conan config set storage.path="${CI_PROJECT_DIR}/.cache/conan"
-    # Pull in submodules
-    - git submodule update --init --recursive
-    # ccache for acceleration
-    - mkdir -p ccache
-    - export CCACHE_BASEDIR=${PWD}
-    - export CCACHE_DIR=${PWD}/ccache
     stage: build
+    variables:
+      CC: "ccache clang"
+      CXX: "ccache clang++"
     needs: []
     script:
     - mkdir build
     - cd build
     - conan install .. -s compiler=clang -s compiler.libcxx=libstdc++11 -if=. -pr=default --build=missing
-    # Testnet Build Config:   # LOW_MEMORY=OFF CLEAR_VOTES=OFF TESTNET=ON ENABLE_MIRA=OFF <- thx hive
-    - cmake -DBLURT_STATIC_BUILD=ON -DLOW_MEMORY_NODE=OFF -DCLEAR_VOTES=OFF -WINT_IN_BOOL_CONTEXT=OFF -DBUILD_BLURT_TESTNET=ON -DSKIP_BY_TX_ID=ON -DBLURT_LINT_LEVEL=OFF -DENABLE_MIRA=OFF -DCMAKE_BUILD_TYPE=Release ..
+    - cmake -DBLURT_STATIC_BUILD=ON -DLOW_MEMORY_NODE=OFF -DCLEAR_VOTES=OFF -WINT_IN_BOOL_CONTEXT=OFF -DBUILD_BLURT_TESTNET=ON -DSKIP_BY_TX_ID=ON -DBLURT_LINT_LEVEL=FULL -DENABLE_MIRA=OFF -DCMAKE_BUILD_TYPE=Release ..
     - make -j$(nproc) blurtd cli_wallet
-  # cli wallet is only used for witness, so we capture it from the witness build
     tags:
-    - metal
+    - shell-arch
     artifacts:
       paths:
-        - /builds/blurt/blurt/build/bin/
+        - build/bin/
 
-# Took sonarcloud's default multi-stage thing and made it a single stage.
 sonarcloud: 
   stage: test
-  image: conanio/clang10
+  tags: 
+    - shell-arch
+  needs: []
   variables:
+    CC: "ccache clang"
+    CXX: "ccache clang++"
     SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"  # Defines the location of the analysis task cache
     GIT_DEPTH: "0"  # Tells git to fetch all the branches of the project, required by the analysis task
-    # note that variables SONAR_HOST_URL and SONAR_TOKEN are transmitted to the environament through Gitlab CI
-
-  # this job sdownloads ans unpacks the build-wrapper and the sonar-scanner
-  # in this example it is done for every build.
-  # This can be optimized by caching the files or better, by including them, in the build docker image
-
   script:
     # Download build-wrapper
     - curl "${SONAR_HOST_URL}/static/cpp/build-wrapper-linux-x86.zip" --output build-wrapper-linux-x86.zip
@@ -59,21 +290,14 @@ sonarcloud:
     - curl 'https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.2.0.1873-linux.zip' --output sonar-scanner-cli-4.2.0.1873-linux.zip
     - unzip sonar-scanner-cli-4.2.0.1873-linux.zip
     - mv sonar-scanner-4.2.0.1873-linux sonar-scanner
-# NO CACHE: SINGLE-STAGE
-#  cache:
-#    policy: push
-#    key: "${CI_COMMIT_SHORT_SHA}"
-#    paths:
-#      - build-wrapper-linux-x86/ # to share the build-wrapper between jobs
-#      - sonar-scanner/           # to share the sonar-scanner between jobs
-    # prepare the build tree
+    # Configure and compile blurt
     - mkdir build
     - cd build
     - conan install .. -s compiler=clang -s compiler.libcxx=libstdc++11 -if=. -pr=default --build=missing
-    - cmake -DBLURT_STATIC_BUILD=ON -DLOW_MEMORY_NODE=ON -DCLEAR_VOTES=ON -DBUILD_BLURT_TESTNET=OFF -DSKIP_BY_TX_ID=ON -DBLURT_LINT_LEVEL=OFF -DENABLE_MIRA=ON -DCMAKE_BUILD_TYPE=Release ..
+    - cmake -DBLURT_STATIC_BUILD=ON -DLOW_MEMORY_NODE=ON -DCLEAR_VOTES=ON -WINT_IN_BOOL_CONTEXT=OFF -DBUILD_BLURT_TESTNET=OFF -DSKIP_BY_TX_ID=ON -DBLURT_LINT_LEVEL=OFF -DENABLE_MIRA=ON -DCMAKE_BUILD_TYPE=Release ..
     - cd ..
     # run the build inside the build wrapper
-    - build-wrapper-linux-x86/build-wrapper-linux-x86-64 --out-dir build_wrapper_output_directory cmake --build build/ --config Release
+    - build-wrapper-linux-x86/build-wrapper-linux-x86-64 --out-dir . cmake --build build/ --config Release --parallel --target blurtd cli_wallet
     - sonar-scanner/bin/sonar-scanner -X -Dsonar.host.url="${SONAR_HOST_URL}" -Dsonar.token="${SONAR_TOKEN}"
   artifacts:
     paths:
@@ -111,24 +335,27 @@ lm no mira:
         - /builds/blurt/blurt/build/bin/
 
 
+
+# DISABLED BECAUSE OF ISSUES WITH LOPSIDED/ARCHLINUX
+# Specifically, an archlinux-keyring issue
 megadrive-build-env:
   stage: build-env
+  when: manual
   script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-    - docker buildx build --file megadrive/build/Dockerfile --tag $CI_REGISTRY_IMAGE/md-env --push --platform linux/arm64,linux/amd64 .
+    - docker buildx build --file contrib/Dockerfiles/builder/Dockerfile --tag $CI_REGISTRY_IMAGE/md-env --push --platform linux/arm64,linux/amd64 .
   tags:
     - amd64-shell
 
 
-
-
+# Builds blurt arm64-ified
 megadrive-build-ubuntu:
   stage: build
   script:
     - mkdir build
     - cd build
     - conan install .. -s compiler=clang -s compiler.libcxx=libstdc++11 -if=. -pr=default --build=missing
-    - cmake -DBLURT_STATIC_BUILD=ON -DLOW_MEMORY_NODE=ON -DCLEAR_VOTES=ON -DBUILD_BLURT_TESTNET=OFF -DSKIP_BY_TX_ID=ON -DBLURT_LINT_LEVEL=OFF -DENABLE_MIRA=OFF -DCMAKE_BUILD_TYPE=Release ..
+    - cmake -DBLURT_STATIC_BUILD=ON -DLOW_MEMORY_NODE=ON -DCLEAR_VOTES=ON -WINT_IN_BOOL_CONTEXT=OFF -DBUILD_BLURT_TESTNET=OFF -DSKIP_BY_TX_ID=ON -DBLURT_LINT_LEVEL=FULL -DENABLE_MIRA=OFF -DCMAKE_BUILD_TYPE=Release ..
     - make -j$(nproc) blurtd cli_wallet
   tags:
     - arm64-shell
@@ -136,13 +363,15 @@ megadrive-build-ubuntu:
     paths:
       - build/bin
 
-megadrive-build-ubuntu-highmem:
+
+# Builds blurt arm64 testnet
+megadrive-testnet-ubuntu:
   stage: build
   script:
     - mkdir build
     - cd build
     - conan install .. -s compiler=clang -s compiler.libcxx=libstdc++11 -if=. -pr=default --build=missing
-    - cmake -DBLURT_STATIC_BUILD=ON -DLOW_MEMORY_NODE=OFF -DCLEAR_VOTES=ON -DBUILD_BLURT_TESTNET=OFF -DSKIP_BY_TX_ID=ON -DBLURT_LINT_LEVEL=OFF -DENABLE_MIRA=OFF -DCMAKE_BUILD_TYPE=Release ..
+    - cmake -DBLURT_STATIC_BUILD=ON -DLOW_MEMORY_NODE=ON -DCLEAR_VOTES=ON -WINT_IN_BOOL_CONTEXT=OFF -DBUILD_BLURT_TESTNET=ON -DSKIP_BY_TX_ID=ON -DBLURT_LINT_LEVEL=FULL -DENABLE_MIRA=OFF -DCMAKE_BUILD_TYPE=Release ..
     - make -j$(nproc) blurtd cli_wallet
   tags:
     - arm64-shell
@@ -150,15 +379,12 @@ megadrive-build-ubuntu-highmem:
     paths:
       - build/bin
 
-
-cryptopie:
-  needs: 
-    - megadrive-build-ubuntu
-  dependencies:
-    - megadrive-build-ubuntu
-  stage: images
+# construct the light cryptopie device image.  runs blurt on sos-lite as a container.
+raspberrypi4:
+  when: manual
+  needs: []
+  stage: devices
   script:
-    - docker buildx build --file contrib/cryptopie/Dockerfile --platform linux/arm64 --tag cryptopie --load --progress plain .
     - bash contrib/cryptopie/build.sh
     - xz -T $(nproc) images/cryptopie.img
     - export STAMP=$(date "+%F-%T")
@@ -167,21 +393,61 @@ cryptopie:
   tags:
     - shell-arch
 
-megadrive-light-oroid-c2:
-  needs: 
-    - megadrive-build-ubuntu
-  dependencies:
-    - megadrive-build-ubuntu
-  stage: images
+# construct the light odroid-c2 device image.  runs blurt on sos-lite as a container.
+oroid-c2:
+  when: manual
+  needs: []
+  stage: devices
   script:
-    - docker buildx build --file megadrive/c2-light/Dockerfile --platform linux/arm64 --tag c2 --load --progress plain .
-    - bash megadrive/c2-light/build.sh
+    - bash contrib/c2/build.sh
     - xz -T $(nproc) images/megadrive-light.img
     - export STAMP=$(date "+%F-%T")
-    - mv images/megadrive-light.img.xz /static/megadrive-light/megadrive-light-c2-$(echo $STAMP).img.xz
-    - sudo ipfs add -Q /static/megadrive-light/megadrive-light-c2-$(echo $STAMP).img.xz > /static/megadrive-light/megadrive-light-c2$(echo $STAMP).html
+    - mv images/megadrive-light.img.xz /static/c2-light/c2-light-$(echo $STAMP).img.xz
+    - sudo ipfs add -Q /static/c2-light/c2-light-$(echo $STAMP).img.xz > /static/c2-light/c2-light-$(echo $STAMP).html
   tags:
     - shell-arch
+
+# Release new versions of blurtjs
+blurtjs:
+  image: node:latest
+  needs: []
+  stage: deploy
+  when: manual
+  variables:
+    NPM_TOKEN: ${CI_JOB_TOKEN}
+  script:
+    - npm ci --cache .npm --prefer-offline
+    - |
+      {
+        echo "@${CI_PROJECT_ROOT_NAMESPACE}:registry=${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/npm/"
+        echo "${CI_API_V4_URL#https?}/projects/${CI_PROJECT_ID}/packages/npm/:_authToken=\${CI_JOB_TOKEN}"
+      } | tee --append .npmrc
+    - cd client-libs/blurtjs
+    - yarn install
+    - yarn build
+    - npm adduser
+    - npm run semantic-release
+
+
+# Release changes to dblurt
+dblurt:
+  image: node:latest
+  needs: []
+  stage: deploy
+  when: manual
+  variables:
+    NPM_TOKEN: ${CI_JOB_TOKEN}
+  script:
+    - npm ci --cache .npm --prefer-offline
+    - |
+      {
+        echo "@${CI_PROJECT_ROOT_NAMESPACE}:registry=${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/npm/"
+        echo "${CI_API_V4_URL#https?}/projects/${CI_PROJECT_ID}/packages/npm/:_authToken=\${CI_JOB_TOKEN}"
+      } | tee --append .npmrc
+    - cd client-libs/dblurt
+    - yarn install
+    - npm adduser
+    - npm run semantic-release
 
 # construct the megadrive arch container
 megadrive-container:
@@ -192,23 +458,36 @@ megadrive-container:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - docker buildx build --file contrib/Dockerfiles/ci/Dockerfile --platform linux/arm64 --tag $CI_REGISTRY_IMAGE/megadrive:$CI_COMMIT_BRANCH --push --progress plain .
   tags:
-    - shell-arch
+    - amd64-shell
   dependencies:
     - megadrive-build-ubuntu
-
-
-
-
+  
+# construct the megadrive arch container
+megadrive-testnet-container:
+  needs: 
+    - megadrive-testnet-ubuntu
+  stage: docker
+  script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker buildx build --file contrib/Dockerfiles/ci/Dockerfile --platform linux/arm64 --tag $CI_REGISTRY_IMAGE/megadrive:$CI_COMMIT_BRANCH --push --progress plain .
+  tags:
+    - amd64-shell
+  dependencies:
+    - megadrive-testnet-ubuntu
 
 witness:
   stage: build
+  variables:
+    CC: "ccache clang"
+    CXX: "ccache clang++"
   script:
     - mkdir build
     - cd build
     - conan install .. -s compiler=clang -s compiler.libcxx=libstdc++11 -if=. -pr=default --build=missing
     # Witness Build Config: -DLOW_MEMORY_NODE=ON -DCLEAR_VOTES=ON
-    - cmake -DBLURT_STATIC_BUILD=ON -DLOW_MEMORY_NODE=ON -DCLEAR_VOTES=ON -DBUILD_BLURT_TESTNET=OFF -DSKIP_BY_TX_ID=ON -DBLURT_LINT_LEVEL=OFF -DENABLE_MIRA=OFF -DCMAKE_BUILD_TYPE=Release ..
+    - cmake -DBLURT_STATIC_BUILD=ON -DLOW_MEMORY_NODE=ON -DCLEAR_VOTES=ON -WINT_IN_BOOL_CONTEXT=OFF -DBUILD_BLURT_TESTNET=OFF -DSKIP_BY_TX_ID=ON -DBLURT_LINT_LEVEL=OFF -DENABLE_MIRA=OFF -DCMAKE_BUILD_TYPE=Release ..
     - make -j$(nproc) blurtd cli_wallet
+  # cli wallet is only used for witness, so we capture it from the witness build
   tags:
     - shell-arch
   artifacts:
@@ -216,13 +495,30 @@ witness:
       - build/bin/
   needs: []
 
+
+witness_test:
+  stage: test
+  when: manual
+  script:
+    - ./build/bin/blurtd --resync-blockchain
+  needs: 
+    - witness
+  dependencies:
+    - witness
+  tags: 
+    - shell-arch
+
+
 mira:
   stage: build
+  variables:
+    CC: "ccache clang"
+    CXX: "ccache clang++"
   script:
     - mkdir build
     - cd build
     - conan install .. -s compiler=clang -s compiler.libcxx=libstdc++11 -if=. -pr=default --build=missing
-    - cmake -DBLURT_STATIC_BUILD=ON -DLOW_MEMORY_NODE=ON -DCLEAR_VOTES=ON -DBUILD_BLURT_TESTNET=OFF -DSKIP_BY_TX_ID=ON -DBLURT_LINT_LEVEL=OFF -DENABLE_MIRA=ON -DCMAKE_BUILD_TYPE=Release ..
+    - cmake -DBLURT_STATIC_BUILD=ON -DLOW_MEMORY_NODE=ON -DCLEAR_VOTES=ON -WINT_IN_BOOL_CONTEXT=OFF -DBUILD_BLURT_TESTNET=OFF -DSKIP_BY_TX_ID=ON -DBLURT_LINT_LEVEL=OFF -DENABLE_MIRA=ON -DCMAKE_BUILD_TYPE=Release ..
     - make -j$(nproc) blurtd cli_wallet
   tags:
     - shell-arch
@@ -233,11 +529,14 @@ mira:
 
 rpc:
   stage: build
+  variables:
+    CC: "ccache clang"
+    CXX: "ccache clang++"
   script:
     - mkdir build
     - cd build
     - conan install .. -s compiler=clang -s compiler.libcxx=libstdc++11 -if=. -pr=default --build=missing
-    - cmake -DBLURT_STATIC_BUILD=ON -DLOW_MEMORY_NODE=OFF -DCLEAR_VOTES=OFF -DBUILD_BLURT_TESTNET=OFF -DSKIP_BY_TX_ID=OFF -DBLURT_LINT_LEVEL=OFF -DENABLE_MIRA=OFF -DCMAKE_BUILD_TYPE=Release ..
+    - cmake -DBLURT_STATIC_BUILD=ON -DLOW_MEMORY_NODE=OFF -DCLEAR_VOTES=OFF -WINT_IN_BOOL_CONTEXT=OFF -DBUILD_BLURT_TESTNET=OFF -DSKIP_BY_TX_ID=OFF -DBLURT_LINT_LEVEL=OFF -DENABLE_MIRA=OFF -DCMAKE_BUILD_TYPE=Release ..
     - make -j$(nproc) blurtd cli_wallet
   tags:
     - shell-arch
@@ -245,10 +544,6 @@ rpc:
     paths:
       - build/bin/
   needs: []
-
-
-
-
 
 
 kaniko witness:
@@ -263,7 +558,8 @@ kaniko witness:
   script:
     - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
     - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/contrib/Dockerfiles/ci/Dockerfile --destination $CI_REGISTRY_IMAGE/witness:$CI_COMMIT_BRANCH
-  
+  tags:
+    - metal
 
 kaniko rpc:
   stage: docker
@@ -277,11 +573,27 @@ kaniko rpc:
   script:
     - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
     - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/contrib/Dockerfiles/rpc/Dockerfile --destination $CI_REGISTRY_IMAGE/rpc:$CI_COMMIT_BRANCH
-  
+  tags:
+    - metal
+
+kaniko testnet:
+  stage: docker
+  needs:
+    - testnet
+  dependencies:
+    - testnet
+  image:
+    name: gcr.io/kaniko-project/executor:debug
+    entrypoint: [""]
+  script:
+    - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
+    - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/contrib/Dockerfiles/rpc/Dockerfile --destination $CI_REGISTRY_IMAGE/testnet:$CI_COMMIT_BRANCH
+  tags:
+    - metal
 
 kaniko mira:
   stage: docker
-  needs: 
+  needs:
     - mira
   dependencies:
     - mira
@@ -291,3 +603,11 @@ kaniko mira:
   script:
     - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
     - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/contrib/Dockerfiles/ci/Dockerfile --destination $CI_REGISTRY_IMAGE/mira:$CI_COMMIT_BRANCH
+  tags:
+    - metal
+  
+include:
+  - template: Security/Dependency-Scanning.gitlab-ci.yml
+  - template: Security/License-Scanning.gitlab-ci.yml
+  - template: Security/SAST.gitlab-ci.yml
+  - template: Security/Secret-Detection.gitlab-ci.yml

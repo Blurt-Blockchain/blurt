@@ -1,7 +1,4 @@
 add_executable( blurtd main.cpp )
-if( UNIX AND NOT APPLE )
-  set(rt_library rt )
-endif()
 
 find_package( Gperftools QUIET )
 if( GPERFTOOLS_FOUND )
@@ -11,7 +8,6 @@ endif()
 
 if( BLURT_STATIC_BUILD )
    target_link_libraries( blurtd PRIVATE
-      "-static-libstdc++ -static-libgcc"
       appbase
       blurt_utilities
       blurt_plugins

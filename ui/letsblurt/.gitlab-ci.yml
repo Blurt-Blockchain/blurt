@@ -1,0 +1,42 @@
+stages:
+    - env
+    - build
+    - test
+
+
+# https://www.instamobile.io/android-development/generate-react-native-release-build-android/
+
+
+lets-blurt:
+  needs: []
+  stage: build
+  image: archlinux
+  script:
+    - pacman -Syyu --noconfirm adb npm yarn python git base-devel gradle
+    - yarn global add react-native
+    - npm install
+    - cd android 
+    - react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res/
+    - ./gradlew assembleRelease
+  tags:
+    - metal
+
+builder:
+  stage: env
+  when: manual
+  script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker buildx build --tag $CI_REGISTRY_IMAGE/lbenv --push  .
+  tags:
+    - amd64-shell
+
+
+
+
+include:
+  - template: Security/Dependency-Scanning.gitlab-ci.yml
+  - template: Security/License-Scanning.gitlab-ci.yml
+  - template: Security/SAST.gitlab-ci.yml
+  - template: Security/Secret-Detection.gitlab-ci.yml
+
+

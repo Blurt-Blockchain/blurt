@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Blurt.js Stream</title>
+  </head>
+  <body>
+    <script src="https://cdn.jsdelivr.net/npm/@blurtfoundation/blurtjs/dist/blurt.min.js"></script>
+    <script>
+      blurt.api.setOptions({
+        url: "https://rpc.blurt.world",
+        useAppbaseApi: true,
+      });
+      const GET_BLOCK_INTERVAL = 2500;
+      const GET_GLOBAL_PROPS_INTERVAL = 3000;
+
+      let head_block = 0;
+      let current_block = 0;
+
+      setInterval(function () {
+        blurt.api.getDynamicGlobalProperties(function (err, result) {
+          if (current_block === 0) current_block = result.head_block_number;
+          if (result) head_block = result.head_block_number;
+        });
+      }, GET_GLOBAL_PROPS_INTERVAL);
+
+      setInterval(function () {
+        if (current_block < head_block) {
+          blurt.api.getBlock(
+            current_block, // blockNum
+            function (err, result) {
+              // ... persist last processed block ... //
+              if (!result) return;
+
+              // process non-empty blocks only
+              let { block_id, timestamp, transactions } = result;
+              if (Array.isArray(transactions) && transactions.length) {
+                transactions.forEach(async (tx) => {
+                  let { block_num, operations } = tx;
+                  operations.forEach(async (operation) => {
+                    let [tx_type, tx_data] = operation;
+                    if (tx_type === "transfer") {
+                      console.log("transfer transaction", tx_data);
+                    }
+                  });
+                });
+              }
+            }
+          );
+          current_block = current_block + 1;
+        }
+      }, GET_BLOCK_INTERVAL);
+    </script>
+  </body>
+</html>

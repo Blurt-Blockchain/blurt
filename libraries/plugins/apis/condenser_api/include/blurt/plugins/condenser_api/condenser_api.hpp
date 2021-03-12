@@ -236,6 +236,7 @@ struct api_comment_object
       root_author( c.root_author ),
       root_permlink( c.root_permlink ),
       max_accepted_payout( legacy_asset::from_asset( c.max_accepted_payout ) ),
+      percent_blurt( c.percent_blurt ),
       allow_replies( c.allow_replies ),
       allow_votes( c.allow_votes ),
       allow_curation_rewards( c.allow_curation_rewards )
@@ -288,6 +289,7 @@ struct api_comment_object
    string            root_permlink;
 
    legacy_asset      max_accepted_payout;
+   uint16_t          percent_blurt;
    bool              allow_replies = false;
    bool              allow_votes = false;
    bool              allow_curation_rewards = false;
@@ -984,7 +986,7 @@ FC_REFLECT( blurt::plugins::condenser_api::api_comment_object,
              (children_abs_rshares)(cashout_time)(max_cashout_time)
              (total_vote_weight)(reward_weight)(total_payout_value)(curator_payout_value)(author_rewards)(net_votes)
              (root_author)(root_permlink)
-             (max_accepted_payout)(allow_replies)(allow_votes)(allow_curation_rewards)
+             (max_accepted_payout)(percent_blurt)(allow_replies)(allow_votes)(allow_curation_rewards)
              (beneficiaries)
           )
 

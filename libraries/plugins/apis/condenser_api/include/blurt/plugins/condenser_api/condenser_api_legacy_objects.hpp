@@ -6,7 +6,6 @@
 
 namespace blurt { namespace plugins { namespace condenser_api {
 
-FC_TODO( "Remove when automated actions are created" )
 typedef static_variant<
          void_t,
          version,

@@ -1,0 +1,16 @@
+[settings]
+os=Linux
+os_build=Linux
+arch=armv8
+arch_build=armv8
+compiler=clang
+compiler.version=11
+compiler.libcxx=libstdc++11
+build_type=Release
+[options]
+[build_requires]
+[env]
+CC="ccache clang"
+CXX="ccache clang++"
+
+# If using ccache, do like "ccache clang" and "ccache clang++"

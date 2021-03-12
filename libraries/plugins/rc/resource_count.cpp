@@ -109,14 +109,12 @@ struct count_operation_visitor
 
    void operator()( const set_withdraw_vesting_route_operation& op )const
    {
-      FC_TODO( "Change RC state bytes computation to take SMT's into account" )
       state_bytes_count += _w.withdraw_vesting_route_object_base_size;
       execution_time_count += _e.set_withdraw_vesting_route_operation_exec_time;
    }
 
    void operator()( const vote_operation& op )const
    {
-      FC_TODO( "Change RC state bytes computation to take SMT's into account" )
       state_bytes_count += _w.comment_vote_object_base_size;
       execution_time_count += _e.vote_operation_exec_time;
    }
@@ -131,40 +129,34 @@ struct count_operation_visitor
 
    void operator()( const transfer_operation& )const
    {
-      FC_TODO( "Change RC state bytes computation to take SMT's into account" )
       execution_time_count += _e.transfer_operation_exec_time;
       market_op_count++;
    }
 
    void operator()( const transfer_to_vesting_operation& )const
    {
-      FC_TODO( "Change RC state bytes computation to take SMT's into account" )
       execution_time_count += _e.transfer_to_vesting_operation_exec_time;
       market_op_count++;
    }
 
    void operator()( const transfer_to_savings_operation& )const
    {
-      FC_TODO( "Change RC state bytes computation to take SMT's into account" )
       execution_time_count += _e.transfer_to_savings_operation_exec_time;
    }
 
    void operator()( const transfer_from_savings_operation& )const
    {
-      FC_TODO( "Change RC state bytes computation to take SMT's into account" )
       state_bytes_count += _w.savings_withdraw_object_byte_size;
       execution_time_count += _e.transfer_from_savings_operation_exec_time;
    }
 
    void operator()( const claim_reward_balance_operation& op )const
    {
-      FC_TODO( "Change RC state bytes computation to take SMT's into account" )
       execution_time_count += _e.claim_reward_balance_operation_exec_time;
    }
 
    void operator()( const withdraw_vesting_operation& op )const
    {
-      FC_TODO( "Change RC state bytes computation to take SMT's into account" )
       execution_time_count += _e.withdraw_vesting_operation_exec_time;
    }
 

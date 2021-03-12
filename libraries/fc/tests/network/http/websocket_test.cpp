@@ -1,4 +1,5 @@
-#include <boost/test/unit_test.hpp>
+#include <boost/test/included/unit_test.hpp>
+
 
 #include <fc/network/http/websocket.hpp>
 

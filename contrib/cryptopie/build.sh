@@ -6,6 +6,8 @@ set -exo pipefail
 # Print each command
 set -o xtrace
 
+# Build the system image in Docker
+docker buildx build --file contrib/cryptopie/Dockerfile --platform linux/arm64 --tag cryptopie --load --progress plain .
 
 # docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
 
@@ -64,7 +66,7 @@ rm -rf images || true
 mkdir -p images
 
 # Make the image file
-fallocate -l 3G "images/cryptopie.img"
+fallocate -l 4G "images/cryptopie.img"
 
 # loop-mount the image file so it becomes a disk
 export LOOP=$(sudo losetup --find --show images/cryptopie.img)
@@ -90,14 +92,20 @@ sudo mount $(echo $LOOP)p2 mnt/rootfs
 sudo rsync -a ./.tmp/result-rootfs/boot/* mnt/boot
 sudo rsync -a ./.tmp/result-rootfs/* mnt/rootfs --exclude boot
 sudo mkdir mnt/rootfs/boot
+
+
+# chill for a moment before unmounting
+sleep 20
 sudo umount mnt/boot mnt/rootfs
+sleep 20
+sudo losetup -d $LOOP # drop the loop mount
+
 
 # Tell pi where its memory card is:  This is needed only with the mainline linux kernel provied by linux-aarch64
 # sed -i 's/mmcblk0/mmcblk1/g' ./.tmp/result-rootfs/etc/fstab
 
-# Drop the loop mount
-sudo losetup -d $LOOP
+
 
 # Delete .tmp and mnt
-sudo rm -rf ./.tmp
+sudo rm -rf .tmp
 sudo rm -rf mnt

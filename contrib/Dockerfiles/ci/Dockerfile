@@ -8,8 +8,11 @@ COPY ./build/bin/cli_wallet /usr/bin/cli_wallet
 
 # FETCH DEPENDENCIES AND SNAPSHOT.
 # FETCH SNAPSHOT WITH IPGET, CF IPFS GATEWAY IS UNRELIABLE
-RUN pacman -Syyu --noconfirm ncurses && \
-        ln -s /usr/lib/libncursesw.so.6 /usr/lib/libncurses.so.6
+
+RUN sed -i -e "s/^CheckSpace/#!!!CheckSpace/g" /etc/pacman.conf && \
+        pacman -Syyu --noconfirm ncurses && \
+        ln -s /usr/lib/libncursesw.so.6 /usr/lib/libncurses.so.6 && \
+        sed -i -e "s/^#!!!CheckSpace/CheckSpace/g" /etc/pacman.conf
 
 
 # RUN BLURT

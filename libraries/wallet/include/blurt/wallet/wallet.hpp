@@ -317,7 +317,6 @@ class wallet_api
 
       /** Converts a signed_transaction in JSON form to its binary representation.
        *
-       * TODO: I don't see a broadcast_transaction() function, do we need one?
        *
        * @param tx the transaction to serialize
        * @returns the binary form of the transaction.  It will not be hex encoded,
@@ -910,7 +909,6 @@ class wallet_api
       map< uint32_t, condenser_api::api_operation_object > get_account_history( string account, uint32_t from, uint32_t limit );
 
 
-      FC_TODO(Supplement API argument description)
       /**
        *  Marks one account as following another account.  Requires the posting authority of the follower.
        *

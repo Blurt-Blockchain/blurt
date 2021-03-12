@@ -1,20 +1,17 @@
 # Defines Blurt library target.
 project( Blurt )
-cmake_minimum_required( VERSION 3.2 )
+cmake_minimum_required( VERSION 3.16 )
 
+
+# Configure the chain
 set( BLOCKCHAIN_NAME "Blurt" )
 set( CMAKE_CXX_STANDARD 14 )
-
 set( GUI_CLIENT_EXECUTABLE_NAME Blurt )
 set( CUSTOM_URL_SCHEME "gcs" )
 set( INSTALLER_APP_ID "68ad7005-8eee-49c9-95ce-9eed97e5b347" )
-
-
-list( APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/CMakeModules" )
-
 set(CMAKE_EXPORT_COMPILE_COMMANDS "ON")
 
-
+list( APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/CMakeModules" )
 list( APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/libraries/fc/CMakeModules" )
 list( APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/libraries/fc/GitVersionGen" )
 include( GetGitRevisionDescription )
@@ -66,6 +63,7 @@ endif()
 
 OPTION( CHAINBASE_CHECK_LOCKING "Check locks in chainbase (ON or OFF)" ON )
 MESSAGE( STATUS "CHAINBASE_CHECK_LOCKING: ${CHAINBASE_CHECK_LOCKING}" )
+
 if( CHAINBASE_CHECK_LOCKING )
   SET( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DCHAINBASE_CHECK_LOCKING" )
   SET( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DCHAINBASE_CHECK_LOCKING" )
@@ -88,7 +86,67 @@ endif()
 OPTION( BLURT_STATIC_BUILD "Build blurtd as a static library (ON or OFF)" OFF )
 MESSAGE( STATUS "BLURT_STATIC_BUILD: ${BLURT_STATIC_BUILD}" )
 
-SET( BLURT_LINT_LEVEL "OFF" CACHE STRING "Lint level during blurt build (FULL, HIGH, LOW, OFF)" )
+
+if(EXISTS ${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
+    include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
+    conan_basic_setup()
+    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fvisibility=hidden")
+    SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fvisibility=hidden")
+else()
+    message(WARNING "The file conanbuildinfo.cmake doesn't exist, you have to run conan install first. Will try without conan...")
+
+
+    FIND_PACKAGE(Boost 1.58 REQUIRED COMPONENTS ${BOOST_COMPONENTS})
+
+    if( NOT( Boost_VERSION LESS 106900 ) )
+        SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fvisibility=hidden")
+        SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fvisibility=hidden")
+    endif()
+endif()
+
+
+find_program(CCACHE_FOUND ccache)
+if(CCACHE_FOUND)
+    set_property(GLOBAL PROPERTY RULE_LAUNCH_COMPILE ccache)
+    set_property(GLOBAL PROPERTY RULE_LAUNCH_LINK ccache) # Less useful to do it for linking, see edit2
+endif(CCACHE_FOUND)
+
+
+find_library(READLINE_LIBRARIES NAMES readline)
+find_path(READLINE_INCLUDE_DIR readline/readline.h)
+
+set( CMAKE_CXX_FLAGS "${CMAKE_C_FLAGS} -std=c++14 -Wall" )
+set( pthread_library pthread)
+
+
+
+set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fcolor-diagnostics" )
+
+
+set( CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DDEBUG")
+
+    # based on http://www.delorie.com/gnu/docs/gdb/gdb_70.html
+    # uncomment this line to tell GDB about macros (slows compile times)
+    # set( CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -gdwarf-2 -g3" )
+
+
+set(ENABLE_COVERAGE_TESTING FALSE CACHE BOOL "Build Blurt for code coverage analysis")
+
+if(ENABLE_COVERAGE_TESTING)
+    SET(CMAKE_CXX_FLAGS "--coverage ${CMAKE_CXX_FLAGS}")
+endif()
+
+# fc/src/compress/miniz.c breaks strict aliasing. The Linux kernel builds with no strict aliasing
+SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-strict-aliasing -DBOOST_THREAD_DONT_PROVIDE_PROMISE_LAZY" )
+SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fno-strict-aliasing -DBOOST_THREAD_DONT_PROVIDE_PROMISE_LAZY" )
+
+# external_plugins needs to be compiled first because libraries/app depends on BLURT_EXTERNAL_PLUGINS being fully populated
+add_subdirectory( libraries )
+add_subdirectory( programs )
+add_subdirectory( tests )
+
+# Use clang-tidy as a linter
+SET( BLURT_LINT_LEVEL "OFF" CACHE STRING "Lint level during steem build (FULL, HIGH, LOW, OFF)" )
 find_program(
    CLANG_TIDY_EXE
    NAMES "clang-tidy"
@@ -117,79 +175,9 @@ else()
 endif( NOT CLANG_TIDY_EXE )
 
 
-if(EXISTS ${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
-    include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
-    conan_basic_setup()
-
-    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fvisibility=hidden")
-    SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fvisibility=hidden")
-else()
-    message(WARNING "The file conanbuildinfo.cmake doesn't exist, you have to run conan install first. Will try without conan...")
 
 
-    FIND_PACKAGE(Boost 1.58 REQUIRED COMPONENTS ${BOOST_COMPONENTS})
-
-    if( NOT( Boost_VERSION LESS 106900 ) )
-        SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fvisibility=hidden")
-        SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fvisibility=hidden")
-    endif()
-endif()
-
-
-find_program(CCACHE_FOUND ccache)
-if(CCACHE_FOUND)
-    set_property(GLOBAL PROPERTY RULE_LAUNCH_COMPILE ccache)
-    set_property(GLOBAL PROPERTY RULE_LAUNCH_LINK ccache) # Less useful to do it for linking, see edit2
-endif(CCACHE_FOUND)
-
-
-find_library(READLINE_LIBRARIES NAMES readline)
-find_path(READLINE_INCLUDE_DIR readline/readline.h)
-
-# Linux Specific Options Here
-message( STATUS "Configuring Blurt on Linux" )
-set( CMAKE_CXX_FLAGS "${CMAKE_C_FLAGS} -std=c++11 -Wall" )
-set( rt_library rt )
-set( pthread_library pthread)
-if ( FULL_STATIC_BUILD )
-  set( CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static-libstdc++ -static-libgcc")
-endif ( FULL_STATIC_BUILD )
-
-if( "${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" )
-        set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-builtin-memcmp" )
-endif()
-
-if( "${CMAKE_GENERATOR}" STREQUAL "Ninja" )
-    if( "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang" )
-         set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fcolor-diagnostics" )
-      endif()
-endif()
-
-set( CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DDEBUG")
-
-    # based on http://www.delorie.com/gnu/docs/gdb/gdb_70.html
-    # uncomment this line to tell GDB about macros (slows compile times)
-    # set( CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -gdwarf-2 -g3" )
-
-
-set(ENABLE_COVERAGE_TESTING FALSE CACHE BOOL "Build Blurt for code coverage analysis")
-
-if(ENABLE_COVERAGE_TESTING)
-    SET(CMAKE_CXX_FLAGS "--coverage ${CMAKE_CXX_FLAGS}")
-endif()
-
-# fc/src/compress/miniz.c breaks strict aliasing. The Linux kernel builds with no strict aliasing
-SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-strict-aliasing -DBOOST_THREAD_DONT_PROVIDE_PROMISE_LAZY" )
-SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fno-strict-aliasing -DBOOST_THREAD_DONT_PROVIDE_PROMISE_LAZY" )
-
-# external_plugins needs to be compiled first because libraries/app depends on BLURT_EXTERNAL_PLUGINS being fully populated
-add_subdirectory( external_plugins )
-add_subdirectory( libraries )
-add_subdirectory( programs )
-
-add_subdirectory( tests )
-
-
+# Testnet Option
 if( BUILD_BLURT_TESTNET )
   MESSAGE( STATUS "\n\n             CONFIGURED FOR TEST NETWORK             \n\n" )
 else()

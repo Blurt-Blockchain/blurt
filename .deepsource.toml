@@ -1,0 +1,46 @@
+version = 1
+
+# marks a folder as containing tests
+test_patterns = [
+  "client-libs/dblurt/test/*"
+]
+
+exclude_patterns = [
+    "libraries/**",
+    "programs/**",
+    "**/tos.md",
+    "ui/condenser/config/production.json"
+]
+
+[[analyzers]]
+name = "docker"
+enabled = true
+
+  [analyzers.meta]
+  dockerfile_paths = [
+    "ui/condenser/Dockerfile",
+    "storage/imagehoster/Dockerfile",
+    "contrib/cryptopie/Dockerfile",
+    "contrib/c2/Dockerfile"
+  ]
+
+[[analyzers]]
+name = "javascript"
+enabled = true
+
+  [analyzers.meta]
+  environment = [
+    "nodejs",
+    "browser"
+  ]
+  plugins = ["react"]
+  style_guide = "airbnb"
+  dialect = "flow"
+
+[[transformers]]
+name = "prettier"
+enabled = true
+
+[[transformers]]
+name = "standardjs"
+enabled = true

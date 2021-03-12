@@ -53,6 +53,7 @@ struct api_comment_object
       author_rewards( o.author_rewards ),
       net_votes( o.net_votes ),
       max_accepted_payout( o.max_accepted_payout ),
+      percent_blurt( o.percent_blurt ),
       allow_replies( o.allow_replies ),
       allow_votes( o.allow_votes ),
       allow_curation_rewards( o.allow_curation_rewards )
@@ -119,6 +120,7 @@ struct api_comment_object
    string            root_permlink;
 
    asset             max_accepted_payout;
+   uint16_t          percent_blurt;
    bool              allow_replies = false;
    bool              allow_votes = false;
    bool              allow_curation_rewards = false;
@@ -551,7 +553,7 @@ FC_REFLECT( blurt::plugins::database_api::api_comment_object,
              (children_abs_rshares)(cashout_time)(max_cashout_time)
              (total_vote_weight)(reward_weight)(total_payout_value)(curator_payout_value)(author_rewards)(net_votes)
              (root_author)(root_permlink)
-             (max_accepted_payout)(allow_replies)(allow_votes)(allow_curation_rewards)
+             (max_accepted_payout)(percent_blurt)(allow_replies)(allow_votes)(allow_curation_rewards)
              (beneficiaries)
           )
 

@@ -11,19 +11,12 @@
 #include <blurt/chain/util/manabar.hpp>
 
 #include <fc/macros.hpp>
-
-#ifndef IS_LOW_MEM
-FC_TODO( "After we vendor fc, also vendor diff_match_patch and fix these warnings" )
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wsign-compare"
-#pragma GCC diagnostic push
-#if !defined( __clang__ )
-#pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
-#endif
-#include <diff_match_patch.h>
-#pragma GCC diagnostic pop
-#pragma GCC diagnostic pop
 #include <boost/locale/encoding_utf.hpp>
+#include <diff_match_patch.h>
+#include <fc/uint128.hpp>
+#include <fc/utf8.hpp>
+#include <limits>
+
 
 using boost::locale::conv::utf_to_utf;
 
@@ -37,12 +30,7 @@ std::string wstring_to_utf8(const std::wstring& str)
     return utf_to_utf<char>(str.c_str(), str.c_str() + str.size());
 }
 
-#endif
 
-#include <fc/uint128.hpp>
-#include <fc/utf8.hpp>
-
-#include <limits>
 
 namespace blurt { namespace chain {
    using fc::uint128_t;
@@ -81,7 +69,6 @@ void witness_update_evaluator::do_apply( const witness_update_operation& o )
    {
       FC_ASSERT( o.props.account_creation_fee.symbol.is_canon() );
 
-      FC_TODO( "Move to validate() after HF20" );
       FC_ASSERT( o.props.account_creation_fee.amount <= BLURT_MAX_ACCOUNT_CREATION_FEE, "account_creation_fee greater than maximum account creation fee" );
    }
 
@@ -146,7 +133,6 @@ void witness_set_properties_evaluator::do_apply( const witness_set_properties_op
       fc::raw::unpack_from_vector( itr->second, props.account_creation_fee );
 
       {
-         FC_TODO( "Move to validate() after HF20" );
          FC_ASSERT( props.account_creation_fee.amount <= BLURT_MAX_ACCOUNT_CREATION_FEE, "account_creation_fee greater than maximum account creation fee" );
       }
    }
@@ -269,7 +255,6 @@ void initialize_account_object( account_object& acc, const account_name_type& na
    acc.voting_manabar.last_update_time = props.time.sec_since_epoch();
    acc.mined = mined;
 
-   FC_TODO( "If after HF 20, there are no temp account creations, the HF check can be removed." )
    if( recovery_account != BLURT_TEMP_ACCOUNT )
    {
       acc.recovery_account = recovery_account;
@@ -457,6 +442,9 @@ struct comment_options_extension_visitor
 
 void comment_options_evaluator::do_apply( const comment_options_operation& o )
 {
+   if (!_db.has_hardfork(BLURT_HARDFORK_0_3))
+      FC_ASSERT(o.percent_blurt == 0, "Payments in blurt are disabled");
+
    const auto& comment = _db.get_comment( o.author, o.permlink );
    if( !o.allow_curation_rewards || !o.allow_votes || o.max_accepted_payout < comment.max_accepted_payout )
       FC_ASSERT( comment.abs_rshares == 0, "One of the included comment options requires the comment to have no rshares allocated to it." );
@@ -464,9 +452,11 @@ void comment_options_evaluator::do_apply( const comment_options_operation& o )
    FC_ASSERT( comment.allow_curation_rewards >= o.allow_curation_rewards, "Curation rewards cannot be re-enabled." );
    FC_ASSERT( comment.allow_votes >= o.allow_votes, "Voting cannot be re-enabled." );
    FC_ASSERT( comment.max_accepted_payout >= o.max_accepted_payout, "A comment cannot accept a greater payout." );
+   FC_ASSERT( comment.percent_blurt >= o.percent_blurt, "A comment cannot accept a greater percent BLURT.");
 
    _db.modify( comment, [&]( comment_object& c ) {
        c.max_accepted_payout   = o.max_accepted_payout;
+       c.percent_blurt         = o.percent_blurt;
        c.allow_votes           = o.allow_votes;
        c.allow_curation_rewards = o.allow_curation_rewards;
    });
@@ -520,7 +510,6 @@ void comment_evaluator::do_apply( const comment_operation& o )
          FC_ASSERT( _db.get( parent->root_comment ).allow_replies, "The parent comment has disabled replies." );
       }
 
-      FC_TODO( "Cleanup this logic after HF 20. Old ops don't need to check pre-hf20 times." )
       {
          if( o.parent_author == BLURT_ROOT_POST_PARENT )
              FC_ASSERT( ( now - auth.last_root_post ) > BLURT_MIN_ROOT_COMMENT_INTERVAL, "You may only post once every 5 minutes.", ("now",now)("last_root_post", auth.last_root_post) );
@@ -1108,7 +1097,6 @@ void vote_evaluator::do_apply( const vote_operation& o )
    // Lazily delete vote
    if( itr != comment_vote_idx.end() && itr->num_changes == -1 )
    {
-      FC_TODO( "This looks suspicious. We might not be deleting vote objects that we should be on nodes that are configured to clear votes" );
       FC_ASSERT( false, "Cannot vote again on a comment after payout." );
 
       _db.remove( *itr );
@@ -1789,7 +1777,6 @@ void claim_reward_balance_evaluator::do_apply( const claim_reward_balance_operat
 
 void delegate_vesting_shares_evaluator::do_apply( const delegate_vesting_shares_operation& op )
 {
-#pragma message( "TODO: Update get_effective_vesting_shares when modifying this operation to support SMTs." )
 
    const auto& delegator = _db.get_account( op.delegator );
    const auto& delegatee = _db.get_account( op.delegatee );
