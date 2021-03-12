@@ -2,6 +2,9 @@ FROM faddat/sos-lite
 
 COPY motd /etc/motd
 
+ENV PATH=$PATH:/root/go/bin
+ENV GOPATH=/root/go
+
 # THIS WILL BOOT AND JOIN A KILLABLE PI NET RUN BY JACOB
 
 # Disk space thing
