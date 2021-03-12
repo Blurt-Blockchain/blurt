@@ -469,11 +469,11 @@ witness:
   needs: []
 
 
-witness_test:
+witness test- is replay needed?:
   stage: test
   when: manual
   script:
-    - ./build/bin/blurtd --resync-blockchain
+    - ./build/bin/blurtd
   needs: 
     - witness
   dependencies:
@@ -481,6 +481,14 @@ witness_test:
   tags: 
     - shell-arch
 
+witness test - from scratch in docker:
+  stage: test
+  when: manual
+  image: $CI_REGISTRY_IMAGE/witness:$CI_COMMIT_BRANCH
+  script:
+    - ./build/bin/blurtd
+  needs: 
+    - kaniko witness
 
 mira:
   stage: build
