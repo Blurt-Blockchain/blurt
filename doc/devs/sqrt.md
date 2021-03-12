@@ -1,4 +1,3 @@
-
 # Introduction
 
 In this document we derive the approximate integer square root function used by Steem for the curation curve
@@ -17,15 +16,15 @@ The following definitions are equivalent to Definition (1a):
 - (Definition 1d) `msb(x) = floor(log_2(x))`
 
 Many CPU's (including Intel CPU's since the Intel 386) can compute the `msb()` function very quickly on
-machine-word-size integers with a special instruction directly implemented in hardware.  In C++, the
+machine-word-size integers with a special instruction directly implemented in hardware. In C++, the
 Boost library provides reasonably compiler-independent, hardware-independent access to this
 functionality with `boost::multiprecision::detail::find_msb(x)`.
 
 # Approximate logarithms
 
-According to Definition 1d, `msb(x)` is already a (somewhat crude) approximate base-2 logarithm.  The
-bits below the most-significant bit provide the fractional part of the linear interpolation.  The
-fractional part is called the *mantissa* and the integer part is called the *exponent*; effectively we
+According to Definition 1d, `msb(x)` is already a (somewhat crude) approximate base-2 logarithm. The
+bits below the most-significant bit provide the fractional part of the linear interpolation. The
+fractional part is called the _mantissa_ and the integer part is called the _exponent_; effectively we
 have re-invented the floating-point representation.
 
 Here are some Python functions to convert to/from these approximate logarithms:
@@ -60,7 +59,7 @@ def from_log(y, wordsize=32, ebits=5):
 # Approximate square roots
 
 To construct an approximate square root algorithm, start from the identity `log(sqrt(x)) = log(x) / 2`.
-We can easily obtain `sqrt(x) ~ from_log(to_log(x) >> 1)`.  We can proceed by manual inlining the inner
+We can easily obtain `sqrt(x) ~ from_log(to_log(x) >> 1)`. We can proceed by manual inlining the inner
 function call:
 
 ```
@@ -92,15 +91,15 @@ First, consider the following simplifications:
 - The MSB of the mantissa part of `z` is the low bit of `msb_x`
 - The lower bits of the mantissa part of `z` are simply the bits of the mantissa part of `x` shifted once
 
-The above simplifications enable a more fundamental improvement:  We can compute
-the mantissa and exponent of `z` directly from `x` and `msb_x`.  Therefore, packing
+The above simplifications enable a more fundamental improvement: We can compute
+the mantissa and exponent of `z` directly from `x` and `msb_x`. Therefore, packing
 the intermediate result into `to_log_x` and then immediately unpacking it, effectively
-becomes a no-op and can be omitted.  This makes the `wordsize` and `ebits` variables fall
-out.  Making choices for these parameters and allocating extra space at the top of the word
+becomes a no-op and can be omitted. This makes the `wordsize` and `ebits` variables fall
+out. Making choices for these parameters and allocating extra space at the top of the word
 for exponent bits becomes completely unnecessary!
 
-One subtlety is that the two shift operators result in a net shift of mantissa bits.  The
-are shifted left by `mantissa_bits - msb_x` and then shifted right by `mantissa_bits - msb_z`.  The
+One subtlety is that the two shift operators result in a net shift of mantissa bits. The
+are shifted left by `mantissa_bits - msb_x` and then shifted right by `mantissa_bits - msb_z`. The
 net shift is therefore a right-shift of `msb_x - msb_z`.
 
 The final code looks like this:

@@ -4,6 +4,7 @@ The unit test target is `make chain_test`
 This creates an executable `./tests/chain_test` that will run all unit tests.
 
 Tests are broken in several categories:
+
 ```
 basic_tests          // Tests of "basic" functionality
 block_tests          // Tests of the block chain

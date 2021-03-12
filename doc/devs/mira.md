@@ -4,14 +4,14 @@ MIRA has many options that allow the user to improve performance. For most use c
 
 MIRA uses a multi-tiered architecture for retrieving and storing data from its databases. Each blockchain index is considered its own distinct database. At a very high level, the tiers can be thought of as follows:
 
-| Database Tier       |   Location    |  Reading | Writing |
-|---------------------|---------------|:--------:|:-------:|
-| Object cache        |   Main memory |  &#9745; | &#9745; |
-| Global shared cache |   Main memory |  &#9745; | &#9744; |
-| Gobal write buffer  |   Main memory |  &#9745; | &#9745; |
-| Tier 0 file based   |   Disk        |  &#9745; | &#9745; |
-| Tier 1 file based   |   Disk        |  &#9745; | &#9745; |
-| ...                 |   Disk        |  &#9745; | &#9745; |
+| Database Tier       | Location    | Reading | Writing |
+| ------------------- | ----------- | :-----: | :-----: |
+| Object cache        | Main memory | &#9745; | &#9745; |
+| Global shared cache | Main memory | &#9745; | &#9744; |
+| Gobal write buffer  | Main memory | &#9745; | &#9745; |
+| Tier 0 file based   | Disk        | &#9745; | &#9745; |
+| Tier 1 file based   | Disk        | &#9745; | &#9745; |
+| ...                 | Disk        | &#9745; | &#9745; |
 
 Below is an example of MIRAs default configuration that is designed for a 16GiB node.
 
@@ -61,7 +61,7 @@ The object cache determines how many database objects MIRA has direct access to.
 ...
 ```
 
-> *__Note:__* *The object count is defined as an unsigned integer in the configuration.*
+> _**Note:**_ _The object count is defined as an unsigned integer in the configuration._
 
 ---
 
@@ -78,13 +78,13 @@ The global shared cache is a section of main memory that will contain data block
 ...
 ```
 
-> *__Note:__* *The global shared cache capacity is defined as a string in the configuration.*
+> _**Note:**_ _The global shared cache capacity is defined as a string in the configuration._
 
 ---
 
 ## Global write buffer
 
-The global write buffer is used for performant writes to the database. It lives in main memory and also contains the latest changes to a particular database object. Not only is it used for writing, but also for reading. It is important to ensure there is enough capacity allocated to keep up with the live chain. The global write buffer is contained *within* the global shared cache. Using the default configuration as an example, `1073741824 = 1GiB`.
+The global write buffer is used for performant writes to the database. It lives in main memory and also contains the latest changes to a particular database object. Not only is it used for writing, but also for reading. It is important to ensure there is enough capacity allocated to keep up with the live chain. The global write buffer is contained _within_ the global shared cache. Using the default configuration as an example, `1073741824 = 1GiB`.
 
 ```
 ...
@@ -94,7 +94,7 @@ The global write buffer is used for performant writes to the database. It lives 
 ...
 ```
 
-> *__Note:__* *The global write buffer size is defined as a string in the configuration.*
+> _**Note:**_ _The global write buffer size is defined as a string in the configuration._
 
 ---
 
@@ -119,7 +119,7 @@ Using the default configuration:
 
 Let us calculate the largest total memory usage of MIRA. `(62500 * 64KiB) + 5GiB + 5.5GiB = ~14.5GiB`
 
-> *__Note:__* *The global write buffer size is not included in the total memory calculation for MIRA because it is contained within the global shared cache.*
+> _**Note:**_ _The global write buffer size is not included in the total memory calculation for MIRA because it is contained within the global shared cache._
 
 ### Example 2.
 
@@ -132,7 +132,7 @@ Example 2 is appropriate for a 32GiB node.
 
 Let us calculate the largest total memory usage of MIRA. `(125000 * 64KiB) + 10GiB + 5.5GiB = ~23.5GiB`
 
-> *__Note:__* *The global write buffer size is not included in the total memory calculation for MIRA because it is contained within the global shared cache.*
+> _**Note:**_ _The global write buffer size is not included in the total memory calculation for MIRA because it is contained within the global shared cache._
 
 ---
 
