@@ -510,28 +510,25 @@ witness test- is replay needed?:
 
 witness from scratch in docker:
   stage: test
-  when: manual
   image: $CI_REGISTRY_IMAGE/witness:$CI_COMMIT_BRANCH
   script:
-    - blurtd
+    - blurtd --data-dir /blurtd
   needs: 
     - kaniko witness
 
 rpc from scratch in docker:
   stage: test
-  when: manual
   image: $CI_REGISTRY_IMAGE/rpc:$CI_COMMIT_BRANCH
   script:
-    - blurtd
+    - blurtd --data-dir /blurtd
   needs: 
     - kaniko rpc
 
 mira from scratch in docker:
   stage: test
-  when: manual
   image: $CI_REGISTRY_IMAGE/mira:$CI_COMMIT_BRANCH
   script:
-    - blurtd
+    - blurtd --data-dir /blurtd
   needs: 
     - kaniko mira
 
