@@ -5,6 +5,7 @@
 ![Twitter](https://img.shields.io/twitter/url?style=social&url=https%3A%2F%2Ftwitter.com%2FBlurtOfficial)
 [![Blurt](https://img.shields.io/badge/-Blurt-red)](https://blurt.blog)
 [![DeepSource](https://deepsource.io/gl/blurt/blurt.svg/?label=active+issues&show_trend=true)](https://deepsource.io/gl/blurt/blurt/?ref=repository-badge)
+[![DeepSource](https://deepsource.io/gl/blurt/blurt.svg/?label=resolved+issues&show_trend=true)](https://deepsource.io/gl/blurt/blurt/?ref=repository-badge)
 
 Blurt is a public social blockchain with a diverse and vibrant community that strictly upholds [property rights](https://twitter.com/cz_binance/status/1236373815447506945?s=20).
 
