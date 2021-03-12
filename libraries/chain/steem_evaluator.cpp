@@ -11,19 +11,12 @@
 #include <blurt/chain/util/manabar.hpp>
 
 #include <fc/macros.hpp>
-
-#ifndef IS_LOW_MEM
-FC_TODO( "After we vendor fc, also vendor diff_match_patch and fix these warnings" )
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wsign-compare"
-#pragma GCC diagnostic push
-#if !defined( __clang__ )
-#pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
-#endif
-#include <diff_match_patch.h>
-#pragma GCC diagnostic pop
-#pragma GCC diagnostic pop
 #include <boost/locale/encoding_utf.hpp>
+#include <diff_match_patch.h>
+#include <fc/uint128.hpp>
+#include <fc/utf8.hpp>
+#include <limits>
+
 
 using boost::locale::conv::utf_to_utf;
 
@@ -37,12 +30,7 @@ std::string wstring_to_utf8(const std::wstring& str)
     return utf_to_utf<char>(str.c_str(), str.c_str() + str.size());
 }
 
-#endif
 
-#include <fc/uint128.hpp>
-#include <fc/utf8.hpp>
-
-#include <limits>
 
 namespace blurt { namespace chain {
    using fc::uint128_t;
