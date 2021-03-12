@@ -481,14 +481,33 @@ witness test- is replay needed?:
   tags: 
     - shell-arch
 
-witness test - from scratch in docker:
+witness from scratch in docker:
   stage: test
   when: manual
   image: $CI_REGISTRY_IMAGE/witness:$CI_COMMIT_BRANCH
   script:
-    - ./build/bin/blurtd
+    - blurtd
   needs: 
     - kaniko witness
+
+rpc from scratch in docker:
+  stage: test
+  when: manual
+  image: $CI_REGISTRY_IMAGE/rpc:$CI_COMMIT_BRANCH
+  script:
+    - blurtd
+  needs: 
+    - kaniko witness
+
+mira from scratch in docker:
+  stage: test
+  when: manual
+  image: $CI_REGISTRY_IMAGE/mira:$CI_COMMIT_BRANCH
+  script:
+    - blurtd
+  needs: 
+    - kaniko witness
+
 
 mira:
   stage: build
