@@ -497,7 +497,7 @@ rpc from scratch in docker:
   script:
     - blurtd
   needs: 
-    - kaniko witness
+    - kaniko rpc
 
 mira from scratch in docker:
   stage: test
@@ -506,7 +506,7 @@ mira from scratch in docker:
   script:
     - blurtd
   needs: 
-    - kaniko witness
+    - kaniko mira
 
 
 mira:
