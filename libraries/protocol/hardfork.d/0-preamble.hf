@@ -13,7 +13,7 @@
 #include <set>
 
 #ifdef IS_TEST_NET
-#define BLURT_NUM_HARDFORKS 3
+#define BLURT_NUM_HARDFORKS 4
 #else
-#define BLURT_NUM_HARDFORKS 3
+#define BLURT_NUM_HARDFORKS 4
 #endif
