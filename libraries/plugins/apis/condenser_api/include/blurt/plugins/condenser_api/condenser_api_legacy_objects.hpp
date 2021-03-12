@@ -9,7 +9,8 @@ namespace blurt { namespace plugins { namespace condenser_api {
 typedef static_variant<
          void_t,
          version,
-         hardfork_version_vote
+         hardfork_version_vote,
+         fee_info
       > legacy_block_header_extensions;
 
 typedef vector< legacy_block_header_extensions > legacy_block_header_extensions_type;
@@ -84,6 +85,7 @@ struct legacy_signed_transaction
    transaction_id_type        transaction_id;
    uint32_t                   block_num = 0;
    uint32_t                   transaction_num = 0;
+   legacy_asset               fee ;
 };
 
 struct legacy_signed_block
@@ -98,16 +100,38 @@ struct legacy_signed_block
       block_id( b.block_id ),
       signing_key( b.signing_key )
    {
+      fee_info fi;
+
       for( const auto& e : b.extensions )
       {
          legacy_block_header_extensions ext;
          e.visit( convert_to_legacy_static_variant< legacy_block_header_extensions >( ext ) );
          extensions.push_back( ext );
+
+
+         if (ext.which() == legacy_block_header_extensions::tag<fee_info>::value) {
+            fi = ext.get<fee_info>();
+         }
       }
 
       for( const auto& t : b.transactions )
       {
-         transactions.push_back( legacy_signed_transaction( t ) );
+         legacy_signed_transaction tx_item ( t );
+
+         if ((fi.operation_flat_fee > 0) || (fi.bandwidth_kbytes_fee > 0)) { // recalculate the fee
+            auto operation_flat_fee = asset( share_type(fi.operation_flat_fee), BLURT_SYMBOL );
+            auto bandwidth_kbytes_fee = asset( share_type(fi.bandwidth_kbytes_fee), BLURT_SYMBOL );
+            int64_t flat_fee_amount = operation_flat_fee.amount.value * t.operations.size();
+            auto flat_fee = asset(std::max(flat_fee_amount, int64_t(1)), BLURT_SYMBOL);
+
+            auto trx_size = fc::raw::pack_size(t);
+            int64_t bw_fee_amount = (trx_size * bandwidth_kbytes_fee.amount.value) / 1024;
+            auto bw_fee = asset(std::max(bw_fee_amount, int64_t(1)), BLURT_SYMBOL);
+            auto fee = flat_fee + bw_fee;
+            tx_item.fee = legacy_asset::from_asset(fee);
+         }
+
+         transactions.push_back( tx_item );
       }
 
       transaction_ids.insert( transaction_ids.end(), b.transaction_ids.begin(), b.transaction_ids.end() );
@@ -153,7 +177,7 @@ void from_variant( const fc::variant&, blurt::plugins::condenser_api::legacy_blo
 }
 
 FC_REFLECT( blurt::plugins::condenser_api::legacy_signed_transaction,
-            (ref_block_num)(ref_block_prefix)(expiration)(operations)(extensions)(signatures)(transaction_id)(block_num)(transaction_num) )
+            (ref_block_num)(ref_block_prefix)(expiration)(operations)(extensions)(signatures)(transaction_id)(block_num)(transaction_num)(fee) )
 
 FC_REFLECT( blurt::plugins::condenser_api::legacy_signed_block,
             (previous)(timestamp)(witness)(transaction_merkle_root)(extensions)(witness_signature)(transactions)(block_id)(signing_key)(transaction_ids) )

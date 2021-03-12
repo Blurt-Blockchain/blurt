@@ -30,6 +30,23 @@ bool is_virtual_operation( const operation& op )
    return op.visit( is_vop_visitor() );
 }
 
+struct hardfork_visitor
+{
+   typedef void result_type;
+   hardfork_visitor( uint32_t num ) : hardfork( num ) {}
+
+   template< typename T >
+   void operator()( T& v )const { v.set_hardfork(hardfork); }
+
+private:
+   uint32_t hardfork;
+};
+
+void set_op_hardfork( operation& op, uint32_t hardfork )
+{
+   op.visit( hardfork_visitor( hardfork ) );
+}
+
 } } // blurt::protocol
 
 BLURT_DEFINE_OPERATION_TYPE( blurt::protocol::operation )

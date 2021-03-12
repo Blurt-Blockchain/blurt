@@ -134,6 +134,14 @@ asset sps_processor::calculate_maintenance_budget( const time_point_sec& head_ti
    //Calculate daily_budget_limit
    int64_t daily_budget_limit = treasury_fund.amount.value / total_amount_divider;
 
+   /**
+    * there is no limit on daily budget in first 2 years.
+    */
+   const auto& dgpo = db.get_dynamic_global_properties();
+   if (db.has_hardfork(BLURT_HARDFORK_0_3) && (dgpo.regent_vesting_shares.amount.value > 0)) {
+      daily_budget_limit = treasury_fund.amount.value;
+   }
+
    daily_budget_limit = ( ( uint128_t( passed_time_seconds ) * daily_budget_limit ) / daily_seconds ).to_uint64();
 
    return asset( daily_budget_limit, treasury_fund.symbol );
