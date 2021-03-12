@@ -126,32 +126,6 @@ void update_manabar( const PropType& gpo, AccountType& account, bool downvote_ma
    account.voting_manabar.use_mana( -new_mana );
    } FC_CAPTURE_LOG_AND_RETHROW( (account)(effective_vests) )
 
-//   FC_TODO( "This hardfork check should not be needed. Remove after HF21 if that is the case." );
-//   // This is used as a hardfork check. Can be replaced with if( gpo.downvote_pool_percent ). Leaving as a hard check to be safe until after HF 21
-//   try{
-//   if( downvote_mana )
-//   {
-//      manabar_params params;
-//      params.regen_time = BLURT_VOTING_MANA_REGENERATION_SECONDS;
-//
-//      if( check_overflow )
-//      {
-//         params.max_mana = ( ( uint128_t( effective_vests ) * gpo.downvote_pool_percent ) / BLURT_100_PERCENT ).to_int64();
-//      }
-//      else
-//      {
-//         FC_TODO( "Cleanup once we have verified the overflow has not permanently made it in to the chain" );
-//         uint128_t numerator = effective_vests * gpo.downvote_pool_percent;
-//         if( numerator.hi != 0 )
-//            elog( "NOTIFYALERT! max mana overflow made it in to the chain" );
-//
-//         params.max_mana = ( effective_vests * gpo.downvote_pool_percent ) / BLURT_100_PERCENT;
-//      }
-//
-//      account.downvote_manabar.regenerate_mana( params, gpo.time );
-//      account.downvote_manabar.use_mana( ( -new_mana * gpo.downvote_pool_percent ) / BLURT_100_PERCENT );
-//   }
-//   } FC_CAPTURE_LOG_AND_RETHROW( (account)(effective_vests) )
 }
 
 } } } // blurt::chain::util

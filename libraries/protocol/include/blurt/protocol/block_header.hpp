@@ -12,7 +12,6 @@ namespace blurt { namespace protocol {
       int64_t bandwidth_kbytes_fee = 0;
    };
 
-   FC_TODO( "Remove when automated actions are created" )
    typedef static_variant<
       void_t,
       version,                 // Normal witness version reporting, for diagnostics and voting
