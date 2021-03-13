@@ -11,7 +11,7 @@
 // https://developers.steem.io/tutorials-recipes/understanding-configuration-values
 
 #ifdef IS_TEST_NET
-#define BLURT_BLOCKCHAIN_VERSION              ( version(0, 3, 0) )
+#define BLURT_BLOCKCHAIN_VERSION              ( version(0, 4, 0) )
 
 #define BLURT_INIT_PRIVATE_KEY                (fc::ecc::private_key::regenerate(fc::sha256::hash(std::string("init_key"))))
 #define BLURT_INIT_PUBLIC_KEY_STR             (std::string( blurt::protocol::public_key_type(BLURT_INIT_PRIVATE_KEY.get_public_key()) ))
@@ -39,7 +39,7 @@
 
 #else // IS LIVE BLURT NETWORK
 
-#define BLURT_BLOCKCHAIN_VERSION              ( version(0, 3, 0) )
+#define BLURT_BLOCKCHAIN_VERSION              ( version(0, 4, 0) )
 
 #define BLURT_INIT_PUBLIC_KEY_STR             "BLT5QRsKZp7TFNQdTj7VbpGHWxNL3Eq4zmfER4vJPBpK5VMbrprn8"
 #define BLURT_CHAIN_ID                        (fc::sha256::hash("blurt")) /// cd8d90f29ae273abec3eaa7731e25934c63eb654d55080caff2ebb7f5df6381f
@@ -79,6 +79,11 @@
 #define BLURT_BLOCKS_PER_YEAR                 (365*24*60*60/BLURT_BLOCK_INTERVAL)
 #define BLURT_BLOCKS_PER_DAY                  (24*60*60/BLURT_BLOCK_INTERVAL)
 
+
+// TODO: Determine how to safely change this for HF5
+// LIKELY it looks like BLURT_MAX_WITNESSES_HF5=45
+// BLURT_MAX_VOTED_WITNESSES_HF5=35
+// BLURT_MAX_RUNNER_WITNESSES_HF5=10
 #define BLURT_MAX_WITNESSES                   21
 #define BLURT_MAX_VOTED_WITNESSES_HF17        20
 #define BLURT_MAX_RUNNER_WITNESSES_HF17       1
