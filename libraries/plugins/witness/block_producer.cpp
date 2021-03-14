@@ -50,6 +50,16 @@ chain::signed_block block_producer::_generate_block(fc::time_point_sec when, con
 
    adjust_hardfork_version_vote( _db.get_witness( witness_owner ), pending_block );
 
+
+   if (_db.has_hardfork(BLURT_HARDFORK_0_4)) { // put the fee info into block header extensions
+      auto operation_flat_fee = _db.get_witness_schedule_object().median_props.operation_flat_fee;
+      auto bandwidth_kbytes_fee = _db.get_witness_schedule_object().median_props.bandwidth_kbytes_fee;
+      pending_block.extensions.insert(
+         blurt::protocol::block_header_extensions(
+            blurt::protocol::fee_info(operation_flat_fee.amount.value, bandwidth_kbytes_fee.amount.value)));
+   }
+
+
    apply_pending_transactions( witness_owner, when, pending_block );
 
    // We have temporarily broken the invariant that
