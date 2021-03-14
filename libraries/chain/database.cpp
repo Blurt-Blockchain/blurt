@@ -1677,7 +1677,7 @@ share_type database::cashout_comment_helper( util::comment_reward_context& ctx, 
          }
 
          const auto& gpo = get_dynamic_global_properties();
-         const share_type reward = util::get_rshare_reward( ctx, gpo, has_hardfork(BLURT_HARDFORK_0_4) );
+         const share_type reward = util::get_rshare_reward( ctx );
          uint128_t reward_tokens = uint128_t( reward.value );
 
          if( reward_tokens > 0 )
@@ -3150,9 +3150,7 @@ void database::process_tx_fee( const signed_transaction& trx ) {
             adjust_balance( get_account( BLURT_TREASURY_ACCOUNT ), fee );
          } else {
             adjust_balance( get_account( BLURT_NULL_ACCOUNT ), fee );
-#ifdef IS_TEST_NET
             ilog( "burned transaction fee ${f} from account ${a}, for trx ${t}", ("f", fee)("a", auth)("t", trx.id()));
-#endif
          }
       }
    } FC_CAPTURE_AND_RETHROW( (trx) )
@@ -3831,14 +3829,15 @@ void database::apply_hardfork( uint32_t hardfork )
          }
          break;
       case BLURT_HARDFORK_0_2:
+         break;
       case BLURT_HARDFORK_0_3:
          break;
-      case BLURT_HARDFORK_0_4: {
+      case BLURT_HARDFORK_0_4: /* {
 
          modify( get< reward_fund_object, by_name >( BLURT_POST_REWARD_FUND_NAME ), [&]( reward_fund_object& rfo ) {
             rfo.content_constant = BLURT_HARDFORK_0_4_REWARD_CONTENT_CONSTANT;
          });
-      }
+      } This may go into hf5 */
          break;
       default:
          break;
