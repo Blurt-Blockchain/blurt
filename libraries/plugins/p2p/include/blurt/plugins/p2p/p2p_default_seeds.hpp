@@ -37,8 +37,8 @@ const std::vector< std::string > default_seeds = {
    "192.168.195.72:1776",   //notforsale
    "192.168.195.154:1776",   //jakemlim
    "192.168.195.49:1776",   //blurtpower 
-   "192.168.195.114:1776"   //jacobgadikian
-   "209.145.58.159:1776",  //blurtlatam
+   "192.168.195.114:1776",   //jacobgadikian
+   "209.145.58.159:1776"  //blurtlatam
 };
 #endif
 
