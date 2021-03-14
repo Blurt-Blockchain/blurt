@@ -44,15 +44,17 @@ uint64_t get_rshare_reward( const comment_reward_context& ctx, const dynamic_glo
 
    u256 rf(ctx.total_reward_fund_blurt.amount.value);
    u256 total_claims = to256( ctx.total_reward_shares2 );
-   u256 staked_supply(gpo.total_vesting_fund_blurt.amount.value);
-   u256 current_supply(gpo.current_supply.amount.value);
+//   u256 staked_supply(gpo.total_vesting_fund_blurt.amount.value);
+//   u256 current_supply(gpo.current_supply.amount.value);
 
    //idump( (ctx) );
 
    u256 claim = to256( evaluate_reward_curve( ctx.rshares.value, ctx.reward_curve, ctx.content_constant ) );
    claim = ( claim * ctx.reward_weight ) / BLURT_100_PERCENT;
 
-   u256 payout_u256 = use_new_calc ? ((( rf * claim ) / total_claims) * (staked_supply / current_supply)) : (( rf * claim ) / total_claims);
+   u256 payout_u256 = ( rf * claim ) / total_claims;
+   // Possibly bring this back for hf5
+   //u256 payout_u256 = use_new_calc ? ((( rf * claim ) / total_claims) * (staked_supply / current_supply)) : (( rf * claim ) / total_claims);
    FC_ASSERT( payout_u256 <= u256( uint64_t( std::numeric_limits<int64_t>::max() ) ) );
    uint64_t payout = static_cast< uint64_t >( payout_u256 );
 
