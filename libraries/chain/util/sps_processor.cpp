@@ -138,7 +138,7 @@ asset sps_processor::calculate_maintenance_budget( const time_point_sec& head_ti
     * there is no limit on daily budget in first 2 years.
     */
    const auto& dgpo = db.get_dynamic_global_properties();
-   if (db.has_hardfork(BLURT_HARDFORK_0_3) && (dgpo.regent_vesting_shares.amount.value > 0)) {
+   if (db.has_hardfork(BLURT_HARDFORK_0_4) && (dgpo.regent_vesting_shares.amount.value > 0)) {
       daily_budget_limit = treasury_fund.amount.value;
    }
 

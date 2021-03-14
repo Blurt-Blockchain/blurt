@@ -1241,7 +1241,7 @@ void database::adjust_witness_vote( const witness_object& witness, share_type de
 
       w.virtual_last_update = wso.current_virtual_time;
       w.votes += delta;
-      if (has_hardfork(BLURT_HARDFORK_0_3)) {
+      if (has_hardfork(BLURT_HARDFORK_0_4)) {
          FC_ASSERT(w.votes <= dpo.total_vesting_shares.amount + dpo.regent_vesting_shares.amount, "", ("w.votes", w.votes)("props", dpo.total_vesting_shares));
       } else {
          FC_ASSERT( w.votes <= dpo.total_vesting_shares.amount, "", ("w.votes", w.votes)("props", dpo.total_vesting_shares) );
@@ -1677,7 +1677,7 @@ share_type database::cashout_comment_helper( util::comment_reward_context& ctx, 
          }
 
          const auto& gpo = get_dynamic_global_properties();
-         const share_type reward = util::get_rshare_reward( ctx, gpo, has_hardfork(BLURT_HARDFORK_0_3) );
+         const share_type reward = util::get_rshare_reward( ctx, gpo, has_hardfork(BLURT_HARDFORK_0_4) );
          uint128_t reward_tokens = uint128_t( reward.value );
 
          if( reward_tokens > 0 )
@@ -3118,7 +3118,7 @@ void database::_apply_transaction(const signed_transaction& trx)
  * flat_fee: fixed fee for each operation in the tx, eg., 0.05 BLURT
  * bandwidth_fee: eg., 0.01 BLURT / Kbytes
  *
- * fee goes to BLURT_TREASURY_ACCOUNT prior to HF 0.3, and BLURT_NULL_ACCOUNT after HF 0.3
+ * fee goes to BLURT_TREASURY_ACCOUNT prior to HF 0.4, and BLURT_NULL_ACCOUNT after HF 0.4
  */
 void database::process_tx_fee( const signed_transaction& trx ) {
    try {
@@ -3146,7 +3146,7 @@ void database::process_tx_fee( const signed_transaction& trx ) {
          FC_ASSERT( acnt.balance >= fee, "Account does not have sufficient funds for transaction fee.", ("balance", acnt.balance)("fee", fee) );
 
          adjust_balance( acnt, -fee );
-         if (!has_hardfork(BLURT_HARDFORK_0_3)) {
+         if (!has_hardfork(BLURT_HARDFORK_0_4)) {
             adjust_balance( get_account( BLURT_TREASURY_ACCOUNT ), fee );
          } else {
             adjust_balance( get_account( BLURT_NULL_ACCOUNT ), fee );
@@ -3736,7 +3736,8 @@ void database::init_hardforks()
    _hardfork_versions.times[ BLURT_HARDFORK_0_2 ] = fc::time_point_sec( BLURT_HARDFORK_0_2_TIME );
    _hardfork_versions.versions[ BLURT_HARDFORK_0_2 ] = BLURT_HARDFORK_0_2_VERSION;
 
-// #ifdef IS_TEST_NET
+// Hard Fork 3: JGA's contributions to HF4 are added here.  
+// Any references to hf3, seen as a delta when comparing hf3 to hf4, should be changed to activate at hf4.
    FC_ASSERT( BLURT_HARDFORK_0_3 == 3, "Invalid hardfork configuration" );
    _hardfork_versions.times[ BLURT_HARDFORK_0_3 ] = fc::time_point_sec( BLURT_HARDFORK_0_3_TIME );
    _hardfork_versions.versions[ BLURT_HARDFORK_0_3 ] = BLURT_HARDFORK_0_3_VERSION;
@@ -3745,6 +3746,9 @@ void database::init_hardforks()
 
 // Hard fork 4.  Completing the merge, but still need to create a new file: libraries/protocol/hardfork.d/0_4.hf
 // that file should include cryptomancer's changes that were in 0_3: ee42dc3
+// Initial issue with HF4 is that Jacob did not correctly update declarations that related to "HARDFORK_0_3"
+// So hf4 nodes would come up, and apply changes contained in hf4 at the hf3 start.  
+// This also explains the failure mode and timing.
 // #ifdef IS_TEST_NET
    FC_ASSERT( BLURT_HARDFORK_0_4 == 4, "Invalid hardfork configuration" );
    _hardfork_versions.times[ BLURT_HARDFORK_0_4 ] = fc::time_point_sec( BLURT_HARDFORK_0_4_TIME );
@@ -3871,7 +3875,7 @@ void database::validate_invariants()const
       /// verify no witness has too many votes
       const auto& witness_idx = get_index< witness_index >().indices();
       for( auto itr = witness_idx.begin(); itr != witness_idx.end(); ++itr ) {
-         if (has_hardfork(BLURT_HARDFORK_0_3)) {
+         if (has_hardfork(BLURT_HARDFORK_0_4)) {
             FC_ASSERT( itr->votes <= gpo.total_vesting_shares.amount + gpo.regent_vesting_shares.amount, "", ("itr",*itr) );
          } else {
             FC_ASSERT( itr->votes <= gpo.total_vesting_shares.amount, "", ("itr",*itr) );
