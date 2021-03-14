@@ -35,7 +35,7 @@ uint64_t approx_sqrt( const uint128_t& x )
    return result;
 }
 
-uint64_t get_rshare_reward( const comment_reward_context& ctx, const dynamic_global_property_object& gpo, bool use_new_calc )
+uint64_t get_rshare_reward( const comment_reward_context& ctx )
 {
    try
    {
