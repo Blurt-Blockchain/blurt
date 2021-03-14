@@ -1120,7 +1120,7 @@ void vote_evaluator::do_apply( const vote_operation& o )
 
    used_mana = ( used_mana + max_vote_denom - 1 ) / max_vote_denom;
    int64_t abs_rshares = used_mana.to_int64();
-   if( !_db.has_hardfork(BLURT_HARDFORK_0_3) ) // dust threshold removed in HF 0.3.0
+   if( !_db.has_hardfork(BLURT_HARDFORK_0_4) ) // dust threshold removed in HF 0.4.0
    {
       abs_rshares -= BLURT_VOTE_DUST_THRESHOLD;
    }
@@ -1159,7 +1159,7 @@ void vote_evaluator::do_apply( const vote_operation& o )
             c.vote_rshares += rshares;
          if( rshares > 0 )
             c.net_votes++;
-         else if( !_db.has_hardfork(BLURT_HARDFORK_0_3) || (_db.has_hardfork(BLURT_HARDFORK_0_3) && rshares < 0) )
+         else if( !_db.has_hardfork(BLURT_HARDFORK_0_4) || (_db.has_hardfork(BLURT_HARDFORK_0_4) && rshares < 0) )
             c.net_votes--;
       });
 
@@ -1215,7 +1215,7 @@ void vote_evaluator::do_apply( const vote_operation& o )
             const auto& reward_fund = _db.get_reward_fund( comment );
             auto curve = reward_fund.curation_reward_curve;
             auto content_constant = reward_fund.content_constant;
-            if( _db.has_hardfork(BLURT_HARDFORK_0_3) )
+            if( _db.has_hardfork(BLURT_HARDFORK_0_4) )
             {
                // in HF 0.3.0, this value changed but we still want old value for the curation curve
                content_constant = BLURT_CONTENT_CONSTANT_HF21;
