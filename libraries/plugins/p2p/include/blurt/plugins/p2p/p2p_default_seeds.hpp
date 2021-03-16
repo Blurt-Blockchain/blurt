@@ -26,7 +26,8 @@ const std::vector< std::string > default_seeds = {
    "192.168.195.119:1776",   //Nelkeljdm
    "192.168.195.95:1776",   //kilajaem
    "192.168.195.145:1776",    //empato365
-   "192.168.195.66:1776",207.244.233.24//opfergnome aka nerdtopiade
+   "192.168.195.66:1776",   //opfergnome aka nerdtopiade
+   "207.244.233.24:1776",   //opfergnome aka nerdtopiade
    "192.168.195.89:1776",   //blurthispano
    "192.168.195.96:1776",   //oopsiepoopsie
    "192.168.195.48:1776",    //kamrankplyloy
