@@ -20,7 +20,7 @@ const std::vector< std::string > default_seeds = {
    "192.168.195.140:1776",    //imrransoudagar
    "192.168.195.2:1776",    //freakeao
    "192.168.195.160:1776",    //kamikaze
-   "192.168.195.117:1776",    //saboin
+   "192.168.195.229:1776",    //saboin
    "192.168.195.61:1776",   //ionomy
    "192.168.195.141:1776",    //trev03
    "192.168.195.119:1776",   //Nelkeljdm
@@ -38,7 +38,9 @@ const std::vector< std::string > default_seeds = {
    "192.168.195.154:1776",   //jakemlim
    "192.168.195.49:1776",   //blurtpower 
    "192.168.195.114:1776",   //jacobgadikian
-   "209.145.58.159:1776"  //blurtlatam
+   "209.145.58.159:1776",  //blurtlatam
+   "blurt-seed1.saboin.com:1776",  //saboin
+   "blurt-seed2.saboin.com:1776"   //saboin
 };
 #endif
 
