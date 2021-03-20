@@ -1677,7 +1677,7 @@ share_type database::cashout_comment_helper( util::comment_reward_context& ctx, 
          }
 
          const auto& gpo = get_dynamic_global_properties();
-         const share_type reward = util::get_rshare_reward( ctx, gpo, has_hardfork(BLURT_HARDFORK_0_4) );
+         const share_type reward = util::get_rshare_reward( ctx, gpo, get_hardfork() );
          uint128_t reward_tokens = uint128_t( reward.value );
 
          if( reward_tokens > 0 )
