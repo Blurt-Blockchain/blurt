@@ -3831,6 +3831,7 @@ void database::apply_hardfork( uint32_t hardfork )
          }
          break;
       case BLURT_HARDFORK_0_2:
+         break;
       case BLURT_HARDFORK_0_3:
          break;
       case BLURT_HARDFORK_0_4: {
