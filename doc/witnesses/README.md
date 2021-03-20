@@ -26,7 +26,7 @@ What's important here is that everyone is not using only a single provider.
 | contabo.com                 | cloud                | low         | Price AND one time I saw a contabo node outperform nearly all others in a network stress test situation on the [akash.io](https://akash.io) testnet. |
 | Your local hosting provider | bare metal           | ?           | Diversify the Witness Set                                                                                                                            |
 | GCE                         | Cloud                | high        | admin features                                                                                                                                       |
-| AWS                         | Cooud                | high        | industry leader for infrastructure                                                                                                                   |
+| AWS                         | Cloud                | high        | industry leader for infrastructure                                                                                                                   |
 
 **Machine Spec**:
 Your Witness machine spec is entirely **your** choice. This recommended spec should be relatively low cost ($5-20 per month) and should also run your Blurt Witness very effectively.
