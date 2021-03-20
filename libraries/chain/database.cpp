@@ -3111,6 +3111,24 @@ void database::_apply_transaction(const signed_transaction& trx)
 
 } FC_CAPTURE_AND_RETHROW( (trx) ) }
 
+account_name_type database::get_transaction_user( const signed_transaction& tx )
+{
+   flat_set< account_name_type > active;
+   flat_set< account_name_type > owner;
+   flat_set< account_name_type > posting;
+   vector< authority > other;
+
+   tx.get_required_authorities( active, owner, posting, other );
+
+   for( const account_name_type& name : posting )
+      return name;
+   for( const account_name_type& name : active )
+      return name;
+   for( const account_name_type& name : owner )
+      return name;
+   return account_name_type();
+}
+
 /**
  * simple fee system:
  * fee = flat_fee + bandwidth_fee
@@ -3138,21 +3156,32 @@ void database::process_tx_fee( const signed_transaction& trx ) {
       auto bw_fee = asset(std::max(bw_fee_amount, int64_t(1)), BLURT_SYMBOL);
       auto fee = flat_fee + bw_fee;
 
-      flat_set< account_name_type > required;
-      vector<authority> other;
-      trx.get_required_authorities( required, required, required, other );
-      for( const auto& auth : required ) {
-         const auto& acnt = get_account( auth );
+      if (has_hardfork(BLURT_HARDFORK_0_5)) {
+         auto name = get_transaction_user( trx );
+
+         const auto& acnt = get_account( name );
          FC_ASSERT( acnt.balance >= fee, "Account does not have sufficient funds for transaction fee.", ("balance", acnt.balance)("fee", fee) );
 
          adjust_balance( acnt, -fee );
-         if (!has_hardfork(BLURT_HARDFORK_0_4)) {
-            adjust_balance( get_account( BLURT_TREASURY_ACCOUNT ), fee );
-         } else {
-            adjust_balance( get_account( BLURT_NULL_ACCOUNT ), fee );
+         adjust_balance( get_account( BLURT_NULL_ACCOUNT ), fee );
 #ifdef IS_TEST_NET
-            ilog( "burned transaction fee ${f} from account ${a}, for trx ${t}", ("f", fee)("a", auth)("t", trx.id()));
+         ilog( "burned transaction fee ${f} from account ${a}, for trx ${t}", ("f", fee)("a", name)("t", trx.id()));
 #endif
+      } else {
+         // before BLURT_HARDFORK_0_5
+         flat_set< account_name_type > required;
+         vector<authority> other;
+         trx.get_required_authorities( required, required, required, other );
+         for( const auto& auth : required ) {
+            const auto& acnt = get_account( auth );
+            FC_ASSERT( acnt.balance >= fee, "Account does not have sufficient funds for transaction fee.", ("balance", acnt.balance)("fee", fee) );
+
+            adjust_balance( acnt, -fee );
+            if (!has_hardfork(BLURT_HARDFORK_0_4)) {
+               adjust_balance( get_account( BLURT_TREASURY_ACCOUNT ), fee );
+            } else {
+               adjust_balance( get_account( BLURT_NULL_ACCOUNT ), fee );
+            }
          }
       }
    } FC_CAPTURE_AND_RETHROW( (trx) )
@@ -3754,6 +3783,12 @@ void database::init_hardforks()
    _hardfork_versions.times[ BLURT_HARDFORK_0_4 ] = fc::time_point_sec( BLURT_HARDFORK_0_4_TIME );
    _hardfork_versions.versions[ BLURT_HARDFORK_0_4 ] = BLURT_HARDFORK_0_4_VERSION;
 // #endif
+
+#ifdef IS_TEST_NET
+   FC_ASSERT( BLURT_HARDFORK_0_5 == 5, "Invalid hardfork configuration" );
+   _hardfork_versions.times[ BLURT_HARDFORK_0_5 ] = fc::time_point_sec( BLURT_HARDFORK_0_5_TIME );
+   _hardfork_versions.versions[ BLURT_HARDFORK_0_5 ] = BLURT_HARDFORK_0_5_VERSION;
+#endif
 
    const auto& hardforks = get_hardfork_property_object();
    FC_ASSERT( hardforks.last_hardfork <= BLURT_NUM_HARDFORKS, "Chain knows of more hardforks than configuration", ("hardforks.last_hardfork",hardforks.last_hardfork)("BLURT_NUM_HARDFORKS",BLURT_NUM_HARDFORKS) );
