@@ -238,11 +238,11 @@ void witness_set_properties_evaluator::do_apply( const witness_set_properties_op
          See issue https://gitlab.com/blurt/blurt/-/issues/114
       */
       const witness_schedule_object& wso = _db.get_witness_schedule_object();
-      share_type flat_fee_amount = wso.median_props.operation_flat_fee.amount.value * trx.operations.size();
+      share_type flat_fee_amount = wso.median_props.operation_flat_fee.amount.value;
       auto flat_fee = asset(std::max(flat_fee_amount, share_type(1)), BLURT_SYMBOL);
    
       auto op_size = fc::raw::pack_size(o);
-      share_type bw_fee_amount = (trx_size * wso.median_props.bandwidth_kbytes_fee.amount.value)/1024;
+      share_type bw_fee_amount = (op_size * wso.median_props.bandwidth_kbytes_fee.amount.value)/1024;
       auto bw_fee = asset(std::max(bw_fee_amount, share_type(1)), BLURT_SYMBOL);
       auto fee = flat_fee + bw_fee;
    
