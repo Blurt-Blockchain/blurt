@@ -35,7 +35,7 @@ uint64_t approx_sqrt( const uint128_t& x )
    return result;
 }
 
-uint64_t get_rshare_reward( const comment_reward_context& ctx, const dynamic_global_property_object& gpo, bool use_new_calc )
+uint64_t get_rshare_reward( const comment_reward_context& ctx, const dynamic_global_property_object& gpo, uint32_t hardfork )
 {
    try
    {
@@ -52,7 +52,12 @@ uint64_t get_rshare_reward( const comment_reward_context& ctx, const dynamic_glo
    u256 claim = to256( evaluate_reward_curve( ctx.rshares.value, ctx.reward_curve, ctx.content_constant ) );
    claim = ( claim * ctx.reward_weight ) / BLURT_100_PERCENT;
 
-   u256 payout_u256 = use_new_calc ? ((( rf * claim ) / total_claims) * (staked_supply / current_supply)) : (( rf * claim ) / total_claims);
+   u256 payout_u256 = (( rf * claim ) / total_claims);
+   if ( hardfork >= BLURT_HARDFORK_0_5 ) {
+      payout_u256 = (payout_u256 * staked_supply) / current_supply;
+   } else if ( hardfork >= BLURT_HARDFORK_0_4 ) {
+      payout_u256 *= (staked_supply / current_supply);
+   }
    FC_ASSERT( payout_u256 <= u256( uint64_t( std::numeric_limits<int64_t>::max() ) ) );
    uint64_t payout = static_cast< uint64_t >( payout_u256 );
 

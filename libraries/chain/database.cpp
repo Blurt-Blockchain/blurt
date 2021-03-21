@@ -1677,7 +1677,7 @@ share_type database::cashout_comment_helper( util::comment_reward_context& ctx, 
          }
 
          const auto& gpo = get_dynamic_global_properties();
-         const share_type reward = util::get_rshare_reward( ctx, gpo, has_hardfork(BLURT_HARDFORK_0_4) );
+         const share_type reward = util::get_rshare_reward( ctx, gpo, get_hardfork() );
          uint128_t reward_tokens = uint128_t( reward.value );
 
          if( reward_tokens > 0 )
@@ -3754,6 +3754,12 @@ void database::init_hardforks()
    _hardfork_versions.times[ BLURT_HARDFORK_0_4 ] = fc::time_point_sec( BLURT_HARDFORK_0_4_TIME );
    _hardfork_versions.versions[ BLURT_HARDFORK_0_4 ] = BLURT_HARDFORK_0_4_VERSION;
 // #endif
+
+#ifdef IS_TEST_NET
+   FC_ASSERT( BLURT_HARDFORK_0_5 == 5, "Invalid hardfork configuration" );
+   _hardfork_versions.times[ BLURT_HARDFORK_0_5 ] = fc::time_point_sec( BLURT_HARDFORK_0_5_TIME );
+   _hardfork_versions.versions[ BLURT_HARDFORK_0_5 ] = BLURT_HARDFORK_0_5_VERSION;
+#endif
 
    const auto& hardforks = get_hardfork_property_object();
    FC_ASSERT( hardforks.last_hardfork <= BLURT_NUM_HARDFORKS, "Chain knows of more hardforks than configuration", ("hardforks.last_hardfork",hardforks.last_hardfork)("BLURT_NUM_HARDFORKS",BLURT_NUM_HARDFORKS) );

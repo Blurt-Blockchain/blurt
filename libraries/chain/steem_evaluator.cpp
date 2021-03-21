@@ -230,6 +230,35 @@ void witness_set_properties_evaluator::do_apply( const witness_set_properties_op
          w.props.bandwidth_kbytes_fee = props.bandwidth_kbytes_fee;
       }
    });
+
+   if (_db.has_hardfork(BLURT_HARDFORK_0_5)) {
+      /* witness_set_properties_evaluator is a special case because
+         it uses the signing key instead of owner, active, or posting key
+         to operate.
+         See issue https://gitlab.com/blurt/blurt/-/issues/114
+      */
+      const witness_schedule_object& wso = _db.get_witness_schedule_object();
+      share_type flat_fee_amount = wso.median_props.operation_flat_fee.amount.value;
+      auto flat_fee = asset(std::max(flat_fee_amount, share_type(1)), BLURT_SYMBOL);
+   
+      auto op_size = fc::raw::pack_size(o);
+      share_type bw_fee_amount = (op_size * wso.median_props.bandwidth_kbytes_fee.amount.value)/1024;
+      auto bw_fee = asset(std::max(bw_fee_amount, share_type(1)), BLURT_SYMBOL);
+      auto fee = flat_fee + bw_fee;
+   
+      const auto& acnt = _db.get_account( o.owner );
+      FC_ASSERT( acnt.balance >= fee, "Account does not have sufficient funds for transaction fee.", ("balance", acnt.balance)("fee", fee) );
+   
+      _db.adjust_balance( acnt, -fee );
+      if (_db.has_hardfork(BLURT_HARDFORK_0_4)) {
+         _db.adjust_balance( _db.get_account( BLURT_NULL_ACCOUNT ), fee );
+#ifdef IS_TEST_NET
+         ilog( "burned transaction fee ${f} from account ${a}", ("f", fee)("a", o.owner));
+#endif
+      } else {
+         _db.adjust_balance( _db.get_account( BLURT_TREASURY_ACCOUNT ), fee );
+      }
+   }
 }
 
 void verify_authority_accounts_exist(
@@ -868,7 +897,9 @@ void withdraw_vesting_evaluator::do_apply( const withdraw_vesting_operation& o )
    }
    else
    {
-      int vesting_withdraw_intervals = BLURT_VESTING_WITHDRAW_INTERVALS; /// 13 weeks = 1 quarter of a year
+      int vesting_withdraw_intervals = _db.has_hardfork( BLURT_HARDFORK_0_5 )
+         ? BLURT_VESTING_WITHDRAW_INTERVALS_HF5
+         : BLURT_VESTING_WITHDRAW_INTERVALS;
 
       _db.modify( account, [&]( account_object& a )
       {
