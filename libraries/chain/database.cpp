@@ -3755,11 +3755,11 @@ void database::init_hardforks()
    _hardfork_versions.versions[ BLURT_HARDFORK_0_4 ] = BLURT_HARDFORK_0_4_VERSION;
 // #endif
 
-#ifdef IS_TEST_NET
+// #ifdef IS_TEST_NET
    FC_ASSERT( BLURT_HARDFORK_0_5 == 5, "Invalid hardfork configuration" );
    _hardfork_versions.times[ BLURT_HARDFORK_0_5 ] = fc::time_point_sec( BLURT_HARDFORK_0_5_TIME );
    _hardfork_versions.versions[ BLURT_HARDFORK_0_5 ] = BLURT_HARDFORK_0_5_VERSION;
-#endif
+// #endif
 
    const auto& hardforks = get_hardfork_property_object();
    FC_ASSERT( hardforks.last_hardfork <= BLURT_NUM_HARDFORKS, "Chain knows of more hardforks than configuration", ("hardforks.last_hardfork",hardforks.last_hardfork)("BLURT_NUM_HARDFORKS",BLURT_NUM_HARDFORKS) );
@@ -3837,6 +3837,7 @@ void database::apply_hardfork( uint32_t hardfork )
          }
          break;
       case BLURT_HARDFORK_0_2:
+         break;
       case BLURT_HARDFORK_0_3:
          break;
       case BLURT_HARDFORK_0_4: {
@@ -3845,6 +3846,8 @@ void database::apply_hardfork( uint32_t hardfork )
             rfo.content_constant = BLURT_HARDFORK_0_4_REWARD_CONTENT_CONSTANT;
          });
       }
+         break;
+      case BLURT_HARDFORK_0_5:
          break;
       default:
          break;
