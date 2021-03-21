@@ -897,7 +897,9 @@ void withdraw_vesting_evaluator::do_apply( const withdraw_vesting_operation& o )
    }
    else
    {
-      int vesting_withdraw_intervals = BLURT_VESTING_WITHDRAW_INTERVALS; /// 13 weeks = 1 quarter of a year
+      int vesting_withdraw_intervals = _db.has_hardfork( BLURT_HARDFORK_0_5 )
+         ? BLURT_VESTING_WITHDRAW_INTERVALS_HF5
+         : BLURT_VESTING_WITHDRAW_INTERVALS;
 
       _db.modify( account, [&]( account_object& a )
       {
