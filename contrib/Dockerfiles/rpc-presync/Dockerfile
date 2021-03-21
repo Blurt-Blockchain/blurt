@@ -1,4 +1,4 @@
-FROM faddat/faddat/blurt-rpc-presync-amd64
+FROM faddat/blurt-rpc-presync-amd64
 
 MAINTAINER Jacob Gadikian <jacob@blurt.foundation>
 
