@@ -250,16 +250,16 @@ void witness_set_properties_evaluator::do_apply( const witness_set_properties_op
       FC_ASSERT( acnt.balance >= fee, "Account does not have sufficient funds for transaction fee.", ("balance", acnt.balance)("fee", fee) );
    
       _db.adjust_balance( acnt, -fee );
-      if (_db.has_hardfork(BLURT_HARDFORK_0_4)) {
-         _db.adjust_balance( _db.get_account( BLURT_NULL_ACCOUNT ), fee );
-#ifdef IS_TEST_NET
-         ilog( "burned transaction fee ${f} from account ${a}", ("f", fee)("a", o.owner));
-#endif
-      } else {
+   }
+
+   if (_db.has_hardfork(BLURT_HARDFORK_0_4)) {
+      _db.adjust_balance( _db.get_account( BLURT_NULL_ACCOUNT ), fee );
+      ilog( "burned transaction fee ${f} from account ${a}", ("f", fee)("a", o.owner));
+   } else {
          _db.adjust_balance( _db.get_account( BLURT_TREASURY_ACCOUNT ), fee );
       }
-   }
 }
+
 
 void verify_authority_accounts_exist(
    const database& db,
