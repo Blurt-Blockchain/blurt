@@ -1,7 +1,7 @@
 #ifndef BLURT_HARDFORK_0_5
 #define BLURT_HARDFORK_0_5 5
 
-#define BLURT_HARDFORK_0_5_TIME (1615568895)  // Friday, March 12, 2021 5:08:15 PM GMT
+#define BLURT_HARDFORK_0_5_TIME (1616374206)  // Monday, March 22, 2021 12:50:06 AM
 #define BLURT_HARDFORK_0_5_VERSION hardfork_version(0, 5)
 
 #endif

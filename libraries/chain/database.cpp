@@ -3741,7 +3741,6 @@ void database::init_hardforks()
    FC_ASSERT( BLURT_HARDFORK_0_3 == 3, "Invalid hardfork configuration" );
    _hardfork_versions.times[ BLURT_HARDFORK_0_3 ] = fc::time_point_sec( BLURT_HARDFORK_0_3_TIME );
    _hardfork_versions.versions[ BLURT_HARDFORK_0_3 ] = BLURT_HARDFORK_0_3_VERSION;
-// #endif
 
 
 // Hard fork 4.  Completing the merge, but still need to create a new file: libraries/protocol/hardfork.d/0_4.hf
@@ -3749,17 +3748,15 @@ void database::init_hardforks()
 // Initial issue with HF4 is that Jacob did not correctly update declarations that related to "HARDFORK_0_3"
 // So hf4 nodes would come up, and apply changes contained in hf4 at the hf3 start.  
 // This also explains the failure mode and timing.
-// #ifdef IS_TEST_NET
    FC_ASSERT( BLURT_HARDFORK_0_4 == 4, "Invalid hardfork configuration" );
    _hardfork_versions.times[ BLURT_HARDFORK_0_4 ] = fc::time_point_sec( BLURT_HARDFORK_0_4_TIME );
    _hardfork_versions.versions[ BLURT_HARDFORK_0_4 ] = BLURT_HARDFORK_0_4_VERSION;
-// #endif
 
-// #ifdef IS_TEST_NET
+   // HARD FORK FIVE:
+   // WITNESS PARAMETERS SECURITY AND REWARD POOL FIXES
    FC_ASSERT( BLURT_HARDFORK_0_5 == 5, "Invalid hardfork configuration" );
    _hardfork_versions.times[ BLURT_HARDFORK_0_5 ] = fc::time_point_sec( BLURT_HARDFORK_0_5_TIME );
    _hardfork_versions.versions[ BLURT_HARDFORK_0_5 ] = BLURT_HARDFORK_0_5_VERSION;
-// #endif
 
    const auto& hardforks = get_hardfork_property_object();
    FC_ASSERT( hardforks.last_hardfork <= BLURT_NUM_HARDFORKS, "Chain knows of more hardforks than configuration", ("hardforks.last_hardfork",hardforks.last_hardfork)("BLURT_NUM_HARDFORKS",BLURT_NUM_HARDFORKS) );
@@ -3841,7 +3838,6 @@ void database::apply_hardfork( uint32_t hardfork )
       case BLURT_HARDFORK_0_3:
          break;
       case BLURT_HARDFORK_0_4: {
-
          modify( get< reward_fund_object, by_name >( BLURT_POST_REWARD_FUND_NAME ), [&]( reward_fund_object& rfo ) {
             rfo.content_constant = BLURT_HARDFORK_0_4_REWARD_CONTENT_CONSTANT;
          });
