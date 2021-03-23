@@ -729,7 +729,7 @@ blurt.broadcast.comment(wif, parentAuthor, parentPermlink, author, permlink, tit
 ### Comment Options
 
 ```
-blurt.broadcast.commentOptions(wif, author, permlink, maxAcceptedPayout, percentHiveDollars, allowVotes, allowCurationRewards, extensions, function(err, result) {
+blurt.broadcast.commentOptions(wif, author, permlink, maxAcceptedPayout, percentBlurt, allowVotes, allowCurationRewards, extensions, function(err, result) {
   console.log(err, result);
 });
 ```

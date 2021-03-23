@@ -274,6 +274,7 @@ const comment_options = new Serializer("comment_options", {
   author: string,
   permlink: string,
   max_accepted_payout: asset,
+  percent_blurt: uint16,
   allow_votes: bool,
   allow_curation_rewards: bool,
   extensions: set(

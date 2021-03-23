@@ -39,7 +39,7 @@ describe("steem.broadcast:", () => {
             author: username,
             permlink,
             max_accepted_payout: "1000000.000 BLURT",
-            percent_steem_dollars: 10000,
+            percent_blurt: 10000,
             allow_votes: true,
             allow_curation_rewards: true,
             extensions: [
