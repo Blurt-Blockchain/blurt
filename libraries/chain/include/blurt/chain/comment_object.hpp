@@ -267,7 +267,7 @@ FC_REFLECT( blurt::chain::comment_object,
              (net_rshares)(abs_rshares)(vote_rshares)
              (children_abs_rshares)(cashout_time)(max_cashout_time)
              (total_vote_weight)(reward_weight)(total_payout_value)(curator_payout_value)(beneficiary_payout_value)(author_rewards)(net_votes)(root_comment)
-             (max_accepted_payout)(allow_replies)(allow_votes)(allow_curation_rewards)
+             (max_accepted_payout)(percent_blurt)(allow_replies)(allow_votes)(allow_curation_rewards)
              (beneficiaries)
           )
 

@@ -790,7 +790,7 @@ FC_REFLECT( blurt::protocol::beneficiary_route_type, (account)(weight) )
 FC_REFLECT( blurt::protocol::comment_payout_beneficiaries, (beneficiaries) )
 
 FC_REFLECT_TYPENAME( blurt::protocol::comment_options_extension )
-FC_REFLECT( blurt::protocol::comment_options_operation, (author)(permlink)(max_accepted_payout)(allow_votes)(allow_curation_rewards)(extensions) )
+FC_REFLECT( blurt::protocol::comment_options_operation, (author)(permlink)(max_accepted_payout)(percent_blurt)(allow_votes)(allow_curation_rewards)(extensions) )
 
 FC_REFLECT( blurt::protocol::escrow_transfer_operation, (from)(to)(blurt_amount)(escrow_id)(agent)(fee)(json_meta)(ratification_deadline)(escrow_expiration) );
 FC_REFLECT( blurt::protocol::escrow_approve_operation, (from)(to)(agent)(who)(escrow_id)(approve) );
