@@ -471,7 +471,7 @@ struct comment_options_extension_visitor
 
 void comment_options_evaluator::do_apply( const comment_options_operation& o )
 {
-   if (!_db.has_hardfork(BLURT_HARDFORK_0_3))
+   if (!_db.has_hardfork(BLURT_HARDFORK_0_6))
       FC_ASSERT(o.percent_blurt == 0, "Payments in blurt are disabled");
 
    const auto& comment = _db.get_comment( o.author, o.permlink );
@@ -575,6 +575,10 @@ void comment_evaluator::do_apply( const comment_operation& o )
          com.last_payout = fc::time_point_sec::min();
          com.max_cashout_time = fc::time_point_sec::maximum();
          com.reward_weight = reward_weight;
+         if( !_db.has_hardfork(BLURT_HARDFORK_0_6) )
+         {
+            com.percent_blurt = 0;
+         }
 
          if ( o.parent_author == BLURT_ROOT_POST_PARENT )
          {

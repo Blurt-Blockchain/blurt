@@ -3758,6 +3758,18 @@ void database::init_hardforks()
    _hardfork_versions.times[ BLURT_HARDFORK_0_5 ] = fc::time_point_sec( BLURT_HARDFORK_0_5_TIME );
    _hardfork_versions.versions[ BLURT_HARDFORK_0_5 ] = BLURT_HARDFORK_0_5_VERSION;
 
+   // HARD FORK 6:
+   // Patch issues with 75/25 payout model
+   FC_ASSERT( BLURT_HARDFORK_0_6 == 6, "Invalid hardfork configuration" );
+   _hardfork_versions.times[ BLURT_HARDFORK_0_6 ] = fc::time_point_sec( BLURT_HARDFORK_0_6_TIME );
+   _hardfork_versions.versions[ BLURT_HARDFORK_0_6 ] = BLURT_HARDFORK_0_6_VERSION;
+
+#ifdef IS_TEST_NET
+   FC_ASSERT( BLURT_HARDFORK_0_7 == 7, "Invalid hardfork configuration" );
+   _hardfork_versions.times[ BLURT_HARDFORK_0_7 ] = fc::time_point_sec( BLURT_HARDFORK_0_7_TIME );
+   _hardfork_versions.versions[ BLURT_HARDFORK_0_7 ] = BLURT_HARDFORK_0_7_VERSION;
+#endif
+
    const auto& hardforks = get_hardfork_property_object();
    FC_ASSERT( hardforks.last_hardfork <= BLURT_NUM_HARDFORKS, "Chain knows of more hardforks than configuration", ("hardforks.last_hardfork",hardforks.last_hardfork)("BLURT_NUM_HARDFORKS",BLURT_NUM_HARDFORKS) );
    FC_ASSERT( _hardfork_versions.versions[ hardforks.last_hardfork ] <= BLURT_BLOCKCHAIN_VERSION, "Blockchain version is older than last applied hardfork" );
@@ -3844,6 +3856,8 @@ void database::apply_hardfork( uint32_t hardfork )
       }
          break;
       case BLURT_HARDFORK_0_5:
+         break;
+      case BLURT_HARDFORK_0_6:
          break;
       default:
          break;
