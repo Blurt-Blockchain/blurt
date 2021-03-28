@@ -173,6 +173,7 @@ docker exec -it blurtd bash
 You will notice that your command prompt will be surrounded by brackets to let you know that you are inside a Docker container.
 
 Example:
+
 ```
 [root@saboin-blurt /]#
 ```
@@ -218,6 +219,7 @@ You'll also need to import the brain priv_wif_key that you generated in the prev
 ```
 import_key 5Jf7aeiqYC2vPzaVtrgpHr2SmfFdP7gV5XDwyj3fFoZt13bdGhc
 ```
+
 ###### Don't worry! The key in the example is not a valid key.
 
 **Add private brain key to config.ini to sign blocks as a Witness**
@@ -244,12 +246,14 @@ Scroll almost all the way down until you get to this line:
 # name of witness controlled by this node (e.g. initwitness )
 # witness =
 ```
+
 Delete the hash sign and the leading space before `witness =`, and add your witness username inside quotation marks after the equal sign like this:
 
 ```bash
 # name of witness controlled by this node (e.g. initwitness )
 witness = "jacobgadikian"
 ```
+
 ###### Replace jacobgadikian with your own Blurt username.
 
 Next, find this line:
@@ -265,6 +269,7 @@ Delete the hash sign and the leading space before `private-key =`, and add your 
 # WIF PRIVATE KEY to be used by one or more witnesses or miners
 private-key = 5Jf7aeiqYC2vPzaVtrgpHr2SmfFdP7gV5XDwyj3fFoZt13bdGhc
 ```
+
 ######(Don't worry! The key in the example is not a valid key.)
 
 Press `Ctrl + o` to save the file, and `Ctrl + x` to exit the nano editor.
@@ -472,7 +477,7 @@ You can have one or more backup servers in case your main one fails or starts mi
 
 It's highly recommended for consensus witnesses to have backup servers.
 
-The procedure to setup your backup servers are the same as with your main server. You will need to generate a new Brain  key for your backup server.
+The procedure to setup your backup servers are the same as with your main server. You will need to generate a new Brain key for your backup server.
 
 Then, in order to switch between the servers, you just need to do an `update_witness` operation from your Cli Wallet and put in the public key that matches the server you want to use for signing blocks with your witness.
 
