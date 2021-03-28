@@ -221,32 +221,37 @@ imageupload container push:
   only:
     - dev
 
+
+
+
+
+
 instablurt-amd64:
   needs: []
-  when: manual
   stage: docker
   script:
-    - docker rm instablurt-amd64
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - docker run -d --name instablurt-amd64 $CI_REGISTRY_IMAGE/witness:dev
-    - sleep 9000
+    - for i in {1..1000}; do echo -n "This is a test in loop $i $(docker logs -n 5 instablurt-amd64) "; date ; sleep 5; done
     - docker commit instablurt-amd64
-    - tocker tag instablurt-amd64 $CI_REGISTRY/instablurt-amd64
-  tags: 
-    - shell-arch
+    - docker tag instablurt-amd64 $CI_REGISTRY_IMAGE/instablurt-amd64:$CI_COMMIT_BRANCH
+    - docker push $CI_REGISTRY_IMAGE/instablurt-amd64:$CI_COMMIT_BRANCH
+
 
 
 instablurt-arm64:
   needs: []
-  when: manual
   stage: docker
   script:
-    - docker rm instablurt-arm64
+    - docker rm instablurt-arm64 || true
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-    - docker run -d --net=host --restart=unless-stopped --name instablurt-arm64 faddat/arm-blurt-presync /usr/bin/blurtd --data-dir /blurtd --plugin "witness account_by_key account_by_key_api condenser_api database_api network_broadcast_api transaction_status transaction_status_api rc_api" --p2p-seed-node 172.26.41.78:1776 --p2p-seed-node 172.26.179.68:1776 --p2p-seed-node 172.26.116.111:1776 --p2p-seed-node 172.26.71.157:1776 --p2p-seed-node 172.26.215.48:1776 --p2p-seed-node 172.26.210.82:1776 --p2p-seed-node 172.26.84.164:1776 --p2p-seed-node 172.26.106.151:1776
-    - sleep 3000
+    - docker run -d --net=host --restart=unless-stopped --name instablurt-arm64 faddat/arm-blurt-presync /usr/bin/blurtd --data-dir /blurtd
+    - for i in {1..1000}; do echo -n "This is a test in loop $i $(docker logs -n 5 instablurt-arm64) "; date ; sleep 5; done
     - docker commit instablurt-arm64
-    - tocker tag instablurt-amd64 $CI_REGISTRY_IMAGE/instablurt-arm64
+    - docker tag instablurt-amd64 $CI_REGISTRY_IMAGE/instablurt-arm64:$CI_COMMIT_BRANCH
+    - docker push $CI_REGISTRY_IMAGE/instablurt-arm64:$CI_COMMIT_BRANCH
+    - docker stop instablurt-arm64
+    - docker rm instablurt-arm64
   tags: 
     - arm64-shell
 
@@ -585,6 +590,10 @@ kaniko presync rpc:
   script:
     - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
     - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/contrib/Dockerfiles/rpc-presync/Dockerfile --destination $CI_REGISTRY_IMAGE/rpc-presync:$CI_COMMIT_BRANCH
+    - docker run -d $CI_REGISTRY_IMAGE/rpc-presync:$CI_COMMIT_BRANCH --name rpc-presync
+    - for i in {1..1000}; do echo -n "This is a test in loop $i $(docker logs -n 5 rpc-presync) "; date ; sleep 5; done
+    - docker commit $CI_REGISTRY_IMAGE/rpc-presync:$CI_COMMIT_BRANCH
+    - docker rm rpc-presync
   tags:
     - metal
 
