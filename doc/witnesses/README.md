@@ -4,14 +4,6 @@ The role of a witness in the Blurt Blockchain is to verify incoming transactions
 
 ## Witness Hardware
 
-As many of you are aware, the hardware spec needed for running a Steem/Hive witness has grown significantly over the years!
-
-[privex.io](https://privex.io) currently offers a highly optomized Hive witness setup that they call Node In A Box(TM).
-
-We have had some discussions about a Blurt-Flavored "Node In A Box(TM)", so in the long-term as the chain grows, their services may limit your costs and risks.
-
-Additionally, a non-docker bash script AND a docker-based script will be developed and included in this repository.
-
 Our goal should be to ensure that we do not run on any single infrastructure provider. While many of us have a bit of a [bare-metal server fetish](https://gitlab.com/virgohardware/core), the fact is that for Blurt's launch and likely for at least the first six months of Blurt's operation, you're not going to need a huge machine to operate a Witness. We are considering further optomizations to Blurtd which would permanently lower the RAM consumption on both Witness and Seed nodes, but that's as of yet incomplete. Here is a [reasonable machine spec](https://whaleshares.io/@faddat/witness-post#@faddat/re-daking-re-faddat-witness-post-20200612t195020198z) that should give you a ton of growing room.
 
 **Infrastructure Providers**:
@@ -43,11 +35,9 @@ Accurate as of **June 15, 2020**:
 
 ## Witness Setup Procedure
 
-**Valid for Mainnet, July 4, 2020:**
+**Valid for Mainnet, March 28, 2021:**
 
-Check out this [BLOG POST](https://blurt.blog/blurtopian/@zahidsun/how-to-setup-a-witness-node-step-by-step-video-tutorial) with instructional video!
-
-If you plan to use our automated setup, your witness node should run Debian 10. If you're doing it manually, feel free to use any type of machine that you'd like.
+It is recommended to use either Debian 10 or Ubuntu 20.04.
 
 ### Configure Passwordless SSH Logins: IMPORTANT!
 
@@ -85,7 +75,7 @@ You should change it to:
 PasswordAuthentication no
 ```
 
-Press `ctrl + o` to save the file, and `ctrl + x` to exit the nano editor.
+Press `Ctrl + o` to save the file, and `Ctrl + x` to exit the nano editor.
 
 Then run
 
@@ -95,35 +85,124 @@ service ssh restart
 
 **DO NOT OPERATE A BLURT WITNESS WITH PASSWORD AUTHENTICATION ENABLED.**
 
-### Set up a Blurt Full Node
+### Set up a Blurt Witness or Seed Node
 
-We've reduced setting up a full node to a single-line installer. Run the following command as root on your fresh Debian 10 physical or virtual machine.
+Blurt nodes are now provided as Docker container images with the latest build. This makes upgrading during hardforks much quicker and smoother.
 
-```bash
-bash <(curl -s https://gitlab.com/blurt/blurt/-/raw/dev/doc/witnesses/witness.bash)
-```
-
-Now you've just got to wait a bit for your machine to import 1.3 million Steem accounts and sync the Blurt Blockchain. To monitor this process, do like:
+You will need to have root privileges to perform this installation. If you are not logged in as root, you can run the following command to get root privileges:
 
 ```bash
-journalctl -u blurtd -f
+sudo su
 ```
 
-When you see individual blocks being produced, it's done and you're ready to proceed
+Start by installing dependencies and getting your server up to date:
 
-Exit the scrolling monitoring logs with `Ctrl+C`
+```bash
+apt update
+apt upgrade -y
+apt install -y software-properties-common gnupg vnstat ifstat iftop atop ufw fail2ban systemd-timesyncd
+```
 
-The script sets up a Blurt Full Node, but setting up a Witness will always be a manual process. In order to run a witness, you'll need to import your Blurt active key using the `cli_wallet` so that you can sign a `witness_update` transaction that announces your Witness candidacy to the blockchain. Blurt is a Steem fork, so Steem active keys from 20 May 2020 or earlier will also work.
+Install Docker:
 
-So now you'll need to run **cli_wallet**. (type `cli_wallet` and hit enter)
+```bash
+curl -s https://get.docker.com | bash
+```
 
-The first thing you should do is set a password, like:
+Setup your firewall to block all incoming connections except for SSH and port 1776 for p2p connections:
+
+```bash
+ufw default deny
+ufw allow ssh
+ufw allow 1776
+ufw enable
+```
+
+To install the Docker container with the Blurt node, run the following command:
+
+```bash
+docker run -d --net=host -v blurtd:/blurtd --name blurtd  registry.gitlab.com/blurt/blurt/witness:dev /usr/bin/blurtd --data-dir /blurtd --plugin "witness account_by_key account_by_key_api condenser_api database_api network_broadcast_api transaction_status transaction_status_api rc_api" --webserver-http-endpoint 127.0.0.1:8091 --webserver-ws-endpoint 127.0.0.1:8090
+```
+
+Now, the Docker image will be downloaded and your Blurt node will start up inside of a Docker container.
+
+You will have to wait for the node to import over 1 million Blurt accounts and synchronize the Blurt blockchain.
+
+To monitor this process, you can run the following command:
+
+```bash
+docker logs blurtd -f
+```
+
+Once you see individual blocks being handled, the chain is fully synchronized.
+
+It will look something like this:
+
+```
+1355794ms p2p_plugin.cpp:212            handle_block         ] Got 0 transactions on block 7561872 by saboin -- Block Time Offset: -205 ms
+1358831ms p2p_plugin.cpp:212            handle_block         ] Got 0 transactions on block 7561873 by opfergnome -- Block Time Offset: -168 ms
+1361695ms p2p_plugin.cpp:212            handle_block         ] Got 0 transactions on block 7561874 by blurthispano -- Block Time Offset: -304 ms
+1364788ms p2p_plugin.cpp:212            handle_block         ] Got 0 transactions on block 7561875 by megadrive -- Block Time Offset: -212 ms
+1367689ms p2p_plugin.cpp:212            handle_block         ] Got 0 transactions on block 7561876 by ionomy -- Block Time Offset: -310 ms
+1370683ms p2p_plugin.cpp:212            handle_block         ] Got 1 transactions on block 7561877 by busbecq -- Block Time Offset: -316 ms
+1374015ms p2p_plugin.cpp:212            handle_block         ] Got 0 transactions on block 7561878 by jakeminlim -- Block Time Offset: 15 ms
+1376675ms p2p_plugin.cpp:212            handle_block         ] Got 0 transactions on block 7561879 by zahidsun -- Block Time Offset: -325 ms
+1379685ms p2p_plugin.cpp:212            handle_block         ] Got 0 transactions on block 7561880 by imransoudagar -- Block Time Offset: -314 ms
+1382709ms p2p_plugin.cpp:212            handle_block         ] Got 0 transactions on block 7561881 by double-u -- Block Time Offset: -290 ms
+1385647ms p2p_plugin.cpp:212            handle_block         ] Got 0 transactions on block 7561882 by kentzz001 -- Block Time Offset: -352 ms
+1388925ms p2p_plugin.cpp:212            handle_block         ] Got 0 transactions on block 7561883 by jacobgadikian -- Block Time Offset: -74 ms
+1391731ms p2p_plugin.cpp:212            handle_block         ] Got 0 transactions on block 7561884 by empato365 -- Block Time Offset: -268 ms
+1394757ms p2p_plugin.cpp:212            handle_block         ] Got 0 transactions on block 7561885 by africa.witness -- Block Time Offset: -242 ms
+1397830ms p2p_plugin.cpp:212            handle_block         ] Got 0 transactions on block 7561886 by michelangelo3 -- Block Time Offset: -169 ms
+```
+
+Once you get there, you can exit the scrolling monitoring logs with `Ctrl + C`
+
+If you are only setting up a seed node, you are done.
+
+In order to run a witness, you'll need to import your Blurt active key using the `cli_wallet` so that you can sign a `witness_update` transaction that announces your witness candidacy to the blockchain. Blurt is a Steem fork, so Steem active keys from 20 May, 2020 or earlier will also work.
+
+So now you'll need to run **cli_wallet**.
+
+To do this, you will have to enter blurtd's Docker container:
+
+```bash
+docker exec -it blurtd bash
+```
+
+You will notice that your command prompt will be surrounded by brackets to let you know that you are inside a Docker container.
+
+Example:
+
+```
+[root@saboin-blurt /]#
+```
+
+Next, navigate to the `/blurtd` directory:
+
+```bash
+cd /blurtd
+```
+
+Note that it is important to run `cli_wallet` from the `/blurtd` directory because this directory is the only one that will not be erased in the event that you need to reinstall your Blurt node or when you upgrade during hardforks.
+
+To start `cli_wallet`, run this command:
+
+```bash
+cli_wallet
+```
+
+The first thing you should do is set a password:
 
 ```
 set_password yourpassword
 ```
 
-You'll also want to `suggest_brain_key`.
+You'll also want to run:
+
+```
+suggest_brain_key
+```
 
 Copy down its entire output and keep it safely. You'll be using this brain key to control your Witness.
 
@@ -135,34 +214,89 @@ import_key 5KABCDEFGHIJKLMNOPQRSTUVXYZ
 
 Note: The key should start with a 5 as per the example key above.
 
+You'll also need to import the brain priv_wif_key that you generated in the previous step.
+
+```
+import_key 5Jf7aeiqYC2vPzaVtrgpHr2SmfFdP7gV5XDwyj3fFoZt13bdGhc
+```
+
+###### Don't worry! The key in the example is not a valid key.
+
 **Add private brain key to config.ini to sign blocks as a Witness**
 
-First exit the cli_wallet:
+First exit the cli_wallet by pressing `Ctrl + d`.
 
-```
-Ctrl+D
-```
+Then exit the Docker container:
 
-In the code below, replace BRAIN_KEY_WIF_PRIV_KEY with the previously generated Brain wif_priv_key and replace "jacobgadikian" with your own Blurt account name:
-
-```
-echo "private-key = BRAIN_KEY_WIF_PRIV_KEY" >> /blurt/config.ini
-echo 'witness = "jacobgadikian"' >> /blurt/config.ini
-systemctl restart blurtd
-systemctl status blurtd
+```bash
+exit
 ```
 
-Paste all four of the lines above in one hit into the command line and press enter once.
+Next, we need to edit `config.ini` to put in the settings for your witness.
+
+Use nano to edit `config.ini`:
+
+```bash
+nano /var/lib/docker/volumes/blurtd/_data/config.ini
+```
+
+Scroll almost all the way down until you get to this line:
+
+```bash
+# name of witness controlled by this node (e.g. initwitness )
+# witness =
+```
+
+Delete the hash sign and the leading space before `witness =`, and add your witness username inside quotation marks after the equal sign like this:
+
+```bash
+# name of witness controlled by this node (e.g. initwitness )
+witness = "jacobgadikian"
+```
+
+###### Replace jacobgadikian with your own Blurt username.
+
+Next, find this line:
+
+```bash
+# WIF PRIVATE KEY to be used by one or more witnesses or miners
+# private-key =
+```
+
+Delete the hash sign and the leading space before `private-key =`, and add your previously generated Brain wif_priv_key after the equal sign like this:
+
+```bash
+# WIF PRIVATE KEY to be used by one or more witnesses or miners
+private-key = 5Jf7aeiqYC2vPzaVtrgpHr2SmfFdP7gV5XDwyj3fFoZt13bdGhc
+```
+
+######(Don't worry! The key in the example is not a valid key.)
+
+Press `Ctrl + o` to save the file, and `Ctrl + x` to exit the nano editor.
+
+Now restart the Blurt node with the following command:
+
+```bash
+docker restart blurtd
+```
 
 **Declare that you're a Witness**
 
-Use the command `cli_wallet` to go back into the wallet and then unlock it with:
+We need to go back into `cli_wallet` to do this:
+
+```bash
+docker exec -it blurtd bash
+cd /blurtd
+cli_wallet
+```
+
+First, we need to unlock the wallet:
 
 ```
 unlock yourpasswordhere
 ```
 
-Use the below code, but first replace the "jacobgadikian" Blurt account name with your own; also replace the blog URL with your own blog url (Blurt, Hive, Medium, Steem etc) and the Brain public key with yours, which you generated previously:
+Use the folowing code, but first replace the "jacobgadikian" Blurt account name with your own; also replace the blog URL with your own blog URL (this should ideally be a Blurt post that introduces your witness or at the very least a link you your Blurt profile), and the Brain public key with yours, which you generated previously:
 
 ```
 update_witness "jacobgadikian" "https://your-blog-url" "BRAIN_KEY_PUB_KEY_GOES_HERE" {"account_creation_fee":"10.000 BLURT","maximum_block_size":65536} true
@@ -202,7 +336,7 @@ Success looks like this:
 }
 ```
 
-It's also a very good idea for you to vote for yourself from the **cli_wallet**, so that you will begin to make blocks:
+It's also a very good idea for you to vote for yourself from the `cli_wallet`, so that you will begin to make blocks:
 
 Note: You'll want to replace `jacobgadikian` with your own Blurt account name in the next voting step. The first name is the account that you're voting from and the second name with placeholder 'gopher23' is the account that you're voting for.
 
@@ -247,266 +381,111 @@ Success for voting for **gopher23** witness looks like:
 
 **Updating Fees**
 
-The Blurt blockchain has fees for every transaction, including voting, posting, power up, power down, transfers, reblurt etc witnesses set the fees according to network demand, ie higher fees when spam is prolific and lower fees when global user activity reduces. Free transactions are a myth, witnesses subsidise free transactions with every increasing server costs to keep up with chain bloat, fees help witnesses keep the bloat down to a minimum.
+The Blurt blockchain has fees for every transaction, including voting, posting, power up, power down, transfers, reblurt, et cetera. Witnesses set the fees according to network demand, ie. higher fees when spam is prolific and lower fees when global user activity reduces. Free transactions are a myth. Witnesses subsidise free transactions with ever-increasing server costs to keep up with chain bloat. Fees help witnesses keep the bloat down to a minimum.
 
 Fees are calculated as a median of consensus witness fees. Have a look at what fees other witnesses have set on https://blocks.blurtwallet.com/#/witnesses
 
-Set the fees from your unlocked wallet using the below string, remembering to replace "jacobgadikian" with your witness account name and inserting your wallet Public Brain Key where specified. You can also adjust `account_creation_fee`, `operation_flat_fee` and `bandwidth_kbytes_fee` as desired.
+Set the fees from your unlocked wallet using the string below, remembering to replace "jacobgadikian" with your witness account name and inserting your wallet Public Brain Key where specified. You can also adjust `account_creation_fee`, `operation_flat_fee` and `bandwidth_kbytes_fee` as desired.
 
 ```
-update_witness_properties "jacobgadikian" {"key":"BRAIN_KEY_PUB_KEY_GOES_HERE", "account_creation_fee":"10.000 BLURT","maximum_block_size":65536,"account_subsidy_budget": 797, "account_subsidy_decay": 347321, "operation_flat_fee":"0.001 BLURT","bandwidth_kbytes_fee":"0.100 BLURT"} true
+update_witness_properties "jacobgadikian" {"key":"BRAIN_KEY_PUB_KEY_GOES_HERE", "account_creation_fee":"10.000 BLURT","maximum_block_size":65536,"account_subsidy_budget": 797, "account_subsidy_decay": 347321, "operation_flat_fee":"0.001 BLURT","bandwidth_kbytes_fee":"0.200 BLURT"} true
 ```
 
-**If you're a witness, you're done now.**
+To exit Cli Wallet and Docker container, press `Ctrl + d` and run:
 
-**Full Nodes and Seed Nodes should**
-
-```
-systemctl start ipfs-hardened
+```bash
+exit
 ```
 
 ## Common Cli Wallet Commands
 
-Open Cli Wallet:
+Enter Docker container and open Cli Wallet:
 
 ```bash
+docker exec -it blurtd bash
+cd /blurtd
 cli_wallet
 ```
 
 Unlock Wallet:
 
-```bash
+```
 unlock yourpassword
 ```
 
-Exit Cli Wallet:
+Exit Cli Wallet and Docker container:
+
+Press `Ctrl + d` and then run:
 
 ```bash
-Ctrl+D
+exit
 ```
 
-## Common Blurtd Commands
-
-Check block production status by printing one minute of history to your terminal:
-
-```bash
-journalctl -u blurtd --no-pager --since "1 minute ago"
-```
+## Common Docker/Blurtd related commands
 
 Monitor the blockchain continuously:
 
 ```bash
-journalctl -u blurtd -f
-```
-
-Monitor your node continuously, all processes:
-
-```bash
-journalctl -f
+docker logs blurtd -f
 ```
 
 Stop blurtd
 
 ```bash
-systemctl stop blurtd
+docker stop blurtd
 ```
 
 Start blurtd
 
 ```bash
-systemctl start blurtd
+docker start blurtd
 ```
 
 Restart blurtd
 
 ```bash
-systemctl restart blurtd
-```
-
-Replay Blockchain
-
-```bash
-systemctl stop blurtd
-blurtd --data-dir /blurt --replay-blockchain
+docker restart blurtd
 ```
 
 Edit config.ini
 
 ```bash
-nano /blurt/config.ini
+nano /var/lib/docker/volumes/blurtd/_data/config.ini
 ```
 
-## Updating for HF1
+## Disabling your witness
 
-Enter the `cli_wallet`
+There might be some situations in which you need to disable your witness. If you are working on your witness server and you want to avoid missing blocks, it's a good idea to disable it before working on it, then re-enable it once you're done.
 
-**Disable your witness**
+In that case, enter the Docker container and run Cli Wallet:
 
-In the below command, replace `jacobgadikian` with your Blurt account name and the blog url with your own. Note the `BLT1111111111111111111111111111111114T1Anm` key is the global default key to disable the witness.
-
-```
-update_witness "jacobgadikian" "https://your-blog-url" "BLT1111111111111111111111111111111114T1Anm" {"account_creation_fee":"10.000 BLURT","maximum_block_size":65536} true
-```
-
-Then `ctrl+d` to exit the wallet.
-
-**upgrade your binary**
-
-```
-systemctl stop blurtd
-wget -O blurt.zip https://gitlab.com/blurt/blurt/-/jobs/630888073/artifacts/download?file_type=archive
-unzip blurt.zip
-mv build/programs/blurtd/blurtd_witness /usr/bin/blurtd
-chmod +x /usr/bin/blurtd
+```bash
+docker exec -it blurtd bash
+cd /blurtd
+cli_wallet
 ```
 
-**Edit the systemd unit**
-
-```
-nano /etc/systemd/system/blurtd.service
-```
-
-Change it so that exec start looks like this:
-
-```
-ExecStart=/usr/bin/blurtd --replay --data-dir /blurt
-```
-
-`Ctrl+o` to write the changes, hit `ENTER` to complete the writing, `Ctrl+x` to exit.
-
-**Reload Daemon**
-
-```
-systemctl daemon-reload
-```
-
-**Start blurtd**
-
-```
-systemctl start blurtd
-```
-
-**Wait for chain to sync**
-
-```
-journalctl -u blurtd -f
-```
-
-When you start seeing scrolling text showing blocks being produced it is synced! Example: `Got 0 transactions on block 150005 by blurtplus -- Block Time Offset: -342 ms`
-
-**enable your witness**
-
-Enter the `cli_wallet`
-
-Replace `jacobgadikian` with your Blurt account name and the blog url with your own.
-
-```
-update_witness "jacobgadikian" "https://your-blog-url" "BRAIN_KEY_PUB_KEY_GOES_HERE" {"account_creation_fee":"10.000 BLURT","maximum_block_size":65536} true
-```
-
-Exit wallet with `Ctrl+d`
-
-**Edit the systemd unit and change back to default value**
-
-```
-nano /etc/systemd/system/blurtd.service
-```
-
-Change back exec start to look like this:
-
-```
-ExecStart=/usr/bin/blurtd --data-dir /blurt
-```
-
-`Ctrl+o` to write the changes, hit `ENTER` to complete the writing, `Ctrl+x` to exit.
-
-Finally check a block explorer to see that you are broadcasting the new version number.
-
-## Upgrading for HF2
-
-Enter the `cli_wallet`
-
-**Disable your witness**
-
-In the below command, replace `jacobgadikian` with your Blurt account name and the blog url with your own. Note the `BLT1111111111111111111111111111111114T1Anm` key is the global default key to disable the witness.
+Run the following command, but replace `jacobgadikian` with your Blurt account name and the blog url with your own. Note the `BLT1111111111111111111111111111111114T1Anm` key is the global default key to disable the witness.
 
 ```
 update_witness "jacobgadikian" "https://your-blog-url" "BLT1111111111111111111111111111111114T1Anm" {"account_creation_fee":"10.000 BLURT","maximum_block_size":65536} true
 ```
 
-Then `ctrl+d` to exit the wallet.
+## Running two or more servers for backup
 
-**upgrade your binary**
+You can have one or more backup servers in case your main one fails or starts missing blocks. It's also more convenient if you need to do some work on your main server because you don't need to disable your witness. Instead you can just switch the block signing over to your backup server while doing your work on your main, then switch back when you're done.
 
-```
-systemctl stop blurtd
-wget https://gitlab.com/blurt/blurt/-/jobs/675578369/artifacts/raw/build/bin/blurtd
-mv blurtd /usr/bin/blurtd
-chmod +x /usr/bin/blurtd
-apt install libncurses5
-```
+It's highly recommended for consensus witnesses to have backup servers.
 
-**Edit the systemd unit**
+The procedure to setup your backup servers are the same as with your main server. You will need to generate a new Brain key for your backup server.
 
-```
-nano /etc/systemd/system/blurtd.service
-```
+Then, in order to switch between the servers, you just need to do an `update_witness` operation from your Cli Wallet and put in the public key that matches the server you want to use for signing blocks with your witness.
 
-Change it so that exec start looks like this:
-
-```
-ExecStart=/usr/bin/blurtd --replay --data-dir /blurt
-```
-
-`Ctrl+o` to write the changes, hit `ENTER` to complete the writing, `Ctrl+x` to exit.
-
-**Reload Daemon**
-
-```
-systemctl daemon-reload
-```
-
-**Start blurtd**
-
-```
-systemctl start blurtd
-```
-
-**Wait for chain to sync**
-
-```
-journalctl -u blurtd -f
-```
-
-When you start seeing scrolling text showing blocks being produced it is synced! Example: `Got 0 transactions on block 150005 by blurtplus -- Block Time Offset: -342 ms`
-
-**enable your witness**
-
-Enter the `cli_wallet`
-
-Replace `jacobgadikian` with your Blurt account name and the blog url with your own.
+Run the following command from `cli_wallet`, but replace "jacobgadikian" with your Blurt witness account, the blog URL with your own, and the brain pub key with the one for the server you want to use for signing blocks.
 
 ```
 update_witness "jacobgadikian" "https://your-blog-url" "BRAIN_KEY_PUB_KEY_GOES_HERE" {"account_creation_fee":"10.000 BLURT","maximum_block_size":65536} true
 ```
-
-Exit wallet with `Ctrl+d`
-
-**Edit the systemd unit and change back to default value**
-
-```
-nano /etc/systemd/system/blurtd.service
-```
-
-Change back exec start to look like this:
-
-```
-ExecStart=/usr/bin/blurtd --data-dir /blurt
-```
-
-`Ctrl+o` to write the changes, hit `ENTER` to complete the writing, `Ctrl+x` to exit.
-
-Finally check a block explorer to see that you are broadcasting the new version number.
 
 ## Social Expectations
 
@@ -578,6 +557,14 @@ A witness published URL, usually to a post about their witness and role in the B
 ### new_signing_key
 
 Sets the signing key for the witness, which is used to sign blocks.
+
+### operation_flat_fee
+
+This is the flat fee in BLURT that will be charged on every operation done on the Blurt blockchain.
+
+### bandwidth_kbytes_fee
+
+This is an additional fee in BLURT that will be charged on every operation based on the size of the data it contains.
 
 ## Finished
 
