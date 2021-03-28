@@ -221,11 +221,6 @@ imageupload container push:
   only:
     - dev
 
-
-
-
-
-
 instablurt-amd64:
   needs: []
   stage: docker
@@ -236,8 +231,6 @@ instablurt-amd64:
     - docker commit instablurt-amd64
     - docker tag instablurt-amd64 $CI_REGISTRY_IMAGE/instablurt-amd64:$CI_COMMIT_BRANCH
     - docker push $CI_REGISTRY_IMAGE/instablurt-amd64:$CI_COMMIT_BRANCH
-
-
 
 instablurt-arm64:
   needs: []
@@ -254,7 +247,6 @@ instablurt-arm64:
     - docker rm instablurt-arm64
   tags: 
     - arm64-shell
-
 
 # Hard Fork 3
 testnet:
@@ -312,8 +304,6 @@ sonarcloud:
     - master
     - dev
 
-
-
 # DISABLED BECAUSE OF ISSUES WITH LOPSIDED/ARCHLINUX
 # Specifically, an archlinux-keyring issue
 megadrive-build-env:
@@ -324,7 +314,6 @@ megadrive-build-env:
     - docker buildx build --file contrib/Dockerfiles/builder/Dockerfile --tag $CI_REGISTRY_IMAGE/md-env --push --platform linux/arm64,linux/amd64 .
   tags:
     - amd64-shell
-
 
 # Builds blurt arm64-ified
 megadrive-build-ubuntu:
@@ -340,7 +329,6 @@ megadrive-build-ubuntu:
   artifacts:
     paths:
       - build/bin
-
 
 # Builds blurt arm64 testnet
 megadrive-testnet-ubuntu:
@@ -405,7 +393,6 @@ blurtjs:
     - yarn build
     - npm adduser
     - npm run semantic-release
-
 
 # Release changes to dblurt
 dblurt:
@@ -473,7 +460,6 @@ witness:
       - build/bin/
   needs: []
 
-
 witness test- is replay needed?:
   stage: test
   when: manual
@@ -509,7 +495,6 @@ mira from scratch in docker:
     - blurtd --data-dir /blurtd
   needs: 
     - kaniko mira
-
 
 mira:
   stage: build
@@ -547,7 +532,6 @@ rpc:
       - build/bin/
   needs: []
 
-
 kaniko witness:
   stage: docker
   needs:
@@ -584,12 +568,9 @@ kaniko presync rpc:
     - rpc
   dependencies:
     - rpc
-  image:
-    name: gcr.io/kaniko-project/executor:debug
-    entrypoint: [""]
   script:
-    - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
-    - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/contrib/Dockerfiles/rpc-presync/Dockerfile --destination $CI_REGISTRY_IMAGE/rpc-presync:$CI_COMMIT_BRANCH
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker buildx build --dockerfile $CI_PROJECT_DIR/contrib/Dockerfiles/rpc-presync/Dockerfile --tag $CI_REGISTRY_IMAGE/rpc-presync:$CI_COMMIT_BRANCH .
     - docker run -d $CI_REGISTRY_IMAGE/rpc-presync:$CI_COMMIT_BRANCH --name rpc-presync
     - for i in {1..1000}; do echo -n "This is a test in loop $i $(docker logs -n 5 rpc-presync) "; date ; sleep 5; done
     - docker commit $CI_REGISTRY_IMAGE/rpc-presync:$CI_COMMIT_BRANCH
