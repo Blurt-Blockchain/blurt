@@ -1253,7 +1253,7 @@ void vote_evaluator::do_apply( const vote_operation& o )
             if( _db.has_hardfork(BLURT_HARDFORK_0_4) )
             {
                // in HF 0.4.0, this value changed but we still want old value for the curation curve
-               content_constant = BLURT_CONTENT_CONSTANT;
+               content_constant = BLURT_CURATION_CONSTANT;
             }
             uint64_t old_weight = util::evaluate_reward_curve( old_vote_rshares.value, curve, content_constant ).to_uint64();
             uint64_t new_weight = util::evaluate_reward_curve( comment.vote_rshares.value, curve, content_constant ).to_uint64();

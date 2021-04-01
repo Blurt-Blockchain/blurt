@@ -2599,7 +2599,7 @@ void database::init_genesis( const open_args& args )
             {
                rfo.name = BLURT_POST_REWARD_FUND_NAME;
                rfo.last_update = head_block_time();
-               rfo.content_constant = BLURT_CONTENT_CONSTANT;
+               rfo.content_constant = BLURT_REWARD_CONSTANT;
                rfo.percent_curation_rewards = 50 * BLURT_1_PERCENT;
                rfo.percent_content_rewards = BLURT_100_PERCENT;
                rfo.reward_balance = asset( BLURT_INIT_POST_REWARD_BALANCE, BLURT_SYMBOL );
@@ -3851,7 +3851,7 @@ void database::apply_hardfork( uint32_t hardfork )
          break;
       case BLURT_HARDFORK_0_4: {
          modify( get< reward_fund_object, by_name >( BLURT_POST_REWARD_FUND_NAME ), [&]( reward_fund_object& rfo ) {
-            rfo.content_constant = BLURT_CONTENT_CONSTANT_HF4;
+            rfo.content_constant = BLURT_REWARD_CONSTANT_HF4;
          });
       }
          break;
@@ -3859,7 +3859,7 @@ void database::apply_hardfork( uint32_t hardfork )
          break;
       case BLURT_HARDFORK_0_6: {
          modify( get< reward_fund_object, by_name >( BLURT_POST_REWARD_FUND_NAME ), [&]( reward_fund_object& rfo ) {
-            rfo.content_constant = BLURT_CONTENT_CONSTANT_HF6;
+            rfo.content_constant = BLURT_REWARD_CONSTANT_HF6;
          });
       }
          break;

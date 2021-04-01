@@ -117,9 +117,10 @@
 #define BLURT_PROPOSAL_FUND_PERCENT_HF21      (10*BLURT_1_PERCENT)
 
 #define BLURT_HF21_CONVERGENT_LINEAR_RECENT_CLAIMS (fc::uint128_t(0,305178654659033363ull))
-#define BLURT_CONTENT_CONSTANT                (fc::uint128_t(0,2000000000000ull))
-#define BLURT_CONTENT_CONSTANT_HF4            (fc::uint128_t(0,2000000000ull))
-#define BLURT_CONTENT_CONSTANT_HF6            (fc::uint128_t(0,200000000000ull))
+#define BLURT_CURATION_CONSTANT              (fc::uint128_t(0,2000000000000ull))
+#define BLURT_REWARD_CONSTANT                (fc::uint128_t(0,2000000000000ull))
+#define BLURT_REWARD_CONSTANT_HF4            (fc::uint128_t(0,2000000000ull))
+#define BLURT_REWARD_CONSTANT_HF6            (fc::uint128_t(0,200000000000ull))
 
 #define BLURT_BANDWIDTH_AVERAGE_WINDOW_SECONDS (60*60*24*7) ///< 1 week
 #define BLURT_BANDWIDTH_PRECISION             (uint64_t(1000000)) ///< 1 million
