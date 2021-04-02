@@ -163,14 +163,15 @@ Our next milestone is [Hard Fork 3](https://gitlab.com/blurt/blurt/-/milestones/
 ## Indexers
 
 - [Blockfolio.com](https://blockfolio.com/coin/BLURT)
+- [Coincodex.com](https://coincodex.com/crypto/blurt/)
 - [Coingecko.com](https://www.coingecko.com/en/coins/blurt)
+- [CoinJab.com](https://coinjab.com/asset/BLURT)
 - [Coinmarketcap.com](https://coinmarketcap.com/currencies/blurt/)
 - [Coinpaprika.com](https://coinpaprika.com/coin/blurt-blurt/)
 - [Currency.world](https://currency.world/currencies/BLURT)
 - [Livecoinwatch.com](https://www.livecoinwatch.com/price/Blurt-BLURT)
 - [Worldcoinindex.com](https://www.worldcoinindex.com/coin/blurt)
 - [Xangle.io](https://xangle.io/project/BLURT/key-info)
-- [Coincodex.com](https://coincodex.com/crypto/blurt/)
 
 ## Documentation
 
