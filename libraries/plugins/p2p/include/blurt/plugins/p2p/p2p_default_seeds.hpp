@@ -14,30 +14,7 @@ const std::vector< std::string > default_seeds = {
    "159.69.50.171:1776",  // rpc2
    "138.201.152.77:1776",  //rpc3
    "78.47.190.108:1776",    //rpc4
-   "192.168.195.186:1776",    //ilnegro
-   "192.168.195.209:1776",   //megadrive
-   "192.168.195.172:1776",     //zahid
-   "192.168.195.140:1776",    //imrransoudagar
-   "192.168.195.2:1776",    //freakeao
-   "192.168.195.160:1776",    //kamikaze
-   "192.168.195.229:1776",    //saboin
-   "192.168.195.61:1776",   //ionomy
-   "192.168.195.141:1776",    //trev03
-   "192.168.195.119:1776",   //Nelkeljdm
-   "192.168.195.95:1776",   //kilajaem
-   "192.168.195.145:1776",    //empato365
-   "192.168.195.66:1776",   //opfergnome aka nerdtopiade
    "207.244.233.24:1776",   //opfergnome aka nerdtopiade
-   "192.168.195.89:1776",   //blurthispano
-   "192.168.195.96:1776",   //oopsiepoopsie
-   "192.168.195.48:1776",    //kamrankplyloy
-   "192.168.195.234:1776",    //Zahid
-   "192.168.195.127:1776",   //eastmael
-   "192.168.195.229:1776",     //saboin
-   "192.168.195.72:1776",   //notforsale
-   "192.168.195.154:1776",   //jakemlim
-   "192.168.195.49:1776",   //blurtpower 
-   "192.168.195.114:1776",   //jacobgadikian
    "209.145.58.159:1776",  //blurtlatam
    "blurt-seed1.saboin.com:1776",  //saboin
    "blurt-seed2.saboin.com:1776"   //saboin
