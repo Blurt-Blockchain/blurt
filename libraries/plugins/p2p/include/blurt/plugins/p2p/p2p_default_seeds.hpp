@@ -15,6 +15,7 @@ const std::vector< std::string > default_seeds = {
    "138.201.152.77:1776",  //rpc3
    "78.47.190.108:1776",    //rpc4
    "207.244.233.24:1776",   //opfergnome aka nerdtopiade
+   "209.126.86.39:1776",   //michelangelo3
    "209.145.58.159:1776",  //blurtlatam
    "blurt-seed1.saboin.com:1776",  //saboin
    "blurt-seed2.saboin.com:1776"   //saboin
