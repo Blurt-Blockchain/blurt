@@ -1,24 +1,6 @@
 {
   "facebook_app_id": false,
   "google_analytics_id": false,
-  "helmet": {
-    "directives": {
-      "childSrc": "'self' 3speak.online emb.d.tube player.twitch.tv www.youtube.com staticxx.facebook.com w.soundcloud.com player.vimeo.com",
-      "connectSrc": "wss://notifications.blurt.world/ https://rpc.blurt.world https://blurturl.herokuapp.com blurt.world rpc.blurt.world 'self' https://www.google-analytics.com/ https://stats.g.doubleclick.net/ https://images.blurt.world https://imgp.blurt.world/ https://blurtd.privex.io notifications.blurt.world data:",
-      "defaultSrc": "tpc.googlesyndication.com 'self' emb.d.tube www.youtube.com staticxx.facebook.com player.vimeo.com *.streamrail.com img.3speakcontent.online lbry.tv *.wistia.com",
-      "fontSrc": "data: fonts.gstatic.com",
-      "frameAncestors": "'none'",
-      "frameSrc": "'self' googleads.g.doubleclick.net https:",
-      "imgSrc": "* data:",
-      "objectSrc": "'none'",
-      "pluginTypes": "application/pdf",
-      "scriptSrc": "'unsafe-inline' http://www.gooletagmanager.com 'unsafe-eval' data: https: 'self' www.google-analytics.com connect.facebook.net",
-      "styleSrc": "'self' 'unsafe-inline' translate.googleapis.com fonts.googleapis.com platform.twitter.com",
-      "reportUri": "/api/v1/csp_violation"
-    },
-    "reportOnly": false,
-    "setAllHeaders": true
-  },
   "img_proxy_prefix": "https://blurt.world/imagesup/",
   "ipfs_prefix": "https://ipfs.blurt.world/ipfs/",
   "notify": {
