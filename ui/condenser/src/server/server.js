@@ -241,8 +241,6 @@ if (env === 'production') {
     app.use(koa_logger());
 }
 
-
-
 app.use(
     mount(
         '/static',
@@ -282,7 +280,6 @@ useUserJson(app);
 usePostJson(app);
 
 useGeneralApi(app);
-
 
 if (env !== 'test') {
     const appRender = require('./app_render');

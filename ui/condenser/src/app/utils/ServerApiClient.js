@@ -3,7 +3,7 @@ import { api } from '@blurtfoundation/blurtjs';
 const request_base = {
     method: 'post',
     credentials: 'same-origin',
-    referrerPolicy: "unsafe-url",
+    referrerPolicy: 'unsafe-url',
     headers: {
         Accept: 'application/json',
         'Content-type': 'application/json',
@@ -32,7 +32,6 @@ export function serverApiRecordEvent(type, val, rate_limit_ms = 5000) {
     if (last_call && new Date() - last_call < rate_limit_ms) return;
     last_call = new Date();
     const value = val && val.stack ? `${val.toString()} | ${val.stack}` : val;
-
 }
 
 export function saveCords(x, y) {
@@ -51,5 +50,3 @@ export function setUserPreferences(payload) {
     });
     return fetch('/api/v1/setUserPreferences', request);
 }
-
-
