@@ -1,20 +1,6 @@
 {
     "facebook_app_id": "SDC_FACEBOOK_APP_ID",
     "google_analytics_id": "SDC_GOOGLE_ANALYTICS_ID",
-    "helmet": {
-        "directives": {
-            "childSrc": "SDC_HELMET_CHILDSRC",
-            "connectSrc": "SDC_HELMET_CONNECTSRC",
-            "defaultSrc": "SDC_HELMET_DEFAULTSRC",
-            "fontSrc": "SDC_HELMET_FONTSRC",
-            "frameAncestors": "SDC_HELMET_FRAMEANCESTORS",
-            "imgSrc": "SDC_HELMET_IMGSRC",
-            "objectSrc": "SDC_HELMET_OBJECTSRC",
-            "scriptSrc": "SDC_HELMET_SCRIPTSRC",
-            "styleSrc": "SDC_HELMET_STYLESRC",
-            "reportUri": "SDC_HELMET_REPORTURI"
-        }
-    },
     "img_proxy_prefix": "SDC_IMAGE_PROXY_PREFIX",
     "notify": {
         "gcm_key": "SDC_NOTIFY_GCM_KEY"
