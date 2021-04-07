@@ -1,7 +1,6 @@
 import path from 'path';
 import Koa from 'koa';
 import mount from 'koa-mount';
-import helmet from 'koa-helmet';
 import koa_logger from 'koa-logger';
 import requestTime from './requesttimings';
 import StatsLoggerClient from './utils/StatsLoggerClient';
@@ -242,11 +241,7 @@ if (env === 'production') {
     app.use(koa_logger());
 }
 
-// app.use(
-//     helmet({
-//         hsts: false,
-//     })
-// );
+
 
 app.use(
     mount(
@@ -288,20 +283,6 @@ usePostJson(app);
 
 useGeneralApi(app);
 
-// helmet wants some things as bools and some as lists, makes config difficult.
-// our config uses strings, this splits them to lists on whitespace.
-if (env === 'production') {
-    const helmetConfig = {
-        directives: convertEntriesToArrays(config.get('helmet.directives')),
-        reportOnly: config.get('helmet.reportOnly'),
-        setAllHeaders: config.get('helmet.setAllHeaders'),
-    };
-    helmetConfig.directives.reportUri = helmetConfig.directives.reportUri[0];
-    if (helmetConfig.directives.reportUri === '-') {
-        delete helmetConfig.directives.reportUri;
-    }
-    app.use(helmet.contentSecurityPolicy(helmetConfig));
-}
 
 if (env !== 'test') {
     const appRender = require('./app_render');
