@@ -121,7 +121,7 @@ ufw enable
 To install the Docker container with the Blurt node, run the following command:
 
 ```bash
-docker run -d --net=host -v blurtd:/blurtd --name blurtd  registry.gitlab.com/blurt/blurt/witness:dev /usr/bin/blurtd --data-dir /blurtd --plugin "witness account_by_key account_by_key_api condenser_api database_api network_broadcast_api transaction_status transaction_status_api rc_api" --webserver-http-endpoint 127.0.0.1:8091 --webserver-ws-endpoint 127.0.0.1:8090
+docker run -d --net=host -v blurtd:/blurtd --name blurtd  registry.gitlab.com/blurt/blurt/witness:dev /usr/bin/blurtd --data-dir /blurtd --plugin "witness account_by_key account_by_key_api condenser_api database_api network_broadcast_api transaction_status transaction_status_api rc_api" --webserver-http-endpoint 127.0.0.1:8091 --webserver-ws-endpoint 127.0.0.1:8090 --p2p-endpoint 0.0.0.0:1776
 ```
 
 Now, the Docker image will be downloaded and your Blurt node will start up inside of a Docker container.
