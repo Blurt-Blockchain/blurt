@@ -1,5 +1,24 @@
 #include <appbase/application.hpp>
 #include <blurt/manifest/plugins.hpp>
+#include <iostream>
+#include <sstream>
+#include <blurt/ipfs/client.h>
+#include <fstream>
+using namespace std;
+
+
+
+int getjson(int, char**) {
+  std::stringstream contents;
+
+  ipfs::Client client("localhost", 5001);
+
+  client.FilesGet("/ipfs/QmYwAPJzv5CZsnA625s3Xf2nemtYgPpHdWEz79ojWnPbdG/readme", &contents);
+
+  std::cout << contents.str() << std::endl;
+
+  return 0;
+}
 
 #include <blurt/protocol/types.hpp>
 #include <blurt/protocol/version.hpp>
@@ -62,6 +81,41 @@ void info()
       std::cerr << "blockchain version: " << fc::string( BLURT_BLOCKCHAIN_VERSION ) << "\n";
       std::cerr << "------------------------------------------------------\n";
 #endif
+}
+
+void check() {
+   /* try to open file to read */
+   ifstream ifile;
+   ifile.open("snapshot.json");
+   if(ifile) {
+      cout<<"Snapshot exists, making sure it is the right one";
+          ipfs::Json add_result;
+    client.FilesAdd(
+        {{"bar.txt", ipfs::http::FileUpload::Type::kFileName,
+          "../compile_commands.json"}},
+        &add_result);
+    std::cout << "FilesAdd() result:" << std::endl
+              << add_result.dump(2) << std::endl;
+   } else {
+      cout<<"Snapshot doesn't exist";
+   }
+
+}
+
+
+
+
+
+int get(int, char**) {
+  std::stringstream contents;
+
+  ipfs::Client client("localhost", 5001);
+
+  client.FilesGet("/ipfs/QmYwAPJzv5CZsnA625s3Xf2nemtYgPpHdWEz79ojWnPbdG/readme", &contents);
+
+  std::cout << contents.str() << std::endl;
+
+  return 0;
 }
 
 int main( int argc, char** argv )
