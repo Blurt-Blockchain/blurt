@@ -1,0 +1,7 @@
+#ifndef BLURT_HARDFORK_0_6
+#define BLURT_HARDFORK_0_6 6
+
+#define BLURT_HARDFORK_0_6_TIME (1618078292)  // Sat Apr 10 2021 18:11:32 GMT+0000
+#define BLURT_HARDFORK_0_6_VERSION hardfork_version(0, 6)
+
+#endif

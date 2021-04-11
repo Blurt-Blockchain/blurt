@@ -4,7 +4,4 @@
 #define BLURT_HARDFORK_0_4_TIME (1615568895)  // Friday, March 12, 2021 5:08:15 PM GMT
 #define BLURT_HARDFORK_0_4_VERSION hardfork_version(0, 4)
 
-
-#define BLURT_HARDFORK_0_4_REWARD_CONTENT_CONSTANT     (fc::uint128_t(0,2000000000ull))
-
 #endif
