@@ -1,25 +1,8 @@
 #include <appbase/application.hpp>
 #include <blurt/manifest/plugins.hpp>
-#include <iostream>
 #include <sstream>
 #include <blurt/ipfs/client.h>
 #include <fstream>
-using namespace std;
-
-
-
-int getjson(int, char**) {
-  std::stringstream contents;
-
-  ipfs::Client client("localhost", 5001);
-
-  client.FilesGet("/ipfs/QmYwAPJzv5CZsnA625s3Xf2nemtYgPpHdWEz79ojWnPbdG/readme", &contents);
-
-  std::cout << contents.str() << std::endl;
-
-  return 0;
-}
-
 #include <blurt/protocol/types.hpp>
 #include <blurt/protocol/version.hpp>
 
@@ -91,31 +74,27 @@ void check() {
       cout<<"Snapshot exists, making sure it is the right one";
           ipfs::Json add_result;
     client.FilesAdd(
-        {{"bar.txt", ipfs::http::FileUpload::Type::kFileName,
-          "../compile_commands.json"}},
+        {{"snapshot.json", ipfs::http::FileUpload::Type::kFileName,
+          "snapshot.json"}},
         &add_result);
     std::cout << "FilesAdd() result:" << std::endl
               << add_result.dump(2) << std::endl;
    } else {
       cout<<"Snapshot doesn't exist";
+      get();
    }
 
 }
 
-
-
-
-
-int get(int, char**) {
+void get(int, char**) {
   std::stringstream contents;
 
   ipfs::Client client("localhost", 5001);
 
-  client.FilesGet("/ipfs/QmYwAPJzv5CZsnA625s3Xf2nemtYgPpHdWEz79ojWnPbdG/readme", &contents);
+  client.FilesGet("/ipfs/QmPrwVpwe4Ya46CN9LXNnrUdWvaDLMwFetMUdpcdpjFbyu", &contents);
 
   std::cout << contents.str() << std::endl;
 
-  return 0;
 }
 
 int main( int argc, char** argv )
