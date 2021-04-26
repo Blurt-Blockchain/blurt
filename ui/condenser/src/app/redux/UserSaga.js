@@ -488,7 +488,7 @@ function * usernamePasswordLogin2 ({
     // );
   }
   // TOS acceptance
-  yield fork(promptTosAcceptance, username)
+  // yield fork(promptTosAcceptance, username)
 
   // Redirect user to the appropriate page after login.
   if (afterLoginRedirectToWelcome) {
