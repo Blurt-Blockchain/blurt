@@ -1,4 +1,4 @@
-import { fromJS, Set, List } from 'immutable'
+// import { fromJS, Set, List } from 'immutable'
 import { call, put, select, fork, takeLatest } from 'redux-saga/effects'
 import { api, auth } from '@blurtfoundation/blurtjs'
 import {
@@ -488,7 +488,7 @@ function * usernamePasswordLogin2 ({
     // );
   }
   // TOS acceptance
-  yield fork(promptTosAcceptance, username)
+  // yield fork(promptTosAcceptance, username)
 
   // Redirect user to the appropriate page after login.
   if (afterLoginRedirectToWelcome) {
