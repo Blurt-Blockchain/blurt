@@ -23,7 +23,7 @@ simple as pulling in the gitlab repo and issuing one command to build it,
 like this:
 
 ```bash
-git clone https://gitlab.com/blurt/openblurt/condenser
+git clone https://gitlab.com/blurt/blurt/-/tree/dev/ui/condenser
 cd condenser
 docker build -t="myname/condenser:mybranch" .
 docker run -it -p 8080:8080 myname/condenser:mybranch
@@ -51,7 +51,7 @@ npm i -g yarn
 #### Install and build
 
 ```bash
-git clone https://gitlab.com/blurt/openblurt/condenser
+git clone https://gitlab.com/blurt/blurt/-/tree/dev/ui/condenser
 cd condenser
 mkdir tmp
 yarn install
