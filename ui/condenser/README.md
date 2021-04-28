@@ -13,7 +13,7 @@ To bring up a running container fit for production, it's as simple as this:
 ```bash
 export CHICKEN=$(base64 --wrap=0 /dev/urandom | head -c 32)
 echo $CHICKEN
-docker run -it -p 8080:8080 -e SDC_SESSION_SECRETKEY=$CHICKEN registry.gitlab.com/blurt/openblurt/condenser
+docker run -it -p 8080:8080 -e SDC_SESSION_SECRETKEY=$CHICKEN registry.gitlab.com/blurt/blurt/-/tree/dev/ui/condenser
 ```
 
 NB: Make sure that you record $CHICKEN somewhere safe. It should remain consistent.
