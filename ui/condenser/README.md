@@ -13,7 +13,7 @@ To bring up a running container fit for production, it's as simple as this:
 ```bash
 export CHICKEN=$(base64 --wrap=0 /dev/urandom | head -c 32)
 echo $CHICKEN
-docker run -it -p 8080:8080 -e SDC_SESSION_SECRETKEY=$CHICKEN registry.gitlab.com/blurt/blurt/-/tree/dev/ui/condenser
+docker run -it -p 8080:8080 -e SDC_SESSION_SECRETKEY=$CHICKEN registry.gitlab.com/blurt/openblurt/condenser
 ```
 
 NB: Make sure that you record $CHICKEN somewhere safe. It should remain consistent.
@@ -23,9 +23,13 @@ simple as pulling in the gitlab repo and issuing one command to build it,
 like this:
 
 ```bash
-git clone https://gitlab.com/blurt/blurt/-/tree/dev/ui/condenser
-cd condenser
-docker build -t="myname/condenser:mybranch" .
+apt update
+apt upgrade
+apt install git
+curl -s https://get.docker.com | bash
+git clone https://gitlab.com/blurt/blurt.git
+cd blurt/ui/condenser
+docker build -t="myname/condenser:mybranch"
 docker run -it -p 8080:8080 myname/condenser:mybranch
 ```
 
@@ -51,13 +55,16 @@ npm i -g yarn
 #### Install and build
 
 ```bash
-git clone https://gitlab.com/blurt/blurt/-/tree/dev/ui/condenser
-cd condenser
+apt update
+apt upgrade
+apt install git
+git clone https://gitlab.com/blurt/blurt.git
+cd blurt/ui/condenser
 mkdir tmp
 yarn install
 yarn build
 yarn run
-yarn start
+start
 ```
 
 After you've done your dev work, push to a branch. CI will test the build. If it builds, merge to master and you'll have a docker container at registry.gitlab.com/blurt/openblurt/condenser containing your latest work.
