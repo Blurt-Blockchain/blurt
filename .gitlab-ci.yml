@@ -222,39 +222,39 @@ imageupload container push:
     - dev
 
 # Instablurt jobs will kill instances of themselves running previously.  This is alright. 
-instablurt-amd64:
-  needs: []
-  stage: docker
-  script:
-    - docker stop instablurt-amd64 || true
-    - docker rm instablurt-amd64 || true
-    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-    - docker run -d --name instablurt-amd64 $CI_REGISTRY_IMAGE/witness:dev
-    - for i in {1..1000}; do echo -n "This is a test in loop $i $(docker logs -n 5 instablurt-amd64) "; date ; sleep 5; done
-    - docker commit instablurt-amd64
-    - docker tag instablurt-amd64 $CI_REGISTRY_IMAGE/instablurt-amd64:$CI_COMMIT_BRANCH
-    - docker push $CI_REGISTRY_IMAGE/instablurt-amd64:$CI_COMMIT_BRANCH
-    - docker stop instablurt-amd64
-    - docker rm instablurt-amd64
-  tags:
-    - amd64-shell
+# instablurt-amd64:
+#  needs: []
+#  stage: docker
+#  script:
+#    - docker stop instablurt-amd64 || true
+#    - docker rm instablurt-amd64 || true
+#    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+#    - docker run -d --name instablurt-amd64 $CI_REGISTRY_IMAGE/witness:dev
+#    - for i in {1..1000}; do echo -n "This is a test in loop $i $(docker logs -n 5 instablurt-amd64) "; date ; sleep 5; done
+#    - docker commit instablurt-amd64
+#    - docker tag instablurt-amd64 $CI_REGISTRY_IMAGE/instablurt-amd64:$CI_COMMIT_BRANCH
+#    - docker push $CI_REGISTRY_IMAGE/instablurt-amd64:$CI_COMMIT_BRANCH
+#    - docker stop instablurt-amd64
+#    - docker rm instablurt-amd64
+#  tags:
+#    - amd64-shell
 
-instablurt-arm64:
-  needs: []
-  stage: docker
-  script:
-    - docker stop instablurt-arm64 || true
-    - docker rm instablurt-arm64 || true
-    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-    - docker run -d --net=host --restart=unless-stopped --name instablurt-arm64 faddat/arm-blurt-presync /usr/bin/blurtd --data-dir /blurtd
-    - for i in {1..1000}; do echo -n "This is a test in loop $i $(docker logs -n 5 instablurt-arm64) "; date ; sleep 5; done
-    - docker commit instablurt-arm64
-    - docker tag instablurt-arm64 $CI_REGISTRY_IMAGE/instablurt-arm64:$CI_COMMIT_BRANCH
-    - docker push $CI_REGISTRY_IMAGE/instablurt-arm64:$CI_COMMIT_BRANCH
-    - docker stop instablurt-arm64
-    - docker rm instablurt-arm64
-  tags: 
-    - arm64-shell
+#instablurt-arm64:
+#  needs: []
+#  stage: docker
+#  script:
+#    - docker stop instablurt-arm64 || true
+#    - docker rm instablurt-arm64 || true
+#    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+#    - docker run -d --net=host --restart=unless-stopped --name instablurt-arm64 faddat/arm-blurt-presync /usr/bin/blurtd --data-dir /blurtd
+#    - for i in {1..1000}; do echo -n "This is a test in loop $i $(docker logs -n 5 instablurt-arm64) "; date ; sleep 5; done
+#    - docker commit instablurt-arm64
+#    - docker tag instablurt-arm64 $CI_REGISTRY_IMAGE/instablurt-arm64:$CI_COMMIT_BRANCH
+#    - docker push $CI_REGISTRY_IMAGE/instablurt-arm64:$CI_COMMIT_BRANCH
+#    - docker stop instablurt-arm64
+#    - docker rm instablurt-arm64
+#  tags: 
+#    - arm64-shell
 
 # Hard Fork 3
 testnet:
