@@ -249,7 +249,7 @@ instablurt-arm64:
     - docker run -d --net=host --restart=unless-stopped --name instablurt-arm64 faddat/arm-blurt-presync /usr/bin/blurtd --data-dir /blurtd
     - for i in {1..1000}; do echo -n "This is a test in loop $i $(docker logs -n 5 instablurt-arm64) "; date ; sleep 5; done
     - docker commit instablurt-arm64
-    - docker tag instablurt-amd64 $CI_REGISTRY_IMAGE/instablurt-arm64:$CI_COMMIT_BRANCH
+    - docker tag instablurt-arm64 $CI_REGISTRY_IMAGE/instablurt-arm64:$CI_COMMIT_BRANCH
     - docker push $CI_REGISTRY_IMAGE/instablurt-arm64:$CI_COMMIT_BRANCH
     - docker stop instablurt-arm64
     - docker rm instablurt-arm64
