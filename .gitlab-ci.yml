@@ -227,7 +227,7 @@ instablurt-amd64:
   stage: docker
   script:
     - docker stop instablurt-amd64 || true
-    - docker rm instablurt-arm64 || true
+    - docker rm instablurt-amd64 || true
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - docker run -d --name instablurt-amd64 $CI_REGISTRY_IMAGE/witness:dev
     - for i in {1..1000}; do echo -n "This is a test in loop $i $(docker logs -n 5 instablurt-amd64) "; date ; sleep 5; done
