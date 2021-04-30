@@ -574,24 +574,25 @@ kaniko rpc:
     - metal
 
 # this cazy thing here will interrupt prior jobs.  It's kinda sorta okay. 
-rpc presync:
-  stage: docker
-  needs:
-    - rpc
-  dependencies:
-    - rpc
-  script:
-    - docker stop rpc-presync || true
-    - docker rm rpc-presync || true
-    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-    - docker buildx build --dockerfile $CI_PROJECT_DIR/contrib/Dockerfiles/rpc-presync/Dockerfile --tag $CI_REGISTRY_IMAGE/rpc-presync:$CI_COMMIT_BRANCH .
-    - docker run -d $CI_REGISTRY_IMAGE/rpc-presync:$CI_COMMIT_BRANCH --name rpc-presync
-    - for i in {1..1000}; do echo -n "This is a test in loop $i $(docker logs -n 5 rpc-presync) "; date ; sleep 5; done
-    - docker commit $CI_REGISTRY_IMAGE/rpc-presync:$CI_COMMIT_BRANCH
-    - docker stop rpc-presync
-    - docker rm rpc-presync
-  tags:
-    - metal
+# LETS MAKE A PRESYNC IMAGE AT OTHER TIMES. 
+# rpc presync:
+#  stage: docker
+#  needs:
+#    - rpc
+#  dependencies:
+#    - rpc
+#  script:
+#    - docker stop rpc-presync || true
+#    - docker rm rpc-presync || true
+#    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+#    - docker buildx build --dockerfile $CI_PROJECT_DIR/contrib/Dockerfiles/rpc-presync/Dockerfile --tag $CI_REGISTRY_IMAGE/rpc-presync:$CI_COMMIT_BRANCH .
+#    - docker run -d $CI_REGISTRY_IMAGE/rpc-presync:$CI_COMMIT_BRANCH --name rpc-presync
+#    - for i in {1..1000}; do echo -n "This is a test in loop $i $(docker logs -n 5 rpc-presync) "; date ; sleep 5; done
+#    - docker commit $CI_REGISTRY_IMAGE/rpc-presync:$CI_COMMIT_BRANCH
+#    - docker stop rpc-presync
+#    - docker rm rpc-presync
+#  tags:
+#    - metal
 
 kaniko testnet:
   stage: docker
