@@ -329,6 +329,7 @@ megadrive-build-env:
 megadrive-build-ubuntu:
   stage: build
   script:
+    - docker image prune -y
     - mkdir build
     - cd build
     - conan install .. -s compiler=clang -s compiler.libcxx=libstdc++11 -if=. -pr=default --build=missing
