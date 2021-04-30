@@ -482,6 +482,7 @@ witness test- is replay needed?:
 
 witness from scratch in docker:
   stage: test
+  when: manual
   image: $CI_REGISTRY_IMAGE/witness:$CI_COMMIT_BRANCH
   script:
     - blurtd --data-dir /blurtd
@@ -490,6 +491,7 @@ witness from scratch in docker:
 
 rpc from scratch in docker:
   stage: test
+  when: manual
   image: $CI_REGISTRY_IMAGE/rpc:$CI_COMMIT_BRANCH
   script:
     - blurtd --data-dir /blurtd
@@ -498,6 +500,7 @@ rpc from scratch in docker:
 
 mira from scratch in docker:
   stage: test
+  when: manual
   image: $CI_REGISTRY_IMAGE/mira:$CI_COMMIT_BRANCH
   script:
     - blurtd --data-dir /blurtd
