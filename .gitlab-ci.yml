@@ -24,7 +24,7 @@ condenser-docker-test-arm:
   needs: []
   stage: build
   script:
-    - docker image prune -y
+    - docker image prune -f
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - docker buildx build --file ui/condenser/Dockerfile --cache-from $CI_REGISTRY_IMAGE/condenser-arm64:cache --cache-to $CI_REGISTRY_IMAGE/condenser-arm64:cache --platform linux/arm64 ./ui/condenser
   tags:
@@ -329,7 +329,7 @@ megadrive-build-env:
 megadrive-build-ubuntu:
   stage: build
   script:
-    - docker image prune -y
+    - docker image prune -f
     - mkdir build
     - cd build
     - conan install .. -s compiler=clang -s compiler.libcxx=libstdc++11 -if=. -pr=default --build=missing
