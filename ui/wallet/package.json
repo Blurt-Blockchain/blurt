@@ -1,5 +1,5 @@
 {
-    "name": "BlurtWallet",
+    "name": "blurt_wallet",
     "version": "0.1.0",
     "description": "The Blurt Wallet allows you to send and recieve blurt, and set your profile picture, and vote for witnesses!",
     "repository": {
