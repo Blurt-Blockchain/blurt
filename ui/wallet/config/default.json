@@ -6,7 +6,7 @@
     "helmet": {
         "directives": {
             "childSrc": "'self'",
-            "connectSrc": "'self' blurt.blog https://blurt.world https://images.blurt.blog https://rpc.blurt.world https://imgp.blurt.world https://api.blurt.world wss://notifications.blurt.worl",
+            "connectSrc": "'self' blurt.blog https://blurt.world https://images.blurt.blog https://rpc.blurt.world https://blurt-rpc.saboin.com https://kentzz.blurt.world https://rpc.nerdtopia.de https://blurt.ecosynthesizer.com https://imgp.blurt.world https://api.blurt.world wss://notifications.blurt.world",
             "defaultSrc": "'self'",
             "fontSrc": "data: fonts.gstatic.com",
             "frameAncestors": "'none'",
