@@ -5,18 +5,18 @@ geometry: margin=2cm
 
 # Network Nodes
 
-These are some of the currently known network nodes available in the Blurt ecosystem, please commit any changes to this document should you know of any nodes not listed or any of the currently listed ones ceasing to function.
+These are some of the currently known network nodes available in the Blurt ecosystem. Please commit any changes to this document should you know of any nodes not listed or any of the currently listed ones ceasing to function.
 
-| Node Url           | Operator  |
+| Node URL | Operator |
 | ------------------ | --------- |
-| api.blurtworld.com | @yehey    |
-| api.blurt.tools    | @blurtdev |
-| blurtd.privex.io   | privex.io |
-| rpc.blurt.buzz     | @ericet   |
-| rpc.blurt.world    | Core Team |
-| api.blurt.blog     | Core Team |
+| https://rpc.blurt.world | Core Team |
+| https://rpc.nerdtopia.de | [@nerdtopiade](https://blurt.world/@nerdtopiade) |
+| https://blurt.ecosynthesizer.com | [@symbionts](https://blurt.world/@symbionts) |
+| https://kentzz.blurt.world | [@kentzz001](https://blurt.world/@kentz001) |
+| https://blurt-rpc.saboin.com | [@saboin](https://blurt.world/@saboin) |
 
-# Blocktivity.info api
+
+# Blocktivity.info API
 
 https://blocktivity.blurtopian.com/api/stats
 
@@ -28,14 +28,19 @@ Verbose version showing individual operation count
 
 # Global Properties Nodes
 
-| Node Url                              | Operator  |
+| Node Url | Operator |
 | ------------------------------------- | --------- |
-| https://biapi.blurt-now.com/api/blurt | @eastmael |
-| https://api.blurt.buzz/api/methodName | @ericet   |
+| https://biapi.blurt-now.com/api/blurt | [@eastmael](https://blurt.world/@eastmael) |
+
+# Blurt REST API
+
+| URL | Operator |
+| ----------------------------------------------- | -------------- |
+| https://api.blurt.world/api/methodName | Core Team |
 
 **Instructions:**
 
-- get global dynamic properties: https://api.blurt.buzz/api/getDynamicGlobalProperties
-- get chain properties: https://api.blurt.buzz/api/getChainProperties
-- get account details: https://api.blurt.buzz/api/getAccounts?names[]=ericet
+- get global dynamic properties: https://api.blurt.world/api/getDynamicGlobalProperties
+- get chain properties: https://api.blurt.world/api/getChainProperties
+- get account details: https://api.blurt.world/api/getAccounts?names[]=
   All the methods listed here are supported: https://developers.steem.io/apidefinitions/#apidefinitions-condenser-api
