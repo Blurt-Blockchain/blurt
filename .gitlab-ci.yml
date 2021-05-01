@@ -144,6 +144,7 @@ imgp test build:
   needs: []
   stage: build
   script:
+    - docker run --rm --privileged multiarch/qemu-user-static --reset -p yes --credential yes
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - docker pull --platform linux/arm64 faddat/archlinux
     - docker pull --platform linux/amd64 faddat/archlinux
@@ -158,6 +159,7 @@ imgp container push:
   needs: []
   stage: build
   script:
+    - docker run --rm --privileged multiarch/qemu-user-static --reset -p yes --credential yes
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - docker pull --platform linux/arm64 faddat/archlinux
     - docker pull --platform linux/amd64 faddat/archlinux
@@ -187,6 +189,7 @@ imagehoster test:
   needs: []
   stage: build
   script:
+    - docker run --rm --privileged multiarch/qemu-user-static --reset -p yes --credential yes
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - docker pull --platform linux/arm64 faddat/archlinux
     - docker pull --platform linux/amd64 faddat/archlinux
@@ -200,6 +203,7 @@ imagehoster push:
   needs: []
   stage: build
   script:
+    - docker run --rm --privileged multiarch/qemu-user-static --reset -p yes --credential yes
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - docker pull --platform linux/arm64 faddat/archlinux
     - docker pull --platform linux/amd64 faddat/archlinux
@@ -214,6 +218,7 @@ imageupload container push:
   needs: []
   stage: build
   script:
+    - docker run --rm --privileged multiarch/qemu-user-static --reset -p yes --credential yes
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - docker pull --platform linux/arm64 faddat/archlinux
     - docker pull --platform linux/amd64 faddat/archlinux
