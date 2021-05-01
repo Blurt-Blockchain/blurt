@@ -9,7 +9,7 @@ export async function getStateAsync(url) {
     const raw = await api.getStateAsync(path);
 
     await axios
-        .get('https://api.blurt.buzz/price_info', { timeout: 3000 })
+        .get('https://api.blurt.world/price_info', { timeout: 3000 })
         .then((response) => {
             if (response.status === 200) {
                 raw.blurt_price = Number(response.data.price_usd).toFixed(3);

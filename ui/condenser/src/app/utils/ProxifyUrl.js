@@ -8,8 +8,8 @@
  * <proxy>/{int}x{int}/[<proxy>/{int}x{int}/]<proxy>/<file url>
  * @type {RegExp}
  */
-const rProxyDomain = /^http(s)?:\/\/images.blurt.buzz\//g;
-const rProxyDomainsDimensions = /http(s)?:\/\/images.blurt.buzz\/([0-9]+x[0-9]+)\//g;
+const rProxyDomain = /^http(s)?:\/\/images.blurt.blog\//g;
+const rProxyDomainsDimensions = /http(s)?:\/\/images.blurt.blog\/([0-9]+x[0-9]+)\//g;
 const NATURAL_SIZE = '0x0/';
 const CAPPED_SIZE = '640x0/';
 

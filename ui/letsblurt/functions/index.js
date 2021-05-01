@@ -4,9 +4,10 @@ const dblurt = require('./dblurt');
 
 const MAINNET_OFFICIAL = [
   'https://rpc.blurt.world',
-  'https://rpc.blurt.buzz',
-  'https://api.blurt.blog',
-  'https://blurtd.privex.io',
+  'https://rpc.nerdtopia.de',
+  'https://blurt.ecosynthesizer.com',
+  'https://kentzz.blurt.world',
+  'https://blurt-rpc.saboin.com',
 ];
 const client = new dblurt.Client(MAINNET_OFFICIAL, {
   timeout: 5000,

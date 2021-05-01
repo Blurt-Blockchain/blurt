@@ -44,7 +44,7 @@ const _upload = (
 };
 
 //// upload image
-// e.g. "profile_image":"https://images.blurt.buzz/DQmP1NegAx2E3agYjgdzn4Min9eVVxSdyXxgQ2DWLwHBKbi/helpus_icon.png"
+// e.g. "profile_image":"https://images.blurt.blog/DQmP1NegAx2E3agYjgdzn4Min9eVVxSdyXxgQ2DWLwHBKbi/helpus_icon.png"
 // export const uploadProfileImage = (media, username: string, signature) => {
 //   const file = {
 //     uri: media.path,

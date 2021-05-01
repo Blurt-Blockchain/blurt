@@ -8,7 +8,7 @@ import Userpic from './Userpic';
 import { Center } from 'decorators';
 
 const store = createStore(rootReducer);
-global.$STM_Config = { img_proxy_prefix: 'https://images.blurt.world/' };
+global.$STM_Config = { img_proxy_prefix: 'https://images.blurt.blog/' };
 
 storiesOf('Elements', module)
     .addDecorator(withKnobs)
