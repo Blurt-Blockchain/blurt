@@ -1,4 +1,4 @@
-FROM lopsided/archlinux
+FROM faddat/archlinux
 
 RUN pacman -Syyu --noconfirm npm yarn base-devel
 

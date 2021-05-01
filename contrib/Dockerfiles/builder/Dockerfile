@@ -1,4 +1,4 @@
-FROM lopsided/archlinux
+FROM faddat/archlinux
 
 MAINTAINER jacobgadikian@gmail.com
 
