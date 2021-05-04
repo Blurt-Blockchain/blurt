@@ -385,3 +385,4 @@ client-libs/yo/tests/envdir-to-envfile.sh
 client-libs/yo/deploy/
 client-libs/yo/.DS_Store
 client-libs/yo/.pytest_cache
+node_modules/.yarn-integrity

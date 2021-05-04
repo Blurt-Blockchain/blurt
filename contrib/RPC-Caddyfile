@@ -1,0 +1,11 @@
+# To use your own domain name (with automatic HTTPS), first make
+# sure your domain's A/AAAA DNS records are properly pointed to
+# this machine's public IP, then replace example.com in the code below
+# with your domain name.
+
+example.com {
+    header Access-Control-Allow-Origin "*"
+    header Access-Control-Allow-Methods "POST, GET, OPTIONS"
+    header Access-Control-Allow-Headers "Content-Type"
+    reverse_proxy localhost:8091
+}
