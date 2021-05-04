@@ -116,14 +116,6 @@ const SidePanel = ({
                 link: 'https://leodex.io/',
             },
         ],
-        wrapped: [
-            {
-                value: 'wblurt',
-                label: 'Uniswap',
-                link:
-                    'https://app.uniswap.org/#/swap?inputCurrency=ETH&outputCurrency=0x37472814e5c6146e6ca7ed1753cd1b18b733e5d4',
-            },
-        ],
         external: [
             {
                 value: 'chat',
@@ -140,11 +132,6 @@ const SidePanel = ({
             //     label: tt('navigation.jobs'),
             //     link: 'https://recruiting.paylocity.com/recruiting/jobs/List/3288/Steemit-Inc',
             // },
-            {
-                value: 'tools',
-                label: 'Blurt Tools',
-                link: 'https://blurt.tools/',
-            },
             // {
             //     value: 'business',
             //     label: tt('navigation.business_center'),
