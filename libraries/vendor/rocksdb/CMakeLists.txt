@@ -34,7 +34,7 @@
 
 cmake_minimum_required(VERSION 3.5.1)
 
-list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake/modules/")
+list(APPEND CMAKE_MODULE_PATH "cmake/modules/")
 include(ReadVersion)
 get_rocksdb_version(rocksdb_VERSION)
 project(rocksdb
