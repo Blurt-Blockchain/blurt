@@ -1,7 +1,6 @@
 [requires]
 boost/1.69.0
 openssl/1.1.1g
-rocksdb/6.8.1
 websocketpp/0.8.1
 zlib/1.2.11
 readline/8.0
