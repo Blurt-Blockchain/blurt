@@ -11,13 +11,15 @@ set( CUSTOM_URL_SCHEME "gcs" )
 set( INSTALLER_APP_ID "68ad7005-8eee-49c9-95ce-9eed97e5b347" )
 set(CMAKE_EXPORT_COMPILE_COMMANDS "ON")
 
-include_directories("libraries/vendor/rocksdb/include")
-
+include(ExternalProject)
+ExternalProject_Add(rocksdb
+  GIT_REPOSITORY    git@github.com:facebook/rocksdb.git
+  GIT_TAG           origin/release/latest
+)
 
 list( APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/CMakeModules" )
 list( APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/libraries/fc/CMakeModules" )
 list( APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/libraries/fc/GitVersionGen" )
-list( APPEND CMAKE_MODULE_PATH "libraries/vendor/rocksdb/cmake/modules/" )
 include( GetGitRevisionDescription )
 get_git_head_revision( GIT_REFSPEC GIT_SHA2 )
 
