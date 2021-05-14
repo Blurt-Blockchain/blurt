@@ -22,7 +22,6 @@ RUN sed -i -e "s/^CheckSpace/#!!!CheckSpace/g" /etc/pacman.conf && \
 # translation:  It is ready to make a splash.
 RUN echo "sleep 80" >> /usr/local/bin/firstboot.sh && \
         systemctl enable vnstat && \
-        mkdir /root/go && \
         echo "export PATH=$PATH:/root/go/bin" > /root/.bash_profile && \
         echo "export GOPATH=/root/go" >> /root/.bash_profile && \
         echo "cryptopie" > /etc/hostname && \
