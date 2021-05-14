@@ -9,15 +9,13 @@ ENV GOPATH=/root/go
 
 # Disk space thing
 # Download starport, too
+
 RUN sed -i -e "s/^CheckSpace/#!!!CheckSpace/g" /etc/pacman.conf && \
         pacman -Syyu --noconfirm net-tools ufw vnstat iftop base-devel wget protobuf git go yarn npm && \
+        sed -i -e "s/^#!!!CheckSpace/CheckSpace/g" /etc/pacman.conf && \
         git clone https://github.com/tendermint/starport && \
         cd starport && \
-        make && \ 
-        mv build/starport /usr/bin && \
-        cd .. && rm -rf starport && \
-        chmod +x /usr/bin/starport && \
-        sed -i -e "s/^#!!!CheckSpace/CheckSpace/g" /etc/pacman.conf
+        make 
 
 # Prepare boot script
 # cryptopie is now a full-freatured Starport development enviornment!
