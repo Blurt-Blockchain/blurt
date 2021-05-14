@@ -66,7 +66,7 @@ rm -rf images || true
 mkdir -p images
 
 # Make the image file
-fallocate -l 6G "images/cryptopie.img"
+fallocate -l 12G "images/cryptopie.img"
 
 # loop-mount the image file so it becomes a disk
 export LOOP=$(sudo losetup --find --show images/cryptopie.img)
