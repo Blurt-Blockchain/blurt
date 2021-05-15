@@ -1,5 +1,6 @@
 
-#define BOOST_THREAD_PROVIDES_EXECUTORS
+// Commented out to allow building with boost 1.76.0.
+// #define BOOST_THREAD_PROVIDES_EXECUTORS
 #define BOOST_THREAD_PROVIDES_FUTURE
 
 #include <blurt/plugins/block_data_export/block_data_export_plugin.hpp>

@@ -1,6 +1,7 @@
 #pragma once
 #include <blurt/protocol/exceptions.hpp>
 #include <blurt/protocol/operations.hpp>
+#include <boost/core/demangle.hpp>
 
 namespace blurt { namespace chain {
 

@@ -51,11 +51,7 @@ namespace fc {
     private:
       friend class tcp_server;
       class impl;
-      #ifdef _WIN64
-      fc::fwd<impl,0x81> my;
-      #else
-      fc::fwd<impl,0x54> my;
-      #endif
+      fc::fwd<impl,0x80> my;
   };
   typedef std::shared_ptr<tcp_socket> tcp_socket_ptr;
 
