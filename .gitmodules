@@ -4,3 +4,6 @@
 [submodule "libraries/fc/vendor/secp256k1-zkp"]
 	path = libraries/fc/vendor/secp256k1-zkp
 	url = https://github.com/cryptonomex/secp256k1-zkp.git
+[submodule "external/rocksdb"]
+	path = external/rocksdb
+	url = https://github.com/facebook/rocksdb.git

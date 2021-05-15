@@ -1,9 +1,13 @@
 [requires]
 boost/1.76.0
 openssl/1.1.1g
-rocksdb/6.8.1
 websocketpp/0.8.1
 zlib/1.2.11
+lz4/1.9.3
+bzip2/1.0.8
+snappy/1.1.8
+libdeflate/1.7
+
 readline/8.0
 
 [generators]

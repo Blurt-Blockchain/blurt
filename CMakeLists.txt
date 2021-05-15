@@ -1,6 +1,9 @@
 # Defines Blurt library target.
 project( Blurt )
 cmake_minimum_required( VERSION 3.16 )
+include( ExternalProject )
+
+
 
 
 # Configure the chain
@@ -117,12 +120,7 @@ find_path(READLINE_INCLUDE_DIR readline/readline.h)
 
 set( CMAKE_CXX_FLAGS "${CMAKE_C_FLAGS} -std=c++14 -Wall" )
 set( pthread_library pthread)
-
-
-
 set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fcolor-diagnostics" )
-
-
 set( CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DDEBUG")
 
     # based on http://www.delorie.com/gnu/docs/gdb/gdb_70.html
@@ -169,8 +167,8 @@ else()
       message( STATUS "Linting level set to: LOW" )
       set( DO_CLANG_TIDY "${CLANG_TIDY_EXE}" "-checks='clang-analyzer-*'" )
    else()
-      unset( CLANG_TIDY_EXE )
-      message( STATUS "Linting level set to: OFF" )
+      message( STATUS "Linting level set to: FULL" )
+      set( DO_CLANG_TIDY "${CLANG_TIDY_EXE}" "-checks='*'" )
    endif()
 endif( NOT CLANG_TIDY_EXE )
 
