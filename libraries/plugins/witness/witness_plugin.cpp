@@ -101,6 +101,13 @@ namespace detail {
             plugin_exception,
             "Cannot specify more than 8 beneficiaries." );
       }
+
+      void operator()( const comment_payout_blurt& cpb )const
+      {
+         BLURT_ASSERT( cpb.percent_blurt <= BLURT_100_PERCENT,
+            plugin_exception,
+            "Percent cannot exceed 100%" );
+      }
    };
 
    void check_memo( const string& memo, const chain::account_object& account, const account_authority_object& auth )

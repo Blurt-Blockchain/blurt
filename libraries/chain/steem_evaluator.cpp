@@ -467,13 +467,20 @@ struct comment_options_extension_visitor
          }
       });
    }
+
+   void operator()( const comment_payout_blurt& cpb ) const
+   {
+      FC_ASSERT( _c.percent_blurt >= cpb.percent_blurt, "A comment cannot accept a greater percent BLURT.");
+
+      _db.modify( _c, [&]( comment_object& c )
+      {
+         c.percent_blurt = cpb.percent_blurt;
+      });
+   }
 };
 
 void comment_options_evaluator::do_apply( const comment_options_operation& o )
 {
-   if (!_db.has_hardfork(BLURT_HARDFORK_0_6))
-      FC_ASSERT(o.percent_blurt == 0, "Payments in blurt are disabled");
-
    const auto& comment = _db.get_comment( o.author, o.permlink );
    if( !o.allow_curation_rewards || !o.allow_votes || o.max_accepted_payout < comment.max_accepted_payout )
       FC_ASSERT( comment.abs_rshares == 0, "One of the included comment options requires the comment to have no rshares allocated to it." );
@@ -481,11 +488,9 @@ void comment_options_evaluator::do_apply( const comment_options_operation& o )
    FC_ASSERT( comment.allow_curation_rewards >= o.allow_curation_rewards, "Curation rewards cannot be re-enabled." );
    FC_ASSERT( comment.allow_votes >= o.allow_votes, "Voting cannot be re-enabled." );
    FC_ASSERT( comment.max_accepted_payout >= o.max_accepted_payout, "A comment cannot accept a greater payout." );
-   FC_ASSERT( comment.percent_blurt >= o.percent_blurt, "A comment cannot accept a greater percent BLURT.");
 
    _db.modify( comment, [&]( comment_object& c ) {
        c.max_accepted_payout   = o.max_accepted_payout;
-       c.percent_blurt         = o.percent_blurt;
        c.allow_votes           = o.allow_votes;
        c.allow_curation_rewards = o.allow_curation_rewards;
    });

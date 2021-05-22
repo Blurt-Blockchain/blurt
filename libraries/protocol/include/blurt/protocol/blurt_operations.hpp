@@ -83,8 +83,16 @@ namespace blurt { namespace protocol {
       void validate()const;
    };
 
+   struct comment_payout_blurt
+   {
+      uint16_t percent_blurt;
+
+      void validate()const;
+   };
+
    typedef static_variant<
-            comment_payout_beneficiaries
+            comment_payout_beneficiaries,
+            comment_payout_blurt
            > comment_options_extension;
 
    typedef flat_set< comment_options_extension > comment_options_extensions_type;
@@ -102,7 +110,6 @@ namespace blurt { namespace protocol {
       string            permlink;
 
       asset             max_accepted_payout    = asset( 1000000000, BLURT_SYMBOL );       /// BLURT_SYMBOL value of the maximum payout this post will receive
-      uint16_t          percent_blurt          = 0;
       bool              allow_votes            = true;      /// allows a post to receive votes;
       bool              allow_curation_rewards = true; /// allows voters to recieve curation rewards. Rewards return to reward fund.
       comment_options_extensions_type extensions;
@@ -788,9 +795,10 @@ FC_REFLECT( blurt::protocol::delete_comment_operation, (author)(permlink) );
 
 FC_REFLECT( blurt::protocol::beneficiary_route_type, (account)(weight) )
 FC_REFLECT( blurt::protocol::comment_payout_beneficiaries, (beneficiaries) )
+FC_REFLECT( blurt::protocol::comment_payout_blurt, (percent_blurt) )
 
 FC_REFLECT_TYPENAME( blurt::protocol::comment_options_extension )
-FC_REFLECT( blurt::protocol::comment_options_operation, (author)(permlink)(max_accepted_payout)(percent_blurt)(allow_votes)(allow_curation_rewards)(extensions) )
+FC_REFLECT( blurt::protocol::comment_options_operation, (author)(permlink)(max_accepted_payout)(allow_votes)(allow_curation_rewards)(extensions) )
 
 FC_REFLECT( blurt::protocol::escrow_transfer_operation, (from)(to)(blurt_amount)(escrow_id)(agent)(fee)(json_meta)(ratification_deadline)(escrow_expiration) );
 FC_REFLECT( blurt::protocol::escrow_approve_operation, (from)(to)(agent)(who)(escrow_id)(approve) );

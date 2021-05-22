@@ -28,7 +28,8 @@ namespace blurt { namespace plugins { namespace condenser_api {
    };
 
    typedef static_variant<
-            protocol::comment_payout_beneficiaries
+            protocol::comment_payout_beneficiaries,
+            protocol::comment_payout_blurt
          > legacy_comment_options_extensions;
 
    typedef vector< legacy_comment_options_extensions > legacy_comment_options_extensions_type;
@@ -150,7 +151,6 @@ namespace blurt { namespace plugins { namespace condenser_api {
          author( op.author ),
          permlink( op.permlink ),
          max_accepted_payout( legacy_asset::from_asset( op.max_accepted_payout ) ),
-         percent_blurt( op.percent_blurt ),
          allow_votes( op.allow_votes ),
          allow_curation_rewards( op.allow_curation_rewards )
       {
@@ -168,7 +168,6 @@ namespace blurt { namespace plugins { namespace condenser_api {
          op.author = author;
          op.permlink = permlink;
          op.max_accepted_payout = max_accepted_payout;
-         op.percent_blurt = percent_blurt;
          op.allow_curation_rewards = allow_curation_rewards;
          op.extensions.insert( extensions.begin(), extensions.end() );
          return op;
@@ -178,7 +177,6 @@ namespace blurt { namespace plugins { namespace condenser_api {
       string            permlink;
 
       legacy_asset      max_accepted_payout;
-      uint16_t          percent_blurt;
       bool              allow_votes;
       bool              allow_curation_rewards;
       legacy_comment_options_extensions_type extensions;
@@ -1218,7 +1216,7 @@ FC_REFLECT( blurt::plugins::condenser_api::legacy_transfer_operation, (from)(to)
 FC_REFLECT( blurt::plugins::condenser_api::legacy_transfer_to_vesting_operation, (from)(to)(amount) )
 FC_REFLECT( blurt::plugins::condenser_api::legacy_withdraw_vesting_operation, (account)(vesting_shares) )
 FC_REFLECT( blurt::plugins::condenser_api::legacy_witness_update_operation, (owner)(url)(block_signing_key)(props)(fee) )
-FC_REFLECT( blurt::plugins::condenser_api::legacy_comment_options_operation, (author)(permlink)(max_accepted_payout)(percent_blurt)(allow_votes)(allow_curation_rewards)(extensions) )
+FC_REFLECT( blurt::plugins::condenser_api::legacy_comment_options_operation, (author)(permlink)(max_accepted_payout)(allow_votes)(allow_curation_rewards)(extensions) )
 FC_REFLECT( blurt::plugins::condenser_api::legacy_escrow_transfer_operation, (from)(to)(blurt_amount)(escrow_id)(agent)(fee)(json_meta)(ratification_deadline)(escrow_expiration) );
 FC_REFLECT( blurt::plugins::condenser_api::legacy_escrow_release_operation, (from)(to)(agent)(who)(receiver)(escrow_id)(blurt_amount) );
 FC_REFLECT( blurt::plugins::condenser_api::legacy_claim_reward_balance_operation, (account)(reward_blurt)(reward_vests) )
