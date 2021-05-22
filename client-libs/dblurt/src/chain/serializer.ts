@@ -328,7 +328,6 @@ OperationSerializers.comment_options = OperationDataSerializer(13, [
   ["author", StringSerializer],
   ["permlink", StringSerializer],
   ["max_accepted_payout", AssetSerializer],
-  ["percent_blurt", UInt16Serializer],
   ["allow_votes", BooleanSerializer],
   ["allow_curation_rewards", BooleanSerializer],
   [
@@ -337,6 +336,7 @@ OperationSerializers.comment_options = OperationDataSerializer(13, [
       StaticVariantSerializer([
         ObjectSerializer([
           ["beneficiaries", ArraySerializer(BeneficiarySerializer)],
+          ["percent_blurt", UInt16Serializer],
         ]),
       ])
     ),

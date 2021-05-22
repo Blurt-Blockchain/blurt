@@ -149,10 +149,10 @@ describe("operations", function () {
         author: username,
         allow_votes: true,
         allow_curation_rewards: true,
-        percent_blurt: 0,
         max_accepted_payout: Asset.from(10, "TBD"),
         extensions: [
           [0, { beneficiaries: [{ weight: 10000, account: acc1.username }] }],
+          [0, { percent_blurt: 0 }],
         ],
       },
       postingWif
