@@ -72,7 +72,7 @@ const comment_payout_beneficiaries = new Serializer(0, {
   beneficiaries: set(beneficiaries),
 });
 
-const comment_payout_blurt = new Serializer(0, {
+const comment_payout_blurt = new Serializer(1, {
   percent_blurt: uint16,
 });
 
@@ -82,7 +82,7 @@ const votable_asset_options = new Serializer("votable_asset_options", {
   beneficiaries: comment_payout_beneficiaries,
 });
 
-const allowed_vote_assets = new Serializer(1, {
+const allowed_vote_assets = new Serializer(2, {
   votable_assets: map(asset_symbol, votable_asset_options),
 });
 
@@ -281,7 +281,7 @@ const comment_options = new Serializer("comment_options", {
   allow_votes: bool,
   allow_curation_rewards: bool,
   extensions: set(
-    static_variant([comment_payout_beneficiaries, allowed_vote_assets, comment_payout_blurt])
+    static_variant([comment_payout_beneficiaries, comment_payout_blurt])
   ),
 });
 
