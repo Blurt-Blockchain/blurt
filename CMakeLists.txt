@@ -21,7 +21,7 @@ hunter_add_package(OpenSSL)
 
 find_package(ZLIB CONFIG REQUIRED)
 find_package(Boost CONFIG REQUIRED)
-find_package(bzip2 CONFIG REQUIRED)
+find_package(BZip2 CONFIG REQUIRED)
 find_package(zstd CONFIG REQUIRED)
 find_package(websocketpp CONFIG REQUIRED)
 find_package(rocksdb CONFIG REQUIRED)
