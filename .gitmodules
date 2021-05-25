@@ -16,6 +16,6 @@
 [submodule "libraries/readline"]
 	path = libraries/readline
 	url = https://git.savannah.gnu.org/git/readline.git
-[submodule "websocketpp/websocketpp"]
+[submodule "libraries/websocketpp"]
 	path = libraries/websocketpp
 	url = https://github.com/zaphoyd/websocketpp

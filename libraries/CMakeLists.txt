@@ -1,5 +1,6 @@
 add_subdirectory( rocksdb )
-add_subdirectory( fc )
+add_subdirectory( zlib )
+add_subdirectory( websocketpp/websocketpp )
 add_subdirectory( schema )
 add_subdirectory( jsonball )
 add_subdirectory( appbase )
@@ -12,3 +13,5 @@ add_subdirectory( utilities )
 add_subdirectory( plugins )
 add_subdirectory( manifest )
 add_subdirectory( wallet )
+add_subdirectory( fc )
+

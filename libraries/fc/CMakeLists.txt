@@ -257,7 +257,7 @@ endif()
 
 target_include_directories(fc
   PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include
-    ${Boost_INCLUDE_DIR}
+    ${Boost_INCLUDE_DIRS}
     ${OPENSSL_INCLUDE_DIR}
     "vendor/diff-match-patch-cpp-stl"
     ${CONAN_INCLUDE_DIRS_WEBSOCKETPP}
