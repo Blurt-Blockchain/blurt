@@ -11,7 +11,9 @@ set( CUSTOM_URL_SCHEME "gcs" )
 set( INSTALLER_APP_ID "68ad7005-8eee-49c9-95ce-9eed97e5b347" )
 set(CMAKE_EXPORT_COMPILE_COMMANDS "ON")
 
+list( APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/libraries/boost/include" )
 list( APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/CMakeModules" )
+list( APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/libraries/rocksdb" )
 list( APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/libraries/fc/CMakeModules" )
 list( APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/libraries/fc/GitVersionGen" )
 include( GetGitRevisionDescription )
@@ -87,22 +89,15 @@ OPTION( BLURT_STATIC_BUILD "Build blurtd as a static library (ON or OFF)" OFF )
 MESSAGE( STATUS "BLURT_STATIC_BUILD: ${BLURT_STATIC_BUILD}" )
 
 
-if(EXISTS ${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
-    include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
-    conan_basic_setup()
-    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fvisibility=hidden")
-    SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fvisibility=hidden")
-else()
-    message(WARNING "The file conanbuildinfo.cmake doesn't exist, you have to run conan install first. Will try without conan...")
+#if(EXISTS ${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
+#    include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
+#    conan_basic_setup()
+#    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fvisibility=hidden")
+#    SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fvisibility=hidden")
+#else()
+#    message(WARNING "The file conanbuildinfo.cmake doesn't exist, you have to run conan install first. Will try without conan...")
 
 
-    FIND_PACKAGE(Boost 1.58 REQUIRED COMPONENTS ${BOOST_COMPONENTS})
-
-    if( NOT( Boost_VERSION LESS 106900 ) )
-        SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fvisibility=hidden")
-        SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fvisibility=hidden")
-    endif()
-endif()
 
 
 find_program(CCACHE_FOUND ccache)

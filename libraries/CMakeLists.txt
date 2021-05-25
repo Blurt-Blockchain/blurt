@@ -1,3 +1,4 @@
+add_subdirectory( rocksdb )
 add_subdirectory( fc )
 add_subdirectory( schema )
 add_subdirectory( jsonball )
