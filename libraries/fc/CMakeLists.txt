@@ -2,7 +2,7 @@
 # Defines fc library target.
 
 PROJECT( fc )
-CMAKE_MINIMUM_REQUIRED( VERSION 3.16.3 )
+CMAKE_MINIMUM_REQUIRED( VERSION 3.20 )
 
 MESSAGE(STATUS "Configuring project fc located in: ${CMAKE_CURRENT_SOURCE_DIR}")
 SET( CMAKE_AUTOMOC OFF )
@@ -76,10 +76,6 @@ add_dependencies(secp256k1 project_secp256k1)
 # End configure secp256k1-zkp
 
 MESSAGE(STATUS "Configuring fc to build on Unix/Apple")
-
-LIST(APPEND BOOST_COMPONENTS coroutine)
-
-FIND_PACKAGE(Boost 1.53 REQUIRED COMPONENTS ${BOOST_COMPONENTS})
 
 SET(CMAKE_FIND_LIBRARY_SUFFIXES ".a;.so")
 
@@ -199,8 +195,7 @@ list(APPEND sources ${fc_headers})
 setup_library( fc SOURCES ${sources} LIBRARY_TYPE STATIC DONT_INSTALL_LIBRARY )
 
 # begin readline stuff
-find_package(Curses)
-find_package(Readline)
+
 
 file(GLOB HEADERS "include/bts/cli/*.hpp")
 

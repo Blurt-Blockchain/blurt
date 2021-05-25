@@ -5,16 +5,7 @@ cmake_minimum_required( VERSION 3.16.3 )
 file(GLOB HEADERS "include/mira/*.hpp" "include/mira/detail/*.hpp")
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS "ON")
-SET(BOOST_COMPONENTS)
-LIST(APPEND BOOST_COMPONENTS thread
-                             date_time
-                             system
-                             filesystem
-                             chrono
-                             unit_test_framework
-                             locale)
 
-FIND_PACKAGE(Boost 1.58 REQUIRED COMPONENTS ${BOOST_COMPONENTS})
 set( Boost_USE_STATIC_LIBS ON CACHE STRING "ON or OFF" )
 
 
