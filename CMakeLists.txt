@@ -12,7 +12,7 @@ project( Blurt )
 
 
 
-hunter_add_package(Boost COMPONENTS thread date_time system filesystem program_options iostreams test serialization chrono context locale coroutine)
+hunter_add_package(Boost COMPONENTS thread regex date_time system filesystem program_options iostreams test serialization chrono context locale coroutine)
 hunter_add_package(zlib)
 hunter_add_package(websocketpp)
 hunter_add_package(readline)

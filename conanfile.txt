@@ -1,7 +1,0 @@
-
-
-[options]
-rocksdb:use_rtti=True
-
-
-
