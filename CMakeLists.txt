@@ -1,3 +1,5 @@
+cmake_minimum_required( VERSION 3.20 )
+
 include(cmake/HunterGate.cmake)
 
 HunterGate(
@@ -7,9 +9,8 @@ HunterGate(
 
 # Defines Blurt library target.
 project( Blurt )
-cmake_minimum_required( VERSION 3.16 )
 
-hunter_add_package(Boost)
+hunter_add_package(Boost COMPONENTS thread date_time system filesystem program_options serialization chrono context locale coroutine)
 hunter_add_package(zlib)
 hunter_add_package(websocketpp)
 hunter_add_package(rocksdb)
