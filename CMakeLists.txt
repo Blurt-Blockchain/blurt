@@ -1,6 +1,28 @@
+include(cmake/HunterGate.cmake)
+
+HunterGate(
+    URL "https://github.com/cpp-pm/hunter/archive/v0.23.300.tar.gz"
+    SHA1 "1151d539465d9cdbc880ee30f794864aec11c448"
+)
+
 # Defines Blurt library target.
 project( Blurt )
 cmake_minimum_required( VERSION 3.16 )
+
+hunter_add_package(Boost)
+hunter_add_package(zlib)
+hunter_add_package(websocketpp)
+hunter_add_package(rocksdb)
+hunter_add_package(OpenSSL)
+
+
+find_package(zlib CONFIG REQUIRED)
+find_package(readline CONFIG REQUIRED)
+find_package(Boost CONFIG REQUIRED)
+find_package(websocketpp CONFIG REQUIRED)
+find_package(rocksdb CONFIG REQUIRED)
+find_package(OpenSSL CONFIG REQUIRED)
+
 
 
 # Configure the chain
@@ -12,12 +34,10 @@ set( INSTALLER_APP_ID "68ad7005-8eee-49c9-95ce-9eed97e5b347" )
 set( CMAKE_EXPORT_COMPILE_COMMANDS "ON" )
 
 list( APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/CMakeModules" )
-list( APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/libraries/rocksdb" )
 list( APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/libraries/fc/CMakeModules" )
 list( APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/libraries/fc/GitVersionGen" )
 include( GetGitRevisionDescription )
 get_git_head_revision( GIT_REFSPEC GIT_SHA2 )
-FIND_PACKAGE( Boost )
 
 SET(BOOST_COMPONENTS)
 LIST(APPEND BOOST_COMPONENTS thread

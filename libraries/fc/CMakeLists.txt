@@ -260,7 +260,7 @@ target_include_directories(fc
     ${Boost_INCLUDE_DIRS}
     ${OPENSSL_INCLUDE_DIR}
     "vendor/diff-match-patch-cpp-stl"
-    ${CONAN_INCLUDE_DIRS_WEBSOCKETPP}
+    ${WEBSOCKETPP_INCLUDE_DIR}
     "${readline_includes}"
 
   PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}

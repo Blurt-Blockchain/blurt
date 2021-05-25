@@ -1,6 +1,3 @@
-add_subdirectory( rocksdb )
-add_subdirectory( zlib )
-add_subdirectory( websocketpp/websocketpp )
 add_subdirectory( schema )
 add_subdirectory( jsonball )
 add_subdirectory( appbase )
