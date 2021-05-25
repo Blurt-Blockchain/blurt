@@ -4,18 +4,3 @@
 [submodule "libraries/fc/vendor/secp256k1-zkp"]
 	path = libraries/fc/vendor/secp256k1-zkp
 	url = https://github.com/cryptonomex/secp256k1-zkp.git
-[submodule "libraries/rocksdb"]
-	path = libraries/rocksdb
-	url = https://github.com/facebook/rocksdb
-[submodule "libraries/zlib"]
-	path = libraries/zlib
-	url = https://github.com/zlib-ng/zlib-ng
-[submodule "libraries/openssl"]
-	path = libraries/openssl
-	url = https://github.com/openssl/openssl
-[submodule "libraries/readline"]
-	path = libraries/readline
-	url = https://git.savannah.gnu.org/git/readline.git
-[submodule "libraries/websocketpp"]
-	path = libraries/websocketpp
-	url = https://github.com/zaphoyd/websocketpp

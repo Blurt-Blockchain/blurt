@@ -1,28 +1,32 @@
 cmake_minimum_required( VERSION 3.20 )
-
 include(cmake/HunterGate.cmake)
 
+
 HunterGate(
-    URL "https://github.com/cpp-pm/hunter/archive/v0.23.300.tar.gz"
-    SHA1 "1151d539465d9cdbc880ee30f794864aec11c448"
+    URL "https://github.com/faddat/hunter/archive/refs/tags/test1.tar.gz"
+    SHA1 "7520c18c49745ace48dfc8f5969e0298da0af120"
 )
 
 # Defines Blurt library target.
 project( Blurt )
 
-hunter_add_package(Boost COMPONENTS thread date_time system filesystem program_options serialization chrono context locale coroutine)
+
+
+hunter_add_package(Boost COMPONENTS thread date_time system filesystem program_options test serialization chrono context locale coroutine)
 hunter_add_package(zlib)
 hunter_add_package(websocketpp)
+hunter_add_package(readline)
 hunter_add_package(rocksdb)
 hunter_add_package(OpenSSL)
 
 
 find_package(zlib CONFIG REQUIRED)
-find_package(readline CONFIG REQUIRED)
 find_package(Boost CONFIG REQUIRED)
 find_package(websocketpp CONFIG REQUIRED)
 find_package(rocksdb CONFIG REQUIRED)
-find_package(OpenSSL CONFIG REQUIRED)
+find_package(OpenSSL REQUIRED)
+find_package(readline REQUIRED)
+
 
 
 
@@ -127,9 +131,6 @@ if(CCACHE_FOUND)
     set_property(GLOBAL PROPERTY RULE_LAUNCH_LINK ccache) # Less useful to do it for linking, see edit2
 endif(CCACHE_FOUND)
 
-
-find_library(READLINE_LIBRARIES NAMES readline)
-find_path(READLINE_INCLUDE_DIR readline/readline.h)
 
 set( CMAKE_CXX_FLAGS "${CMAKE_C_FLAGS} -std=c++14 -Wall" )
 set( pthread_library pthread)
