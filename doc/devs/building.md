@@ -160,7 +160,6 @@ Your mileage may vary on other versions. If you ever want to know if your code c
     git checkout dev
     git submodule update --init --recursive
     mkdir build && cd build
-    conan install .. -s compiler=apple-clang -s compiler.version=11.0 -s compiler.libcxx=libc++ -if=. -pr=default --build=missing
     cmake -DBLURT_STATIC_BUILD=ON -DLOW_MEMORY_NODE=OFF -DCLEAR_VOTES=OFF -DBUILD_BLURT_TESTNET=OFF -DSKIP_BY_TX_ID=OFF -DBLURT_LINT_LEVEL=OFF -DENABLE_MIRA=OFF -DCMAKE_BUILD_TYPE=Release ..
     make -j$(sysctl -n hw.logicalcpu)
 

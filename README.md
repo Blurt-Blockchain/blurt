@@ -18,7 +18,7 @@ We've dramatically reduced the dependencies to compile blurt.
 #### Linux:
 
 - Clang 11 or higher
-- Conan.io
+- cmake
 - ccache
 
 ....that's it.
@@ -28,11 +28,8 @@ Here's how you do it, assuming a totally fresh system:
 ```bash
 git clone https://gitlab.com/blurt/blurt
 cd blurt
-cp contrib/conan-profile/default ~/.conan/profiles/default
-cat ~/.conan/profiles/default #Do this and check that the architecture is right for how you want to build it.  amd64 and arm64 officially supported.  armv5,6,7 should work.
 mkdir build
 cd build
-conan install ..
 cmake ..
 make -j$(nproc) blurtd cli_wallet
 ```
@@ -42,17 +39,13 @@ We use Arch Linux to compile blurt, but that does not mean that you must also us
 #### Mac:
 
 - Clang 12 via xcode-install (don't use brew to get clang you'd have a bad time)
-- conan.io, `brew install conan`
 - ccache
 
 ```bash
 git clone https://gitlab.com/blurt/blurt
 cd blurt
-cp contrib/conan-profile/default-mac ~/.conan/profiles/default
-cat ~/.conan/profiles/default-mac #Do this and check that the architecture is right for how you want to build it.  amd64 and arm64 officially supported.  armv5,6,7 should work.  Should work on apple M1 processors.
 mkdir build
 cd build
-conan install ..
 cmake ..
 make -j$(nproc) blurtd cli_wallet
 ```

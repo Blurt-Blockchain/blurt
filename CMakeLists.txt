@@ -3,25 +3,26 @@ include(cmake/HunterGate.cmake)
 
 
 HunterGate(
-    URL "https://github.com/faddat/hunter/archive/refs/tags/test1.tar.gz"
-    SHA1 "7520c18c49745ace48dfc8f5969e0298da0af120"
+    URL "https://github.com/faddat/hunter/archive/refs/tags/test3.tar.gz"
+    SHA1 "0860942222a07b3203f271af3b83a9a77b50a793"
 )
 
 # Defines Blurt library target.
 project( Blurt )
 
-
-
 hunter_add_package(Boost COMPONENTS thread regex date_time system filesystem program_options iostreams test serialization chrono context locale coroutine)
-hunter_add_package(zlib)
+hunter_add_package(ZLIB)
+hunter_add_package(BZip2)
+hunter_add_package(zstd)
 hunter_add_package(websocketpp)
 hunter_add_package(readline)
 hunter_add_package(rocksdb)
 hunter_add_package(OpenSSL)
 
-
-find_package(zlib CONFIG REQUIRED)
+find_package(ZLIB CONFIG REQUIRED)
 find_package(Boost CONFIG REQUIRED)
+find_package(bzip2 CONFIG REQUIRED)
+find_package(zstd CONFIG REQUIRED)
 find_package(websocketpp CONFIG REQUIRED)
 find_package(rocksdb CONFIG REQUIRED)
 find_package(OpenSSL REQUIRED)
@@ -38,24 +39,11 @@ set( CUSTOM_URL_SCHEME "gcs" )
 set( INSTALLER_APP_ID "68ad7005-8eee-49c9-95ce-9eed97e5b347" )
 set( CMAKE_EXPORT_COMPILE_COMMANDS "ON" )
 
-list( APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/CMakeModules" )
 list( APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/libraries/fc/CMakeModules" )
 list( APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/libraries/fc/GitVersionGen" )
 include( GetGitRevisionDescription )
 get_git_head_revision( GIT_REFSPEC GIT_SHA2 )
 
-SET(BOOST_COMPONENTS)
-LIST(APPEND BOOST_COMPONENTS thread
-                             date_time
-                             system
-                             filesystem
-                             program_options
-                             serialization
-                             chrono
-                             unit_test_framework
-                             context
-                             locale
-                             coroutine)
 SET( Boost_USE_STATIC_LIBS ON CACHE STRING "ON or OFF" )
 
 OPTION( BUILD_BLURT_TESTNET "Build source for test network (ON OR OFF)" OFF )
@@ -110,25 +98,14 @@ if( SKIP_BY_TX_ID )
    SET( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DSKIP_BY_TX_ID" )
 endif()
 
-OPTION( BLURT_STATIC_BUILD "Build blurtd as a static library (ON or OFF)" OFF )
+OPTION( BLURT_STATIC_BUILD "Build blurtd as a static library (ON or OFF)" ON )
 MESSAGE( STATUS "BLURT_STATIC_BUILD: ${BLURT_STATIC_BUILD}" )
-
-
-#if(EXISTS ${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
-#    include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
-#    conan_basic_setup()
-#    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fvisibility=hidden")
-#    SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fvisibility=hidden")
-#else()
-#    message(WARNING "The file conanbuildinfo.cmake doesn't exist, you have to run conan install first. Will try without conan...")
-
-
 
 
 find_program(CCACHE_FOUND ccache)
 if(CCACHE_FOUND)
     set_property(GLOBAL PROPERTY RULE_LAUNCH_COMPILE ccache)
-    set_property(GLOBAL PROPERTY RULE_LAUNCH_LINK ccache) # Less useful to do it for linking, see edit2
+    set_property(GLOBAL PROPERTY RULE_LAUNCH_LINK ccache) 
 endif(CCACHE_FOUND)
 
 
@@ -140,7 +117,6 @@ set( pthread_library pthread)
 set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fcolor-diagnostics" )
 
 
-set( CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DDEBUG")
 
     # based on http://www.delorie.com/gnu/docs/gdb/gdb_70.html
     # uncomment this line to tell GDB about macros (slows compile times)
