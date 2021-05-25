@@ -459,8 +459,8 @@ megadrive-testnet-container:
 witness:
   stage: build
   variables:
-    CC: "ccache clang"
-    CXX: "ccache clang++"
+    CC: "clang"
+    CXX: "clang++"
   script:
     - mkdir build
     - cd build
@@ -517,8 +517,8 @@ mira from scratch in docker:
 mira:
   stage: build
   variables:
-    CC: "ccache clang"
-    CXX: "ccache clang++"
+    CC: "clang"
+    CXX: "clang++"
   script:
     - mkdir build
     - cd build
@@ -534,8 +534,8 @@ mira:
 rpc:
   stage: build
   variables:
-    CC: "ccache clang"
-    CXX: "ccache clang++"
+    CC: "clang"
+    CXX: "clang++"
   script:
     - mkdir build
     - cd build
