@@ -1,11 +1,4 @@
-[requires]
-openssl/1.1.1g
-websocketpp/0.8.1
-zlib/1.2.11
-readline/8.0
 
-[generators]
-cmake
 
 [options]
 rocksdb:use_rtti=True
