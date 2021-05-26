@@ -1,6 +1,6 @@
 # Defines MIRA library target.
 project( MIRA )
-cmake_minimum_required( VERSION 3.16.3 )
+cmake_minimum_required( VERSION 3.20 )
 
 file(GLOB HEADERS "include/mira/*.hpp" "include/mira/detail/*.hpp")
 
@@ -36,7 +36,7 @@ if( CLANG_TIDY_EXE )
    )
 endif( CLANG_TIDY_EXE )
 
-target_link_libraries( mira ${Boost_LIBRARIES} rocksdb fc )
+target_link_libraries( mira ${Boost_LIBRARIES} fc )
 
 target_include_directories( mira
    PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/include"

@@ -24,11 +24,15 @@ find_package(Boost CONFIG REQUIRED)
 find_package(BZip2 CONFIG REQUIRED)
 find_package(zstd CONFIG REQUIRED)
 find_package(websocketpp CONFIG REQUIRED)
-find_package(rocksdb CONFIG REQUIRED)
+find_package(RocksDB CONFIG REQUIRED)
 find_package(OpenSSL REQUIRED)
 find_package(readline REQUIRED)
 
 
+include_directories(
+   "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
+   "$<INSTALL_INTERFACE:include>"
+ )
 
 
 # Configure the chain
