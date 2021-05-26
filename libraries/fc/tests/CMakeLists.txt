@@ -1,4 +1,4 @@
-cmake_minimum_required( VERSION 3.16.3 )
+cmake_minimum_required( VERSION 3.20 )
 include_directories( ../include )
 
 add_executable( bip_lock bip_lock.cpp )

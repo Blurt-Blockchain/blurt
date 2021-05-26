@@ -1,6 +1,6 @@
 # Defines MIRA library target.
 project( MIRA )
-cmake_minimum_required( VERSION 3.16.3 )
+cmake_minimum_required( VERSION 3.20 )
 
 file(GLOB HEADERS "include/mira/*.hpp" "include/mira/detail/*.hpp")
 
