@@ -81,6 +81,11 @@ namespace blurt { namespace protocol {
       {
          cpb.validate();
       }
+
+      void operator()( const comment_payout_blurt& cpb ) const
+      {
+         cpb.validate();
+      }
    };
 
    void comment_payout_beneficiaries::validate()const
@@ -104,6 +109,11 @@ namespace blurt { namespace protocol {
          FC_ASSERT( sum <= BLURT_100_PERCENT, "Cannot allocate more than 100% of rewards to a comment" ); // Have to check incrementally to avoid overflow
          FC_ASSERT( beneficiaries[i - 1] < beneficiaries[i], "Benficiaries must be specified in sorted order (account ascending)" );
       }
+   }
+
+   void comment_payout_blurt::validate()const
+   {
+      FC_ASSERT( percent_blurt <= BLURT_100_PERCENT, "Percent cannot exceed 100%" );
    }
 
    void comment_options_operation::validate()const

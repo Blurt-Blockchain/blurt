@@ -11,7 +11,7 @@
 // https://developers.steem.io/tutorials-recipes/understanding-configuration-values
 
 #ifdef IS_TEST_NET
-#define BLURT_BLOCKCHAIN_VERSION              ( version(0, 5, 0) )
+#define BLURT_BLOCKCHAIN_VERSION              ( version(0, 7, 0) )
 
 #define BLURT_INIT_PRIVATE_KEY                (fc::ecc::private_key::regenerate(fc::sha256::hash(std::string("init_key"))))
 #define BLURT_INIT_PUBLIC_KEY_STR             (std::string( blurt::protocol::public_key_type(BLURT_INIT_PRIVATE_KEY.get_public_key()) ))
@@ -39,7 +39,7 @@
 
 #else // IS LIVE BLURT NETWORK
 
-#define BLURT_BLOCKCHAIN_VERSION              ( version(0, 5, 0) )
+#define BLURT_BLOCKCHAIN_VERSION              ( version(0, 6, 0) )
 
 #define BLURT_INIT_PUBLIC_KEY_STR             "BLT5QRsKZp7TFNQdTj7VbpGHWxNL3Eq4zmfER4vJPBpK5VMbrprn8"
 #define BLURT_CHAIN_ID                        (fc::sha256::hash("blurt")) /// cd8d90f29ae273abec3eaa7731e25934c63eb654d55080caff2ebb7f5df6381f
@@ -117,7 +117,10 @@
 #define BLURT_PROPOSAL_FUND_PERCENT_HF21      (10*BLURT_1_PERCENT)
 
 #define BLURT_HF21_CONVERGENT_LINEAR_RECENT_CLAIMS (fc::uint128_t(0,305178654659033363ull))
-#define BLURT_CONTENT_CONSTANT_HF21           (fc::uint128_t(0,2000000000000ull)) // value changed in HF 0.4.0, see libraries\protocol\hardfork.d\0_4.hf, now called REWARD_CONTENT_CONSTANT
+#define BLURT_CURATION_CONSTANT              (fc::uint128_t(0,2000000000000ull))
+#define BLURT_REWARD_CONSTANT                (fc::uint128_t(0,2000000000000ull))
+#define BLURT_REWARD_CONSTANT_HF4            (fc::uint128_t(0,2000000000ull))
+#define BLURT_REWARD_CONSTANT_HF6            (fc::uint128_t(0,200000000000ull))
 
 #define BLURT_BANDWIDTH_AVERAGE_WINDOW_SECONDS (60*60*24*7) ///< 1 week
 #define BLURT_BANDWIDTH_PRECISION             (uint64_t(1000000)) ///< 1 million

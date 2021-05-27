@@ -1,7 +1,6 @@
 const webpack_isomorphic_tools_plugin = require('webpack-isomorphic-tools/plugin');
 const path = require('path');
 
-
 const ROOT = path.join(__dirname, '..');
 
 module.exports = {

@@ -336,6 +336,7 @@ OperationSerializers.comment_options = OperationDataSerializer(13, [
       StaticVariantSerializer([
         ObjectSerializer([
           ["beneficiaries", ArraySerializer(BeneficiarySerializer)],
+          ["percent_blurt", UInt16Serializer],
         ]),
       ])
     ),
