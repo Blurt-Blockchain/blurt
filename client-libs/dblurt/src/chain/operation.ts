@@ -281,7 +281,10 @@ export interface CommentOptionsOperation extends Operation {
     allow_votes: boolean;
     /** Whether to allow post to recieve curation rewards. */
     allow_curation_rewards: boolean;
-    extensions: [number, { beneficiaries: BeneficiaryRoute[] } | { percent_blurt: number }][]; // flat_set< comment_options_extension >
+    extensions: [
+      number,
+      { beneficiaries: BeneficiaryRoute[] } | { percent_blurt: number }
+    ][]; // flat_set< comment_options_extension >
   };
 }
 
