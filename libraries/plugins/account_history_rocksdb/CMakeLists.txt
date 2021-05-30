@@ -6,11 +6,12 @@ add_library( account_history_rocksdb_plugin
            )
 
 target_link_libraries( account_history_rocksdb_plugin 
-    chain_plugin blurt_chain blurt_protocol json_rpc_plugin )
+    chain_plugin blurt_chain blurt_protocol json_rpc_plugin)
 
 target_include_directories( account_history_rocksdb_plugin
    PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/include"
    )
+
 
 install( TARGETS
    account_history_rocksdb_plugin

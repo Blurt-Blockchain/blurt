@@ -5,7 +5,7 @@ if( GPERFTOOLS_FOUND )
     list( APPEND PLATFORM_SPECIFIC_LIBS tcmalloc )
 endif()
 
-target_link_libraries( blurtd PRIVATE
+target_link_libraries( blurtd
       appbase
       blurt_utilities
       blurt_plugins

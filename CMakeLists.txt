@@ -10,7 +10,7 @@ HunterGate(
 # Defines Blurt library target.
 project( Blurt )
 
-hunter_add_package(Boost COMPONENTS thread regex date_time system filesystem program_options iostreams test serialization chrono context locale coroutine)
+hunter_add_package(Boost COMPONENTS thread regex date_time system filesystem program_options iostreams test serialization chrono context locale coroutine program_options)
 hunter_add_package(ZLIB)
 hunter_add_package(BZip2)
 hunter_add_package(zstd)
@@ -20,7 +20,7 @@ hunter_add_package(rocksdb)
 hunter_add_package(OpenSSL)
 
 find_package(ZLIB CONFIG REQUIRED)
-find_package(Boost CONFIG REQUIRED)
+find_package(Boost CONFIG REQUIRED thread regex date_time system filesystem program_options iostreams serialization chrono context locale coroutine program_options)
 find_package(BZip2 CONFIG REQUIRED)
 find_package(zstd CONFIG REQUIRED)
 find_package(websocketpp CONFIG REQUIRED)
@@ -56,7 +56,7 @@ if( BUILD_BLURT_TESTNET  )
   MESSAGE( STATUS "     " )
   MESSAGE( STATUS "             CONFIGURING FOR TEST NET             " )
   MESSAGE( STATUS "     " )
-  SET( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DIS_TEST_NET" )
+  SET( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DIS_TEST_NET")
   SET( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DIS_TEST_NET" )
 endif()
 
@@ -193,4 +193,5 @@ else()
   MESSAGE( STATUS "\n\n             CONFIGURED FOR FULL NODE                \n\n" )
 endif()
 
-
+target_link_libraries(blurtd Boost::thread Boost::regex Boost::date_time Boost::system Boost::filesystem Boost::program_options Boost::iostreams Boost::serialization Boost::chrono Boost::context Boost::locale Boost::coroutine Boost::program_options)
+target_link_libraries(blurtd rocksdb)
