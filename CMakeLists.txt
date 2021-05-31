@@ -24,7 +24,7 @@ find_package(Boost CONFIG REQUIRED thread regex date_time system filesystem prog
 find_package(BZip2 CONFIG REQUIRED)
 find_package(zstd CONFIG REQUIRED)
 find_package(websocketpp CONFIG REQUIRED)
-find_package(RocksDB CONFIG REQUIRED)
+find_package(RocksDB CONFIG USE_RTTI=1 REQUIRED)
 find_package(OpenSSL REQUIRED)
 find_package(readline REQUIRED)
 
