@@ -26,6 +26,7 @@ CMakeFiles
 CMakeDoxyfile.in
 CMakeDoxygenDefaults.cmake
 CMakeScripts/
+_builds
 
 # Unix Makefiles
 Makefile

@@ -3,8 +3,8 @@ include(cmake/HunterGate.cmake)
 
 
 HunterGate(
-    URL "https://github.com/faddat/hunter/archive/refs/tags/test3.tar.gz"
-    SHA1 "0860942222a07b3203f271af3b83a9a77b50a793"
+    URL "https://github.com/faddat/hunter/archive/refs/tags/four.tar.gz"
+    SHA1 "ee0585f7d592bf276a674816ece9cb83c59bedfb"
 )
 
 # Defines Blurt library target.
@@ -119,12 +119,6 @@ set( CMAKE_CXX_FLAGS "${CMAKE_C_FLAGS} -std=c++14 -Wall" )
 set( pthread_library pthread)
 
 
-
-
-
-
-set(ENABLE_COVERAGE_TESTING FALSE CACHE BOOL "Build Blurt for code coverage analysis")
-
 if(ENABLE_COVERAGE_TESTING)
     SET(CMAKE_CXX_FLAGS "--coverage ${CMAKE_CXX_FLAGS}")
 endif()
@@ -190,4 +184,5 @@ else()
 endif()
 
 target_link_libraries( blurtd Boost::thread Boost::regex Boost::date_time Boost::system Boost::filesystem Boost::program_options Boost::iostreams Boost::serialization Boost::chrono Boost::context Boost::locale Boost::coroutine Boost::program_options )
+
 target_link_libraries( blurtd RocksDB::rocksdb )
