@@ -7,7 +7,6 @@ Use Clion when working on Blurt. It will make your life far easier.
 MAC! IT BUILDS ON MAC!
 You'll need some things:
 
-
 - [IPFS](https://ipfs.io): Install it and do like `mkdir ~/.blurtd && ipfs get -o ~/.blurtd/snapshot.json QmPrwVpwe4Ya46CN9LXNnrUdWvaDLMwFetMUdpcdpjFbyu`
 - Blurt source code: `git clone https://gitlab.com/blurt/blurt`
 - Xcode: `xcode-select --install`
