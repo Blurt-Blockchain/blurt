@@ -193,5 +193,5 @@ else()
   MESSAGE( STATUS "\n\n             CONFIGURED FOR FULL NODE                \n\n" )
 endif()
 
-target_link_libraries(blurtd Boost::thread Boost::regex Boost::date_time Boost::system Boost::filesystem Boost::program_options Boost::iostreams Boost::serialization Boost::chrono Boost::context Boost::locale Boost::coroutine Boost::program_options)
-target_link_libraries(blurtd rocksdb)
+target_link_libraries( blurtd Boost::thread Boost::regex Boost::date_time Boost::system Boost::filesystem Boost::program_options Boost::iostreams Boost::serialization Boost::chrono Boost::context Boost::locale Boost::coroutine Boost::program_options )
+target_link_libraries( blurtd RocksDB::rocksdb )
