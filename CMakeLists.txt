@@ -19,12 +19,14 @@ hunter_add_package(readline)
 hunter_add_package(rocksdb)
 hunter_add_package(OpenSSL)
 
+option(USE_RTTI=1)
+
 find_package(ZLIB CONFIG REQUIRED)
 find_package(Boost CONFIG REQUIRED thread regex date_time system filesystem program_options iostreams serialization chrono context locale coroutine program_options)
 find_package(BZip2 CONFIG REQUIRED)
 find_package(zstd CONFIG REQUIRED)
 find_package(websocketpp CONFIG REQUIRED)
-find_package(RocksDB CONFIG USE_RTTI=1 REQUIRED)
+find_package(RocksDB CONFIG REQUIRED)
 find_package(OpenSSL REQUIRED)
 find_package(readline REQUIRED)
 
