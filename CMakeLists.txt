@@ -19,7 +19,12 @@ hunter_add_package(readline)
 hunter_add_package(rocksdb)
 hunter_add_package(OpenSSL)
 
-option(USE_RTTI "Set RocksDB to use RTTI" True)
+hunter_config(
+    rocksdb
+
+    # Arguments that will be forwarded to CMake build command (optional)
+    CMAKE_ARGS USE_RTTI=TRUE
+)
 
 find_package(ZLIB CONFIG REQUIRED)
 find_package(Boost CONFIG REQUIRED thread regex date_time system filesystem program_options iostreams serialization chrono context locale coroutine program_options)
