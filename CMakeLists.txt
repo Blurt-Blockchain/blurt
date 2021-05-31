@@ -19,12 +19,7 @@ hunter_add_package(readline)
 hunter_add_package(rocksdb)
 hunter_add_package(OpenSSL)
 
-hunter_config(
-    rocksdb
 
-    # Arguments that will be forwarded to CMake build command (optional)
-    CMAKE_ARGS USE_RTTI=TRUE
-)
 
 find_package(ZLIB CONFIG REQUIRED)
 find_package(Boost CONFIG REQUIRED thread regex date_time system filesystem program_options iostreams serialization chrono context locale coroutine program_options)
@@ -125,13 +120,7 @@ set( pthread_library pthread)
 
 
 
-set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fcolor-diagnostics" )
 
-
-
-    # based on http://www.delorie.com/gnu/docs/gdb/gdb_70.html
-    # uncomment this line to tell GDB about macros (slows compile times)
-    # set( CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -gdwarf-2 -g3" )
 
 
 set(ENABLE_COVERAGE_TESTING FALSE CACHE BOOL "Build Blurt for code coverage analysis")
