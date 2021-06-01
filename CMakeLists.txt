@@ -10,6 +10,12 @@ HunterGate(
 # Defines Blurt library target.
 project( Blurt )
 
+find_program(CCACHE_FOUND ccache)
+if(CCACHE_FOUND)
+    set_property(GLOBAL PROPERTY RULE_LAUNCH_COMPILE ccache)
+    set_property(GLOBAL PROPERTY RULE_LAUNCH_LINK ccache) 
+endif(CCACHE_FOUND)
+
 hunter_add_package(Boost COMPONENTS thread regex date_time system filesystem program_options iostreams test serialization chrono context locale coroutine program_options)
 hunter_add_package(ZLIB)
 hunter_add_package(BZip2)
@@ -106,13 +112,6 @@ endif()
 
 OPTION( BLURT_STATIC_BUILD "Build blurtd as a static library (ON or OFF)" ON )
 MESSAGE( STATUS "BLURT_STATIC_BUILD: ${BLURT_STATIC_BUILD}" )
-
-
-find_program(CCACHE_FOUND ccache)
-if(CCACHE_FOUND)
-    set_property(GLOBAL PROPERTY RULE_LAUNCH_COMPILE ccache)
-    set_property(GLOBAL PROPERTY RULE_LAUNCH_LINK ccache) 
-endif(CCACHE_FOUND)
 
 
 set( CMAKE_CXX_FLAGS "${CMAKE_C_FLAGS} -std=c++14 -Wall" )
