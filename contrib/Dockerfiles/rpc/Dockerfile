@@ -3,9 +3,9 @@ FROM faddat/snapshot
 MAINTAINER Jacob Gadikian <jacob@blurt.foundation>
 
 
-COPY ./build/bin/blurtd /usr/bin/blurtd
+COPY ./build/programs/blurtd/blurtd /usr/bin/blurtd
 COPY ./contrib/rpc-config.ini /blurtd/config.ini
-COPY ./build/bin/cli_wallet /usr/bin/cli_wallet
+COPY ./build/programs/cli_wallet/cli_wallet /usr/bin/cli_wallet
 
 # FETCH DEPENDENCIES AND SNAPSHOT.
 # FETCH SNAPSHOT WITH IPGET, CF IPFS GATEWAY IS UNRELIABLE
