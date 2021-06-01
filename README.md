@@ -7,9 +7,7 @@
 [![DeepSource](https://deepsource.io/gl/blurt/blurt.svg/?label=active+issues&show_trend=true)](https://deepsource.io/gl/blurt/blurt/?ref=repository-badge)
 [![DeepSource](https://deepsource.io/gl/blurt/blurt.svg/?label=resolved+issues&show_trend=true)](https://deepsource.io/gl/blurt/blurt/?ref=repository-badge)
 
-Blurt is a public social blockchain.
-
-
+Blurt is a public social blockchain that uses Larimer-style Dpos, meaning that its code is characterized by heavy use of the Boost C++ libraries, and it uses the fc library for many of its core functions.
 
 ## Compile without CI
 
@@ -17,8 +15,8 @@ We've dramatically reduced the dependencies to compile blurt.
 
 #### Linux:
 
-- Clang 11 or higher
-- cmake
+- Clang or gcc
+- cmake 3.20 or greater
 - ccache
 
 ....that's it.
@@ -83,8 +81,7 @@ make -j$(nproc) blurtd cli_wallet
 
 ## Economy
 
-We feel that all actions that impose costs should themselves have a cost, so that we can avoid becoming a garbage patch.
-
+We feel that all actions that impose costs should themselves have a cost, so that we can avoid becoming a garbage patch.  We're developing features that keep us out of "tragedy of the commons" type situations.
 
 ## Software Development
 
