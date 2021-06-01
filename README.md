@@ -48,7 +48,6 @@ cmake ..
 make -j$(nproc) blurtd cli_wallet
 ```
 
-
 ## Features
 
 - No Downvotes
