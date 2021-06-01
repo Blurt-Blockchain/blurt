@@ -9,35 +9,13 @@
 
 Blurt is a public social blockchain that uses Larimer-style Dpos, meaning that its code is characterized by heavy use of the Boost C++ libraries, and it uses the fc library for many of its core functions.
 
-## Compile without CI
 
-We've dramatically reduced the dependencies to compile blurt.
-
-#### Linux:
+### Compile blurt for AMD64 and ARM64, Linux and Mac:
 
 - Clang or gcc
 - cmake 3.20 or greater
 - ccache
 
-....that's it.
-
-Here's how you do it, assuming a totally fresh system:
-
-```bash
-git clone https://gitlab.com/blurt/blurt
-cd blurt
-mkdir build
-cd build
-cmake ..
-make -j$(nproc) blurtd cli_wallet
-```
-
-We use Arch Linux to compile blurt, but that does not mean that you must also use Arch. This should work well on Ubuntu and Debian, as well as others. It should also work on multiple CPU architectures.
-
-#### Mac:
-
-- Clang 12 via xcode-install (don't use brew to get clang you'd have a bad time)
-- ccache
 
 ```bash
 git clone https://gitlab.com/blurt/blurt
