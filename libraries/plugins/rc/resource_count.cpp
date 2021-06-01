@@ -60,6 +60,11 @@ struct count_operation_visitor
       state_bytes_count += _w.comment_object_beneficiaries_member_size * bens.beneficiaries.size();
    }
 
+   void operator()( const comment_payout_blurt bens )const
+   {
+      state_bytes_count += 2;
+   }
+
    void operator()( const comment_options_operation& op )const
    {
       for( const comment_options_extension& e : op.extensions )

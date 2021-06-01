@@ -329,11 +329,11 @@
         "author",
         "extensions",
         "max_accepted_payout",
-        "percent_steem_dollars",
+        "percent_blurt",
         "permlink"
       ],
       "properties": {
-        "percent_steem_dollars": {
+        "percent_blurt": {
           "$ref": "#/definitions/uint16_t",
           "description": "SBD value of the maximum payout this post will receive"
         },

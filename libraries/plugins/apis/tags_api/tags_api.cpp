@@ -541,11 +541,14 @@ void tags_api_impl::set_pending_payout( discussion& d )
    {
       uint128_t vshares;
       const auto& rf = _db.get_reward_fund( _db.get_comment( d.author, d.permlink ) );
+      const auto& gpo = _db.get_dynamic_global_properties();
       vshares = d.net_rshares.value > 0 ? chain::util::evaluate_reward_curve( d.net_rshares.value, rf.author_reward_curve, rf.content_constant ) : 0;
 
       u256 r2 = chain::util::to256( vshares ); //to256(abs_net_rshares);
       r2 *= pot.amount.value;
       r2 /= total_r2;
+      r2 *= gpo.total_vesting_fund_blurt.amount.value;
+      r2 /= gpo.current_supply.amount.value;
 
       d.pending_payout_value = asset( static_cast<uint64_t>(r2), pot.symbol );
    }

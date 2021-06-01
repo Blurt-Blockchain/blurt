@@ -467,13 +467,20 @@ struct comment_options_extension_visitor
          }
       });
    }
+
+   void operator()( const comment_payout_blurt& cpb ) const
+   {
+      FC_ASSERT( _c.percent_blurt >= cpb.percent_blurt, "A comment cannot accept a greater percent BLURT.");
+
+      _db.modify( _c, [&]( comment_object& c )
+      {
+         c.percent_blurt = cpb.percent_blurt;
+      });
+   }
 };
 
 void comment_options_evaluator::do_apply( const comment_options_operation& o )
 {
-   if (!_db.has_hardfork(BLURT_HARDFORK_0_3))
-      FC_ASSERT(o.percent_blurt == 0, "Payments in blurt are disabled");
-
    const auto& comment = _db.get_comment( o.author, o.permlink );
    if( !o.allow_curation_rewards || !o.allow_votes || o.max_accepted_payout < comment.max_accepted_payout )
       FC_ASSERT( comment.abs_rshares == 0, "One of the included comment options requires the comment to have no rshares allocated to it." );
@@ -481,11 +488,9 @@ void comment_options_evaluator::do_apply( const comment_options_operation& o )
    FC_ASSERT( comment.allow_curation_rewards >= o.allow_curation_rewards, "Curation rewards cannot be re-enabled." );
    FC_ASSERT( comment.allow_votes >= o.allow_votes, "Voting cannot be re-enabled." );
    FC_ASSERT( comment.max_accepted_payout >= o.max_accepted_payout, "A comment cannot accept a greater payout." );
-   FC_ASSERT( comment.percent_blurt >= o.percent_blurt, "A comment cannot accept a greater percent BLURT.");
 
    _db.modify( comment, [&]( comment_object& c ) {
        c.max_accepted_payout   = o.max_accepted_payout;
-       c.percent_blurt         = o.percent_blurt;
        c.allow_votes           = o.allow_votes;
        c.allow_curation_rewards = o.allow_curation_rewards;
    });
@@ -575,6 +580,10 @@ void comment_evaluator::do_apply( const comment_operation& o )
          com.last_payout = fc::time_point_sec::min();
          com.max_cashout_time = fc::time_point_sec::maximum();
          com.reward_weight = reward_weight;
+         if( !_db.has_hardfork(BLURT_HARDFORK_0_6) )
+         {
+            com.percent_blurt = 0;
+         }
 
          if ( o.parent_author == BLURT_ROOT_POST_PARENT )
          {
@@ -1248,8 +1257,8 @@ void vote_evaluator::do_apply( const vote_operation& o )
             auto content_constant = reward_fund.content_constant;
             if( _db.has_hardfork(BLURT_HARDFORK_0_4) )
             {
-               // in HF 0.3.0, this value changed but we still want old value for the curation curve
-               content_constant = BLURT_CONTENT_CONSTANT_HF21;
+               // in HF 0.4.0, this value changed but we still want old value for the curation curve
+               content_constant = BLURT_CURATION_CONSTANT;
             }
             uint64_t old_weight = util::evaluate_reward_curve( old_vote_rshares.value, curve, content_constant ).to_uint64();
             uint64_t new_weight = util::evaluate_reward_curve( comment.vote_rshares.value, curve, content_constant ).to_uint64();
