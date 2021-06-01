@@ -9,8 +9,6 @@
 
 Blurt is a public social blockchain.
 
-
-
 ## Compile without CI
 
 We've dramatically reduced the dependencies to compile blurt.
@@ -50,7 +48,6 @@ cmake ..
 make -j$(nproc) blurtd cli_wallet
 ```
 
-
 ## Features
 
 - No Downvotes
@@ -84,7 +81,6 @@ make -j$(nproc) blurtd cli_wallet
 ## Economy
 
 We feel that all actions that impose costs should themselves have a cost, so that we can avoid becoming a garbage patch.
-
 
 ## Software Development
 
