@@ -80,7 +80,7 @@ make -j$(nproc) blurtd cli_wallet
 
 ## Economy
 
-We feel that all actions that impose costs should themselves have a cost, so that we can avoid becoming a garbage patch.  We're developing features that keep us out of "tragedy of the commons" type situations.
+We feel that all actions that impose costs should themselves have a cost, so that we can avoid becoming a garbage patch. We're developing features that keep us out of "tragedy of the commons" type situations.
 
 ## Software Development
 
