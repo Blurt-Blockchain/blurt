@@ -7,14 +7,13 @@ geometry: margin=2cm
 
 These are some of the currently known network nodes available in the Blurt ecosystem. Please commit any changes to this document should you know of any nodes not listed or any of the currently listed ones ceasing to function.
 
-| Node URL | Operator |
-| ------------------ | --------- |
-| https://rpc.blurt.world | Core Team |
-| https://rpc.nerdtopia.de | [@nerdtopiade](https://blurt.world/@nerdtopiade) |
-| https://blurt.ecosynthesizer.com | [@symbionts](https://blurt.world/@symbionts) |
-| https://kentzz.blurt.world | [@kentzz001](https://blurt.world/@kentz001) |
-| https://blurt-rpc.saboin.com | [@saboin](https://blurt.world/@saboin) |
-
+| Node URL                         | Operator                                         |
+| -------------------------------- | ------------------------------------------------ |
+| https://rpc.blurt.world          | Core Team                                        |
+| https://rpc.nerdtopia.de         | [@nerdtopiade](https://blurt.world/@nerdtopiade) |
+| https://blurt.ecosynthesizer.com | [@symbionts](https://blurt.world/@symbionts)     |
+| https://kentzz.blurt.world       | [@kentzz001](https://blurt.world/@kentz001)      |
+| https://blurt-rpc.saboin.com     | [@saboin](https://blurt.world/@saboin)           |
 
 # Blocktivity.info API
 
@@ -28,14 +27,14 @@ Verbose version showing individual operation count
 
 # Global Properties Nodes
 
-| Node Url | Operator |
-| ------------------------------------- | --------- |
+| Node Url                              | Operator                                   |
+| ------------------------------------- | ------------------------------------------ |
 | https://biapi.blurt-now.com/api/blurt | [@eastmael](https://blurt.world/@eastmael) |
 
 # Blurt REST API
 
-| URL | Operator |
-| ----------------------------------------------- | -------------- |
+| URL                                    | Operator  |
+| -------------------------------------- | --------- |
 | https://api.blurt.world/api/methodName | Core Team |
 
 **Instructions:**

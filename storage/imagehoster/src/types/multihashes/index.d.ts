@@ -1,8 +1,6 @@
 declare module "multihashes" {
   function encode(message: Buffer, type: string): Buffer;
-  function decode(
-    message: Buffer
-  ): {
+  function decode(message: Buffer): {
     code: number;
     name: string;
     length: number;

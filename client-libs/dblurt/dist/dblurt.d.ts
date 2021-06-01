@@ -591,9 +591,7 @@ declare module "dblurt/chain/serializer" {
     Int32: (buffer: ByteBuffer, data: number) => void;
     Int64: (buffer: ByteBuffer, data: number) => void;
     Int8: (buffer: ByteBuffer, data: number) => void;
-    Object: (
-      keySerializers: [string, Serializer][]
-    ) => (
+    Object: (keySerializers: [string, Serializer][]) => (
       buffer: ByteBuffer,
       data: {
         [key: string]: any;

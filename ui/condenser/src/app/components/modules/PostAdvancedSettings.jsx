@@ -44,12 +44,8 @@ class PostAdvancedSettings extends Component {
     };
 
     render() {
-        const {
-            formId,
-            username,
-            defaultPayoutType,
-            initialPayoutType,
-        } = this.props;
+        const { formId, username, defaultPayoutType, initialPayoutType } =
+            this.props;
         const { beneficiaries, payoutType } = this.state;
         const { submitting, valid, handleSubmit } = this.state.advancedSettings;
         const disabled =

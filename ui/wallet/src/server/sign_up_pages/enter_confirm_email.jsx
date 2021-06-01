@@ -238,8 +238,7 @@ export default function useEnterAndConfirmEmailPages(app) {
         } else {
             // no matching identity found redirect
             this.flash = {
-                error:
-                    'This is not a valid sign up code. Please click the link in your welcome email.',
+                error: 'This is not a valid sign up code. Please click the link in your welcome email.',
             };
             this.redirect('/');
         }
@@ -256,7 +255,8 @@ export default function useEnterAndConfirmEmailPages(app) {
             VIEW_MODE_WHISTLE,
         ]);
         const viewMode = params[PARAM_VIEW_MODE] ? params[PARAM_VIEW_MODE] : '';
-        const picked_account_name = (this.session.picked_account_name = this.request.query.account);
+        const picked_account_name = (this.session.picked_account_name =
+            this.request.query.account);
         if (!picked_account_name) {
             this.flash = { error: 'Please select your account name' };
             this.redirect('/pick_account' + makeParams(params));

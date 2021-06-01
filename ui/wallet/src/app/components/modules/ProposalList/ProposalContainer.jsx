@@ -61,11 +61,8 @@ class ProposalContainer extends React.Component {
     };
 
     render() {
-        const {
-            proposal,
-            total_vesting_shares,
-            total_vesting_fund_blurt,
-        } = this.props;
+        const { proposal, total_vesting_shares, total_vesting_fund_blurt } =
+            this.props;
         // console.log('ProposalContainer.jsx::render()', this.props);
 
         return (

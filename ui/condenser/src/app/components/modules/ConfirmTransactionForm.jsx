@@ -46,12 +46,8 @@ class ConfirmTransactionForm extends Component {
     };
     render() {
         const { onCancel, okClick, onCheckbox } = this;
-        const {
-            confirm,
-            confirmBroadcastOperation,
-            warning,
-            checkbox,
-        } = this.props;
+        const { confirm, confirmBroadcastOperation, warning, checkbox } =
+            this.props;
         const { checkboxChecked } = this.state;
         const conf = typeof confirm === 'function' ? confirm() : confirm;
         return (

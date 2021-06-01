@@ -468,17 +468,13 @@ function* saveLogin_localStorage() {
         return;
     }
     localStorage.removeItem('autopost2');
-    const [
-        username,
-        private_keys,
-        login_owner_pubkey,
-        login_with_keychain,
-    ] = yield select((state) => [
-        state.user.getIn(['current', 'username']),
-        state.user.getIn(['current', 'private_keys']),
-        state.user.getIn(['current', 'login_owner_pubkey']),
-        state.user.getIn(['current', 'login_with_keychain']),
-    ]);
+    const [username, private_keys, login_owner_pubkey, login_with_keychain] =
+        yield select((state) => [
+            state.user.getIn(['current', 'username']),
+            state.user.getIn(['current', 'private_keys']),
+            state.user.getIn(['current', 'login_owner_pubkey']),
+            state.user.getIn(['current', 'login_with_keychain']),
+        ]);
     if (!login_with_keychain && !private_keys) {
         console.info('No private keys. May be a username login.');
         return;

@@ -280,13 +280,8 @@ export default class UserProfile extends React.Component {
             </div>
         );
 
-        const {
-            name,
-            location,
-            about,
-            website,
-            cover_image,
-        } = normalizeProfile(account);
+        const { name, location, about, website, cover_image } =
+            normalizeProfile(account);
         const website_label = website
             ? website.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '')
             : null;

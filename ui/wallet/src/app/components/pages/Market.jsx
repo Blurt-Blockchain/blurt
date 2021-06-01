@@ -51,13 +51,11 @@ class Market extends React.Component {
         if (!this.props.ticker && np.ticker) {
             const { lowest_ask, highest_bid } = np.ticker;
             if (this.refs.buyBlurt_price)
-                this.refs.buyBlurt_price.value = parseFloat(lowest_ask).toFixed(
-                    6
-                );
+                this.refs.buyBlurt_price.value =
+                    parseFloat(lowest_ask).toFixed(6);
             if (this.refs.sellBlurt_price)
-                this.refs.sellBlurt_price.value = parseFloat(
-                    highest_bid
-                ).toFixed(6);
+                this.refs.sellBlurt_price.value =
+                    parseFloat(highest_bid).toFixed(6);
         }
     }
 
@@ -525,10 +523,11 @@ class Market extends React.Component {
                                                         .value
                                                 );
                                                 if (amount >= 0 && price >= 0)
-                                                    this.refs.buyBlurt_total.value = roundUp(
-                                                        price * amount,
-                                                        3
-                                                    );
+                                                    this.refs.buyBlurt_total.value =
+                                                        roundUp(
+                                                            price * amount,
+                                                            3
+                                                        );
                                                 validateBuyBlurt();
                                             }}
                                         />
@@ -558,10 +557,11 @@ class Market extends React.Component {
                                                         .value
                                                 );
                                                 if (price >= 0 && amount >= 0)
-                                                    this.refs.buyBlurt_total.value = roundUp(
-                                                        price * amount,
-                                                        3
-                                                    );
+                                                    this.refs.buyBlurt_total.value =
+                                                        roundUp(
+                                                            price * amount,
+                                                            3
+                                                        );
                                                 validateBuyBlurt();
                                             }}
                                         />
@@ -594,10 +594,11 @@ class Market extends React.Component {
                                                         .value
                                                 );
                                                 if (total >= 0 && price >= 0)
-                                                    this.refs.buyBlurt_amount.value = roundUp(
-                                                        total / price,
-                                                        3
-                                                    );
+                                                    this.refs.buyBlurt_amount.value =
+                                                        roundUp(
+                                                            total / price,
+                                                            3
+                                                        );
                                                 validateBuyBlurt();
                                             }}
                                         />
@@ -625,22 +626,26 @@ class Market extends React.Component {
                                                     href="#"
                                                     onClick={(e) => {
                                                         e.preventDefault();
-                                                        const price = parseFloat(
-                                                            this.refs
-                                                                .buyBlurt_price
-                                                                .value
-                                                        );
-                                                        const total = account.sbd_balance.split(
-                                                            ' '
-                                                        )[0];
-                                                        this.refs.buyBlurt_total.value = total;
+                                                        const price =
+                                                            parseFloat(
+                                                                this.refs
+                                                                    .buyBlurt_price
+                                                                    .value
+                                                            );
+                                                        const total =
+                                                            account.sbd_balance.split(
+                                                                ' '
+                                                            )[0];
+                                                        this.refs.buyBlurt_total.value =
+                                                            total;
                                                         if (price >= 0)
-                                                            this.refs.buyBlurt_amount.value = roundDown(
-                                                                parseFloat(
-                                                                    total
-                                                                ) / price,
-                                                                3
-                                                            ).toFixed(3);
+                                                            this.refs.buyBlurt_amount.value =
+                                                                roundDown(
+                                                                    parseFloat(
+                                                                        total
+                                                                    ) / price,
+                                                                    3
+                                                                ).toFixed(3);
                                                         validateBuyBlurt();
                                                     }}
                                                 >
@@ -672,10 +677,11 @@ class Market extends React.Component {
                                                     this.refs.buyBlurt_price.value =
                                                         ticker.lowest_ask;
                                                     if (amount >= 0)
-                                                        this.refs.buyBlurt_total.value = roundUp(
-                                                            amount * price,
-                                                            3
-                                                        ).toFixed(3);
+                                                        this.refs.buyBlurt_total.value =
+                                                            roundUp(
+                                                                amount * price,
+                                                                3
+                                                            ).toFixed(3);
                                                     validateBuyBlurt();
                                                 }}
                                             >
@@ -726,10 +732,11 @@ class Market extends React.Component {
                                                         .value
                                                 );
                                                 if (amount >= 0 && price >= 0)
-                                                    this.refs.sellBlurt_total.value = roundDown(
-                                                        price * amount,
-                                                        3
-                                                    );
+                                                    this.refs.sellBlurt_total.value =
+                                                        roundDown(
+                                                            price * amount,
+                                                            3
+                                                        );
                                                 validateSellBlurt();
                                             }}
                                         />
@@ -759,10 +766,11 @@ class Market extends React.Component {
                                                         .value
                                                 );
                                                 if (price >= 0 && amount >= 0)
-                                                    this.refs.sellBlurt_total.value = roundDown(
-                                                        price * amount,
-                                                        3
-                                                    );
+                                                    this.refs.sellBlurt_total.value =
+                                                        roundDown(
+                                                            price * amount,
+                                                            3
+                                                        );
                                                 validateSellBlurt();
                                             }}
                                         />
@@ -794,10 +802,11 @@ class Market extends React.Component {
                                                         .value
                                                 );
                                                 if (price >= 0 && total >= 0)
-                                                    this.refs.sellBlurt_amount.value = roundUp(
-                                                        total / price,
-                                                        3
-                                                    );
+                                                    this.refs.sellBlurt_amount.value =
+                                                        roundUp(
+                                                            total / price,
+                                                            3
+                                                        );
                                                 validateSellBlurt();
                                             }}
                                         />
@@ -825,23 +834,27 @@ class Market extends React.Component {
                                                     href="#"
                                                     onClick={(e) => {
                                                         e.preventDefault();
-                                                        const price = parseFloat(
-                                                            this.refs
-                                                                .sellBlurt_price
-                                                                .value
-                                                        );
-                                                        const amount = account.balance.split(
-                                                            ' '
-                                                        )[0];
-                                                        this.refs.sellBlurt_amount.value = amount;
-                                                        if (price >= 0)
-                                                            this.refs.sellBlurt_total.value = roundDown(
-                                                                price *
-                                                                    parseFloat(
-                                                                        amount
-                                                                    ),
-                                                                3
+                                                        const price =
+                                                            parseFloat(
+                                                                this.refs
+                                                                    .sellBlurt_price
+                                                                    .value
                                                             );
+                                                        const amount =
+                                                            account.balance.split(
+                                                                ' '
+                                                            )[0];
+                                                        this.refs.sellBlurt_amount.value =
+                                                            amount;
+                                                        if (price >= 0)
+                                                            this.refs.sellBlurt_total.value =
+                                                                roundDown(
+                                                                    price *
+                                                                        parseFloat(
+                                                                            amount
+                                                                        ),
+                                                                    3
+                                                                );
                                                         validateSellBlurt();
                                                     }}
                                                 >
@@ -868,13 +881,16 @@ class Market extends React.Component {
                                                     );
                                                     const price =
                                                         ticker.highest_bid;
-                                                    this.refs.sellBlurt_price.value = price;
+                                                    this.refs.sellBlurt_price.value =
+                                                        price;
                                                     if (amount >= 0)
-                                                        this.refs.sellBlurt_total.value = roundDown(
-                                                            parseFloat(price) *
-                                                                amount,
-                                                            3
-                                                        );
+                                                        this.refs.sellBlurt_total.value =
+                                                            roundDown(
+                                                                parseFloat(
+                                                                    price
+                                                                ) * amount,
+                                                                3
+                                                            );
                                                     validateSellBlurt();
                                                 }}
                                             >

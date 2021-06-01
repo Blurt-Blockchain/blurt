@@ -187,9 +187,10 @@ class ReplyEditor extends React.Component {
     onTitleChange = (e) => {
         const value = e.target.value;
         // TODO block links in title (they do not make good permlinks)
-        const hasMarkdown = /(?:\*[\w\s]*\*|\#[\w\s]*\#|_[\w\s]*_|~[\w\s]*~|\]\s*\(|\]\s*\[)/.test(
-            value
-        );
+        const hasMarkdown =
+            /(?:\*[\w\s]*\*|\#[\w\s]*\#|_[\w\s]*_|~[\w\s]*~|\]\s*\(|\]\s*\[)/.test(
+                value
+            );
         this.setState({
             titleWarn: hasMarkdown
                 ? tt('reply_editor.markdown_not_supported')
@@ -675,8 +676,7 @@ class ReplyEditor extends React.Component {
                                                         {tt(
                                                             'reply_editor.beneficiaries_set',
                                                             {
-                                                                count:
-                                                                    beneficiaries.length,
+                                                                count: beneficiaries.length,
                                                             }
                                                         )}
                                                     </span>
@@ -1142,8 +1142,10 @@ export default (formId) =>
                     'props',
                     'bandwidth_kbytes_fee',
                 ]);
-                let size = JSON.stringify(operation).replace(/[\[\]\,\"]/g, '')
-                    .length;
+                let size = JSON.stringify(operation).replace(
+                    /[\[\]\,\"]/g,
+                    ''
+                ).length;
                 let bw_fee = Math.max(
                     0.001,
                     ((size / 1024) * bandwidthKbytesFee).toFixed(3)

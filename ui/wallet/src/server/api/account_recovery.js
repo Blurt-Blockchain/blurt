@@ -88,12 +88,11 @@ export default function useAccountRecoveryApi(app) {
                 return;
             }
 
-            const account_recovery_record = yield models.AccountRecoveryRequest.findOne(
-                {
+            const account_recovery_record =
+                yield models.AccountRecoveryRequest.findOne({
                     attributes: ['id', 'account_name', 'provider', 'status'],
                     where: { id: this.session.arec },
-                }
-            );
+                });
 
             if (
                 !account_recovery_record ||
@@ -126,11 +125,8 @@ export default function useAccountRecoveryApi(app) {
             const signing_key = config.get(
                 'requestAccountRecovery.signing_key'
             );
-            const {
-                new_owner_authority,
-                old_owner_key,
-                new_owner_key,
-            } = params;
+            const { new_owner_authority, old_owner_key, new_owner_key } =
+                params;
 
             yield requestAccountRecovery({
                 signing_key,

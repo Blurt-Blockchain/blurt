@@ -323,7 +323,8 @@ export const TranslationLanguageCodeList = [
   'zho',
   'isr',
 ] as const;
-export type TranslationLanguageCode = typeof TranslationLanguageCodeList[number];
+export type TranslationLanguageCode =
+  typeof TranslationLanguageCodeList[number];
 
 export enum FlagType {
   FLAT = 'flat',

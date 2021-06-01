@@ -107,11 +107,8 @@ class UserWallet extends React.Component {
     };
 
     render() {
-        const {
-            onShowDepositBlurt,
-            onShowWithdrawBlurt,
-            onShowDepositPower,
-        } = this;
+        const { onShowDepositBlurt, onShowWithdrawBlurt, onShowDepositPower } =
+            this;
         const {
             convertToBlurt,
             price_per_blurt,

@@ -63,8 +63,7 @@ function* confirmMobileHandler(e) {
     });
     if (!user) {
         this.flash = {
-            error:
-                'User session not found, please make sure you have cookies enabled in your browser for this website',
+            error: 'User session not found, please make sure you have cookies enabled in your browser for this website',
         };
         this.redirect(enterMobileUrl);
         return;
@@ -300,8 +299,7 @@ export default function useEnterAndConfirmMobilePages(app) {
             const seconds_ago = (Date.now() - mid.updated_at) / 1000.0;
             if (seconds_ago < 60) {
                 this.flash = {
-                    error:
-                        'Confirmation was attempted a moment ago. You can attempt verification again in one minute.',
+                    error: 'Confirmation was attempted a moment ago. You can attempt verification again in one minute.',
                 };
                 this.redirect(enterMobileUrl);
                 return;

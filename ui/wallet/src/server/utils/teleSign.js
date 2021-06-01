@@ -32,8 +32,7 @@ export default function* verify({
                 `TeleSign did not allow phone ${mobile} ip ${ip}. TeleSign responded: ${recommendation}`
             );
             return {
-                error:
-                    'Unable to verify your phone number. Please try a different phone number.',
+                error: 'Unable to verify your phone number. Please try a different phone number.',
                 score,
             };
         }

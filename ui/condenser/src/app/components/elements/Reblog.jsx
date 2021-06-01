@@ -132,8 +132,10 @@ module.exports = connect(
                 json: JSON.stringify(json),
                 __config: { title: tt('g.resteem_this_post') },
             };
-            let size = JSON.stringify(operation).replace(/[\[\]\,\"]/g, '')
-                .length;
+            let size = JSON.stringify(operation).replace(
+                /[\[\]\,\"]/g,
+                ''
+            ).length;
             let bw_fee = Math.max(
                 0.001,
                 ((size / 1024) * bandwidthKbytesFee).toFixed(3)

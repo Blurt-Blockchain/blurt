@@ -526,12 +526,8 @@ export default connect(
             const { password, saveLogin } = data;
             const username = data.username.trim().toLowerCase();
             if (loginBroadcastOperation) {
-                const {
-                    type,
-                    operation,
-                    successCallback,
-                    errorCallback,
-                } = loginBroadcastOperation.toJS();
+                const { type, operation, successCallback, errorCallback } =
+                    loginBroadcastOperation.toJS();
                 dispatch(
                     transactionActions.broadcastOperation({
                         type,

@@ -60,8 +60,7 @@ const SidePanel = ({
             {
                 value: 'faq',
                 label: tt('navigation.faq'),
-                link:
-                    'https://blurtfaq.org/wiki/FAQ_%E2%80%93_The_Bloggers_Almanac',
+                link: 'https://blurtfaq.org/wiki/FAQ_%E2%80%93_The_Bloggers_Almanac',
             },
             {
                 value: 'change_password',
@@ -120,8 +119,7 @@ const SidePanel = ({
             {
                 value: 'wblurt',
                 label: 'Uniswap',
-                link:
-                    'https://app.uniswap.org/#/swap?inputCurrency=ETH&outputCurrency=0x37472814e5c6146e6ca7ed1753cd1b18b733e5d4',
+                link: 'https://app.uniswap.org/#/swap?inputCurrency=ETH&outputCurrency=0x37472814e5c6146e6ca7ed1753cd1b18b733e5d4',
             },
         ],
         external: [

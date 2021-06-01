@@ -25,9 +25,8 @@ class CheckLoginOwner extends React.Component {
             previous_owner_authority &&
             this.props.previous_owner_authority !== previous_owner_authority
         ) {
-            const last_valid_time = previous_owner_authority.get(
-                'last_valid_time'
-            );
+            const last_valid_time =
+                previous_owner_authority.get('last_valid_time');
             // has this been shown already?
             if (localStorage[this.getKey(nextProps)] !== last_valid_time) {
                 let last_valid_date;

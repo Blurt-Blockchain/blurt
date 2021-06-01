@@ -49,11 +49,7 @@ export const generateCommentPermlink = (toAuthor) => {
 
   const timeFormat = `${t.getFullYear().toString()}${(
     t.getMonth() + 1
-  ).toString()}${t
-    .getDate()
-    .toString()}t${t
-    .getHours()
-    .toString()}${t
+  ).toString()}${t.getDate().toString()}t${t.getHours().toString()}${t
     .getMinutes()
     .toString()}${t.getSeconds().toString()}${t.getMilliseconds().toString()}z`;
 
@@ -141,7 +137,8 @@ export const makeJsonMetadataForUpdate = (oldJson, meta, tags) => {
 };
 
 export const extractMetadata = (body: string) => {
-  const urlReg = /(\b(https?|ftp):\/\/[A-Z0-9+&@#/%?=~_|!:,.;-]*[-A-Z0-9+&@#/%=~_|])/gim;
+  const urlReg =
+    /(\b(https?|ftp):\/\/[A-Z0-9+&@#/%?=~_|!:,.;-]*[-A-Z0-9+&@#/%=~_|])/gim;
   const userReg = /(^|\s)(@[a-z][-.a-z\d]+[a-z\d])/gim;
   const imgReg = /(https?:\/\/.*\.(?:png|jpg|jpeg|gif))/gim;
 

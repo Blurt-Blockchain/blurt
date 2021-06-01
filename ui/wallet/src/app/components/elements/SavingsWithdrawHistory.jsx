@@ -62,14 +62,8 @@ class SavingsWithdrawHistory extends React.Component {
         this.initActions();
         let idx = 0;
         const rows = savings_withdraws.map((withdraw) => {
-            const {
-                complete,
-                amount,
-                to,
-                from,
-                memo,
-                request_id,
-            } = withdraw.toJS();
+            const { complete, amount, to, from, memo, request_id } =
+                withdraw.toJS();
             const dest =
                 to === from
                     ? tt('savingswithdrawhistory_jsx.to', { to })

@@ -119,7 +119,8 @@ describe("steem.broadcast:", () => {
           "operations",
         ]);
       } finally {
-        steem.api.getDynamicGlobalPropertiesAsync = oldGetDynamicGlobalProperties;
+        steem.api.getDynamicGlobalPropertiesAsync =
+          oldGetDynamicGlobalProperties;
         steem.api.getBlockAsync = oldGetBlockAsync;
       }
     });

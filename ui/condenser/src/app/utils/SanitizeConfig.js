@@ -52,11 +52,8 @@ export default ({
     transformTags: {
         iframe: (tagName, attribs) => {
             const srcAtty = attribs.src;
-            const {
-                validUrl,
-                useSandbox,
-                sandboxAttributes,
-            } = validateEmbbeddedPlayerIframeUrl(srcAtty);
+            const { validUrl, useSandbox, sandboxAttributes } =
+                validateEmbbeddedPlayerIframeUrl(srcAtty);
 
             if (validUrl !== false) {
                 const iframe = {

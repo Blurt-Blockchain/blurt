@@ -48,11 +48,8 @@ class Header extends React.Component {
     }
 
     componentWillMount() {
-        const {
-            loggedIn,
-            current_account_name,
-            getAccountNotifications,
-        } = this.props;
+        const { loggedIn, current_account_name, getAccountNotifications } =
+            this.props;
         if (loggedIn) {
             getAccountNotifications(current_account_name);
         }

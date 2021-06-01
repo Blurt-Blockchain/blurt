@@ -9,7 +9,8 @@
  * @type {RegExp}
  */
 const rProxyDomain = /^http(s)?:\/\/steemit(dev|stage)?images.com\//g;
-const rProxyDomainsDimensions = /http(s)?:\/\/steemit(dev|stage)?images.com\/([0-9]+x[0-9]+)\//g;
+const rProxyDomainsDimensions =
+    /http(s)?:\/\/steemit(dev|stage)?images.com\/([0-9]+x[0-9]+)\//g;
 const NATURAL_SIZE = '0x0/';
 const CAPPED_SIZE = '640x0/';
 

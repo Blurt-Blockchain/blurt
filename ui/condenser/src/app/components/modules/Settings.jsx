@@ -94,13 +94,8 @@ class Settings extends React.Component {
     render() {
         const { state, props } = this;
 
-        const {
-            walletUrl,
-            ignores,
-            account,
-            isOwnAccount,
-            user_preferences,
-        } = this.props;
+        const { walletUrl, ignores, account, isOwnAccount, user_preferences } =
+            this.props;
         const preferred_api_endpoint = this.getPreferredApiEndpoint();
 
         return (

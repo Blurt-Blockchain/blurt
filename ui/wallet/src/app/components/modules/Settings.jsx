@@ -126,14 +126,8 @@ class Settings extends React.Component {
         if (!metaData.profile) metaData.profile = {};
         delete metaData.user_image; // old field... cleanup
 
-        const {
-            profile_image,
-            cover_image,
-            name,
-            about,
-            location,
-            website,
-        } = this.state;
+        const { profile_image, cover_image, name, about, location, website } =
+            this.state;
 
         // Update relevant fields
         metaData.profile.profile_image = profile_image.value;

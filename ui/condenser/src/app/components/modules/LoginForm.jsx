@@ -100,8 +100,8 @@ class LoginForm extends Component {
     }
 
     SignUp() {
-        const onType = document.getElementsByClassName('OpAction')[0]
-            .textContent;
+        const onType =
+            document.getElementsByClassName('OpAction')[0].textContent;
         serverApiRecordEvent('FreeMoneySignUp', onType);
         window.location.href = SIGNUP_URL;
     }
@@ -576,12 +576,8 @@ export default connect(
             const { password, saveLogin } = data;
             const username = data.username.trim().toLowerCase();
             if (loginBroadcastOperation) {
-                const {
-                    type,
-                    operation,
-                    successCallback,
-                    errorCallback,
-                } = loginBroadcastOperation.toJS();
+                const { type, operation, successCallback, errorCallback } =
+                    loginBroadcastOperation.toJS();
                 dispatch(
                     transactionActions.broadcastOperation({
                         type,

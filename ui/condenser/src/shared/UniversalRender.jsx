@@ -315,15 +315,13 @@ export async function serverRender(
         // Insert the special posts into the list of posts, so there is no
         // jumping of content.
         offchain.special_posts.featured_posts.forEach((featuredPost) => {
-            onchain.content[
-                `${featuredPost.author}/${featuredPost.permlink}`
-            ] = featuredPost;
+            onchain.content[`${featuredPost.author}/${featuredPost.permlink}`] =
+                featuredPost;
         });
 
         offchain.special_posts.promoted_posts.forEach((promotedPost) => {
-            onchain.content[
-                `${promotedPost.author}/${promotedPost.permlink}`
-            ] = promotedPost;
+            onchain.content[`${promotedPost.author}/${promotedPost.permlink}`] =
+                promotedPost;
         });
 
         server_store = createStore(rootReducer, {

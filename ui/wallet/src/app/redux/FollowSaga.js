@@ -66,9 +66,8 @@ function* loadFollowsLoop(account, type, start = '', limit = 1000) {
 
                     const whatList = value.get('what');
                     const accountNameKey = 'following';
-                    const accountName = (lastAccountName = value.get(
-                        'following'
-                    ));
+                    const accountName = (lastAccountName =
+                        value.get('following'));
                     whatList.forEach((what) => {
                         // currently this is always true: what === type
                         m.update(what, OrderedSet(), (s) => s.add(accountName));

@@ -49,7 +49,6 @@ make -j$(nproc) blurtd cli_wallet
 ```
 
 ## Features
-
 - No Downvotes
 - [No Stablecoin](https://blurt.world/blurt/@jacobgadikian/blurt-has-no-dollar-stablecoin-why)
 - Transaction fees [controlled by witnesses](https://blurt.world/blurt/@jacobgadikian/witnesses-control-fees-on-blurt)
@@ -80,7 +79,7 @@ make -j$(nproc) blurtd cli_wallet
 
 ## Economy
 
-We feel that all actions that impose costs should themselves have a cost, so that we can avoid becoming a garbage patch.  We're developing features that keep us out of "tragedy of the commons" type situations.
+We feel that all actions that impose costs should themselves have a cost, so that we can avoid becoming a garbage patch. We're developing features that keep us out of "tragedy of the commons" type situations.
 
 ## Software Development
 

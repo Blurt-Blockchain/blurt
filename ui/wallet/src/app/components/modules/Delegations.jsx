@@ -225,8 +225,10 @@ export default connect(
                 vesting_shares: `${vests} VESTS`,
             };
             // Calculate transaction fee
-            const size = JSON.stringify(operation).replace(/[\[\]\,\"]/g, '')
-                .length;
+            const size = JSON.stringify(operation).replace(
+                /[\[\]\,\"]/g,
+                ''
+            ).length;
             const bw_fee = Math.max(
                 0.001,
                 ((size / 1024) * bandwidthKbytesFee).toFixed(3)

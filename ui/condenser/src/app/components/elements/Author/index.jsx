@@ -91,13 +91,8 @@ class Author extends React.Component {
 
     shouldComponentUpdate = shouldComponentUpdate(this, 'Author');
     render() {
-        const {
-            author,
-            follow,
-            mute,
-            authorRepLog10,
-            showAffiliation,
-        } = this.props; // html
+        const { author, follow, mute, authorRepLog10, showAffiliation } =
+            this.props; // html
         const { username } = this.props; // redux
         const { name, about } = this.props.account
             ? normalizeProfile(this.props.account.toJS())

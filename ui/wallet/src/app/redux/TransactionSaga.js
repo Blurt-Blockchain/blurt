@@ -222,7 +222,8 @@ export function* broadcastOperation({
 function hasPrivateKeys(payload) {
     const blob = JSON.stringify(payload.operations);
     let m;
-    const re = /P?(5[123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz]{50})/g;
+    const re =
+        /P?(5[123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz]{50})/g;
     while (true) {
         m = re.exec(blob);
         if (m) {

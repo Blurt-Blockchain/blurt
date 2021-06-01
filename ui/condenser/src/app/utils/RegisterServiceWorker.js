@@ -9,7 +9,8 @@ export default function registerServiceWorker() {
             return navigator.serviceWorker.ready.then(function (
                 serviceWorkerRegistration
             ) {
-                const subscription = serviceWorkerRegistration.pushManager.getSubscription();
+                const subscription =
+                    serviceWorkerRegistration.pushManager.getSubscription();
                 return subscription.then(function (subscription) {
                     if (subscription) {
                         return subscription;

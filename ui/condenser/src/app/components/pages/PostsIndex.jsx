@@ -88,18 +88,11 @@ class PostsIndex extends React.Component {
         this.setState({ showSpam: !this.state.showSpam });
     };
     render() {
-        let {
-            category,
-            order = constants.DEFAULT_SORT_ORDER,
-        } = this.props.routeParams;
+        let { category, order = constants.DEFAULT_SORT_ORDER } =
+            this.props.routeParams;
 
-        const {
-            categories,
-            featured,
-            promoted,
-            gptBannedTags,
-            topic,
-        } = this.props;
+        const { categories, featured, promoted, gptBannedTags, topic } =
+            this.props;
 
         let allowAdsOnContent = true;
         allowAdsOnContent =

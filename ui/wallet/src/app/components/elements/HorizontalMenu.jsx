@@ -14,13 +14,8 @@ export default class HorizontalMenu extends React.Component {
     };
 
     render() {
-        const {
-            items,
-            title,
-            className,
-            hideValue,
-            includeSearch,
-        } = this.props;
+        const { items, title, className, hideValue, includeSearch } =
+            this.props;
         return (
             <ul
                 className={

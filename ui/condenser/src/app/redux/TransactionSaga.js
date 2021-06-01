@@ -168,7 +168,8 @@ export function* broadcastOperation({
 function hasPrivateKeys(payload) {
     const blob = JSON.stringify(payload.operations);
     let m;
-    const re = /P?(5[123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz]{50})/g;
+    const re =
+        /P?(5[123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz]{50})/g;
     while (true) {
         m = re.exec(blob);
         if (m) {
@@ -424,10 +425,8 @@ export function* preBroadcast_comment({ operation, username }) {
         author,
         __config: { originalBody, comment_options },
     } = operation;
-    const {
-        parent_author = '',
-        parent_permlink = operation.category,
-    } = operation;
+    const { parent_author = '', parent_permlink = operation.category } =
+        operation;
     const { title } = operation;
     let { body } = operation;
 

@@ -507,8 +507,7 @@ typedoc.search.data = {
       id: 62,
       kind: 1024,
       name: "pending_rewarded_vesting_shares",
-      url:
-        "interfaces/dynamicglobalproperties.html#pending_rewarded_vesting_shares",
+      url: "interfaces/dynamicglobalproperties.html#pending_rewarded_vesting_shares",
       classes: "tsd-kind-property tsd-parent-kind-interface",
       parent: "DynamicGlobalProperties",
     },
@@ -516,8 +515,7 @@ typedoc.search.data = {
       id: 63,
       kind: 1024,
       name: "pending_rewarded_vesting_hive",
-      url:
-        "interfaces/dynamicglobalproperties.html#pending_rewarded_vesting_hive",
+      url: "interfaces/dynamicglobalproperties.html#pending_rewarded_vesting_hive",
       classes: "tsd-kind-property tsd-parent-kind-interface",
       parent: "DynamicGlobalProperties",
     },
@@ -581,8 +579,7 @@ typedoc.search.data = {
       id: 71,
       kind: 1024,
       name: "last_irreversible_block_num",
-      url:
-        "interfaces/dynamicglobalproperties.html#last_irreversible_block_num",
+      url: "interfaces/dynamicglobalproperties.html#last_irreversible_block_num",
       classes: "tsd-kind-property tsd-parent-kind-interface",
       parent: "DynamicGlobalProperties",
     },
@@ -1870,8 +1867,7 @@ typedoc.search.data = {
       id: 234,
       kind: 32,
       name: "delegation",
-      url:
-        "interfaces/accountcreatewithdelegationoperation.html#1.__type.delegation",
+      url: "interfaces/accountcreatewithdelegationoperation.html#1.__type.delegation",
       classes: "tsd-kind-variable tsd-parent-kind-type-literal",
       parent: "AccountCreateWithDelegationOperation.1.__type",
     },
@@ -1879,8 +1875,7 @@ typedoc.search.data = {
       id: 235,
       kind: 32,
       name: "creator",
-      url:
-        "interfaces/accountcreatewithdelegationoperation.html#1.__type.creator",
+      url: "interfaces/accountcreatewithdelegationoperation.html#1.__type.creator",
       classes: "tsd-kind-variable tsd-parent-kind-type-literal",
       parent: "AccountCreateWithDelegationOperation.1.__type",
     },
@@ -1888,8 +1883,7 @@ typedoc.search.data = {
       id: 236,
       kind: 32,
       name: "new_account_name",
-      url:
-        "interfaces/accountcreatewithdelegationoperation.html#1.__type.new_account_name",
+      url: "interfaces/accountcreatewithdelegationoperation.html#1.__type.new_account_name",
       classes: "tsd-kind-variable tsd-parent-kind-type-literal",
       parent: "AccountCreateWithDelegationOperation.1.__type",
     },
@@ -1897,8 +1891,7 @@ typedoc.search.data = {
       id: 237,
       kind: 32,
       name: "owner",
-      url:
-        "interfaces/accountcreatewithdelegationoperation.html#1.__type.owner",
+      url: "interfaces/accountcreatewithdelegationoperation.html#1.__type.owner",
       classes: "tsd-kind-variable tsd-parent-kind-type-literal",
       parent: "AccountCreateWithDelegationOperation.1.__type",
     },
@@ -1906,8 +1899,7 @@ typedoc.search.data = {
       id: 238,
       kind: 32,
       name: "active",
-      url:
-        "interfaces/accountcreatewithdelegationoperation.html#1.__type.active",
+      url: "interfaces/accountcreatewithdelegationoperation.html#1.__type.active",
       classes: "tsd-kind-variable tsd-parent-kind-type-literal",
       parent: "AccountCreateWithDelegationOperation.1.__type",
     },
@@ -1915,8 +1907,7 @@ typedoc.search.data = {
       id: 239,
       kind: 32,
       name: "posting",
-      url:
-        "interfaces/accountcreatewithdelegationoperation.html#1.__type.posting",
+      url: "interfaces/accountcreatewithdelegationoperation.html#1.__type.posting",
       classes: "tsd-kind-variable tsd-parent-kind-type-literal",
       parent: "AccountCreateWithDelegationOperation.1.__type",
     },
@@ -1924,8 +1915,7 @@ typedoc.search.data = {
       id: 240,
       kind: 32,
       name: "memo_key",
-      url:
-        "interfaces/accountcreatewithdelegationoperation.html#1.__type.memo_key",
+      url: "interfaces/accountcreatewithdelegationoperation.html#1.__type.memo_key",
       classes: "tsd-kind-variable tsd-parent-kind-type-literal",
       parent: "AccountCreateWithDelegationOperation.1.__type",
     },
@@ -1933,8 +1923,7 @@ typedoc.search.data = {
       id: 241,
       kind: 32,
       name: "json_metadata",
-      url:
-        "interfaces/accountcreatewithdelegationoperation.html#1.__type.json_metadata",
+      url: "interfaces/accountcreatewithdelegationoperation.html#1.__type.json_metadata",
       classes: "tsd-kind-variable tsd-parent-kind-type-literal",
       parent: "AccountCreateWithDelegationOperation.1.__type",
     },
@@ -1942,8 +1931,7 @@ typedoc.search.data = {
       id: 242,
       kind: 32,
       name: "extensions",
-      url:
-        "interfaces/accountcreatewithdelegationoperation.html#1.__type.extensions",
+      url: "interfaces/accountcreatewithdelegationoperation.html#1.__type.extensions",
       classes: "tsd-kind-variable tsd-parent-kind-type-literal",
       parent: "AccountCreateWithDelegationOperation.1.__type",
     },
@@ -2171,8 +2159,7 @@ typedoc.search.data = {
       id: 271,
       kind: 32,
       name: "request_id",
-      url:
-        "interfaces/canceltransferfromsavingsoperation.html#1.__type.request_id",
+      url: "interfaces/canceltransferfromsavingsoperation.html#1.__type.request_id",
       classes: "tsd-kind-variable tsd-parent-kind-type-literal",
       parent: "CancelTransferFromSavingsOperation.1.__type",
     },
@@ -2211,8 +2198,7 @@ typedoc.search.data = {
       id: 276,
       kind: 32,
       name: "account_to_recover",
-      url:
-        "interfaces/changerecoveryaccountoperation.html#1.__type.account_to_recover",
+      url: "interfaces/changerecoveryaccountoperation.html#1.__type.account_to_recover",
       classes: "tsd-kind-variable tsd-parent-kind-type-literal",
       parent: "ChangeRecoveryAccountOperation.1.__type",
     },
@@ -2220,8 +2206,7 @@ typedoc.search.data = {
       id: 277,
       kind: 32,
       name: "new_recovery_account",
-      url:
-        "interfaces/changerecoveryaccountoperation.html#1.__type.new_recovery_account",
+      url: "interfaces/changerecoveryaccountoperation.html#1.__type.new_recovery_account",
       classes: "tsd-kind-variable tsd-parent-kind-type-literal",
       parent: "ChangeRecoveryAccountOperation.1.__type",
     },
@@ -2489,8 +2474,7 @@ typedoc.search.data = {
       id: 311,
       kind: 32,
       name: "max_accepted_payout",
-      url:
-        "interfaces/commentoptionsoperation.html#1.__type.max_accepted_payout",
+      url: "interfaces/commentoptionsoperation.html#1.__type.max_accepted_payout",
       classes: "tsd-kind-variable tsd-parent-kind-type-literal",
       parent: "CommentOptionsOperation.1.__type",
     },
@@ -2514,8 +2498,7 @@ typedoc.search.data = {
       id: 314,
       kind: 32,
       name: "allow_curation_rewards",
-      url:
-        "interfaces/commentoptionsoperation.html#1.__type.allow_curation_rewards",
+      url: "interfaces/commentoptionsoperation.html#1.__type.allow_curation_rewards",
       classes: "tsd-kind-variable tsd-parent-kind-type-literal",
       parent: "CommentOptionsOperation.1.__type",
     },
@@ -2625,8 +2608,7 @@ typedoc.search.data = {
       id: 328,
       kind: 32,
       name: "new_account_name",
-      url:
-        "interfaces/createclaimedaccountoperation.html#1.__type.new_account_name",
+      url: "interfaces/createclaimedaccountoperation.html#1.__type.new_account_name",
       classes: "tsd-kind-variable tsd-parent-kind-type-literal",
       parent: "CreateClaimedAccountOperation.1.__type",
     },
@@ -2666,8 +2648,7 @@ typedoc.search.data = {
       id: 333,
       kind: 32,
       name: "json_metadata",
-      url:
-        "interfaces/createclaimedaccountoperation.html#1.__type.json_metadata",
+      url: "interfaces/createclaimedaccountoperation.html#1.__type.json_metadata",
       classes: "tsd-kind-variable tsd-parent-kind-type-literal",
       parent: "CreateClaimedAccountOperation.1.__type",
     },
@@ -2769,8 +2750,7 @@ typedoc.search.data = {
       id: 346,
       kind: 32,
       name: "required_owner_auths",
-      url:
-        "interfaces/custombinaryoperation.html#1.__type.required_owner_auths",
+      url: "interfaces/custombinaryoperation.html#1.__type.required_owner_auths",
       classes: "tsd-kind-variable tsd-parent-kind-type-literal",
       parent: "CustomBinaryOperation.1.__type",
     },
@@ -2778,8 +2758,7 @@ typedoc.search.data = {
       id: 347,
       kind: 32,
       name: "required_active_auths",
-      url:
-        "interfaces/custombinaryoperation.html#1.__type.required_active_auths",
+      url: "interfaces/custombinaryoperation.html#1.__type.required_active_auths",
       classes: "tsd-kind-variable tsd-parent-kind-type-literal",
       parent: "CustomBinaryOperation.1.__type",
     },
@@ -2787,8 +2766,7 @@ typedoc.search.data = {
       id: 348,
       kind: 32,
       name: "required_posting_auths",
-      url:
-        "interfaces/custombinaryoperation.html#1.__type.required_posting_auths",
+      url: "interfaces/custombinaryoperation.html#1.__type.required_posting_auths",
       classes: "tsd-kind-variable tsd-parent-kind-type-literal",
       parent: "CustomBinaryOperation.1.__type",
     },
@@ -2859,8 +2837,7 @@ typedoc.search.data = {
       id: 357,
       kind: 32,
       name: "required_posting_auths",
-      url:
-        "interfaces/customjsonoperation.html#1.__type.required_posting_auths",
+      url: "interfaces/customjsonoperation.html#1.__type.required_posting_auths",
       classes: "tsd-kind-variable tsd-parent-kind-type-literal",
       parent: "CustomJsonOperation.1.__type",
     },
@@ -2978,8 +2955,7 @@ typedoc.search.data = {
       id: 372,
       kind: 32,
       name: "vesting_shares",
-      url:
-        "interfaces/delegatevestingsharesoperation.html#1.__type.vesting_shares",
+      url: "interfaces/delegatevestingsharesoperation.html#1.__type.vesting_shares",
       classes: "tsd-kind-variable tsd-parent-kind-type-literal",
       parent: "DelegateVestingSharesOperation.1.__type",
     },
@@ -3366,8 +3342,7 @@ typedoc.search.data = {
       id: 421,
       kind: 32,
       name: "ratification_deadline",
-      url:
-        "interfaces/escrowtransferoperation.html#1.__type.ratification_deadline",
+      url: "interfaces/escrowtransferoperation.html#1.__type.ratification_deadline",
       classes: "tsd-kind-variable tsd-parent-kind-type-literal",
       parent: "EscrowTransferOperation.1.__type",
     },
@@ -3800,8 +3775,7 @@ typedoc.search.data = {
       id: 476,
       kind: 32,
       name: "account_to_recover",
-      url:
-        "interfaces/recoveraccountoperation.html#1.__type.account_to_recover",
+      url: "interfaces/recoveraccountoperation.html#1.__type.account_to_recover",
       classes: "tsd-kind-variable tsd-parent-kind-type-literal",
       parent: "RecoverAccountOperation.1.__type",
     },
@@ -3809,8 +3783,7 @@ typedoc.search.data = {
       id: 477,
       kind: 32,
       name: "new_owner_authority",
-      url:
-        "interfaces/recoveraccountoperation.html#1.__type.new_owner_authority",
+      url: "interfaces/recoveraccountoperation.html#1.__type.new_owner_authority",
       classes: "tsd-kind-variable tsd-parent-kind-type-literal",
       parent: "RecoverAccountOperation.1.__type",
     },
@@ -3818,8 +3791,7 @@ typedoc.search.data = {
       id: 478,
       kind: 32,
       name: "recent_owner_authority",
-      url:
-        "interfaces/recoveraccountoperation.html#1.__type.recent_owner_authority",
+      url: "interfaces/recoveraccountoperation.html#1.__type.recent_owner_authority",
       classes: "tsd-kind-variable tsd-parent-kind-type-literal",
       parent: "RecoverAccountOperation.1.__type",
     },
@@ -3882,8 +3854,7 @@ typedoc.search.data = {
       id: 486,
       kind: 32,
       name: "second_block",
-      url:
-        "interfaces/reportoverproductionoperation.html#1.__type.second_block",
+      url: "interfaces/reportoverproductionoperation.html#1.__type.second_block",
       classes: "tsd-kind-variable tsd-parent-kind-type-literal",
       parent: "ReportOverProductionOperation.1.__type",
     },
@@ -3922,8 +3893,7 @@ typedoc.search.data = {
       id: 491,
       kind: 32,
       name: "recovery_account",
-      url:
-        "interfaces/requestaccountrecoveryoperation.html#1.__type.recovery_account",
+      url: "interfaces/requestaccountrecoveryoperation.html#1.__type.recovery_account",
       classes: "tsd-kind-variable tsd-parent-kind-type-literal",
       parent: "RequestAccountRecoveryOperation.1.__type",
     },
@@ -3931,8 +3901,7 @@ typedoc.search.data = {
       id: 492,
       kind: 32,
       name: "account_to_recover",
-      url:
-        "interfaces/requestaccountrecoveryoperation.html#1.__type.account_to_recover",
+      url: "interfaces/requestaccountrecoveryoperation.html#1.__type.account_to_recover",
       classes: "tsd-kind-variable tsd-parent-kind-type-literal",
       parent: "RequestAccountRecoveryOperation.1.__type",
     },
@@ -3940,8 +3909,7 @@ typedoc.search.data = {
       id: 493,
       kind: 32,
       name: "new_owner_authority",
-      url:
-        "interfaces/requestaccountrecoveryoperation.html#1.__type.new_owner_authority",
+      url: "interfaces/requestaccountrecoveryoperation.html#1.__type.new_owner_authority",
       classes: "tsd-kind-variable tsd-parent-kind-type-literal",
       parent: "RequestAccountRecoveryOperation.1.__type",
     },
@@ -3949,8 +3917,7 @@ typedoc.search.data = {
       id: 494,
       kind: 32,
       name: "extensions",
-      url:
-        "interfaces/requestaccountrecoveryoperation.html#1.__type.extensions",
+      url: "interfaces/requestaccountrecoveryoperation.html#1.__type.extensions",
       classes: "tsd-kind-variable tsd-parent-kind-type-literal",
       parent: "RequestAccountRecoveryOperation.1.__type",
     },
@@ -4052,8 +4019,7 @@ typedoc.search.data = {
       id: 507,
       kind: 32,
       name: "current_reset_account",
-      url:
-        "interfaces/setresetaccountoperation.html#1.__type.current_reset_account",
+      url: "interfaces/setresetaccountoperation.html#1.__type.current_reset_account",
       classes: "tsd-kind-variable tsd-parent-kind-type-literal",
       parent: "SetResetAccountOperation.1.__type",
     },
@@ -4100,8 +4066,7 @@ typedoc.search.data = {
       id: 513,
       kind: 32,
       name: "from_account",
-      url:
-        "interfaces/setwithdrawvestingrouteoperation.html#1.__type.from_account",
+      url: "interfaces/setwithdrawvestingrouteoperation.html#1.__type.from_account",
       classes: "tsd-kind-variable tsd-parent-kind-type-literal",
       parent: "SetWithdrawVestingRouteOperation.1.__type",
     },
@@ -4109,8 +4074,7 @@ typedoc.search.data = {
       id: 514,
       kind: 32,
       name: "to_account",
-      url:
-        "interfaces/setwithdrawvestingrouteoperation.html#1.__type.to_account",
+      url: "interfaces/setwithdrawvestingrouteoperation.html#1.__type.to_account",
       classes: "tsd-kind-variable tsd-parent-kind-type-literal",
       parent: "SetWithdrawVestingRouteOperation.1.__type",
     },
@@ -4126,8 +4090,7 @@ typedoc.search.data = {
       id: 516,
       kind: 32,
       name: "auto_vest",
-      url:
-        "interfaces/setwithdrawvestingrouteoperation.html#1.__type.auto_vest",
+      url: "interfaces/setwithdrawvestingrouteoperation.html#1.__type.auto_vest",
       classes: "tsd-kind-variable tsd-parent-kind-type-literal",
       parent: "SetWithdrawVestingRouteOperation.1.__type",
     },
@@ -4710,8 +4673,7 @@ typedoc.search.data = {
       id: 590,
       kind: 32,
       name: "posting_json_metadata",
-      url:
-        "interfaces/accountupdate2operation.html#1.__type.posting_json_metadata",
+      url: "interfaces/accountupdate2operation.html#1.__type.posting_json_metadata",
       classes: "tsd-kind-variable tsd-parent-kind-type-literal",
       parent: "AccountUpdate2Operation.1.__type",
     },
@@ -7336,8 +7298,7 @@ typedoc.search.data = {
       id: 927,
       kind: 32,
       name: "decay_per_time_unit",
-      url:
-        "interfaces/dynamicparam.html#decay_params.__type.decay_per_time_unit",
+      url: "interfaces/dynamicparam.html#decay_params.__type.decay_per_time_unit",
       classes: "tsd-kind-variable tsd-parent-kind-type-literal",
       parent: "DynamicParam.decay_params.__type",
     },
@@ -7345,8 +7306,7 @@ typedoc.search.data = {
       id: 928,
       kind: 32,
       name: "decay_per_time_unit_denom_shift",
-      url:
-        "interfaces/dynamicparam.html#decay_params.__type.decay_per_time_unit_denom_shift",
+      url: "interfaces/dynamicparam.html#decay_params.__type.decay_per_time_unit_denom_shift",
       classes: "tsd-kind-variable tsd-parent-kind-type-literal",
       parent: "DynamicParam.decay_params.__type",
     },
@@ -9460,8 +9420,7 @@ typedoc.search.data = {
       id: 1197,
       kind: 32,
       name: "last_update_time",
-      url:
-        "interfaces/extendedaccount.html#voting_manabar.__type.last_update_time",
+      url: "interfaces/extendedaccount.html#voting_manabar.__type.last_update_time",
       classes: "tsd-kind-variable tsd-parent-kind-type-literal",
       parent: "ExtendedAccount.voting_manabar.__type",
     },

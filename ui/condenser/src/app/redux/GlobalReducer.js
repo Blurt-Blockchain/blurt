@@ -240,14 +240,8 @@ export default function reducer(state = defaultState, action = {}) {
         }
 
         case RECEIVE_DATA: {
-            const {
-                data,
-                order,
-                category,
-                accountname,
-                fetching,
-                endOfData,
-            } = payload;
+            const { data, order, category, accountname, fetching, endOfData } =
+                payload;
             let new_state;
 
             // append incoming post keys to proper content list

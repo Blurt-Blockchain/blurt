@@ -210,8 +210,10 @@ module.exports = connect(
                 required_posting_auths: [follower],
                 json: JSON.stringify(json),
             };
-            let size = JSON.stringify(operation).replace(/[\[\]\,\"]/g, '')
-                .length;
+            let size = JSON.stringify(operation).replace(
+                /[\[\]\,\"]/g,
+                ''
+            ).length;
             let bw_fee = Math.max(
                 0.001,
                 ((size / 1024) * bandwidthKbytesFee).toFixed(3)

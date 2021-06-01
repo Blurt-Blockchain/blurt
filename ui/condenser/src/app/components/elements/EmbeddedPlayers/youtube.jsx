@@ -4,7 +4,8 @@ import YoutubePreview from 'app/components/elements/YoutubePreview';
 const regex = {
     sanitize: /^(https?:)?\/\/www.youtube.com\/embed\/.*/i,
     main: /(?:https?:\/\/)(?:www\.)?(?:(?:youtube\.com\/watch\?v=)|(?:youtu.be\/)|(?:youtube\.com\/embed\/))([A-Za-z0-9_\-]+)[^ ]*/i,
-    contentId: /(?:(?:youtube\.com\/watch\?v=)|(?:youtu.be\/)|(?:youtube\.com\/embed\/))([A-Za-z0-9_\-]+)/i,
+    contentId:
+        /(?:(?:youtube\.com\/watch\?v=)|(?:youtu.be\/)|(?:youtube\.com\/embed\/))([A-Za-z0-9_\-]+)/i,
 };
 
 export default regex;

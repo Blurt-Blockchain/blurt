@@ -124,8 +124,7 @@ const SidePanel = ({
             {
                 value: 'wblurt',
                 label: 'Uniswap',
-                link:
-                    'https://app.uniswap.org/#/swap?inputCurrency=ETH&outputCurrency=0x37472814e5c6146e6ca7ed1753cd1b18b733e5d4',
+                link: 'https://app.uniswap.org/#/swap?inputCurrency=ETH&outputCurrency=0x37472814e5c6146e6ca7ed1753cd1b18b733e5d4',
             },
         ],
         external: [

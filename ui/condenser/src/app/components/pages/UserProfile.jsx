@@ -43,13 +43,8 @@ export default class UserProfile extends React.Component {
     }
 
     shouldComponentUpdate(np, ns) {
-        const {
-            follow,
-            follow_count,
-            account,
-            accountname,
-            notifications,
-        } = this.props;
+        const { follow, follow_count, account, accountname, notifications } =
+            this.props;
 
         let followersLoading = false,
             npFollowersLoading = false;
@@ -539,13 +534,8 @@ export default class UserProfile extends React.Component {
             </div>
         );
 
-        const {
-            name,
-            location,
-            about,
-            website,
-            cover_image,
-        } = normalizeProfile(account);
+        const { name, location, about, website, cover_image } =
+            normalizeProfile(account);
         const website_label = website
             ? website.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '')
             : null;

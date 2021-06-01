@@ -24,10 +24,8 @@ export const parseBlurtTransaction = (transaction) => {
   switch (result.textKey) {
     case 'curation_reward':
       const {reward} = opData;
-      const {
-        comment_author: commentAuthor,
-        comment_permlink: commentPermlink,
-      } = opData;
+      const {comment_author: commentAuthor, comment_permlink: commentPermlink} =
+        opData;
       result.iconType = 'font-awesome-5';
       result.icon = 'hand-holding-heart';
       result.value = reward;
