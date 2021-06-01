@@ -279,8 +279,8 @@ testnet:
     - shell-arch
     artifacts:
       paths:
-        - build/blurtd/blurtd
-        - blild/cli_wallet/cli_wallet
+        - build/programs/blurtd/blurtd
+        - blild/programs/cli_wallet/cli_wallet
 
 sonarcloud: 
   stage: test
@@ -342,8 +342,8 @@ megadrive-build-ubuntu:
     - arm64-shell
   artifacts:
     paths:
-      - build/blurtd/blurtd
-      - blild/cli_wallet/cli_wallet
+      - build/programs/blurtd/blurtd
+      - blild/programs/cli_wallet/cli_wallet
 
 # Builds blurt arm64 testnet
 megadrive-testnet-ubuntu:
@@ -357,8 +357,8 @@ megadrive-testnet-ubuntu:
     - arm64-shell
   artifacts:
     paths:
-      - build/blurtd/blurtd
-      - blild/cli_wallet/cli_wallet
+      - build/programs/blurtd/blurtd
+      - blild/programs/cli_wallet/cli_wallet
 
 # construct the light cryptopie device image.  runs blurt on sos-lite as a container.
 raspberrypi4:
@@ -471,8 +471,8 @@ witness:
     - shell-arch
   artifacts:
     paths:
-      - build/blurtd/blurtd
-      - blild/cli_wallet/cli_wallet
+      - build/programs/blurtd/blurtd
+      - blild/programs/cli_wallet/cli_wallet
   needs: []
 
 witness test- is replay needed?:
@@ -528,7 +528,8 @@ mira:
     - shell-arch
   artifacts:
     paths:
-      - build/bin/
+      - build/programs/blurtd/blurtd
+      - build/programs/cli_wallet/cli_wallet
   needs: []
 
 rpc:
@@ -545,8 +546,8 @@ rpc:
     - shell-arch
   artifacts:
     paths:
-      - build/blurtd/blurtd
-      - blild/cli_wallet/cli_wallet
+      - build/programs/blurtd/blurtd
+      - blild/programs/cli_wallet/cli_wallet
   needs: []
 
 kaniko witness:
