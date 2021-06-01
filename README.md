@@ -7,9 +7,9 @@
 [![DeepSource](https://deepsource.io/gl/blurt/blurt.svg/?label=active+issues&show_trend=true)](https://deepsource.io/gl/blurt/blurt/?ref=repository-badge)
 [![DeepSource](https://deepsource.io/gl/blurt/blurt.svg/?label=resolved+issues&show_trend=true)](https://deepsource.io/gl/blurt/blurt/?ref=repository-badge)
 
-Blurt is a public social blockchain with a diverse and vibrant community that strictly upholds [property rights](https://twitter.com/cz_binance/status/1236373815447506945?s=20).
+Blurt is a public social blockchain.
 
-The Blurt blockchain is defined as social media and builds a living, breathing, and growing social economy and communities where users are getting rewarded by curators for sharing their origin content. Blurt provides a scalable blockchain protocol for publicly accessible and immutable content, along with a fast digital currency (BLURT) which enables people to earn by using their brain (A.K.A. “Proof-of-Brain”).
+
 
 ## Compile without CI
 
@@ -50,23 +50,6 @@ cmake ..
 make -j$(nproc) blurtd cli_wallet
 ```
 
-#### Windows
-
-100,000 Blurt Bouty for the creation of a guide like the one above for windows. Our devs generally don't touch it.
-
-## Development
-
-Blurt is being converted to a monorepo, with the goal of distributing Blurt as a Mac, Windows, and Linux [electron](http://electronjs.org/) app (think like Slack, which is actually just chrome running a webapp). At that time, blurt will be entirely freed from the cloud, and even the tyranny of the current DNS system. Anyone with sufficient access to the internet, will be able to use blurt.
-
-## 569
-
-As discussed previously, the graphene codebase Blurt is based on shows its age. 569 is a network of chains that share a common code base, and many of them will have their genesis state seeded based on staked Blurt. The first of these 569 projects is called `splash` and it will launch ASAP (tm). The first snapshot of accounts will be taken February 28, 2021. Accounts are migrated at the sole discretion of the Blurt foundation.
-
-## Distribution
-
-- Blurt contains user balances imported from Block 4352**6969** of the STEEM public blockchain, snapshotted on the 20th May 2020.
-- Approx 15% or ~60 Million BLURT from the initial supply shall be allocated to the Blurt SocialGraph Foundation (See [@initblurt](https://blocks.blurtwallet.com/#/@initblurt) / [@socialgraph](https://blocks.blurtwallet.com/#/@socialgraph) blockchain accounts).
-- SPS DAO public fund account balance was carried over to BLURT and renamed as [@blurt.dao](https://blocks.blurtwallet.com/#/@blurt.dao). Initially the SocialGraph Foundation will steward this fund and gradually had it over to community control as the platform matures.
 
 ## Features
 
@@ -100,21 +83,8 @@ As discussed previously, the graphene codebase Blurt is based on shows its age. 
 
 ## Economy
 
-- We adhere to [Austrian Economics](https://mises.org/profile/murray-n-rothbard)
-- Our Currency is called BLURT
-- Staked BLURT is called BLURT POWER.
-- Blurt uses Graphene Delegated Proof-of-Stake Consensus (DPOS), and is looking into alternatives like Cosmos-SDK / Tenderrmint.
-- 10% APR inflation narrowing to 1% APR over 20 years
-  - 65% of inflation to Authors/Curators.
-  - 15% of inflation to Stakeholders.
-  - 10% of inflation to Blurt Producers (Witnesses).
-  - 10% of inflation to Blurt DAO Fund.
+We feel that all actions that impose costs should themselves have a cost, so that we can avoid becoming a garbage patch.
 
-## Status
-
-Blurt enjoyed a smooth launch with large participation from witnesses on July 4, 2020.
-
-Work currently has over 50 witnesses and a healthy user population.
 
 ## Software Development
 
