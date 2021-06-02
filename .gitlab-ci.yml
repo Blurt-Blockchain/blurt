@@ -9,29 +9,6 @@ stages:
   - deploy
 
 
-condenser-docker-test:
-  needs: []
-  stage: build
-  script:
-    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-    - docker buildx build --file ui/condenser/Dockerfile --cache-from $CI_REGISTRY_IMAGE/condenser:cache --cache-to $CI_REGISTRY_IMAGE/condenser:cache --platform linux/amd64 ./ui/condenser
-  tags:
-    - shell-arch
-  except:
-    - dev
-
-condenser-docker-test-arm:
-  needs: []
-  stage: build
-  script:
-    - docker image prune -f
-    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-    - docker buildx build --file ui/condenser/Dockerfile --cache-from $CI_REGISTRY_IMAGE/condenser-arm64:cache --cache-to $CI_REGISTRY_IMAGE/condenser-arm64:cache --platform linux/arm64 ./ui/condenser
-  tags:
-    - arm64-shell
-  except:
-    - dev
-
 condenser-docker-push:
   needs: []
   stage: build
@@ -320,6 +297,7 @@ imageupload container push:
 
 # DISABLED BECAUSE OF ISSUES WITH LOPSIDED/ARCHLINUX
 # Specifically, an archlinux-keyring issue
+
 megadrive-build-env:
   stage: build-env
   when: manual
@@ -333,7 +311,6 @@ megadrive-build-env:
 megadrive-build-ubuntu:
   stage: build
   script:
-    - docker image prune -f
     - mkdir build
     - cd build
     - cmake -DBLURT_STATIC_BUILD=ON -DLOW_MEMORY_NODE=ON -DCLEAR_VOTES=ON -WINT_IN_BOOL_CONTEXT=OFF -DBUILD_BLURT_TESTNET=OFF -DSKIP_BY_TX_ID=ON -DBLURT_LINT_LEVEL=FULL -DENABLE_MIRA=OFF -DCMAKE_BUILD_TYPE=Release ..
@@ -374,47 +351,47 @@ oroid-c2:
   tags:
     - shell-arch
 
-# Release new versions of blurtjs
-blurtjs:
-  image: node:latest
-  needs: []
-  stage: deploy
-  when: manual
-  variables:
-    NPM_TOKEN: ${CI_JOB_TOKEN}
-  script:
-    - npm ci --cache .npm --prefer-offline
-    - |
-      {
-        echo "@${CI_PROJECT_ROOT_NAMESPACE}:registry=${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/npm/"
-        echo "${CI_API_V4_URL#https?}/projects/${CI_PROJECT_ID}/packages/npm/:_authToken=\${CI_JOB_TOKEN}"
-      } | tee --append .npmrc
-    - cd client-libs/blurtjs
-    - yarn install
-    - yarn build
-    - npm adduser
-    - npm run semantic-release
-
-# Release changes to dblurt
-dblurt:
-  image: node:latest
-  needs: []
-  stage: deploy
-  when: manual
-  variables:
-    NPM_TOKEN: ${CI_JOB_TOKEN}
-  script:
-    - npm ci --cache .npm --prefer-offline
-    - |
-      {
-        echo "@${CI_PROJECT_ROOT_NAMESPACE}:registry=${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/npm/"
-        echo "${CI_API_V4_URL#https?}/projects/${CI_PROJECT_ID}/packages/npm/:_authToken=\${CI_JOB_TOKEN}"
-      } | tee --append .npmrc
-    - cd client-libs/dblurt
-    - yarn install
-    - npm adduser
-    - npm run semantic-release
-
+## Release new versions of blurtjs
+#blurtjs:
+#  image: node:latest
+#  needs: []
+#  stage: deploy
+#  when: manual
+#  variables:
+#    NPM_TOKEN: ${CI_JOB_TOKEN}
+#  script:
+#    - npm ci --cache .npm --prefer-offline
+#    - |
+#      {
+#        echo "@${CI_PROJECT_ROOT_NAMESPACE}:registry=${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/npm/"
+#        echo "${CI_API_V4_URL#https?}/projects/${CI_PROJECT_ID}/packages/npm/:_authToken=\${CI_JOB_TOKEN}"
+#      } | tee --append .npmrc
+#    - cd client-libs/blurtjs
+#    - yarn install
+#    - yarn build
+#    - npm adduser
+#    - npm run semantic-release
+#
+## Release changes to dblurt
+#dblurt:
+#  image: node:latest
+#  needs: []
+#  stage: deploy
+#  when: manual
+#  variables:
+#    NPM_TOKEN: ${CI_JOB_TOKEN}
+#  script:
+#    - npm ci --cache .npm --prefer-offline
+#    - |
+#      {
+#        echo "@${CI_PROJECT_ROOT_NAMESPACE}:registry=${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/npm/"
+#        echo "${CI_API_V4_URL#https?}/projects/${CI_PROJECT_ID}/packages/npm/:_authToken=\${CI_JOB_TOKEN}"
+#      } | tee --append .npmrc
+#    - cd client-libs/dblurt
+#    - yarn install
+#    - npm adduser
+#    - npm run semantic-release
+#
 # construct the megadrive arch container
 megadrive-container:
   needs: 
@@ -448,18 +425,6 @@ witness:
       - build/programs/blurtd/blurtd
       - blild/programs/cli_wallet/cli_wallet
   needs: []
-
-witness test- is replay needed?:
-  stage: test
-  when: manual
-  script:
-    - ./build/bin/blurtd
-  needs: 
-    - witness
-  dependencies:
-    - witness
-  tags: 
-    - shell-arch
 
 witness from scratch in docker:
   stage: test
