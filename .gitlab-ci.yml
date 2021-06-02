@@ -345,20 +345,6 @@ megadrive-build-ubuntu:
       - build/programs/blurtd/blurtd
       - blild/programs/cli_wallet/cli_wallet
 
-# Builds blurt arm64 testnet
-megadrive-testnet-ubuntu:
-  stage: build
-  script:
-    - mkdir build
-    - cd build
-    - cmake -DBLURT_STATIC_BUILD=ON -DLOW_MEMORY_NODE=ON -DCLEAR_VOTES=ON -WINT_IN_BOOL_CONTEXT=OFF -DBUILD_BLURT_TESTNET=ON -DSKIP_BY_TX_ID=ON -DBLURT_LINT_LEVEL=FULL -DENABLE_MIRA=OFF -DCMAKE_BUILD_TYPE=Release ..
-    - make -j$(nproc) blurtd cli_wallet
-  tags:
-    - arm64-shell
-  artifacts:
-    paths:
-      - build/programs/blurtd/blurtd
-      - blild/programs/cli_wallet/cli_wallet
 
 # construct the light cryptopie device image.  runs blurt on sos-lite as a container.
 raspberrypi4:
@@ -442,18 +428,6 @@ megadrive-container:
   dependencies:
     - megadrive-build-ubuntu
   
-# construct the megadrive arch container
-megadrive-testnet-container:
-  needs: 
-    - megadrive-testnet-ubuntu
-  stage: docker
-  script:
-    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-    - docker buildx build --file contrib/Dockerfiles/ci/Dockerfile --platform linux/arm64 --tag $CI_REGISTRY_IMAGE/megadrive-testnet:$CI_COMMIT_BRANCH --push --progress plain .
-  tags:
-    - amd64-shell
-  dependencies:
-    - megadrive-testnet-ubuntu
 
 witness:
   stage: build
