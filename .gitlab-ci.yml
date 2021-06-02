@@ -320,7 +320,7 @@ megadrive-build-ubuntu:
   artifacts:
     paths:
       - build/programs/blurtd/blurtd
-      - blild/programs/cli_wallet/cli_wallet
+      - build/programs/cli_wallet/cli_wallet
 
 
 # construct the light cryptopie device image.  runs blurt on sos-lite as a container.
