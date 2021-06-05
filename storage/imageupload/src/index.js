@@ -28,9 +28,10 @@ chainLib.api.setOptions({
 
 
 const rate_limit_opts = {
-  points: process.env.RATE_LIMIT_POINTS, // 3 images
+  points: 69, // 3 images
   duration: 3600, // per hour
 };
+
 const rateLimiter = new RateLimiterMemory(rate_limit_opts);
 
 const app = express();
@@ -153,6 +154,7 @@ serverStart = () => {
 
 router.get("/", function (req, res)  {
     peers().then(res.send)
+    
   });
 
   app.use("/", router);
