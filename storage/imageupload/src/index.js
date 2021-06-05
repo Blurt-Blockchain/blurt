@@ -10,13 +10,17 @@ const {
 const RIPEMD160 = require("ripemd160");
 const AWS = require("aws-sdk");
 const { RateLimiterMemory } = require("rate-limiter-flexible");
-const IpfsHttpClient = require("ipfs-http-client");
-const { globSource } = IpfsHttpClient;
-const ipfs = IpfsHttpClient();
-console.log(ipfs.stats.bw);
-console.log(ipfs.swarm.localAddrs);
-console.log(ipfs.swarm.peers);
-console.log(ipfs.getEndpointConfig);
+const { create } = require('ipfs-http-client')
+
+// connect to ipfs daemon API server
+const ipfs = create('http://localhost:5001') // (the default in Node.js)
+
+let peers = async () => { return ipfs.swarm.addrs() }
+let bw = async () => { return ipfs.stats.repo() }
+
+bw().then(console.log)
+peers().then(console.log)
+
 
 chainLib.api.setOptions({
   url: process.env.JSONRPC_URL,
@@ -24,13 +28,6 @@ chainLib.api.setOptions({
   useAppbaseApi: true,
 });
 
-const s3 = new AWS.S3({
-  accessKeyId: process.env.S3_ACCESS_KEY,
-  secretAccessKey: process.env.S3_SECRET_KEY,
-  region: process.env.S3_REGION,
-  endpoint: process.env.S3_ENDPOINT,
-  signatureVersion: "v4",
-});
 
 const rate_limit_opts = {
   points: process.env.RATE_LIMIT_POINTS, // 3 images
@@ -144,7 +141,6 @@ hdl_upload_s3 = async (req, res) => {
       })
       .promise();
 
-    const img_full_path = `${process.env.PREFIX_URL}${process.env.S3_BUCKET}/${s3_file_path}`;
     const ipfs_full_path = `https://cloudflare-ipfs.com/ipfs/${cid}`;
     // this.body = JSON.stringify({status: 'ok', message: 'success', data: img_full_path});
     res.json({ status: "ok", message: "success", data: ipfs_full_path });
