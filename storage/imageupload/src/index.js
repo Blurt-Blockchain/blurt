@@ -1,4 +1,3 @@
-require("dotenv").config();
 const express = require("express");
 const bodyParser = require("body-parser");
 const chainLib = require("@blurtfoundation/blurtjs");
@@ -8,7 +7,6 @@ const {
   Signature,
 } = require("@blurtfoundation/blurtjs/lib/auth/ecc");
 const RIPEMD160 = require("ripemd160");
-const AWS = require("aws-sdk");
 const { RateLimiterMemory } = require("rate-limiter-flexible");
 const { create } = require('ipfs-http-client')
 
@@ -129,17 +127,9 @@ hdl_upload_s3 = async (req, res) => {
 
     await rateLimiter.consume(username, 1);
 
-    const { cid } = await client.add(buffer);
+    const { cid } = await ipfs.add(buffer);
+    console.log(cid)	  
 
-    await s3
-      .putObject({
-        ACL: "public-read",
-        Bucket: process.env.S3_BUCKET,
-        Key: s3_file_path,
-        Body: buffer,
-        ContentType: content_type,
-      })
-      .promise();
 
     const ipfs_full_path = `https://cloudflare-ipfs.com/ipfs/${cid}`;
     // this.body = JSON.stringify({status: 'ok', message: 'success', data: img_full_path});
@@ -159,8 +149,10 @@ serverStart = () => {
   router.get("/test_cors", async (req, res) => {
     res.json({ status: "ok", message: "success", data: null });
   });
-  router.get("/", async (req, res) => {
-    res.json("ipfs powered image hosting");
+
+
+router.get("/", function (req, res)  {
+    peers().then(res.send)
   });
 
   app.use("/", router);
