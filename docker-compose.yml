@@ -44,10 +44,8 @@ services:
 
 
 # Caddy is the user-facing http server.  It is configured with the Caddyfile in contrib.  You will want to get your domain name in there.  An example  has been provided.  
-
-
   caddy:
-    image: caddy:<version>
+    image: caddy
     restart: unless-stopped
     ports:
       - "80:80"
