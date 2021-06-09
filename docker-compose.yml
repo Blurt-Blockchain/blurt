@@ -2,11 +2,10 @@
 version: "3.9"
 services:
 
-
 # the websocket is port 8090 and http is 8091
 # the witness image is used here, but you might wish to change it to the rpc image
   blurt:
-    image: registry.gitlab.com/blurt/blurt/witness
+    image: faddat/blurtrpc-amd64
     ports:
       - "8091:8091"
       - "8090:8090"
@@ -14,84 +13,54 @@ services:
       - blurt
     deploy:
       restart_policy:
-        condition: on-failure
-
-  db:
-    image: postgres:9.4
+        condition: unless-stopped
     volumes:
-      - db-data:/var/lib/postgresql/data
-    networks:
-      - backend
-    deploy:
-      placement:
-        max_replicas_per_node: 1
-        constraints:
-          - "node.role==manager"
+      - blurtd:/blurtd
 
-  vote:
-    image: dockersamples/examplevotingapp_vote:before
+  condenser:
+    image: gitlab.com/blurt/blurt/condenser:dev
     ports:
-      - "5000:80"
+      - 8080:8080
     networks:
-      - frontend
-    depends_on:
-      - redis
-    deploy:
-      replicas: 2
-      update_config:
-        parallelism: 2
-      restart_policy:
-        condition: on-failure
+      - blurt
 
-  result:
-    image: dockersamples/examplevotingapp_result:before
-    ports:
-      - "5001:80"
-    networks:
-      - backend
-    depends_on:
-      - db
-    deploy:
-      replicas: 1
-      update_config:
-        parallelism: 2
-        delay: 10s
-      restart_policy:
-        condition: on-failure
+# Imgproxy is used to resize images.  It is not on the blurt network because the other processes do not interact with it directly.
+  imgproxy:
+    image: darthsim/imgproxy
+    ports: 8069:8080
 
-  worker:
-    image: dockersamples/examplevotingapp_worker
-    networks:
-      - frontend
-      - backend
-    deploy:
-      mode: replicated
-      replicas: 1
-      labels: [APP=VOTING]
-      restart_policy:
-        condition: on-failure
-        delay: 10s
-        max_attempts: 3
-        window: 120s
-      placement:
-        constraints:
-          - "node.role==manager"
 
-  visualizer:
-    image: dockersamples/visualizer:stable
-    ports:
-      - "8080:8080"
-    stop_grace_period: 1m30s
+  ipfs:
+    image: ipfs/go-ipfs
+    environment:
+      - PUID=1000
+      - PGID=1000
     volumes:
-      - "/var/run/docker.sock:/var/run/docker.sock"
-    deploy:
-      placement:
-        constraints:
-          - "node.role==manager"
+      - /root/.ipfs:/config
+    ports:
+      - 4001:4001
+      - 5001:5001
+      - 8070:8080
+
+
+# Caddy is the user-facing http server.  It is configured with the Caddyfile in contrib.  You will want to get your domain name in there.  An example  has been provided.  
+
+
+  caddy:
+    image: caddy:<version>
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - $PWD/Caddyfile:/etc/caddy/Caddyfile
+      - $PWD/site:/srv
+
+
+
 
 networks:
   blurt:
 
 
-volumes:
-  db-data:
+
