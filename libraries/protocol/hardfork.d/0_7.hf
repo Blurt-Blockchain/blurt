@@ -1,7 +1,7 @@
 #ifndef BLURT_HARDFORK_0_7
 #define BLURT_HARDFORK_0_7 7
 
-#define BLURT_HARDFORK_0_7_TIME (1623369600)  // Friday, June 11, 2021 12:00:00 AM
+#define BLURT_HARDFORK_0_7_TIME (1623343194)  // Friday, June 11, 2021 12:00:00 AM
 #define BLURT_HARDFORK_0_7_VERSION hardfork_version(0, 7)
 
 #endif
