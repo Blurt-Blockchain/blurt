@@ -8,6 +8,7 @@ file_server browse {
 }
 }
 
+# Blurt.companuy web site.  Blurt is not a company :D
 http://blurt.company {
 header Access-Control-Allow-Origin "*"
 header Access-Control-Allow-Methods "POST, GET, OPTIONS"
@@ -21,7 +22,7 @@ http://imgp.blurt.company {
 header Access-Control-Allow-Origin "*"
 header Access-Control-Allow-Methods "POST, GET, OPTIONS"
 header Access-Control-Allow-Headers "Content-Type"
-reverse_proxy localhost:8000
+reverse_proxy localhost:8069
 encode gzip
 }
 
@@ -34,6 +35,8 @@ header Access-Control-Allow-Headers "Content-Type"
 reverse_proxy localhost:7070
 encode gzip
 }
+
+
 
 # IPFS Gateway
 http://ipfs.blurt.world {
