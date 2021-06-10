@@ -423,7 +423,7 @@ witness:
   artifacts:
     paths:
       - build/programs/blurtd/blurtd
-      - blild/programs/cli_wallet/cli_wallet
+      - build/programs/cli_wallet/cli_wallet
   needs: []
 
 witness from scratch in docker:
