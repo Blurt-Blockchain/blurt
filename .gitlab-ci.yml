@@ -34,20 +34,20 @@ condenser-docker-push-arm:
 
 # This happens at each commit to "dev", so we don't need to pull when going to production, though we may want to consider a tagging system or something. 
 # For now, let the build ruh, check staging.blurt.world and then if it looks OK, use the others. 
-condenser-staging:
-  needs: 
-    - condenser-docker-push
-  stage: staging
-  script: 
-    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-    - docker pull $CI_REGISTRY_IMAGE/condenser:$CI_COMMIT_BRANCH
-    - docker stop staging || true
-    - docker rm staging || true
-    - docker run -d --name staging --env NODE_ENV=production -p 6969:6969 --env PORT=6969 --env SDC_SITE_DOMAIN=staging.blurt.world --env SDC_SESSION_SECRETKEY="$SDC_SESSION_SECRETKEY" $CI_REGISTRY_IMAGE/condenser:$CI_COMMIT_BRANCH
-  tags:
-    - shell-arch
-  only:
-    - dev
+#condenser-staging:
+#  needs: 
+#    - condenser-docker-push
+#  stage: staging
+#  script: 
+#    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+#    - docker pull $CI_REGISTRY_IMAGE/condenser:$CI_COMMIT_BRANCH
+#    - docker stop staging || true
+#    - docker rm staging || true
+#    - docker run -d --name staging --env NODE_ENV=production -p 6969:6969 --env PORT=6969 --env SDC_SITE_DOMAIN=staging.blurt.world --env SDC_SESSION_SECRETKEY="$SDC_SESSION_SECRETKEY" $CI_REGISTRY_IMAGE/condenser:$CI_COMMIT_BRANCH
+#  tags:
+#    - shell-arch
+#  only:
+#    - dev
 
 condenser-production-world:
   needs: 
@@ -64,19 +64,19 @@ condenser-production-world:
   only:
     - dev
 
-condenser-staging-latam:
-  needs: 
-    - condenser-docker-push
-  stage: staging
-  script: 
-    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-    - docker stop world || true
-    - docker rm world || true
-    - docker run -d --name world --env NODE_ENV=production -p 69:69 --env PORT=69 --env SDC_SITE_DOMAIN=staging.blurtlatam.com --env SDC_SESSION_SECRETKEY="$SDC_SESSION_SECRETKEY" $CI_REGISTRY_IMAGE/condenser:$CI_COMMIT_BRANCH
-  tags:
-    - blurtlatam
-  only:
-    - dev
+#condenser-staging-latam:
+#  needs: 
+#    - condenser-docker-push
+#  stage: staging
+#  script: 
+#    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+#    - docker stop world || true
+#    - docker rm world || true
+#    - docker run -d --name world --env NODE_ENV=production -p 69:69 --env PORT=69 --env SDC_SITE_DOMAIN=staging.blurtlatam.com --env SDC_SESSION_SECRETKEY="$SDC_SESSION_SECRETKEY" $CI_REGISTRY_IMAGE/condenser:$CI_COMMIT_BRANCH
+#  tags:
+#    - blurtlatam
+#  only:
+#    - dev
 
 condenser-production-latam:
   needs: 
@@ -423,7 +423,7 @@ witness:
   artifacts:
     paths:
       - build/programs/blurtd/blurtd
-      - blild/programs/cli_wallet/cli_wallet
+      - build/programs/cli_wallet/cli_wallet
   needs: []
 
 witness from scratch in docker:
@@ -486,7 +486,7 @@ rpc:
   artifacts:
     paths:
       - build/programs/blurtd/blurtd
-      - blild/programs/cli_wallet/cli_wallet
+      - build/programs/cli_wallet/cli_wallet
   needs: []
 
 kaniko witness:
