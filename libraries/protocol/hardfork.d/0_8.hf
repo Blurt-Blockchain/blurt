@@ -1,0 +1,7 @@
+#ifndef BLURT_HARDFORK_0_8
+#define BLURT_HARDFORK_0_8 8
+
+#define BLURT_HARDFORK_0_8_TIME (1648728000)  // Thursday, March 31, 2022 12:00:00 PM
+#define BLURT_HARDFORK_0_8_VERSION hardfork_version(0, 8)
+
+#endif

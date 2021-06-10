@@ -1726,6 +1726,9 @@ share_type database::cashout_comment_helper( util::comment_reward_context& ctx, 
             auto vesting_blurt = author_tokens - author_blurt_tokens;
             const auto& author = get_account( comment.author );
             auto blurt_payout = asset(author_blurt_tokens, BLURT_SYMBOL);
+            if (has_hardfork(BLURT_HARDFORK_0_7)) {
+               adjust_reward_balance( author, blurt_payout );
+            }
             operation vop = author_reward_operation( comment.author, to_string( comment.permlink ), blurt_payout, asset( 0, VESTS_SYMBOL ) );
 
             create_vesting2( *this, author, asset( vesting_blurt, BLURT_SYMBOL ), true,
@@ -3764,10 +3767,14 @@ void database::init_hardforks()
    _hardfork_versions.times[ BLURT_HARDFORK_0_6 ] = fc::time_point_sec( BLURT_HARDFORK_0_6_TIME );
    _hardfork_versions.versions[ BLURT_HARDFORK_0_6 ] = BLURT_HARDFORK_0_6_VERSION;
 
-#ifdef IS_TEST_NET
    FC_ASSERT( BLURT_HARDFORK_0_7 == 7, "Invalid hardfork configuration" );
    _hardfork_versions.times[ BLURT_HARDFORK_0_7 ] = fc::time_point_sec( BLURT_HARDFORK_0_7_TIME );
    _hardfork_versions.versions[ BLURT_HARDFORK_0_7 ] = BLURT_HARDFORK_0_7_VERSION;
+
+#ifdef IS_TEST_NET
+   FC_ASSERT( BLURT_HARDFORK_0_8 == 8, "Invalid hardfork configuration" );
+   _hardfork_versions.times[ BLURT_HARDFORK_0_8 ] = fc::time_point_sec( BLURT_HARDFORK_0_8_TIME );
+   _hardfork_versions.versions[ BLURT_HARDFORK_0_8 ] = BLURT_HARDFORK_0_8_VERSION;
 #endif
 
    const auto& hardforks = get_hardfork_property_object();
@@ -3862,6 +3869,8 @@ void database::apply_hardfork( uint32_t hardfork )
             rfo.content_constant = BLURT_REWARD_CONSTANT_HF6;
          });
       }
+         break;
+      case BLURT_HARDFORK_0_7:
          break;
       default:
          break;
