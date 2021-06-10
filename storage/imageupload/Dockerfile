@@ -9,5 +9,5 @@ EXPOSE 7070
 COPY . .
 
 
-CMD ["yarn","run serve"]
+CMD ["yarn","run start"]
 

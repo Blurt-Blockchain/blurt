@@ -4,15 +4,16 @@ services:
 # the websocket is port 8090 and http is 8091
 # the witness image is used here, but you might wish to change it to the rpc image
   blurt:
-    image: faddat/blurtrpc-amd64
+    image: registry.gitlab.com/blurt/blurt/rpc:dev
+    entrypoint: "/usr/bin/blurtd --data-dir /blurtd --replay-blockchain"
     ports:
       - 8091:8091
       - 8090:8090
     deploy:
       restart_policy:
         condition: on-failure
-    volumes:
-      - blurtd:/blurtd
+#    volumes:
+#      - blurtd:/blurtd
 
 
 # Condenser is Blurt's traditional front end.  This compose file will let you swap condenser and optic as optic is being developed. 
@@ -73,11 +74,6 @@ services:
      build: storage/imageupload
      ports: 
        - 7070:7070
-
-
-networks:
-  blurt:
-  ipfs:
 
 volumes:
   blurtd:
