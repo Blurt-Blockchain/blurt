@@ -68,5 +68,6 @@ services:
 networks:
   blurt:
 
-
+volumes:
+  blurtd:
 
