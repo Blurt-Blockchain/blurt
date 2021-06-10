@@ -17,6 +17,8 @@ services:
     volumes:
       - blurtd:/blurtd
 
+
+# Condenser is Blurt's traditional front end.  This compose file will let you swap condenser and optic as optic is being developed. 
   condenser:
     image: gitlab.com/blurt/blurt/condenser:dev
     ports:
@@ -28,8 +30,13 @@ services:
   imgproxy:
     image: darthsim/imgproxy
     ports: 8069:8080
+    environment:
+#      - AWS_ACCESS_KEY_ID=my_access_key
+#      - AWS_SECRET_ACCESS_KEY=my_secret_key
+#      - IMGPROXY_S3_ENDPOINT=http://minio-address.com
 
 
+# Your node hosts its own images, as well as images that others host.  Later we will add payments to this, creating a storage use case for BLURT. 
   ipfs:
     image: ipfs/go-ipfs
     environment:
@@ -43,7 +50,7 @@ services:
       - 8070:8080
 
 
-# Caddy is the user-facing http server.  It is configured with the Caddyfile in contrib.  You will want to get your domain name in there.  An example  has been provided.  
+# Caddy is the user-facing http server.  It is configured with the Caddyfile in contrib.  You will want to get your domain name in there.  An example  has been provided.  On the raspberry Pi, this will be http://blurt.local.
   caddy:
     image: caddy
     restart: unless-stopped
