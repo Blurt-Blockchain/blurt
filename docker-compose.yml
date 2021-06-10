@@ -13,7 +13,7 @@ services:
       - blurt
     deploy:
       restart_policy:
-        condition: unless-stopped
+        condition: on-failure
     volumes:
       - blurtd:/blurtd
 
@@ -23,6 +23,9 @@ services:
     image: gitlab.com/blurt/blurt/condenser:dev
     ports:
       - 8080:8080
+    deploy:
+      restart_policy:
+        condition: on-failure
     networks:
       - blurt
 
@@ -31,6 +34,9 @@ services:
     image: darthsim/imgproxy
     ports: 
       - 8069:8080
+    deploy:
+      restart_policy:
+        condition: on-failure
 #    environment:
 #      - AWS_ACCESS_KEY_ID=my_access_key
 #      - AWS_SECRET_ACCESS_KEY=my_secret_key
@@ -40,6 +46,9 @@ services:
 # Your node hosts its own images, as well as images that others host.  Later we will add payments to this, creating a storage use case for BLURT. 
   ipfs:
     image: ipfs/go-ipfs
+    deploy:
+      restart_policy:
+        condition: on-failure
     environment:
       - PUID=1000
       - PGID=1000
