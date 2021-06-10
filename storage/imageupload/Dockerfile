@@ -1,10 +1,13 @@
 FROM faddat/archlinux
 
-RUN pacman -Syyu --noconfirm npm yarn base-devel
+RUN pacman -Syyu --noconfirm npm yarn base-devel pm2
 
 RUN yarn install
 
 EXPOSE 7070
 
-CMD ["pm2 start src/server.js --max-memory-restart 512M"]
+COPY . .
+
+
+CMD ["yarn","run serve"]
 

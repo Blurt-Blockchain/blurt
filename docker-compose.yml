@@ -1,4 +1,3 @@
-
 version: "3.9"
 services:
 
@@ -7,10 +6,8 @@ services:
   blurt:
     image: faddat/blurtrpc-amd64
     ports:
-      - "8091:8091"
-      - "8090:8090"
-    networks:
-      - blurt
+      - 8091:8091
+      - 8090:8090
     deploy:
       restart_policy:
         condition: on-failure
@@ -20,14 +17,15 @@ services:
 
 # Condenser is Blurt's traditional front end.  This compose file will let you swap condenser and optic as optic is being developed. 
   condenser:
-    image: gitlab.com/blurt/blurt/condenser:dev
+    image: registry.gitlab.com/blurt/blurt/condenser:dev
     ports:
       - 8080:8080
+    environment:
+      - SDC_SESSION_SECRETKEY=oiS1WOqBDeQTw+8lbIX5gJjTZt3qry6yE3obBZf4VXbechihWeMmJhvHzLjWFKfr%
+      - SDC_SERVER_BLURTD_URL=http://blurt:8091
     deploy:
       restart_policy:
         condition: on-failure
-    networks:
-      - blurt
 
 # Imgproxy is used to resize images.  It is not on the blurt network because the other processes do not interact with it directly.
   imgproxy:
@@ -63,19 +61,23 @@ services:
 # Caddy is the user-facing http server.  It is configured with the Caddyfile in contrib.  You will want to get your domain name in there.  An example  has been provided.  On the raspberry Pi, this will be http://blurt.local.
   caddy:
     image: caddy
-    restart: unless-stopped
     ports:
-      - "80:80"
-      - "443:443"
+      - 80:80
+      - 443:443
     volumes:
-      - $PWD/Caddyfile:/etc/caddy/Caddyfile
-      - $PWD/site:/srv
+      - $PWD/contrib/RPC-Caddyfile:/etc/caddy/Caddyfile
 
 
+
+  upload:
+     build: storage/imageupload
+     ports: 
+       - 7070:7070
 
 
 networks:
   blurt:
+  ipfs:
 
 volumes:
   blurtd:
