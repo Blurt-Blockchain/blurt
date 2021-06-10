@@ -11,7 +11,7 @@ ENV GOPATH=/root/go
 # Download starport, too
 
 RUN sed -i -e "s/^CheckSpace/#!!!CheckSpace/g" /etc/pacman.conf && \
-        pacman -Syyu --noconfirm net-tools ufw vnstat iftop base-devel wget protobuf git go yarn npm && \
+        pacman -Syyu --noconfirm net-tools ufw docker docker-compose vnstat iftop base-devel wget protobuf git go yarn npm && \
         sed -i -e "s/^#!!!CheckSpace/CheckSpace/g" /etc/pacman.conf && \
         git clone https://github.com/tendermint/starport && \
         cd starport && \
