@@ -1,4 +1,3 @@
-require("dotenv").config();
 const express = require("express");
 const bodyParser = require("body-parser");
 const chainLib = require("@blurtfoundation/blurtjs");
@@ -8,15 +7,18 @@ const {
   Signature,
 } = require("@blurtfoundation/blurtjs/lib/auth/ecc");
 const RIPEMD160 = require("ripemd160");
-const AWS = require("aws-sdk");
 const { RateLimiterMemory } = require("rate-limiter-flexible");
-const IpfsHttpClient = require("ipfs-http-client");
-const { globSource } = IpfsHttpClient;
-const ipfs = IpfsHttpClient();
-console.log(ipfs.stats.bw);
-console.log(ipfs.swarm.localAddrs);
-console.log(ipfs.swarm.peers);
-console.log(ipfs.getEndpointConfig);
+const { create } = require('ipfs-http-client')
+
+// connect to ipfs daemon API server
+const ipfs = create('http://localhost:5001') // (the default in Node.js)
+
+let peers = async () => { return ipfs.swarm.addrs() }
+let bw = async () => { return ipfs.stats.repo() }
+
+bw().then(console.log)
+peers().then(console.log)
+
 
 chainLib.api.setOptions({
   url: process.env.JSONRPC_URL,
@@ -24,18 +26,12 @@ chainLib.api.setOptions({
   useAppbaseApi: true,
 });
 
-const s3 = new AWS.S3({
-  accessKeyId: process.env.S3_ACCESS_KEY,
-  secretAccessKey: process.env.S3_SECRET_KEY,
-  region: process.env.S3_REGION,
-  endpoint: process.env.S3_ENDPOINT,
-  signatureVersion: "v4",
-});
 
 const rate_limit_opts = {
-  points: process.env.RATE_LIMIT_POINTS, // 3 images
+  points: 69, // 3 images
   duration: 3600, // per hour
 };
+
 const rateLimiter = new RateLimiterMemory(rate_limit_opts);
 
 const app = express();
@@ -132,19 +128,10 @@ hdl_upload_s3 = async (req, res) => {
 
     await rateLimiter.consume(username, 1);
 
-    const { cid } = await client.add(buffer);
+    const { cid } = await ipfs.add(buffer);
+    console.log(cid)	  
 
-    await s3
-      .putObject({
-        ACL: "public-read",
-        Bucket: process.env.S3_BUCKET,
-        Key: s3_file_path,
-        Body: buffer,
-        ContentType: content_type,
-      })
-      .promise();
 
-    const img_full_path = `${process.env.PREFIX_URL}${process.env.S3_BUCKET}/${s3_file_path}`;
     const ipfs_full_path = `https://cloudflare-ipfs.com/ipfs/${cid}`;
     // this.body = JSON.stringify({status: 'ok', message: 'success', data: img_full_path});
     res.json({ status: "ok", message: "success", data: ipfs_full_path });
@@ -163,8 +150,11 @@ serverStart = () => {
   router.get("/test_cors", async (req, res) => {
     res.json({ status: "ok", message: "success", data: null });
   });
-  router.get("/", async (req, res) => {
-    res.json("ipfs powered image hosting");
+
+
+router.get("/", function (req, res)  {
+    peers().then(res.send)
+    
   });
 
   app.use("/", router);

@@ -260,26 +260,6 @@ class Post extends React.Component {
                         </div>
                     </div>
                 )}
-                {this.props.gptEnabled ? (
-                    <div className="Post_footer__ad">
-                        <GptAd
-                            tags={tags}
-                            type="Freestar"
-                            id="bsa-zone_1566494147292-7_123456"
-                        />
-                    </div>
-                ) : null}
-                <div className="Post_footer__ad">
-                    <a
-                        href="https://www.amazon.com/Best-Sellers/zgbs/?tag=blurt0b-20&linkCode=ur1"
-                        target="_blank"
-                    >
-                        <img
-                            border="0"
-                            src="https://images-na.ssl-images-amazon.com/images/G/01/img14/associates/associates-ads-evergreen_BSP_468x60._V362695947_.png"
-                        />
-                    </a>
-                </div>
                 <div id="#comments" className="Post_comments row hfeed">
                     <div className="column large-12">
                         <div className="Post_comments__content">
@@ -317,24 +297,13 @@ class Post extends React.Component {
                         format="auto"
                         responsive="true"
                     />
-                ) : // <div className="Post_comments__ad">
-                //     <a
-                //         href="https://www.amazon.com/LABISTS-Raspberry-Complete-Preloaded-Heatsinks/dp/B07Z1QFLNH/ref=as_li_ss_il?dchild=1&keywords=raspberry+pi+4+64gb+kit&qid=1608275103&sr=8-1-spons&psc=1&spLa=ZW5jcnlwdGVkUXVhbGlmaWVyPUEyTlpBUjIyV1JOMElZJmVuY3J5cHRlZElkPUEwMDY4NjIwQjNUMFZDRk41VE9VJmVuY3J5cHRlZEFkSWQ9QTA0NjU5OTJPWEZOWERSVUpGSjAmd2lkZ2V0TmFtZT1zcF9hdGYmYWN0aW9uPWNsaWNrUmVkaXJlY3QmZG9Ob3RMb2dDbGljaz10cnVl&linkCode=li2&tag=blurt0b-20&linkId=d3681fb0edfe77eb03a8d06333671a78&language=en_US"
-                //         target="_blank"
-                //     >
-                //         <img
-                //             border="0"
-                //             src="//ws-na.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=B07Z1QFLNH&Format=_SL160_&ID=AsinImage&MarketPlace=US&ServiceVersion=20070822&WS=1&tag=blurt0b-20&language=en_US"
-                //         />
-                //     </a>
-                // </div>
+                ) :
                 null}
             </div>
         );
     }
 }
 
-const emptySet = Set();
 export default connect((state, ownProps) => {
     return {
         content: state.global.get('content'),

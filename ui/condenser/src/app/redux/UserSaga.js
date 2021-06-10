@@ -1,4 +1,4 @@
-import { fromJS, Set, List } from 'immutable';
+//import { fromJS, Set, List } from 'immutable';
 import { call, put, select, fork, takeLatest } from 'redux-saga/effects';
 import { api, auth } from '@blurtfoundation/blurtjs';
 import {
@@ -10,11 +10,7 @@ import {
 import { accountAuthLookup } from 'app/redux/AuthSaga';
 import { getAccount } from 'app/redux/SagaShared';
 import * as userActions from 'app/redux/UserReducer';
-import { receiveFeatureFlags } from 'app/redux/AppReducer';
-import {
-    hasCompatibleKeychain,
-    isLoggedInWithKeychain,
-} from 'app/utils/SteemKeychain';
+import { isLoggedInWithKeychain } from 'app/utils/SteemKeychain';
 import { packLoginData, extractLoginData } from 'app/utils/UserUtil';
 import { browserHistory } from 'react-router';
 import {
@@ -58,7 +54,6 @@ export const userWatches = [
     },
 ];
 
-const strCmp = (a, b) => (a > b ? 1 : a < b ? -1 : 0);
 
 function* shouldShowLoginWarning({ username, password }) {
     // If it's a master key, show the warning.
@@ -115,7 +110,7 @@ function* usernamePasswordLogin(action) {
     // Sets 'loading' while the login is taking place. The key generation can
     // take a while on slow computers.
     yield call(usernamePasswordLogin2, action.payload);
-    const current = yield select((state) => state.user.get('current'));
+    const current = yield select(state => state.user.get('current'));
     if (current) {
         const username = current.get('username');
         yield fork(loadFollows, 'getFollowingAsync', username, 'blog');
@@ -123,7 +118,7 @@ function* usernamePasswordLogin(action) {
     }
 }
 
-const clean = (value) =>
+const clean = value =>
     value == null || value === '' || /null|undefined/.test(value)
         ? undefined
         : value;
@@ -136,7 +131,7 @@ function* usernamePasswordLogin2({
     operationType /* high security */,
     afterLoginRedirectToWelcome,
 }) {
-    const user = yield select((state) => state.user);
+    const user = yield select(state => state.user);
     const loginType = user.get('login_type');
     const justLoggedIn = loginType === 'basic';
     console.log(
@@ -175,7 +170,7 @@ function* usernamePasswordLogin2({
     // no saved password
     if (!username || !(password || useKeychain || login_with_keychain)) {
         console.log('No saved password');
-        const offchain_account = yield select((state) =>
+        const offchain_account = yield select(state =>
             state.offchain.get('account')
         );
         if (offchain_account) serverApiLogout();
@@ -188,7 +183,7 @@ function* usernamePasswordLogin2({
         [username, userProvidedRole] = username.split('/');
     }
 
-    const pathname = yield select((state) => state.global.get('pathname'));
+    const pathname = yield select(state => state.global.get('pathname'));
     const isRole = (role, fn) =>
         !userProvidedRole || role === userProvidedRole ? fn() : undefined;
 
@@ -312,7 +307,7 @@ function* usernamePasswordLogin2({
                     userActions.loginError({ error: 'active_login_blocked' })
                 );
                 return;
-            } else {
+            }
                 const generated_type =
                     password[0] === 'P' && password.length > 40;
                 serverApiRecordEvent(
@@ -328,8 +323,7 @@ function* usernamePasswordLogin2({
                     userActions.loginError({ error: 'Incorrect Password' })
                 );
                 return;
-            }
-        }
+}
         if (authority.get('posting') !== 'full') {
             private_keys = private_keys.remove('posting_private');
         }
@@ -488,7 +482,6 @@ function* usernamePasswordLogin2({
         // );
     }
     // TOS acceptance
-    yield fork(promptTosAcceptance, username);
 
     // Redirect user to the appropriate page after login.
     if (afterLoginRedirectToWelcome) {
@@ -498,80 +491,8 @@ function* usernamePasswordLogin2({
         console.log('Redirecting to feed page', feedURL);
         browserHistory.push(feedURL);
     }
-<<<<<<< HEAD
-  } catch (error) {
-    // Does not need to be fatal
-    console.error('Server Login Error', error)
-  }
+}
 
-  if (!autopost && saveLogin) yield put(userActions.saveLogin())
-  // Feature Flags
-  if (useKeychain || private_keys.get('posting_private')) {
-    // yield fork(
-    //     getFeatureFlags,
-    //     username,
-    //     useKeychain ? null : private_keys.get('posting_private').toString()
-    // );
-  }
-  // TOS acceptance
-  // yield fork(promptTosAcceptance, username)
-
-  // Redirect user to the appropriate page after login.
-  if (afterLoginRedirectToWelcome) {
-    console.log('Redirecting to welcome page')
-    browserHistory.push('/welcome')
-  } else if (feedURL && document.location.pathname === '/') {
-    console.log('Redirecting to feed page', feedURL)
-    browserHistory.push(feedURL)
-  }
-=======
->>>>>>> hf6-jga
-}
-/* NO TOS
-function* promptTosAcceptance(username) {
-    try {
-        const accepted = yield call(isTosAccepted, username);
-        if (!accepted) {
-            yield put(userActions.showTerms());
-        }
-    } catch (e) {
-        // TODO: log error to server, conveyor is unavailable
-    }
-}
-*/
-function* getFeatureFlags(username, posting_private) {
-    // try {
-    //     let flags;
-    //     if (!posting_private && hasCompatibleKeychain()) {
-    //         flags = yield new Promise((resolve, reject) => {
-    //             window.steem_keychain.requestSignedCall(
-    //                 username,
-    //                 'conveyor.get_feature_flags',
-    //                 { account: username },
-    //                 'posting',
-    //                 response => {
-    //                     if (!response.success) {
-    //                         reject(response.message);
-    //                     } else {
-    //                         resolve(response.result);
-    //                     }
-    //                 }
-    //             );
-    //         });
-    //     } else {
-    //         // flags = yield call(
-    //         //     [api, api.signedCallAsync],
-    //         //     'conveyor.get_feature_flags',
-    //         //     { account: username },
-    //         //     username,
-    //         //     posting_private
-    //         // );
-    //     }
-    //     yield put(receiveFeatureFlags(flags));
-    // } catch (error) {
-    //     // Do nothing; feature flags are not ready yet. Or posting_private is not available.
-    // }
-}
 
 function* saveLogin_localStorage() {
     if (!process.env.BROWSER) {
@@ -584,7 +505,7 @@ function* saveLogin_localStorage() {
         private_keys,
         login_owner_pubkey,
         login_with_keychain,
-    ] = yield select((state) => [
+    ] = yield select(state => [
         state.user.getIn(['current', 'username']),
         state.user.getIn(['current', 'private_keys']),
         state.user.getIn(['current', 'login_owner_pubkey']),
@@ -600,7 +521,7 @@ function* saveLogin_localStorage() {
         console.error('No posting key to save?');
         return;
     }
-    const account = yield select((state) =>
+    const account = yield select(state =>
         state.global.getIn(['accounts', username])
     );
     if (!account) {

@@ -28,7 +28,7 @@ hunter_add_package(OpenSSL)
 
 
 find_package(ZLIB CONFIG REQUIRED)
-find_package(Boost CONFIG REQUIRED thread regex date_time system filesystem program_options iostreams serialization chrono context locale coroutine program_options)
+find_package(Boost CONFIG REQUIRED thread regex date_time system filesystem program_options iostreams serialization chrono context coroutine program_options)
 find_package(BZip2 CONFIG REQUIRED)
 find_package(zstd CONFIG REQUIRED)
 find_package(websocketpp CONFIG REQUIRED)
@@ -182,6 +182,6 @@ else()
   MESSAGE( STATUS "\n\n             CONFIGURED FOR FULL NODE                \n\n" )
 endif()
 
-target_link_libraries( blurtd Boost::thread Boost::regex Boost::date_time Boost::system Boost::filesystem Boost::program_options Boost::iostreams Boost::serialization Boost::chrono Boost::context Boost::locale Boost::coroutine Boost::program_options )
+target_link_libraries( blurtd Boost::thread Boost::regex Boost::date_time Boost::system Boost::filesystem Boost::program_options Boost::iostreams Boost::serialization Boost::chrono Boost::context Boost::coroutine Boost::program_options )
 
 target_link_libraries( blurtd RocksDB::rocksdb )
